@@ -705,7 +705,13 @@ void __cdecl16far attact_usesAlignUp42(void)
   char ok;
   bool bVar6;
   bool bVar7;
-  uint uVar8;
+  uint reportIdx;
+  uint alignedDest;
+  uint ownerByte;
+  uint stExitResult;
+  uint randResult;
+  uint recIdx;
+  uint alignedRec;
   uint alignedX;
   undefined1 valHi;
   uint16_t uVar10;
@@ -767,9 +773,9 @@ void __cdecl16far attact_usesAlignUp42(void)
       }
       func_0x0004f68f(segArg);
       GGameState = 0x1d;
-      for (uVar8 = 0; (int)uVar8 < 5; uVar8 = uVar8 + 1) {
-        if ((&reportedUnits)[uVar8] != 0x0) {
-          ovr_ovc41_usesMiceBlitRect(uVar8);
+      for (reportIdx = 0; (int)reportIdx < 5; reportIdx = reportIdx + 1) {
+        if ((&reportedUnits)[reportIdx] != 0x0) {
+          ovr_ovc41_usesMiceBlitRect(reportIdx);
         }
       }
       GGameState = 0xd;
@@ -783,10 +789,10 @@ void __cdecl16far attact_usesAlignUp42(void)
     }
     peVar14 = Entities + index;
     destEnt = (entity_t *)CONCAT22(DAT_2000_d190,peVar14);
-    uVar8 = ovr_alignUp4((peVar14->base).destX,0,0);
+    alignedDest = ovr_alignUp4((peVar14->base).destX,0,0);
     segArg = 0x2379;
     alignedX = ovr_alignUp4((destEnt->base).x,0,0);
-    if ((uVar8 == alignedX) && ((peVar14->base).destY == (peVar14->base).y)) {
+    if ((alignedDest == alignedX) && ((peVar14->base).destY == (peVar14->base).y)) {
       manage_usesCurSfxType32(0x2379,index,(peVar14->base).destX,(peVar14->base).destY);
     }
     if (((peVar14->base).destX != 0 || (peVar14->base).destY != 0) &&
@@ -797,11 +803,11 @@ void __cdecl16far attact_usesAlignUp42(void)
       startY = (peVar14->base).y;
       animByte = AgntGs[(uint)(peVar14->base).gindex].ai;
       if ((peVar14->base).faction < (byte)(peVar14->base).state) {
-        uVar8 = (int)(uint)*(byte *)((int)&(peVar14->base).owner +
+        ownerByte = (int)(uint)*(byte *)((int)&(peVar14->base).owner +
                                     ((int)(uint)(peVar14->base).faction >> 2)) >>
                 (((peVar14->base).faction & 3) << 1) & 0xff03;
-        (peVar14->base).target = (uint8_t)uVar8;
-        valHi = (undefined1)(uVar8 >> 8);
+        (peVar14->base).target = (uint8_t)ownerByte;
+        valHi = (undefined1)(ownerByte >> 8);
         ok = func_0x0004f32d(0x2379,(destEnt->base).x,(peVar14->base).y,
                                 CONCAT11(valHi,(peVar14->base).target),CONCAT11(valHi,animByte));
         if (ok == '\0') {
@@ -853,22 +859,22 @@ void __cdecl16far attact_usesAlignUp42(void)
             goto L_attact_3f0b_1082_1477;
           }
         }
-        uVar8 = ovr_ovc26_usesStExit(index);
-        if ((char)uVar8 == '\0') {
-          uVar8 = ovr_ovc26_usesRandBelow
+        stExitResult = ovr_ovc26_usesStExit(index);
+        if ((char)stExitResult == '\0') {
+          randResult = ovr_ovc26_usesRandBelow
                             (index,(uint16_t)&reported,_SS,(uint16_t)&reportedUnits,_SS);
-          if (((uVar8 & 0xff) == 0) &&
+          if (((randResult & 0xff) == 0) &&
              (AgntGs[(uint)(peVar14->base).gindex].ai ==
               '\0')) {
             manage_usesCurSfxType32(0x2386,index,(peVar14->base).targetX,(peVar14->base).targetY);
           }
         }
         else {
-          uVar8 = (int)(uint)*(byte *)((int)&(peVar14->base).owner +
+          ownerByte = (int)(uint)*(byte *)((int)&(peVar14->base).owner +
                                       ((int)(uint)(peVar14->base).faction >> 2)) >>
                   (((peVar14->base).faction & 3) << 1) & 0xff03;
-          (peVar14->base).target = (uint8_t)uVar8;
-          valHi = (undefined1)(uVar8 >> 8);
+          (peVar14->base).target = (uint8_t)ownerByte;
+          valHi = (undefined1)(ownerByte >> 8);
           ok = func_0x0004f32d(0x2386,startX,startY,CONCAT11(valHi,(peVar14->base).target),
                                   CONCAT11(valHi,animByte));
           if (ok == '\0') {
@@ -883,9 +889,9 @@ void __cdecl16far attact_usesAlignUp42(void)
       }
 L_attact_3f0b_1082_1477:
       reported = 0x1;
-      uVar8 = ovr_alignUp4((peVar14->base).destX,0,0);
+      alignedDest = ovr_alignUp4((peVar14->base).destX,0,0);
       alignedX = ovr_alignUp4((destEnt->base).x,0,0);
-      if ((uVar8 == alignedX) && ((peVar14->base).destY == (peVar14->base).y)) {
+      if ((alignedDest == alignedX) && ((peVar14->base).destY == (peVar14->base).y)) {
         (peVar14->base).destX = 0;
         (peVar14->base).destY = 0;
         if (*(char *)((int)&(peVar14->base).entity + 3) == -1) {
@@ -896,15 +902,15 @@ L_attact_3f0b_1082_1477:
           defByte = *(byte *)((int)uVar3 + 0x89);
         }
         if (defByte != 0xff) {
-          for (uVar8 = 0; uVar8 < SquareRecCount; uVar8 = uVar8 + 1) {
-            alignedX = ovr_alignUp4(*(int *)(uVar8 * 0x13),0,0);
+          for (recIdx = 0; recIdx < SquareRecCount; recIdx = recIdx + 1) {
+            alignedX = ovr_alignUp4(*(int *)(recIdx * 0x13),0,0);
             uVar11 = ovr_alignUp4((destEnt->base).x,0,0);
-            if ((alignedX == uVar11) && (*(uint16_t *)((uint8_t *)&SquareRecs[uVar8] + 2) == (peVar14->base).y)) {
-              func_0x0004f930(0x2379,uVar8 * 0x13 + (uint)defByte + 0xe,0x17f8);
-              if (*(uint16_t *)((uint8_t *)&SquareRecs[uVar8] + 2) == GfxRndSeed2) {
-                uVar8 = ovr_alignUp4(*(int *)(uVar8 * 0x13),0,0);
+            if ((alignedX == uVar11) && (*(uint16_t *)((uint8_t *)&SquareRecs[recIdx] + 2) == (peVar14->base).y)) {
+              func_0x0004f930(0x2379,recIdx * 0x13 + (uint)defByte + 0xe,0x17f8);
+              if (*(uint16_t *)((uint8_t *)&SquareRecs[recIdx] + 2) == GfxRndSeed2) {
+                alignedRec = ovr_alignUp4(*(int *)(recIdx * 0x13),0,0);
                 alignedX = ovr_alignUp4(GfxRndSeed,0,0);
-                if (uVar8 == alignedX) {
+                if (alignedRec == alignedX) {
                   (&reportedUnits)[defByte] = 0x1;
                 }
               }

@@ -13028,3 +13028,33 @@ No expression changed.
   compare_state 1,627/0/0
   diff_dgroup 1,581/1,805 (64 runs, sum|delta| 235,338, mean 148, worst 14,252)
   compare_runtime 1,630 matched, 1,620 identical / 10 different
+
+### attact_usesAlignUp42: uVar8 split into seven roles (37,378 -> 37,346)
+attact_usesAlignUp42: uVar8 split into seven roles (37,378 -> 37,346)
+
+The 25 uses (34 occurrences) in the 280-line body fell into seven distinct roles, each
+identified by the statement that assigns it:
+
+  770-772           the 0..4 index over reportedUnits[]      -> reportIdx    (5)
+  786, 789          ovr_alignUp4(peVar14->base.destX,0,0)     -> alignedDest  (3)
+  800-804, 867-871  *(byte *)&peVar14->base.owner             -> ownerByte    (8)
+  856, 857          ovr_ovc26_usesStExit(index) result        -> stExitResult (2)
+  858, 860          ovr_ovc26_usesRandBelow(...) result       -> randResult   (2)
+  899-905, 907      the SquareRecs scan index                 -> recIdx       (9)
+  905, 907          ovr_alignUp4(*(int *)(recIdx*0x13),0,0)   -> alignedRec   (2)
+
+Line 905 carries two of them and is replaced first, so the sweep that follows cannot take
+its assignment target as an index:
+
+    alignedRec = ovr_alignUp4(*(int *)(recIdx * 0x13),0,0);
+
+Every replacement asserted its occurrence count (2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1), so
+no comparison was renamed by accident.  `ownerByte` is reused for both occurrences because
+it is the same field of the same structure read in two branches.
+
+No expression changed.
+
+  grep_checks 37,378 -> 37,346; build 65/65; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0
+  diff_dgroup 1,581/1,805 (64 runs, sum|delta| 235,338, mean 148, worst 14,252)
+  compare_runtime 1,630 matched, 1,620 identical / 10 different
