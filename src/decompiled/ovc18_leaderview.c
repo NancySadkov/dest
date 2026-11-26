@@ -51,54 +51,54 @@ void __cdecl16far ovc18_blitPanelIfNotRunning(void)
 void __cdecl16far ovc18_showLeaderView(void)
 
 {
-  bool bVar1;
+  bool arenaReady;
   char *msg;
-  uint uVar3;
-  char *pcVar4;
-  int iVar5;
+  uint placeResult;
+  char *nameOfs;
+  int leaderIdx;
   uint8_t partyCounts;
-  char *pcStack_6;
-  uint16_t uStack_4;
+  char *savedNameOfs;
+  uint16_t nameSeg;
   
   trianglesShown = 0;
   if ((MsgShown != '\0') || (GameRunning)) {
     MsgShown = '\0';
   }
   else {
-    _fmemset(MK_FP(_SS, &pcStack_6), 0, 2);
-    for (iVar5 = 0; iVar5 < (int)(uint)GLeaderCount; iVar5 = iVar5 + 1) {
-      if ((((GLeaderSheets[iVar5])->active != '\0') &&
-          ((&partyCounts)[*((uint8_t far *)GLeaderSheets[iVar5] + 0x3f)] =
-                (&partyCounts)[*((uint8_t far *)GLeaderSheets[iVar5] + 0x3f)] + 0x1,
-          (GLeaderSheets[iVar5])->x == GfxRndSeed)) &&
-         ((GLeaderSheets[iVar5])->y == GfxRndSeed2)) {
-        bVar1 = ovr_draw_textArena();
-        if (!bVar1) {
+    _fmemset(MK_FP(_SS, &savedNameOfs), 0, 2);
+    for (leaderIdx = 0; leaderIdx < (int)(uint)GLeaderCount; leaderIdx = leaderIdx + 1) {
+      if ((((GLeaderSheets[leaderIdx])->active != '\0') &&
+          ((&partyCounts)[*((uint8_t far *)GLeaderSheets[leaderIdx] + 0x3f)] =
+                (&partyCounts)[*((uint8_t far *)GLeaderSheets[leaderIdx] + 0x3f)] + 0x1,
+          (GLeaderSheets[leaderIdx])->x == GfxRndSeed)) &&
+         ((GLeaderSheets[leaderIdx])->y == GfxRndSeed2)) {
+        arenaReady = ovr_draw_textArena();
+        if (!arenaReady) {
           return;
         }
-        uStack_4 = ((uint16_t *)(iVar5 * 4))[1];
-        pcVar4 = (char *)*(uint16_t *)(iVar5 * 4);
-        pcStack_6 = pcVar4;
+        nameSeg = (uint16_t)SEG_OF(GLeaderSheets[leaderIdx]);
+        nameOfs = (char *)far_ofs_u32(GLeaderSheets[leaderIdx]);
+        savedNameOfs = nameOfs;
         if (GameRunning == false) {
-          msg = ovr_fmVsprintf("View %s.",(char *)CONCAT22(uStack_4,pcVar4));
-          ovr_say(msg,pcVar4);
+          msg = ovr_fmVsprintf("View %s.",(char *)CONCAT22(nameSeg,nameOfs));
+          ovr_say(msg,nameOfs);
         }
         ovc18_blitTriangles();
         return;
       }
     }
     if (PartyCount != 0) {
-      uStack_4 = *(uint16_t *)((uint)PartyCount * 4 + -2);
-      pcVar4 = (char *)*(uint16_t *)((uint)PartyCount * 4 + -4);
-      pcStack_6 = pcVar4;
-      uVar3 = ovc18_usesAlignUp4();
-      if ((char)uVar3 == '\0') {
-        msg = ovr_fmVsprintf("View %s. (Cannot place)",(char *)CONCAT22(uStack_4,pcStack_6));
-        ovr_say(msg,pcVar4);
+      nameSeg = (uint16_t)SEG_OF(GLeaderSheets[PartyCount - 1]);
+      nameOfs = (char *)far_ofs_u32(GLeaderSheets[PartyCount - 1]);
+      savedNameOfs = nameOfs;
+      placeResult = ovc18_usesAlignUp4();
+      if ((char)placeResult == '\0') {
+        msg = ovr_fmVsprintf("View %s. (Cannot place)",(char *)CONCAT22(nameSeg,savedNameOfs));
+        ovr_say(msg,nameOfs);
       }
       else {
-        msg = ovr_fmVsprintf("Place %s.",(char *)CONCAT22(uStack_4,pcStack_6));
-        ovr_say(msg,pcVar4);
+        msg = ovr_fmVsprintf("Place %s.",(char *)CONCAT22(nameSeg,savedNameOfs));
+        ovr_say(msg,nameOfs);
       }
       trianglesShown = 1;
       ovc18_blitTriangles();
