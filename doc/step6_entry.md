@@ -14457,3 +14457,30 @@ which I chose over a hex byte array deliberately.
 Left as-is: `bolt12.fli` (0x8417) and `save.999` (0x8422) follow these 34 in the original.
 They are still carried as code literals in ovc48/ovc49 plus stmiss blob entries, so this
 change leaves a 21-byte gap at the end of the run rather than duplicating them.
+
+### layout: GTxtFiles after the salvaged/repair block (sum 219,813 -> 209,477)
+layout: GTxtFiles + filenames belong after the salvaged/repair string block
+
+The previous commit inserted the 41 declarations where the old `s_txtFileNames` array was, which
+is *before* the "%s: Costs %d gold..." / salvaged / repair block.  The original's order is
+
+    0x7e65..0x81dc   those strings, ending with s_ld_experience_obtained (80 bytes)
+    0x822c           GTxtFiles (136)
+    0x82b4           the 34 filenames
+
+so our GTxtFiles landed 587 bytes early and the salvaged string ended up after the filenames -
+the +599 step at 0x80f0.
+
+Moving the block to after `s_ld_experience_ob_2410_81dc` cuts that step to +108 and:
+
+  diff_dgroup sum|delta|   219,813 -> 209,477  (-10,336)
+  diff_dgroup runs              45 -> 44
+  diff_dgroup matched        1,615 -> 1,615   (unchanged)
+  compare_runtime matched    1,666 / identical 1,657 (unchanged)
+  compare_state              1,627/0/0
+  grep_checks               35,737
+  build 65/65, LINK.LOG 65 bytes / 0 problems
+
+The remaining +108 at 0x80f0 is the two " Repair costs %d gp." (21) / " Upgrade costs %d gp."
+(22) strings plus s_change_party, which follow s_new_owner in the original but are absent from
+our layout; that is the next identifiable gap in this band.
