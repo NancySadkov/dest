@@ -12540,3 +12540,43 @@ brk_normalize_xsize, __setargv_SavedReturn.
   diff_dgroup 1,450/1,805, 68 runs, sum|delta| 229,747 (DGROUP segment moved 6F75 -> 6F76
   because crtl.c grew; symbol-relative measurements unchanged)
   compare_runtime (main entry) 1,615 matched, 1,605 identical / 10 different
+
+### season_usesDifficulty + constr_usesSmoothPrev2 (37,528 -> 37,483)
+two functions: season_usesDifficulty's truncated sheet, constr_usesSmoothPrev2's extremes (37,528 -> 37,483)
+
+season_usesDifficulty
+---------------------
+The leader sheet was read through a truncated offset:
+
+    iVar1 = (int)SEG_OF(GLeaderSheets[bVar3]);       /* never read */
+    iVar2 = (int)far_ofs_u32(GLeaderSheets[bVar3]);
+    if (*(byte *)(iVar2 + 0x86) < 9)
+
+`iVar2` keeps only the offset, so `+0x86` (char_sheet_t.titleIndex) came from DGROUP.
+Now `sheet = GLeaderSheets[leaderIdx]` and `sheet->titleIndex`.
+
+  bVar3  ovr_manage_findFirstLeader()    -> leaderIdx (3)
+  cVar4  the difficulty letter returned  -> grade     (8)
+  iVar1  SEG_OF(...), dead store         -> removed
+  iVar2  far_ofs_u32(...) for +0x86      -> sheet     (char_sheet_t far *)
+
+VERIFIED in the listing:
+
+    mov  dx,word ptr DGROUP:_GLeaderSheets[bx]
+    mov  word ptr [bp-2],ax
+    mov  word ptr [bp-4],dx
+    les  bx,dword ptr [bp-4]
+    cmp  byte ptr es:[bx+134],9        ; 0x86 = titleIndex, through the sheet's segment
+
+constr_usesSmoothPrev2
+----------------------
+Two accumulating extremes, one role each:
+
+  iVar1     running minimum of the five smooth samples -> minVal (14)
+  iStack_4  running maximum of them                    -> maxVal (8)
+
+No expression changed in either function.
+
+  grep_checks 37,528 -> 37,483; build 65/65; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 1,450/1,805 (68 runs, sum|delta| 229,747)
+  compare_runtime 1,615 matched, 1,605 identical / 10 different

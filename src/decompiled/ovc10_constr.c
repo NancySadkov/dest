@@ -118,40 +118,40 @@ byte __cdecl16far constr_setHighlightAtOffset(int dx,int dy,uint16_t arg3)
 void __cdecl16far constr_usesSmoothPrev2(void)
 
 {
-  int iVar1;
+  int minVal;
   int smoothVal;
   static char cell[64];
-  int iStack_4;
+  int maxVal;
   
   SmoothPrev = 0;
-  iVar1 = constr_usesSmoothPrev(0xffff,-1,(int *)&cell,0,0);
-  iStack_4 = iVar1;
+  minVal = constr_usesSmoothPrev(0xffff,-1,(int *)&cell,0,0);
+  maxVal = minVal;
   smoothVal = constr_usesSmoothPrev(0,-1,(int *)&cell,0,0);
-  if (smoothVal < iVar1) {
-    iVar1 = smoothVal;
+  if (smoothVal < minVal) {
+    minVal = smoothVal;
   }
-  if (iStack_4 < smoothVal) {
-    iStack_4 = smoothVal;
+  if (maxVal < smoothVal) {
+    maxVal = smoothVal;
   }
   smoothVal = constr_usesSmoothPrev(1,-1,(int *)&cell,0,0);
-  if (smoothVal < iVar1) {
-    iVar1 = smoothVal;
+  if (smoothVal < minVal) {
+    minVal = smoothVal;
   }
-  if (iStack_4 < smoothVal) {
-    iStack_4 = smoothVal;
+  if (maxVal < smoothVal) {
+    maxVal = smoothVal;
   }
   smoothVal = constr_usesSmoothPrev(2,-1,(int *)&cell,0,0);
-  if (smoothVal < iVar1) {
-    iVar1 = smoothVal;
+  if (smoothVal < minVal) {
+    minVal = smoothVal;
   }
   smoothVal = constr_usesSmoothPrev(0xfffe,-1,(int *)&cell,0,0);
-  if (smoothVal < iVar1) {
-    iVar1 = smoothVal;
+  if (smoothVal < minVal) {
+    minVal = smoothVal;
   }
-  if (0x5a < iStack_4 - iVar1) {
-    iVar1 = iStack_4 + -0x5a;
+  if (0x5a < maxVal - minVal) {
+    minVal = maxVal + -0x5a;
   }
-  SmoothPrev = iVar1 / 3;
+  SmoothPrev = minVal / 3;
   return;
 }
 

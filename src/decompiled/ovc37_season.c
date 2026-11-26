@@ -268,39 +268,37 @@ int __cdecl16far season_usesGPromotableCount2(void)
 char __cdecl16far season_usesDifficulty(void)
 
 {
-  int iVar1;
-  int iVar2;
-  byte bVar3;
-  char cVar4;
+  char_sheet_t far *sheet;
+  byte leaderIdx;
+  char grade;
   
-  bVar3 = ovr_manage_findFirstLeader();
-  if (bVar3 == 0xff) {
-    cVar4 = 'd';
+  leaderIdx = ovr_manage_findFirstLeader();
+  if (leaderIdx == 0xff) {
+    grade = 'd';
   }
   else {
-    iVar1 = (int)SEG_OF(GLeaderSheets[bVar3]);
-    iVar2 = (int)far_ofs_u32(GLeaderSheets[bVar3]);
-    if (*(byte *)(iVar2 + 0x86) < 9) {
+    sheet = GLeaderSheets[leaderIdx];
+    if (sheet->titleIndex < 9) {
       if (Difficulty == '\x01') {
-        if (*(byte *)(iVar2 + 0x86) < 5) {
-          cVar4 = *(char *)(iVar2 + 0x86) * '\x02' + '5';
+        if (sheet->titleIndex < 5) {
+          grade = sheet->titleIndex * '\x02' + '5';
         }
         else {
-          cVar4 = *(char *)(iVar2 + 0x86) + '9';
+          grade = sheet->titleIndex + '9';
         }
       }
       else if (Difficulty == '\x02') {
-        cVar4 = *(char *)(iVar2 + 0x86) * '\x02' + '5';
+        grade = sheet->titleIndex * '\x02' + '5';
       }
       else {
-        cVar4 = *(char *)(iVar2 + 0x86) * '\x03' + '4';
+        grade = sheet->titleIndex * '\x03' + '4';
       }
     }
     else {
-      cVar4 = 'd';
+      grade = 'd';
     }
   }
-  return cVar4;
+  return grade;
 }
 
 
