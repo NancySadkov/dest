@@ -974,55 +974,58 @@ void __cdecl16far fmRewindHeapPtr(void)
 int __cdecl16far fmMallocRecover(void)
 
 {
-  uint16_t *puVar1;
+  uint8_t far *node;
+  uint8_t far *segPtr;
   bool freed;
   undefined1 extraout_AH;
-  int iVar3;
-  undefined1 uVar4;
-  byte extraout_AH_00;
+  undefined1 extraout_AH_00;
   far_t handle;
-  uint16_t uStack_6;
-  uint16_t uStack_4;
-  
+  uint16_t curSeg;
+  uint16_t curOfs;
+  uint16_t handleSeg;
+  int result;
+  undefined1 retHi;
+
   freed = ovr_fmFreeAudio(0);
   if (freed) {
-    iVar3 = CONCAT11(extraout_AH,1);
+    result = CONCAT11(extraout_AH,1);
   }
   else {
-    uStack_4 = StshCtPtr2.seg;
-    uStack_6 = StshCtPtr2.ofs;
-    while (uStack_6 != 0 || uStack_4 != 0) {
-      if (*(int *)(uStack_6 + 0x11) != 0 || *(int *)(uStack_6 + 0x13) != 0) {
-        handle.seg = *(uint16_t *)(uStack_6 + 0x13);
-        handle.ofs = *(uint16_t *)(uStack_6 + 0x11);
+    curSeg = StshCtPtr2.seg;
+    curOfs = StshCtPtr2.ofs;
+    while (curOfs != 0 || curSeg != 0) {
+      node = (uint8_t far *)MK_FP(curSeg,curOfs);
+      if (*(uint16_t far *)(node + 0x11) != 0 || *(uint16_t far *)(node + 0x13) != 0) {
+        handle.seg = *(uint16_t far *)(node + 0x13);
+        handle.ofs = *(uint16_t far *)(node + 0x11);
         stshFree(handle);
-        iVar3 = *(int *)(uStack_6 + 0x13);
-        *(uint16_t *)(uStack_6 + 0x13) = 0;
-        *(uint16_t *)(uStack_6 + 0x11) = 0;
-        uVar4 = 0x24;
-        if (HeapPtr == iVar3) {
-          uVar4 = 0x24;
+        handleSeg = *(uint16_t far *)(node + 0x13);
+        *(uint16_t far *)(node + 0x13) = 0;
+        *(uint16_t far *)(node + 0x11) = 0;
+        retHi = 0x24;
+        if (HeapPtr == handleSeg) {
+          retHi = 0x24;
           fmRewindHeapPtr();
         }
-        return CONCAT11(uVar4,1);
+        return CONCAT11(retHi,1);
       }
-      puVar1 = (uint16_t *)(uStack_6 + 0xb);
-      uStack_6 = *(uint16_t *)(uStack_6 + 9);
-      uStack_4 = *puVar1;
+      segPtr = (uint8_t far *)(node + 0xb);
+      curOfs = *(uint16_t far *)(node + 9);
+      curSeg = *(uint16_t far *)segPtr;
     }
     freed = ovr_fmFreeAudio(1);
     if (freed) {
-      iVar3 = CONCAT11(extraout_AH_00,1);
+      result = CONCAT11(extraout_AH_00,1);
     }
     else {
       if (audioBusy == '\0') {
                     /* WARNING: Subroutine does not return */
         ovr_stExit(0x15);
       }
-      iVar3 = (uint)extraout_AH_00 << 8;
+      result = (uint)extraout_AH_00 << 8;
     }
   }
-  return iVar3;
+  return result;
 }
 
 

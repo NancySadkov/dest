@@ -11654,3 +11654,39 @@ The remaining open point in these three functions is the same one recorded for
 ovc38_usesStshAlloc: the format strings are present but their variable arguments are
 not, so the produced text cannot yet be right.  That is a decompilation gap, not a
 buffer question.
+
+### fmMallocRecover: the stash chain is a far walk (37,985 -> 37,951)
+fmMallocRecover: the stash chain is a far walk (37,985 -> 37,951)
+
+The loop read node fields at DS:offset:
+
+    uStack_4 = StshCtPtr2.seg;  uStack_6 = StshCtPtr2.ofs;
+    while (uStack_6 != 0 || uStack_4 != 0) {
+      if (*(int *)(uStack_6 + 0x11) != 0 || *(int *)(uStack_6 + 0x13) != 0) ...
+
+`uStack_6` is an offset inside the stash segment held in `uStack_4`, so all seven
+field reads went to DGROUP instead of the chain.  They are now far reads through
+`node = MK_FP(curSeg, curOfs)`.
+
+Names:
+
+  curOfs    current node offset                      (was uStack_6)
+  curSeg    current node segment                     (was uStack_4)
+  node      MK_FP(curSeg, curOfs)
+  segPtr    node + 0xb, the next node's segment      (was puVar1)
+  handleSeg *(node+0x13), compared with HeapPtr      (was iVar3, one role)
+  result    the value returned                       (was iVar3, other role)
+  retHi     the 0x24 high byte returned              (was uVar4)
+
+VERIFIED in the listing:
+
+    les  bx,dword ptr [bp-4]
+    cmp  word ptr es:[bx+17],0
+    jne  short @1@170
+    cmp  word ptr es:[bx+19],0
+
+7 far field reads, 5 `les` sites.
+
+  grep_checks 37,985 -> 37,951; build 65/65; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 1,450/1,868 (71 runs, sum|delta| 276,979)
+  compare_runtime 1,605 identical / 10 different
