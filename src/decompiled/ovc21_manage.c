@@ -1922,10 +1922,11 @@ void __cdecl16far manage_textHalflingCastle(void)
   far_t gfx;
   far_t dst;
   far_t handle;
-  char *pcVar4;
+  char *sayText;
+  char *inputText;
   char_sheet_t *widths;
   far_t entries;
-  char_sheet_t *pcStack_12;
+  char_sheet_t *newLeader;
   int sheetSeg;
   uint8_t inputBuf;
   uint inputResult;
@@ -1966,8 +1967,8 @@ void __cdecl16far manage_textHalflingCastle(void)
       ovr_ovc41_usesGMenuItem();
       return;
     }
-    pcStack_12 = chargen();
-    if (pcStack_12 == (char_sheet_t *)0x0 && sheetSeg == 0) {
+    newLeader = chargen();
+    if (newLeader == (char_sheet_t *)0x0 && sheetSeg == 0) {
       ovr_stats_openCastlePanel();
       ovr_ovc41_usesGMenuItem();
       return;
@@ -1991,32 +1992,32 @@ void __cdecl16far manage_textHalflingCastle(void)
       PartyCount = GLeaderCount + 1;
       GLeaderCount = PartyCount;
     }
-    pcStack_12->statMask = pcStack_12->statMask | 0x40;
-    pcStack_12->charIndex = PartyCount - 1;
+    newLeader->statMask = newLeader->statMask | 0x40;
+    newLeader->charIndex = PartyCount - 1;
     widths = (char_sheet_t *)((char *)0x2627a);
     GLeaderSheets[PartyCount - 1] =
-        (char_sheet_t far *)MK_FP((uint16_t)sheetSeg, (uint16_t)pcStack_12);
+        (char_sheet_t far *)MK_FP((uint16_t)sheetSeg, (uint16_t)newLeader);
     if (CurPartySlot == 0) {
-      pcStack_12->titleIndex = 1;
+      newLeader->titleIndex = 1;
     }
     CurPartySlot = CurPartySlot + 1;
   }
   else {
     manage_openTalkWindow();
     sheetSeg = (int)SEG_OF(GLeaderSheets[PartyCount - 1]);
-    pcStack_12 = (char_sheet_t *)far_ofs_u32(GLeaderSheets[PartyCount - 1]);
-    widths = pcStack_12;
+    newLeader = (char_sheet_t *)far_ofs_u32(GLeaderSheets[PartyCount - 1]);
+    widths = newLeader;
     manage_usesLitoa10((char_sheet_t *)
-                       CONCAT13((char)((uint)sheetSeg >> 8),CONCAT12((char)sheetSeg,pcStack_12)));
+                       CONCAT13((char)((uint)sheetSeg >> 8),CONCAT12((char)sheetSeg,newLeader)));
   }
-  pcVar4 = ovr_fmVsprintf("Place %s here.",
+  sayText = ovr_fmVsprintf("Place %s here.",
                           (char *)CONCAT13((char)((uint)sheetSeg >> 8),
-                                           CONCAT12((char)sheetSeg,pcStack_12)));
-  ovr_drawString(pcVar4,(uint16_t)widths,(char)widths);
+                                           CONCAT12((char)sheetSeg,newLeader)));
+  ovr_drawString(sayText,(uint16_t)widths,(char)widths);
   entries.seg = _SS;
   entries.ofs = (uint16_t)&inputBuf;
-  pcVar4 = ovr_uiInputText(entries,2,far_from_u32((uint32_t)(0x0)),0x0,0);
-  inputResult = (uint)pcVar4 & 0xff;
+  inputText = ovr_uiInputText(entries,2,far_from_u32((uint32_t)(0x0)),0x0,0);
+  inputResult = (uint)inputText & 0xff;
   if (inputResult == 1) {
     leaderIdx = PartyCount - 1;
     if (CurPartySlot == 1) {

@@ -13477,3 +13477,27 @@ No expression changed.
   compare_state 1,627/0/0
   diff_dgroup 1,581/1,805 (64 runs, sum|delta| 235,338, mean 148, worst 14,252)
   compare_runtime 1,630 matched, 1,620 identical / 10 different
+
+### manage_textHalflingCastle: two names, one two-phase (36,822 -> 36,788)
+manage_textHalflingCastle: two names, one two-phase (36,822 -> 36,788)
+
+  pcStack_12  1928,1969,1970,1994,1995,2000,2007,2008,2010,2014
+              the chargen() result / the current leader sheet   -> newLeader (12)
+  pcVar4      2012, 2015   the "Place %s here." result          -> sayText   (2)
+  pcVar4      2018, 2019   ovr_uiInputText's result             -> inputText (2)
+
+`pcStack_12` keeps one role at all twelve uses - `chargen()` in the empty-party branch,
+`GLeaderSheets[PartyCount - 1]` in the other - so it is a whole-function substitution and
+its declaration is renamed with it (the script asserts `char_sheet_t *newLeader;` is what
+remains).
+
+`pcVar4` is two phases of the same string variable: the formatted "Place %s here." text
+printed by `ovr_drawString`, then the raw result of `ovr_uiInputText` whose low byte becomes
+`inputResult`.
+
+No expression changed.
+
+  grep_checks 36,822 -> 36,788; build 65/65; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0
+  diff_dgroup 1,581/1,805 (64 runs, sum|delta| 235,338, mean 148, worst 14,252)
+  compare_runtime 1,630 matched, 1,620 identical / 10 different
