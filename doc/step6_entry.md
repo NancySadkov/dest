@@ -8983,3 +8983,42 @@ The structure is now decoded; the edit is a full turn's work.
   grep_checks 40,000 (unchanged); build 65/65 clean; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 1,444/1,868
   compare_runtime 1,545/12 main entry
+
+### ovc27_textTakesHalfDamage3: agntRec applied; call count exposes an incomplete body
+ovc27_textTakesHalfDamage3: the five fabricated far pointers are now real - and the call count exposes a bigger problem
+
+Applied the decoded structure in the contained part:
+
+  agnt_t far *agntRec;
+  ...
+  /* 0016-001B: the original builds {seg: 0x50, ofs: agntIndex*0x34}. */
+  agntRec = (agnt_t far *)MK_FP(SEG_OF(Agnts),(uint16_t)(agntIndex * 0x34));
+
+and the five sites of
+
+  (agnt_t far *)CONCAT13((char)((uint)ptrSeg >> 8),CONCAT12((char)ptrSeg,paStack_c))
+
+became `agntRec`.  `ptrSeg` was `(char *)((int)&AgntAnms[0x75].halfWidth + 1)` - a fabricated segment the
+original never loads; the disassembly writes 0x50 (Agnts' link-time segment) at [bp-8].
+
+One call needed a cast: `ovc27_rollToHitEntity(uint32_t agnt, byte column)` takes a uint32_t, so that
+site is `(uint32_t)agntRec`.
+
+BUILD CLEAN, but the probe shows:
+
+  instructions: 646
+  call instructions: 51        (original 5ded:10ea: 104)
+
+That gap is not explainable by compiler variance - it means our exported function contains roughly half
+the calls the original makes.  So `ovc27_textTakesHalfDamage3` as it stands in the tree is NOT a faithful
+rendering of the original body: a large part of it is missing or was folded into neighbours during the
+export.  Renaming inside it further would be polishing an incomplete function.
+
+That is a materially different conclusion from "the names are wrong", and it explains why this function
+read as garbled: it is not merely mis-typed, it is incomplete.  The correct next step is to establish the
+function's true extent and whether the missing calls sit in a neighbouring exported function (the file has
+several `ovc27_text*` entries) - a boundary problem, not a naming one.
+
+  grep_checks 40,000 (unchanged - this is an addressing fix, not a naming one)
+  build 65/65 clean; LINK.LOG 65 bytes / 0 problems; compare_state 1,627/0/0
+  diff_dgroup 1,444/1,868; compare_runtime 1,545/12 main entry

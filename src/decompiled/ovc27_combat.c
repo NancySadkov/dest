@@ -889,19 +889,22 @@ void __cdecl16far ovc27_textTakesHalfDamage3(agnt_t far *agnt,uint16_t agntIndex
   uint8_t text2;
   uint8_t msg;
   agnt_t far *paStack_c;
+  agnt_t far *agntRec;
   char *ptrSeg;
   int levelBonus;
   
   agntSeg = (uint16_t)((ulong)((long)agntIndex * 0x34) >> 0x10);
   paStack_c = (agnt_t *)((long)agntIndex * 0x34);
   ptrSeg = (char *)((int)&AgntAnms[0x75].halfWidth + 1);
+  /* 0016-001B: the original builds {seg: 0x50, ofs: agntIndex*0x34}. */
+  agntRec = (agnt_t far *)MK_FP(SEG_OF(Agnts),(uint16_t)(agntIndex * 0x34));
   if (agnt->variant == 0x1) {
     if ((((agntG_t far *)agnt->gdata)->flags3 & 1) == 0) {
       roll = ovr_manage_rollDice((((entity_t *)agnt->entity)->base).level,'\x06');
       damage = (uint)roll;
       uVar3 = ovc27_spellHalfDamage
                         ((agnt_t far *)
-                         CONCAT13((char)((uint)ptrSeg >> 8),CONCAT12((char)ptrSeg,paStack_c)))
+                         agntRec)
       ;
       if ((char)uVar3 != '\0') {
         damage = (int)damage >> 1;
@@ -916,7 +919,7 @@ void __cdecl16far ovc27_textTakesHalfDamage3(agnt_t far *agnt,uint16_t agntIndex
     }
     if ((((agntG_t far *)paStack_c->gdata)->flags3 & 1) == 0) {
       iVar5 = ovc27_rollToHitEntity
-                        (CONCAT13((char)((uint)ptrSeg >> 8),CONCAT12((char)ptrSeg,paStack_c)),
+                        ((uint32_t)agntRec,
                          3);
       if ((char)iVar5 != '\0') {
         damage = (int)damage >> 1;
@@ -924,7 +927,7 @@ void __cdecl16far ovc27_textTakesHalfDamage3(agnt_t far *agnt,uint16_t agntIndex
       ovr_ovc41_textParalyzed
                 ((agnt_t far *)CONCAT22(agntIndex,agnt),
                  (agnt_t far *)
-                 CONCAT13((char)((uint)ptrSeg >> 8),CONCAT12((char)ptrSeg,paStack_c)),damage,
+                 agntRec,damage,
                  (char)paStack_c,(char)ptrSeg,(char)damage);
       *(undefined1 *)&paStack_c->state = 0xb;
       *(undefined1 *)((int)&paStack_c->state + 1) = 0;
@@ -948,13 +951,13 @@ void __cdecl16far ovc27_textTakesHalfDamage3(agnt_t far *agnt,uint16_t agntIndex
     damage = (uint)roll + levelBonus;
     uVar3 = ovc27_spellHalfDamage
                       ((agnt_t far *)
-                       CONCAT13((char)((uint)ptrSeg >> 8),CONCAT12((char)ptrSeg,paStack_c)));
+                       agntRec);
     if ((char)uVar3 != '\0') {
       damage = (int)damage >> 1;
     }
     ovr_ovc41_textParalyzed
               ((agnt_t far *)CONCAT22(agntIndex,agnt),
-               (agnt_t far *)CONCAT13((char)((uint)ptrSeg >> 8),CONCAT12((char)ptrSeg,paStack_c)),
+               (agnt_t far *)agntRec,
                damage,(char)paStack_c,(char)ptrSeg,(char)damage);
     *(undefined1 *)&paStack_c->state = 0xb;
     *(undefined1 *)((int)&paStack_c->state + 1) = 0;
