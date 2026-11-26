@@ -577,29 +577,29 @@ uint __cdecl16far ovc45_compute4(int x,uint16_t y,uint16_t arg3)
 uint __cdecl16far ovc45_compute5(void)
 
 {
-  uint32_t uVar1;
-  byte bVar2;
+  uint32_t sheetPtr;
+  byte leaderIdx;
   byte extraout_AH;
-  uint uVar3;
+  uint result;
   
-  bVar2 = ovr_manage_findFirstLeader();
-  if (bVar2 == 0xff) {
-    uVar3 = (uint)extraout_AH << 8;
+  leaderIdx = ovr_manage_findFirstLeader();
+  if (leaderIdx == 0xff) {
+    result = (uint)extraout_AH << 8;
   }
   else {
-    uVar1 = *(uint32_t *)((uint)bVar2 << 2);
-    if (*(byte *)((int)uVar1 + 0x86) < 4) {
-      uVar3 = CONCAT11((char)(((uint)bVar2 << 2) >> 8),4);
+    sheetPtr = *(uint32_t *)((uint)leaderIdx << 2);
+    if (*(byte *)((int)sheetPtr + 0x86) < 4) {
+      result = CONCAT11((char)(((uint)leaderIdx << 2) >> 8),4);
     }
-    else if ((GLeaderSheets[bVar2])->titleIndex < 9) {
-      uVar1 = *(uint32_t *)((uint)bVar2 << 2);
-      uVar3 = CONCAT11((char)(((uint)bVar2 << 2) >> 8),*(char *)((int)uVar1 + 0x86) + '\x01');
+    else if ((GLeaderSheets[leaderIdx])->titleIndex < 9) {
+      sheetPtr = *(uint32_t *)((uint)leaderIdx << 2);
+      result = CONCAT11((char)(((uint)leaderIdx << 2) >> 8),*(char *)((int)sheetPtr + 0x86) + '\x01');
     }
     else {
-      uVar3 = (uint)(bVar2 >> 6) << 8;
+      result = (uint)(leaderIdx >> 6) << 8;
     }
   }
-  return uVar3;
+  return result;
 }
 
 

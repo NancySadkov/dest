@@ -1222,31 +1222,31 @@ uint16_t __cdecl16far run_demo(void)
 void __cdecl16far ovc42_usesAgntCount(void)
 
 {
-  bool bVar2;
-  int iVar3;
+  bool placedFirst;
+  int agntIdx;
   
-  bVar2 = false;
-  for (iVar3 = 0; iVar3 < (int)(uint)AgntCount; iVar3 = iVar3 + 1) {
-    if (Agnts[iVar3].gdata->type == '\x02') {
-      if (bVar2) {
-        Agnts[iVar3].x = 0x6e;
-        Agnts[iVar3].y = 0xb;
+  placedFirst = false;
+  for (agntIdx = 0; agntIdx < (int)(uint)AgntCount; agntIdx = agntIdx + 1) {
+    if (Agnts[agntIdx].gdata->type == '\x02') {
+      if (placedFirst) {
+        Agnts[agntIdx].x = 0x6e;
+        Agnts[agntIdx].y = 0xb;
       }
       else {
-        Agnts[iVar3].x = 0x2b;
-        Agnts[iVar3].y = 2;
+        Agnts[agntIdx].x = 0x2b;
+        Agnts[agntIdx].y = 2;
       }
-      bVar2 = true;
+      placedFirst = true;
     }
     else {
-      if (Agnts[iVar3].gdata->type == '\x01') {
-        Agnts[iVar3].x = 0x3d;
-        Agnts[iVar3].y = 0x12;
+      if (Agnts[agntIdx].gdata->type == '\x01') {
+        Agnts[agntIdx].x = 0x3d;
+        Agnts[agntIdx].y = 0x12;
       }
       else {
-        if (Agnts[iVar3].gdata->type == '\v') {
-          Agnts[iVar3].x = 0x56;
-          Agnts[iVar3].y = 0x14;
+        if (Agnts[agntIdx].gdata->type == '\v') {
+          Agnts[agntIdx].x = 0x56;
+          Agnts[agntIdx].y = 0x14;
         }
       }
     }

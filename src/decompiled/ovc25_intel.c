@@ -220,49 +220,47 @@ void __cdecl16far ovc25_usesAlignUp44(char partyIndex,byte count,uint16_t destX,
 
 {
   bool ok;
-  uint uVar2;
-  uint uVar3;
-  int iVar4;
-  uint16_t uVar5;
+  uint entX;
+  uint wantX;
+  int placed;
   uint16_t curSeg = _SS;
   uint8_t entityIndex;
   
   if (count != 0) {
-    iVar4 = 0;
+    placed = 0;
     for (entityIndex = 0; entityIndex < EntityCount; entityIndex = entityIndex + 1) {
-      uVar5 = (uint16_t)((ulong)Entities >> 0x10);
       if (*(char *)((int)&(Entities)[entityIndex].base.entity + 3) == partyIndex) {
-        uVar2 = ovr_alignUp4((Entities)[entityIndex].base.destX,0,0);
-        uVar3 = ovr_alignUp4(destX,0,0);
-        if ((uVar2 == uVar3) && ((Entities)[entityIndex].base.destY == destY))
+        entX = ovr_alignUp4((Entities)[entityIndex].base.destX,0,0);
+        wantX = ovr_alignUp4(destX,0,0);
+        if ((entX == wantX) && ((Entities)[entityIndex].base.destY == destY))
         {
-          iVar4 = iVar4 + 1;
+          placed = placed + 1;
         }
       }
     }
-    while ((iVar4 < (int)(uint)count &&
+    while ((placed < (int)(uint)count &&
            (ok = ovc25_textArena((uint *)CONCAT22(curSeg,&entityIndex),'\x02',
                                     (uint)(byte)partyIndex,destX), ok))) {
       (Entities)[entityIndex].base.state = 0;
       (Entities)[entityIndex].base.destX = destX;
       (Entities)[entityIndex].base.destY = destY;
-      iVar4 = iVar4 + 1;
+      placed = placed + 1;
     }
-    while ((iVar4 < (int)(uint)count &&
+    while ((placed < (int)(uint)count &&
            (ok = ovc25_textArena((uint *)CONCAT22(curSeg,&entityIndex),'\x01',
                                     (uint)(byte)partyIndex,destX), ok))) {
       (Entities)[entityIndex].base.state = 0;
       (Entities)[entityIndex].base.destX = destX;
       (Entities)[entityIndex].base.destY = destY;
-      iVar4 = iVar4 + 1;
+      placed = placed + 1;
     }
-    while ((iVar4 < (int)(uint)count &&
+    while ((placed < (int)(uint)count &&
            (ok = ovc25_textArena((uint *)CONCAT22(curSeg,&entityIndex),'\0',
                                     (uint)(byte)partyIndex,destX), ok))) {
       (Entities)[entityIndex].base.state = 0;
       (Entities)[entityIndex].base.destX = destX;
       (Entities)[entityIndex].base.destY = destY;
-      iVar4 = iVar4 + 1;
+      placed = placed + 1;
     }
   }
   return;

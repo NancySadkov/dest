@@ -13501,3 +13501,43 @@ No expression changed.
   compare_state 1,627/0/0
   diff_dgroup 1,581/1,805 (64 runs, sum|delta| 235,338, mean 148, worst 14,252)
   compare_runtime 1,630 matched, 1,620 identical / 10 different
+
+### four small functions: eight names and one dead store (36,788 -> 36,708)
+four small functions: eight names and one dead store (36,788 -> 36,708)
+
+ovc45_compute5 (27 lines)
+    uVar1   (uint32_t)*(uint32_t *)((uint)leaderIdx << 2)    -> sheetPtr   (5)
+    bVar2   ovr_manage_findFirstLeader()                     -> leaderIdx  (9)
+    uVar3   the value returned                               -> result     (6)
+
+ovc42_usesAgntCount (38 lines)
+    bVar2   "a type-2 agent has already been positioned"     -> placedFirst (4)
+    iVar3   the 0..AgntCount-1 loop index                    -> agntIdx     (16)
+
+ovc25_usesAlignUp44 (51 lines)
+    uVar2   ovr_alignUp4(entity.destX,0,0)                   -> entX   (3)
+    uVar3   ovr_alignUp4(destX,0,0)                          -> wantX  (3)
+    iVar4   the number placed so far                         -> placed (13)
+    uVar5   (uint16_t)((ulong)Entities >> 0x10), never read  -> removed
+
+constr_blitRowObjects (25 lines)
+    bVar1   constr_setHighlightAtOffset(...) result          -> bldType (4)
+    iVar2   the map-square column, then the *0xc blit offset -> colOfs  (8)
+    uVar3   the row loop index                               -> row     (7)
+
+Chosen from tmp/rank3.py sorted by its `tight` column (the share of uses whose name stays
+within 40 lines), which is the screening signal for "every name has one role".  All eight
+surviving names are single-role at every use, so each is a whole-function substitution and
+the declarations are renamed in the same pass.
+
+`uVar5` in ovc25_usesAlignUp44 is another write-only segment word: one assignment, no read,
+so the assignment and its declaration both go.  `tmp/dead_locals5.py` (new) independently
+confirms there are **no** wholly-unused section-5 declarations left in the tree, so this is
+the last of the dead-local vein.
+
+No expression changed.
+
+  grep_checks 36,788 -> 36,708; build 65/65; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0
+  diff_dgroup 1,581/1,805 (64 runs, sum|delta| 235,338, mean 148, worst 14,252)
+  compare_runtime 1,630 matched, 1,620 identical / 10 different

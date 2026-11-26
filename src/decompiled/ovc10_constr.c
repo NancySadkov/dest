@@ -396,23 +396,23 @@ void __cdecl16far constr_usesScreenOriginY(uint16_t rect,uint16_t type,uint16_t 
 void __cdecl16far constr_blitRowObjects(brect_t *rect,uint16_t type)
 
 {
-  byte bVar1;
+  byte bldType;
   undefined1 extraout_AH;
-  int iVar2;
-  uint16_t uVar3;
+  int colOfs;
+  uint16_t row;
   far_t gfx;
   
-  for (uVar3 = rowMapSquareFirst[0]; (int)uVar3 < (int)rowMapSquareEnd[0]; uVar3 = uVar3 + 1) {
-    iVar2 = *(int *)(&mapSquareColumn[uVar3]);
-    if ((0xb < iVar2 + 0x2f) && (iVar2 < 0xdf)) {
-      bVar1 = constr_setHighlightAtOffset(iVar2,0,0);
-      if ((BuildingTypes[CONCAT11(extraout_AH,bVar1)].flags & 5) != 0) {
-        iVar2 = CONCAT11(extraout_AH,bVar1) * 0xc;
+  for (row = rowMapSquareFirst[0]; (int)row < (int)rowMapSquareEnd[0]; row = row + 1) {
+    colOfs = *(int *)(&mapSquareColumn[row]);
+    if ((0xb < colOfs + 0x2f) && (colOfs < 0xdf)) {
+      bldType = constr_setHighlightAtOffset(colOfs,0,0);
+      if ((BuildingTypes[CONCAT11(extraout_AH,bldType)].flags & 5) != 0) {
+        colOfs = CONCAT11(extraout_AH,bldType) * 0xc;
         gfx.seg = *(uint16_t *)
-                   ((char *)0x28eda + iVar2);
+                   ((char *)0x28eda + colOfs);
         gfx.ofs = *(uint16_t *)
-                   ((char *)0x28ed8 + iVar2);
-        ovr_blitGfxRect(gfx,*(int16_t *)(&mapSquareLeftX[uVar3]),144,rect,(uint8_t)type,true,0,0,0,0,0,0);
+                   ((char *)0x28ed8 + colOfs);
+        ovr_blitGfxRect(gfx,*(int16_t *)(&mapSquareLeftX[row]),144,rect,(uint8_t)type,true,0,0,0,0,0,0);
       }
     }
   }
