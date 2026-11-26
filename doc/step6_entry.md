@@ -9501,3 +9501,45 @@ later pass.
   grep_checks 39,962 (unchanged - prototypes are not section-5 patterns)
   build 65/65 clean; LINK.LOG 65 bytes / 0 problems; compare_state 1,627/0/0
   diff_dgroup 1,444/1,868; compare_runtime 1,545/12 main entry
+
+### MEASURED: the ovr_stsprintf group does not decompose by file
+MEASURED: the ovr_stsprintf group does not decompose by file either
+
+The objective's plan was to take one file at a time (ovc21_manage.c or ovc41_main.c, 36 sites each).  A
+small file shows why that does not work.
+
+ovc23_bldrec.c has one site of the symptom:
+
+  2019  pcVar2 = ovr_ovc15_capitalize((char *)&text2);
+  2020  pcVar2 = ovr_stsprintf((char *)&text,(char *)CONCAT22(0x5665,_SS),
+  2021                         (char *)CONCAT22(pcVar2,(char *)0x26510),dst,uVar4,uVar5,
+  2022                         uVar3);
+  2023  ovr_uiNotify(pcVar2,dst,0);
+
+The decoded shape of `lcall 0x170,0x7a` is
+`stsprintf(MK_FP(_SS,&buf), MK_FP(_DS,<fmt>), <far vararg>)`, so:
+
+  arg1 = SS:&text                      -> matches (char *)&text, needs MK_FP(_SS,&text)
+  arg2 = DS:<fmt>                      -> CONCAT22(0x5665,_SS) is 0x5665 in the SEGMENT half and _SS in
+                                          the offset half - reversed, so it is MK_FP(_DS,0x5665)
+  arg3 = ???                           -> CONCAT22(pcVar2,(char *)0x26510) would be segment pcVar2 and
+                                          offset 0x6510 (0x26510 truncated), which is not a pointer to
+                                          anything.  And there are FOUR MORE arguments after it
+                                          (dst, uVar4, uVar5, uVar3) that the decoded shape does not have.
+
+So at this site the export has both reversed an argument AND invented three or four extra ones.  The same
+was true in ovc27_textTakesHalfDamage3, where three sites had three different buffer expressions and one
+had its format reversed.
+
+CONCLUSION: the 146-site group cannot be swept at file granularity, because the defect is per-site - each
+call's argument list has to be read from its own push sequence, exactly as the four call shapes in
+ovc27_textTakesHalfDamage3 had to be.  What the prototype correction (last commit) did buy is that the
+*result* is no longer truncated, which is the precondition; the argument lists remain per-site work.
+
+The sweep that IS mechanical is a different one: the detector can be inverted - find call sites where the
+number of arguments in the C does not match the number of words pushed at the original's lcall.  That is
+one comparison per site and it needs no interpretation of what the arguments mean.
+
+  grep_checks 39,962 (unchanged); build 65/65 clean; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 1,444/1,868
+  compare_runtime 1,545/12 main entry
