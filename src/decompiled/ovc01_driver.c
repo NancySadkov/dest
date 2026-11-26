@@ -941,22 +941,23 @@ void __cdecl16far driver_drawLine(uint8_t *ofs1,int row1,uint8_t *ofs2,int row2,
 void __cdecl16far driver_loop1(uint x1,uint x2,uint16_t y,uint8_t colour,uint16_t dstSeg)
 
 {
-  uint8_t *puVar1;
-  uint uVar2;
-  int iVar3;
-  uint8_t *puVar4;
+  uint8_t *outPtr;
+  uint swapTmp;
+  uint rowOfs;
+  int n;
+  uint8_t *runPtr;
   
-  uVar2 = x2;
+  swapTmp = x2;
   if (x2 < x1) {
     x2 = x1;
-    x1 = uVar2;
+    x1 = swapTmp;
   }
-  uVar2 = CONCAT11((char)y,(char)(y >> 8));
-  puVar4 = (uint8_t *)(x1 + uVar2 + (uVar2 >> 2));
-  for (iVar3 = (x2 - x1) + 1; iVar3 != 0; iVar3 = iVar3 + -1) {
-    puVar1 = puVar4;
-    puVar4 = puVar4 + 1;
-    *puVar1 = colour;
+  rowOfs = CONCAT11((char)y,(char)(y >> 8));
+  runPtr = (uint8_t *)(x1 + rowOfs + (rowOfs >> 2));
+  for (n = (x2 - x1) + 1; n != 0; n = n + -1) {
+    outPtr = runPtr;
+    runPtr = runPtr + 1;
+    *outPtr = colour;
   }
   return;
 }

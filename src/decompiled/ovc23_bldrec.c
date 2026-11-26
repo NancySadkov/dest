@@ -1988,39 +1988,40 @@ int __cdecl16far ovc23_compute2(int x,uint16_t y)
 void __cdecl16far ovc23_drownUnitsAt(uint16_t x,uint16_t y)
 
 {
-  uint16_t *puVar1;
-  char *pcVar2;
+  uint16_t *flagPtr;
+  char *entName;
+  char *message;
   uint16_t dst;
   uint entityIndex;
-  uint16_t uVar3;
-  uint16_t uVar4;
-  uint16_t uVar5;
+  uint16_t notifySeg;
+  uint16_t msgX;
+  uint16_t msgY;
   static char text2[64];   /* DGROUP-backed formatting buffer */
   static char text[64];   /* DGROUP-backed formatting buffer */
   int clearCol;
   byte gindex;
   
-  puVar1 = (uint16_t *)((*(short (*) [60] [148])GMapFlags)[y + 1] + x);
-  *puVar1 = *puVar1 | 3;
+  flagPtr = (uint16_t *)((*(short (*) [60] [148])GMapFlags)[y + 1] + x);
+  *flagPtr = *flagPtr | 3;
   entityIndex = EntityCount;
   while (entityIndex = entityIndex - 1, -1 < (int)entityIndex) {
-    uVar3 = (uint16_t)((ulong)Entities >> 0x10);
+    notifySeg = (uint16_t)((ulong)Entities >> 0x10);
     if (((Entities)[entityIndex].base.x == x) &&
        ((Entities)[entityIndex].base.y == y)) {
       clearCol = ovc23_findClearColumn(x,y);
-      uVar3 = (uint16_t)((ulong)Entities >> 0x10);
+      notifySeg = (uint16_t)((ulong)Entities >> 0x10);
       if (clearCol < 0) {
         gindex = (Entities)[entityIndex].base.gindex;
         if (AgntGs[(uint)gindex].ai == '\0') {
-          uVar3 = 0xa000;
+          notifySeg = 0xa000;
           dst = 0x195d;
-          uVar4 = x;
-          uVar5 = y;
-          pcVar2 = ovr_ovc15_capitalize(text2);
-          pcVar2 = ovr_stsprintf(text,(char *)CONCAT22(0x5665,_SS),
-                                 (char *)CONCAT22(pcVar2,(char *)0x26510),dst,uVar4,uVar5,
-                                 uVar3);
-          ovr_uiNotify(pcVar2,dst,0);
+          msgX = x;
+          msgY = y;
+          entName = ovr_ovc15_capitalize(text2);
+          message = ovr_stsprintf(text,(char *)CONCAT22(0x5665,_SS),
+                                 (char *)CONCAT22(entName,(char *)0x26510),dst,msgX,msgY,
+                                 notifySeg);
+          ovr_uiNotify(message,dst,0);
         }
         ovr_ovc15_removeEntity(entityIndex);
       }

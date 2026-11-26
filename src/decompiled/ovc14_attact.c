@@ -15,32 +15,30 @@ uint __cdecl16far attact_usesGMapFlags(uint x,int y,uint16_t arg3)
 
 {
   uint in_AX;
-  uint uVar1;
-  short *psVar2;
-  byte bVar3;
-  uint16_t uVar4;
+  uint result;
+  short *rowPtr;
+  byte ptrHi;
   
   if (((((int)x < 0) || (y < 0)) || (in_AX = x + 1, 0x93 < (int)in_AX)) ||
      (in_AX = y + 1, 0x3b < (int)in_AX)) {
-    uVar1 = in_AX & 0xff00;
+    result = in_AX & 0xff00;
   }
   else {
-    uVar4 = (uint16_t)((ulong)GMapFlags >> 0x10);
     if (((*(short (*) [60] [148])GMapFlags)[y][x] & 3U) == 0) {
-      psVar2 = (*(short (*) [60] [148])GMapFlags)[y] + x;
-      bVar3 = (byte)((uint)psVar2 >> 8);
-      if ((psVar2[0x94] & 3U) == 0) {
-        uVar1 = CONCAT11(bVar3,1);
+      rowPtr = (*(short (*) [60] [148])GMapFlags)[y] + x;
+      ptrHi = (byte)((uint)rowPtr >> 8);
+      if ((rowPtr[0x94] & 3U) == 0) {
+        result = CONCAT11(ptrHi,1);
       }
       else {
-        uVar1 = (uint)bVar3 << 8;
+        result = (uint)ptrHi << 8;
       }
     }
     else {
-      uVar1 = ((x & 0x7fff) >> 7) << 8;
+      result = ((x & 0x7fff) >> 7) << 8;
     }
   }
-  return uVar1;
+  return result;
 }
 
 

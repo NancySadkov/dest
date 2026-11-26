@@ -13541,3 +13541,51 @@ No expression changed.
   compare_state 1,627/0/0
   diff_dgroup 1,581/1,805 (64 runs, sum|delta| 235,338, mean 148, worst 14,252)
   compare_runtime 1,630 matched, 1,620 identical / 10 different
+
+### three more small functions: eleven names, one dead store (36,708 -> 36,632)
+three more small functions: eleven names, one dead segment word (36,708 -> 36,632)
+
+attact_usesGMapFlags (31 lines)
+    uVar1   the value returned                               -> result  (6)
+    psVar2  (...)[y] + x, a short * into the row              -> rowPtr  (4)
+    bVar3   the pointer's high byte, used as the result's     -> ptrHi   (4)
+    uVar4   (uint16_t)((ulong)GMapFlags >> 0x10), never read  -> removed
+    in_AX   left: the export assigns it inside the guard expression
+
+ovc23_drownUnitsAt (46 lines)
+    puVar1  (*(short (*)[60][148])GMapFlags)[y+1] + x         -> flagPtr   (4)
+    pcVar2  2019 assignment + 2021 read   ovc_ovc15_capitalize -> entName    (2)
+    pcVar2  2020 assignment + 2023 read   ovr_stsprintf         -> message    (2)
+    uVar3   the segment argument that reaches ovr_uiNotify     -> notifySeg (5)
+    uVar4   the x carried into the message                     -> msgX      (3)
+    uVar5   the y carried into the message                     -> msgY      (3)
+
+driver_loop1 (22 lines)
+    puVar1  the byte pointer used for the store               -> outPtr  (3)
+    puVar4  the running pointer                               -> runPtr  (5)
+    iVar3   the (x2-x1)+1 counter                             -> n       (5)
+    uVar2   949, 952  the swap temporary                      -> swapTmp (2)
+    uVar2   954, 955  CONCAT11(y,y>>8) and its >>2 term       -> rowOfs  (3)
+
+THE SAME TRAP AS ovc27_spellHalfDamage, IN A DIFFERENT SHAPE.  In ovc23_drownUnitsAt the
+two `pcVar2` roles are adjacent:
+
+    pcVar2 = ovr_ovc15_capitalize(text2);              /* the entity name      */
+    pcVar2 = ovr_stsprintf(text, ..., CONCAT22(pcVar2, (char *)0x26510), ...);
+                                       ^^^^^^ the *previous* value, the name
+    ovr_uiNotify(pcVar2, dst, 0);                      /* the formatted message */
+
+so the argument on the continuation line 2021 belongs to `entName`, not `message`.  The
+first attempt assigned it to `message` and the post-rename assertion (`pcVar2` still
+present) stopped the write - the same guard that caught the spellHalfDamage defect, which
+this time fired *before* the file changed instead of after.
+
+`uVar4` in attact_usesGMapFlags is a write-only segment word (`GMapFlags >> 0x10`): one
+assignment, no read, so both lines go.
+
+No expression changed.
+
+  grep_checks 36,708 -> 36,632; build 65/65; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0
+  diff_dgroup 1,581/1,805 (64 runs, sum|delta| 235,338, mean 148, worst 14,252)
+  compare_runtime 1,630 matched, 1,620 identical / 10 different
