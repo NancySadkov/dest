@@ -11116,3 +11116,46 @@ contents - these are name and record-addressing changes only.  grep_checks was f
 for the previous four turns while layout moved; this turn is the reverse.
 
 Re-running both dead-local sweeps a second time finds 0, so that vein is exhausted.
+
+### grep_checks 38,916 -> 38,385 over four commits
+grep_checks 38,916 -> 38,385 over four commits: record fix, five rename passes, dead-local sweeps
+
+Continuing on the section-5 axis after four turns of layout-only work.
+
+  commit      change                                                    delta
+  000a64b9    agnt_usesStExit record fix + ovc28/driver renames +        -338
+              two dead-local sweeps (91 declarations, 45 write-only)
+  e7b907a8    ovc26_usesFillGrid: BFS queues and cursors                  -108
+  724a7943    ovc18_showLeaderView: GLeaderSheets near reads + names      -54
+  dc567ea7    manage_highlightStructures: index split + segment args      -31
+
+Record-addressing fixes (both are the class verified last session):
+
+  * agnt_usesStExit truncated the target agent to `target * 0x34` and read
+    frames/frameIndex/screenX/screenY at DS:offset; now
+    Agnts[agnt->target].{frames,frameIndex,screenX,screenY}, and the animation
+    frame entry is a real far pointer (`*(int far *)(frameRec + 0xd)`).
+    Listing: `mov es,dx / mov ax,word ptr es:_Agnts[bx+40]`, les sites 19.
+
+  * ovc18_showLeaderView read `GLeaderSheets[i]` as `*(uint16_t *)(i*4)` and
+    `((uint16_t *)(i*4))[1]` - the same array it dereferences correctly three
+    lines above - and `GLeaderSheets[PartyCount-1]` as `PartyCount*4-4/-2`;
+    now far_ofs_u32 / SEG_OF of the array entry.
+
+Two mechanical sweeps (tmp/drop_dead_locals.py, tmp/drop_dead_stores.py):
+
+  a local whose identifier occurs once in its function is a dead declaration;
+  one occurring exactly twice (declaration + one plain assignment) is write-only.
+  Both lines can be deleted without changing behaviour.  136 locals removed
+  across 35 files.  A second run of both finds 0 - the vein is exhausted.
+
+MEASURED (HEAD 65ecb0fa -> 38,385)
+
+  grep_checks        38,916 -> 38,385   (-531)
+  build              65/65 clean, 0 errors
+  LINK.LOG           65 bytes / 0 problems
+  compare_state      1,627/0/0 unchanged
+  diff_dgroup        1,449/1,868, 72 delta runs, sum|delta| unchanged
+  compare_runtime    1,604 identical / 10 different unchanged
+
+Layout and runtime are untouched because none of this changes DGROUP contents.
