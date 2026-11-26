@@ -1601,8 +1601,12 @@ char s_of_nobility_2410_6cb7[42] = "of nobility. You will truly be the master";
 char s_of_your_2410_6ce1[11] = "of your...";
 char s_Your_desire_to_dest_2410_6cec[] = "Your desire to destroy him and gain revenge";
 char s_inspired_you_to_see_2410_6d18[] = "inspired you to seek a life of glory and";
+char s_adventure_2410_6d41[11] = "adventure.";
 char s__s_stronghold_destr_2410_6d4c[] = "%s stronghold destroyed";
+char s_of_adventure_2410_6d97[24] = "of adventure and glory.";
 char s_Congratulations__yo_2410_6d64[] = "Congratulations, you have achieved your objective.";
+char s_s_for_valor_2410_6dce[25] = "%s, for valor in battle.";
+char s_s_for_city_2410_6de7[25] = "%s, for city management.";
 char s_that__s_shall_hold__2410_6daf[] = "that %s shall hold the rank of";
 undefined1 xOfsTable[56] = {
       0x36, 0x00, 0x27, 0x00, 0x1D, 0x00, 0x10, 0x00, 0x01, 0x02, 0x03, 0x03, 0x00, 0x05, 0x04,

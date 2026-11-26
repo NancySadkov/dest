@@ -14779,3 +14779,41 @@ MEASURED (HEAD fc520d36 -> this commit)
 The remaining large steps in the profile are upstream: -46 at 0x6939, -30 at 0x6a6e, -5 at
 0x6ab9, -11 at 0x6d4c, -24 at 0x6daf and -50 at 0x6e00.  That cluster is where the accumulated
 offset enters, so it is the next band to scan with tmp/band2.py.
+
+### layout: the four strings at 0x6d41..0x6de7 (sum -> 177,888)
+layout: the four strings at 0x6d41..0x6de7 (sum 193,566 -> 177,888)
+
+The original band against ours:
+
+    0x6d18  41  "inspired you to seek a life of glory and"   ours 41  @0x6d18   OK
+    0x6d41  11  "adventure."                                MISSING
+    0x6d4c  24  "%s stronghold destroyed"                    ours 24  @0x6d41   (11 early)
+    0x6d64  51  "Congratulations, you have achieved..."      ours 51  @0x6d59   (11 early)
+    0x6d97  24  "of adventure and glory."                    MISSING
+    0x6daf  31  "that %s shall hold the rank of"             ours 31  @0x6d8c   (35 early)
+    0x6dce  25  "%s, for valor in battle."                   MISSING
+    0x6de7  25  "%s, for city management."                   MISSING
+    0x6e00  56  xOfsTable                                    ours     @0x6dab   (85 early)
+
+11 + 24 + 25 + 25 = 85, exactly the accumulated offset at xOfsTable, decomposing into the three
+reported steps: -11 at the stronghold string, -24 at the rank string, -50 at xOfsTable.
+
+All four texts existed only as stmiss.c blob entries (lines 216-219).  They are declared at their
+positions and the blob entries removed, so the bytes are moved rather than duplicated.
+
+MEASURED (HEAD 9a420422 -> this commit)
+
+  diff_dgroup matched        1,624 -> 1,628
+  diff_dgroup sum|delta|   193,566 -> 177,888   (-15,678)
+  diff_dgroup mean             119 ->   109
+  diff_dgroup runs              33 ->    35     (see below)
+  compare_runtime matched    1,679 -> 1,683
+  compare_runtime identical  1,670 -> 1,674
+  compare_state              1,627/0/0
+  grep_checks               35,702 -> 35,706
+  build 65/65, LINK.LOG 65 bytes / 0 problems
+
+`runs` rose because four more symbols now pair and each of them opens a delta region whose
+neighbours moved; the coverage measures (matched +4, runtime identical +4) both improved and the
+residual sum fell by 15,678, which is the honest direction.  The next band to scan is 0x6939..0x6d41,
+where the profile still steps by -46 at s_empty_2410_6939 and -30 at s_d_building_s_repaired.

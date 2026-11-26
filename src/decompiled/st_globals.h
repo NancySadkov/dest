@@ -2367,3 +2367,9 @@ extern char s_save_999_2410_8422[10];
 /* 0x84a3 / 0x8512 */
 extern char s_d_2410_84a3[5];
 extern undefined1 __OvrSize[4];
+
+/* 0x6d41 / 0x6d97 / 0x6dce / 0x6de7 */
+extern char s_adventure_2410_6d41[11];
+extern char s_of_adventure_2410_6d97[24];
+extern char s_s_for_valor_2410_6dce[25];
+extern char s_s_for_city_2410_6de7[25];
