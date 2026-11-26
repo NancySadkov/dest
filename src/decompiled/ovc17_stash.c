@@ -948,21 +948,21 @@ stg_tmp_t * __cdecl16far stash_usesStExit(stg_tmp_t *gfxListOfs,uint16_t arg2,ui
 void __cdecl16far fmRewindHeapPtr(void)
 
 {
-  uint16_t *puVar1;
-  uint16_t uStack_6;
-  uint16_t uStack_4;
+  uint16_t *segPtr;
+  uint16_t nodeOfs;
+  uint16_t nodeSeg;
   
   HeapPtr = 0xffff;
-  uStack_4 = StshCtPtr2.seg;
-  uStack_6 = StshCtPtr2.ofs;
-  while (uStack_6 != 0 || uStack_4 != 0) {
-    if ((*(int *)(uStack_6 + 0x11) != 0 || *(int *)(uStack_6 + 0x13) != 0) &&
-       (*(uint *)(uStack_6 + 0x13) < HeapPtr)) {
-      HeapPtr = *(uint *)(uStack_6 + 0x13);
+  nodeSeg = StshCtPtr2.seg;
+  nodeOfs = StshCtPtr2.ofs;
+  while (nodeOfs != 0 || nodeSeg != 0) {
+    if ((*(int *)(nodeOfs + 0x11) != 0 || *(int *)(nodeOfs + 0x13) != 0) &&
+       (*(uint *)(nodeOfs + 0x13) < HeapPtr)) {
+      HeapPtr = *(uint *)(nodeOfs + 0x13);
     }
-    puVar1 = (uint16_t *)(uStack_6 + 0xb);
-    uStack_6 = *(uint16_t *)(uStack_6 + 9);
-    uStack_4 = *puVar1;
+    segPtr = (uint16_t *)(nodeOfs + 0xb);
+    nodeOfs = *(uint16_t *)(nodeOfs + 9);
+    nodeSeg = *segPtr;
   }
   return;
 }

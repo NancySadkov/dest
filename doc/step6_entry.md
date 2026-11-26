@@ -13751,3 +13751,61 @@ No expression changed.
   compare_state 1,627/0/0
   diff_dgroup 1,581/1,805 (64 runs, sum|delta| 235,338, mean 148, worst 14,252)
   compare_runtime 1,630 matched, 1,620 identical / 10 different
+
+### six more small functions: sixteen names, two dead stores, one alias (36,389 -> 36,246)
+six more small functions: sixteen names, two dead stores, one alias (36,389 -> 36,246)
+
+ovc25_attackingNotice (36 lines)
+    pbVar1  917, 944, 945   &(leader + 0x5d) read-modify-write   -> flagPtr     (4)
+    uVar2   918 decl, 935   ovr_randBelow(100,0)                 -> randRoll    (3)
+    uVar2   938, 942, 943   _DS, the uiNotify segment            -> notifySeg   (3)
+    puVar3  919, 939, 942   ovr_ovc15_usesStshRealloc's result    -> stashPtr    (3)
+    uVar4   921, 930, 933   shortName[0] + rank + shortName[1]    -> classWeight (4)
+
+manage_compute2 (21 lines)
+    pcVar2  `pcVar2 = sheet;` a no-op alias of the parameter     -> removed (7 uses)
+    bVar1   the value returned                                   -> result      (6)
+
+ovc38_usesStshFree (20 lines)
+    piVar1  89, 95, 96   (int *)(handle.ofs + i*4)               -> entryPtr   (4)
+    puVar2  90, 97..99   the same slot read as uint16_t *        -> entryWords (4)
+    iVar3   91, 94, 95, 97  the 0..5 loop index                  -> idx        (7)
+
+fmRewindHeapPtr (21 lines)
+    puVar1   951, 963, 965  &(node + 0xb), the segment word      -> segPtr  (3)
+    uStack_6 952..965       the current node's offset            -> nodeOfs (10)
+    uStack_4 953, 956, 958, 965  the current node's segment      -> nodeSeg (4)
+
+driver_copyWords (19 lines)
+    puVar1  1802, 1812, 1814  the source word pointer            -> srcPtr (3)
+    puVar2  1803, 1810, 1814  the destination word pointer       -> dstPtr (3)
+    puVar3  1804, 1807, 1812, 1813  the running source cursor    -> curSrc (5)
+    puVar4  1805, 1808, 1810, 1811  the running destination cursor -> curDst (5)
+
+attact_usesEntityCount (33 lines)
+    iVar1    1542, 1557     manage_usesLitoa103() count          -> remaining  (5)
+    pcVar2   1543, 1565, 1566  ovr_ovc15_textArena's result        -> arenaText  (3)
+    uVar3    1545 decl, 1553, 1555  ovr_ovc23_isCursorAt's result  -> cursorHit  (3)
+    uStack_3 1546, 1558, 1561, 1563  the target code byte          -> targetCode (4)
+    plus its two `(uint16_t)((ulong)Entities >> 0x10)` stores, both write-only -> removed
+
+TWO MISTAKES CAUGHT, both before the commit:
+
+1. the `uVar2` split in ovc25_attackingNotice renamed the declaration line to
+   `uint16_t randRoll;` but never added `uint16_t notifySeg;`.  The build reported
+   `Undefined symbol 'notifySeg'`, so the declaration was added and the whole gate suite
+   re-run - the numbers quoted here are from the clean run, not the broken one.
+
+2. in attact_usesEntityCount the dead-store removal ran *after* the rename, so its pattern
+   (`uVar3 = ...`) no longer matched and the two stores silently survived as
+   `cursorHit = ...`.  They were removed explicitly afterwards.  Sequencing a pattern-based
+   deletion after a rename is exactly the mistake the per-name assertions are meant to
+   catch, and here the assertion (name gone) passed while the deletion silently did
+   nothing - the lesson is to delete before renaming, or to assert the deletion count.
+
+No expression changed.
+
+  grep_checks 36,389 -> 36,246; build 65/65; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0
+  diff_dgroup 1,581/1,805 (64 runs, sum|delta| 235,338, mean 148, worst 14,252)
+  compare_runtime 1,630 matched, 1,620 identical / 10 different

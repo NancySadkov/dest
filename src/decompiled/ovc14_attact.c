@@ -1539,31 +1539,29 @@ void __cdecl16far attact_usesUpdSeason(void)
 void __cdecl16far attact_usesEntityCount(void)
 
 {
-  int iVar1;
-  char *pcVar2;
+  int remaining;
+  char *arenaText;
   uint owner;
-  uint16_t uVar3;
-  undefined1 uStack_3;
+  uint16_t cursorHit;
+  undefined1 targetCode;
   
   owner = 0;
   do {
     if (EntityCount <= owner) {
       return;
     }
-    uVar3 = (uint16_t)((ulong)Entities >> 0x10);
-    uVar3 = ovr_ovc23_isCursorAt
+    cursorHit = ovr_ovc23_isCursorAt
                       ((Entities)[owner].base.x,(Entities)[owner].base.y,0);
-    if ((char)uVar3 != '\0') {
-      for (iVar1 = manage_usesLitoa103(0x236f,owner); iVar1 != 0; iVar1 = iVar1 + -1) {
-        uVar3 = (uint16_t)((ulong)Entities >> 0x10);
+    if ((char)cursorHit != '\0') {
+      for (remaining = manage_usesLitoa103(0x236f,owner); remaining != 0; remaining = remaining + -1) {
         if (((Entities)[owner].base.target & 1) == 0) {
-          uStack_3 = 0;
+          targetCode = 0;
         }
         else {
-          uStack_3 = (Entities)[owner].base.target - 2;
+          targetCode = (Entities)[owner].base.target - 2;
         }
-        pcVar2 = ovr_ovc15_textArena(owner,(uint)uStack_3,0);
-        if (((uint)pcVar2 & 0xff) == 0) break;
+        arenaText = ovr_ovc15_textArena(owner,(uint)targetCode,0);
+        if (((uint)arenaText & 0xff) == 0) break;
       }
     }
     owner = owner + 1;

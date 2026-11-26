@@ -86,17 +86,17 @@ void __cdecl16far ovc38_saveHighScores(far_t entries)
 void __cdecl16far ovc38_usesStshFree(far_t handle)
 
 {
-  int *piVar1;
-  uint16_t *puVar2;
-  int iVar3;
+  int *entryPtr;
+  uint16_t *entryWords;
+  int idx;
   far_t handle_00;
   
-  for (iVar3 = 0; iVar3 < 6; iVar3 = iVar3 + 1) {
-    piVar1 = (int *)(handle.ofs + iVar3 * 4);
-    if (*piVar1 != 0 || piVar1[1] != 0) {
-      puVar2 = (uint16_t *)(handle.ofs + iVar3 * 4);
-      handle_00.seg = puVar2[1];
-      handle_00.ofs = *puVar2;
+  for (idx = 0; idx < 6; idx = idx + 1) {
+    entryPtr = (int *)(handle.ofs + idx * 4);
+    if (*entryPtr != 0 || entryPtr[1] != 0) {
+      entryWords = (uint16_t *)(handle.ofs + idx * 4);
+      handle_00.seg = entryWords[1];
+      handle_00.ofs = *entryWords;
       ovr_stshFree(handle_00);
     }
   }

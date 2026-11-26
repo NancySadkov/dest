@@ -914,11 +914,12 @@ void __cdecl16far OVC25_5b66_131f_entry(void)
 void __cdecl16far ovc25_attackingNotice(byte partyIndex)
 
 {
-  byte *pbVar1;
-  uint16_t uVar2;
-  uint8_t *puVar3;
+  byte *flagPtr;
+  uint16_t randRoll;
+  uint16_t notifySeg;
+  uint8_t *stashPtr;
   char *msg;
-  uint uVar4;
+  uint classWeight;
   uint16_t curSeg = _SS;
   static char text[64];   /* DGROUP-backed formatting buffer */
   byte partyClass;
@@ -927,22 +928,22 @@ void __cdecl16far ovc25_attackingNotice(byte partyIndex)
       (*(char *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0x3f) != '\0')) &&
      (*(int *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0x5e) == 0)) {
     partyClass = (GLeaderSheets[partyIndex])->classStr;
-    uVar4 = (uint)AgntGs[(uint)partyClass].shortName[0] +
+    classWeight = (uint)AgntGs[(uint)partyClass].shortName[0] +
             (uint)AgntGs[(uint)partyClass].rank +
             (uint)AgntGs[(uint)partyClass].shortName[1];
-    if (((uVar4 < PlayerCount) &&
+    if (((classWeight < PlayerCount) &&
         (((GLeaderSheets[partyIndex])->flags5d & 1) == 0)) &&
-       (uVar2 = ovr_randBelow(100,0), (int)(uVar2 & 0xff) < (int)(PlayerCount - uVar4))) {
+       (randRoll = ovr_randBelow(100,0), (int)(randRoll & 0xff) < (int)(PlayerCount - classWeight))) {
       *(uint16_t *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0x5e) = 0x19;
       ovr_play_sfx(82,0,0);
-      uVar2 = _DS;
-      puVar3 = ovr_ovc15_usesStshRealloc
+      notifySeg = _DS;
+      stashPtr = ovr_ovc15_usesStshRealloc
                          ((char *)*(uint16_t *)((uint)partyIndex * 4),((uint16_t *)((uint)partyIndex * 4))[1],GSavedBlitSeg,0,0,0,0,0);
       msg = ovr_stsprintf(text,(char *)CONCAT22(0x58f5,curSeg),
-                          (char *)CONCAT22(puVar3,(char *)0x26510),uVar2);
-      ovr_uiNotify(msg,uVar2,0);
-      pbVar1 = (byte *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0x5d);
-      *pbVar1 = *pbVar1 | 1;
+                          (char *)CONCAT22(stashPtr,(char *)0x26510),notifySeg);
+      ovr_uiNotify(msg,notifySeg,0);
+      flagPtr = (byte *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0x5d);
+      *flagPtr = *flagPtr | 1;
     }
   }
   return;

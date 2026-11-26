@@ -172,23 +172,21 @@ char * __cdecl16far manage_compute1(int n,uint16_t arg2)
 byte __cdecl16far manage_compute2(char_sheet_t far *sheet)
 
 {
-  byte bVar1;
-  char_sheet_t far *pcVar2;
+  byte result;
   
-  pcVar2 = sheet;
-  if ((pcVar2->cls == 4) && (0xc < pcVar2->race)) {
-    bVar1 = 0xc;
+  if ((sheet->cls == 4) && (0xc < sheet->race)) {
+    result = 0xc;
   }
-  else if ((pcVar2->cls == 5) && (10 < pcVar2->race)) {
-    bVar1 = 10;
+  else if ((sheet->cls == 5) && (10 < sheet->race)) {
+    result = 10;
   }
-  else if ((pcVar2->cls == 6) && (8 < pcVar2->race)) {
-    bVar1 = 8;
+  else if ((sheet->cls == 6) && (8 < sheet->race)) {
+    result = 8;
   }
   else {
-    bVar1 = pcVar2->race;
+    result = sheet->race;
   }
-  return bVar1;
+  return result;
 }
 
 

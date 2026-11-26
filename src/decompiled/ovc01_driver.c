@@ -1799,19 +1799,19 @@ uint __cdecl16far lowNibble(uint value,uint16_t arg2)
 void __cdecl16far driver_copyWords(far_t src,far_t dst,uint16_t count)
 
 {
-  uint16_t *puVar1;
-  uint16_t *puVar2;
-  uint16_t *puVar3;
-  uint16_t *puVar4;
+  uint16_t *srcPtr;
+  uint16_t *dstPtr;
+  uint16_t *curSrc;
+  uint16_t *curDst;
   
-  puVar3 = (uint16_t *)src.ofs;
-  puVar4 = (uint16_t *)dst.ofs;
+  curSrc = (uint16_t *)src.ofs;
+  curDst = (uint16_t *)dst.ofs;
   for (; count != 0; count = count - 1) {
-    puVar2 = puVar4;
-    puVar4 = puVar4 + 1;
-    puVar1 = puVar3;
-    puVar3 = puVar3 + 1;
-    *puVar2 = *puVar1;
+    dstPtr = curDst;
+    curDst = curDst + 1;
+    srcPtr = curSrc;
+    curSrc = curSrc + 1;
+    *dstPtr = *srcPtr;
   }
   return;
 }
