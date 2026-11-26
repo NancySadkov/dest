@@ -12580,3 +12580,44 @@ No expression changed in either function.
   grep_checks 37,528 -> 37,483; build 65/65; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 1,450/1,805 (68 runs, sum|delta| 229,747)
   compare_runtime 1,615 matched, 1,605 identical / 10 different
+
+### diff_dgroup: generated _2410_XXXX names pair by name (matched 1,450 -> 1,473)
+diff_dgroup: our generated `_2410_XXXX` names now pair by their stripped key (matched 1,450 -> 1,473)
+
+Most of our string symbols are declared as `s_<text>_2410_<orig-offset>`, so the key of
+our `s_cleric_2410_01da` is `S_CLERIC_2410_01DA` while the original's name for the same
+object is `s_cleric`.  No exact or digit-stripped key could reach it, so the pair could
+only be found by the content-matching *report* - which then blamed whatever symbol owned
+that address in our layout:
+
+    01da  s_cleric      ours=_S_FRMLND_LBM_2410_2E31
+    0755  s_d           ours=_CRED01CUT2SEG
+
+Two changes in scripts/diff_dgroup.py:
+
+1. a third candidate table keyed by `variant_key(name)` = our key with a trailing
+   `_2410_XXXX` removed;
+2. the candidate lists are now *concatenated* (exact, loose, variant) instead of
+   `or`-chained, so a table whose candidates are all consumed still falls through to the
+   next one;
+3. when a generated name is a candidate, prefer the one whose `_2410_XXXX` suffix equals
+   this original symbol's offset - that pairing is exact by construction rather than a
+   guess.
+
+MEASURED (HEAD f116fe20 -> this commit)
+
+  diff_dgroup matched        1,450 -> 1,473   (+23)
+  diff_dgroup unmatched        355 ->   332   (-23)
+  matched by content (report)   21 ->    15
+  diff_dgroup delta runs        68 ->    69
+  diff_dgroup sum|delta| 229,747 -> 247,309   (+17,562)
+  compare_state / compare_runtime / grep_checks unchanged
+
+READ THE SUM CAREFULLY: it rose because 23 symbols that were previously *excluded* from
+the profile are now measured.  Their contribution is 247,309 - 229,747 = 17,562, i.e. a
+mean of 764 each, which is consistent with the high-drift region they live in (+152 at
+0x0094 decaying to +~600 by 0x0600).  The 1,450 pairs that were already matched are
+unchanged: 229,747/1,450 = 158.4 and (247,309-17,562)/1,450 = 158.4.
+
+So `matched` is the honest number here and it improved; sum|delta| is not comparable
+across a change in the measured set.

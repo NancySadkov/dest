@@ -76,6 +76,18 @@ def key(name):
     return k
 
 
+def variant_key(name):
+    """`key()` of our names with the generated `_2410_XXXX` offset suffix removed.
+
+    Most of our string symbols are declared as `s_<text>_2410_<orig-offset>`, so the key
+    of our `s_cleric_2410_01da` is `S_CLERIC_2410_01DA` while the original's name for the
+    same object is `s_cleric`.  Without this the pair could only be found by the
+    content-matching report, which then attributed it to whatever symbol happened to own
+    the address in our layout (`s_cleric -> _S_FRMLND_LBM_2410_2E31`).
+    """
+    return re.sub(r"_2410_[0-9A-F]{4}$", "", key(name))
+
+
 def loose_key(name):
     """`key()` without the trailing digit.
 
@@ -98,15 +110,20 @@ print("rebuilt DGROUP segment: %04x" % dgroup_seg if dgroup_seg else "DGROUP not
 
 ours_by_key = {}
 ours_by_loose = {}
+ours_by_variant = {}
 for name, (seg, ofs) in ours.items():
     if seg != dgroup_seg:
         continue
     ours_by_key.setdefault(key(name), []).append((ofs, name))
     ours_by_loose.setdefault(loose_key(name), []).append((ofs, name))
+    if variant_key(name) != key(name):
+        ours_by_variant.setdefault(variant_key(name), []).append((ofs, name))
 for k in ours_by_key:
     ours_by_key[k].sort()
 for k in ours_by_loose:
     ours_by_loose[k].sort()
+for k in ours_by_variant:
+    ours_by_variant[k].sort()
 
 matched = []
 unmatched = []      # (off, name, reason)
@@ -114,10 +131,22 @@ last = -1
 used = set()
 for off, name in orig:
     k = key(name)
-    cands = ours_by_key.get(k)
-    if not cands:
-        # fallback: allow the trailing `_N` to differ (see loose_key)
-        cands = ours_by_loose.get(loose_key(name))
+    # exact key first, then the two fallbacks; a candidate list that is merely
+    # exhausted must still fall through to the next table, so concatenate.
+    cands = []
+    for tbl, kk in ((ours_by_key, k),
+                    (ours_by_loose, loose_key(name)),
+                    (ours_by_variant, variant_key(name))):
+        for entry in tbl.get(kk, ()):
+            if entry not in cands:
+                cands.append(entry)
+    # a generated name carries the *original* offset (`_2410_01DA`), so when one of
+    # those is a candidate, prefer the one whose suffix is this symbol's offset - that
+    # pairing is exact by construction, not a guess.
+    tagged = (("_2410_%04X" % off),)
+    exact = [c for c in cands if c[1].upper().endswith(tagged[0])]
+    if exact:
+        cands = exact + [c for c in cands if c not in exact]
     if not cands:
         unmatched.append((off, name, "no name with this key"))
         continue
