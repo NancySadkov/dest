@@ -608,14 +608,17 @@ void __cdecl16far stshInitAudioAssets(char grab)
         iVar10 = (int)puVar3 + 0xd;
         iVar4 = in_DX + (uint)((uint32_t *)0xfff2 < puVar3);
         pvVar5 = ovr_stshAlloc(CONCAT13((char)((uint)iVar4 >> 8),CONCAT12((char)iVar4,iVar10)));
-        ((uint16_t *)(i * 4))[1] = iVar10;
-        *(uint16_t *)(i * 4) =(uint16_t)( pvVar5);
-        *(undefined1 *)*(uint32_t *)(i << 2) = 3;
-        uVar13 = (uint16_t)((ulong)*(uint32_t *)(i << 2) >> 0x10);
-        iVar4 = (int)*(uint32_t *)(i << 2);
-        *(uint16_t *)(iVar4 + 3) = 0;
-        *(uint16_t *)(iVar4 + 1) = 0;
-        *(uint16_t *)((int)*(uint32_t *)(i << 2) + 5) =(uint16_t)( puVar3);
+        {
+          uint8_t far *handle;
+          /* 014B: the table lives in AudioHandles' own segment, not at DS offset i*4. */
+          ((uint16_t far *)((uint8_t far *)&AudioHandles[0] + i * 4))[1] = iVar10;
+          ((uint16_t far *)((uint8_t far *)&AudioHandles[0] + i * 4))[0] = (uint16_t)pvVar5;
+          handle = (uint8_t far *)*(uint32_t far *)&AudioHandles[i];
+          *handle = 3;
+          *(uint16_t far *)(handle + 3) = 0;
+          *(uint16_t far *)(handle + 1) = 0;
+          *(uint16_t far *)(handle + 5) = (uint16_t)puVar3;
+        }
         file_id = ovr_stshOpen(*(uint16_t *)(i * 2));
         iVar4 = ovr_stshRead();
         if (iVar4 != 0 || iVar10 != 0) {

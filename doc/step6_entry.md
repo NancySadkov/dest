@@ -8419,3 +8419,50 @@ typedef rather than a scalar, or that the `(uint8_t far *)` cast in between disc
   grep_checks 40,071 (unchanged); build 65/65 clean; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 1,444/1,868
   compare_runtime 1,545/12 main entry
+
+#### Correction: the ovc20_stash rewrite works - my revert was a grep artifact
+
+Last turn's revert was based on "the listing contains no `es:[bx+2]`".  That was a mistake: I searched
+for one register form.  A three-line probe settles the underlying question, because `DW` is
+`struct DW { uint16_t lo, hi; }` and it was not obvious that a struct-typed `far far` array still gets
+its own segment:
+
+```c
+DW far far probeDW[4];
+```
+
+```
+probeDW[i].lo                  -> mov ax,seg _probeDW / mov es,ax / mov ax,word ptr es:_probeDW[bx]
+&probeDW[0] + i*4              -> mov dx,seg _probeDW / add ax,offset _probeDW
+*(uint32_t far *)&probeDW[i]   -> mov dx,word ptr es:_probeDW[bx+2] / mov ax,word ptr es:_probeDW[bx]
+((uint16_t far *)((char far *)&probeDW[0] + i*4))[1] = v
+                               -> mov ax,seg _probeDW / mov es,ax / mov word ptr es:_probeDW[bx+2],dx
+```
+
+So the construct emits exactly the far addressing the original uses, and the re-applied rewrite verifies
+in `stshInitAudioAssets`:
+
+```
+mov  bx,si / shl bx,2
+mov  ax,seg _AudioHandles
+mov  es,ax
+mov  word ptr es:_AudioHandles[bx+2],dx
+...
+mov  ax,word ptr es:_AudioHandles[bx+2]
+mov  dx,word ptr es:_AudioHandles[bx]
+les  bx,dword ptr [bp-50]
+mov  byte ptr es:[bx],3
+mov  word ptr es:[bx+3],0
+```
+
+against the original's `mov ax,0x48 / mov es,ax / les bx,ptr es:[bx] / mov byte ptr es:[bx],3 /
+mov word ptr es:[bx+3],0 / ...`.  `seg _AudioHandles` replaces the original's link-time literal `0x48`.
+
+**Lesson worth keeping:** "the listing does not contain X" only means that when the search covers every
+form X could take.  Three times this session I have drawn a conclusion from a pattern that was too
+specific (pointer-in-offset vs pointer-in-segment, function-level vs argument-level phantom checks, and
+now a register-specific operand search).  A one-function probe is cheaper than a revert.
+
+  grep_checks 40,071 -> 40,067; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 1,444/1,868
+  compare_runtime 1,545/12 main entry
