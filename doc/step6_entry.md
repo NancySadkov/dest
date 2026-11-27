@@ -18644,3 +18644,43 @@ here rather than papered over.
     compare_state    1,628/0/0 (unchanged)
     diff_dgroup      1,639/1,805 matched, 5 runs, sum|delta| 18, mean 0, worst 12 (unchanged)
     compare_runtime  1,692 matched, 1,683 identical / 9 different at all three sample points
+
+### fix: the heal target is Agnts (stride 0x34), not Entities (0x37)
+fix: the heal target is Agnts (stride 0x34), not Entities - and the 0x37 note was wrong
+
+The previous commit's rewrite of `ovc41_textOnlyPlaceSingle` used `&Entities[entityIndex]` and
+`ent->base.*`, and its doc entry claimed our `entity_t` was three bytes too large because the build
+emitted `mov dx,0x37 / imul` where the image has `0x34`.  Both were wrong, and the image says so twice:
+
+    ovc41_textOnlyPlaceSingle 6a8f:209c   mov dx,0x34 / imul   on [bp+0xa]
+    ovc22_usesEntities2       5087:199d   mov dx,0x37 / imul   on [bp+6]
+
+So the original has **two** instance arrays, and the heal function uses the 0x34 one:
+
+    Agnts[24]     agnt_t,   stride 0x34   - the agent instances  (fields +0x21 strength,
+                                                            +0x22 strengthMax, +0x2b flags)
+    Entities      entity_t, stride 0x37   - agnt_t plus tick (0x34) and dir (0x36)
+
+`entity_t` is therefore the right size, and the heal function heals `Agnts[index]`, whose fields are
+plain `agnt_t` members - no `.base`.
+
+The body now reads `ent = &Agnts[entityIndex]`, `ent->flags`, `ent->strength`, `ent->strengthMax`, and
+the emitted code matches the image again:
+
+    002f  mov ax,[bp+0xa] / mov dx,0x34 / imul dx / add ax,0
+    003a  mov word [bp-2],0x5e47          ; seg Agnts
+    0045  test word es:[bx+0x2b],0x820
+    0054  mov ax,es:[bx+0x2b] / and ax,0xf7ff / mov es:[bx+0x2b],ax
+    ...    rollDice x5, panFromX, play_sfxU(0x3b), pluralSuffix x2,
+           statusText x2, usesStshRealloc, stsprintf(0x6feb) / add sp,0x20, uiNotify
+
+A first attempt at the edit applied the `entity_t -> agnt_t` substitutions file-wide and broke nine
+other functions in ovc41_main.c (`Undefined symbol 'base' in function ovc41_removeAgent`); the file was
+restored from git and the change re-applied inside the heal function alone (14 replacements, lines
+2098..2190).
+
+Measured (unchanged metrics, corrected code):
+
+    grep_checks 26,977; build 65/65; LINK.LOG 65 bytes / 0 problems
+    compare_state 1,628/0/0; diff_dgroup 1,639/1,805 with sum|delta| 18
+    compare_runtime 1,692 matched, 1,683 identical / 9 different at all three sample points

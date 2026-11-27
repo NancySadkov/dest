@@ -2104,7 +2104,7 @@ byte * __cdecl16far ovc41_textOnlyPlaceSingle(agnt_t far *agnt,int entityIndex)
 
 {
   far_t curePtrs[4];
-  entity_t far *ent;
+  agnt_t far *ent;
   uint8_t level;
   uint16_t healed;
   uint16_t old;
@@ -2125,8 +2125,8 @@ byte * __cdecl16far ovc41_textOnlyPlaceSingle(agnt_t far *agnt,int entityIndex)
   for (i = 0; i < 4; i++) {
     curePtrs[i] = CureSpellPtrs[i];
   }
-  ent = &Entities[entityIndex];
-  if ((ent->base.flags & 0x820) != 0) {
+  ent = &Agnts[entityIndex];
+  if ((ent->flags & 0x820) != 0) {
     return (byte *)ent;
   }
   agnt->flags = agnt->flags & ~0x800;
@@ -2153,7 +2153,7 @@ byte * __cdecl16far ovc41_textOnlyPlaceSingle(agnt_t far *agnt,int entityIndex)
     healed = (uint16_t)((ovr_manage_rollDice(3,6) & 0xff) + 3);
     break;
   default:
-    healed = (uint16_t)((ent->base.strengthMax - ent->base.strength) -
+    healed = (uint16_t)((ent->strengthMax - ent->strength) -
                         (ovr_manage_rollDice(1,6) & 0xff));
     if ((int)healed < 6) {
       healed = (uint16_t)((ovr_manage_rollDice(3,6) & 0xff) + 3);
@@ -2161,12 +2161,12 @@ byte * __cdecl16far ovc41_textOnlyPlaceSingle(agnt_t far *agnt,int entityIndex)
     }
     break;
   }
-  old = ent->base.strength;
-  ent->base.strength = (uint8_t)(ent->base.strength + healed);
-  if (ent->base.strength > ent->base.strengthMax) {
-    ent->base.strength = ent->base.strengthMax;
+  old = ent->strength;
+  ent->strength = (uint8_t)(ent->strength + healed);
+  if (ent->strength > ent->strengthMax) {
+    ent->strength = ent->strengthMax;
   }
-  total = ent->base.strength;
+  total = ent->strength;
   delta = (uint16_t)(total - old);
   if (total == old) {
     return (byte *)ent;
@@ -2175,7 +2175,7 @@ byte * __cdecl16far ovc41_textOnlyPlaceSingle(agnt_t far *agnt,int entityIndex)
   ovr_play_sfxU(0x3b,0,pan);
   pluralA = (char far *)ovc41_pluralSuffix((uint16_t)total);
   pluralB = (char far *)ovc41_pluralSuffix(delta);
-  text1 = (char far *)ovr_agnt_statusText((agnt_t far *)ent,
+  text1 = (char far *)ovr_agnt_statusText(ent,
                                           (char far *)MK_FP(_SS,&buf1));
   text2 = (char far *)ovr_agnt_statusText(agnt,(char far *)MK_FP(_SS,&buf2));
   stash = (char far *)ovr_ovc15_usesStshRealloc(text2);
