@@ -18188,3 +18188,67 @@ REBUILT.EXE stays 520,204 bytes because O49.OBJ is one of the four excluded over
 source-level fidelity (and section-5 names) that the default link does not carry.  A link with
 `EXCLUDE_OBJS` unset was checked in an earlier session to exceed the 640 KiB DOS limit; that is why the
 exclusion exists, so this function cannot be exercised by the gates until that budget is addressed.
+
+### step 6: ovc15_textView re-decompiled from the image (grep 29,795 -> 29,329)
+step 6: `ovc15_textView` re-decompiled from the image (grep 29,795 -> 29,329)
+
+Next entry from the call-count screen: image 211 bytes / 2 calls, export 437 lines / 32 calls with a
+nine-parameter signature (`uint32_t param_1,int *param_2,...`).
+
+## The image (`tmp/dis_seg.py 4207 25dd 0xdf`)
+
+    25dd  prologue; sub sp,6
+    25e3  sel = AgntGs[agnt->gindex].shortName[3]      (es:[gindex*0x95 + 0x271c])
+    2600  if (sel == 0xff) sel = 0
+    260a  switch (sel - 1)      jump table CS:0x26b0 = 2628,2632,263c,2646,2650,265a
+            case 0: w=4 h=1    case 1: w=6 h=1    case 2: w=4 h=2
+            case 3: w=8 h=3    case 4: w=6 h=1    case 5: w=6 h=1
+            default (>5):      w=8 h=2
+    2662  if (agnt->level > 9) height = h
+          else height = (ovr_manage_rollDice(1, w) & 0xff)
+                      + (int16)ovr_agnt_abilityModifier(entityIndexByte, 4)
+    26a0  if (height < 1) height = 1
+    26ab  return (byte)height
+
+The two thunks are named from `ovr_stubs.c`'s own comments (`0x190:0x57 -> manage_rollDice`,
+`0x148:0x3e -> agnt_abilityModifier`), and `entityIndexByte` is `*(uint8_t *)((uint8_t far *)agnt +
+0x1a)` - the same byte `stats_compute4` hands to `ovr_agnt_abilityModifier`.
+
+## Verified in the rebuilt image (`tmp/dis_ours.py _OVC15_TEXTVIEW`)
+
+    ours                                image
+    sub sp,6                            25e0 sub sp,6
+    les bx,[bp+6] / al=es:[bx+0xd]      25e3/25e6 same
+    dx=0x95 / imul dx                   25ec same
+    es=<our DGROUP> / al=es:[bx+0x260e] 25f1/25f8 es=0x60 / es:[bx+0x271c]
+    cmp byte [bp-1],0xff                2600 same
+    dec ax / cmp bx,5 / ja             260a..2615 same
+    shl bx,1 / jmp cs:[bx+0x2ccf]       2617 jmp cs:[bx+0x26b0]
+    w=4,h=1  w=6,h=1  w=4,h=2  w=8,h=3 2628..2658 same immediates
+    cmp byte es:[bx+0xf],9 / jbe        2665 same
+    push w / push 1 / lcall manage_rollDice / add sp,4
+                                        266c..2677 same
+    push ax / push 4 / les bx,[bp+6] / mov al,es:[bx+0x1a] / push ax /
+    lcall agnt_abilityModifier / add sp,4
+                                        267c..268c same
+    pop dx / add dx,ax / [bp-6]=dx      2690..2693 same
+
+An intermediate build showed `mov bx,[bp+6] / mov al,[bx+0x1a]` - a near access, segment dropped,
+exactly the defect the listing caught in `ovc49_body1`.  Writing the byte as
+`*(uint8_t far *)((uint8_t far *)agnt + 0x1a)` restored `les bx,[bp+6] / mov al,es:[bx+0x1a]`.
+
+## Measured (HEAD d5fc9c28 -> this commit)
+
+    grep_checks      29,795 -> 29,329   (-466; the 437-line wrong body is gone)
+    REBUILT.EXE      520,204 -> 515,980
+    build 65/65, LINK.LOG 65 bytes / 0 problems
+    compare_state    1,628/0/0 (unchanged)
+    diff_dgroup      1,639/1,805 matched, 5 runs, sum|delta| 18, mean 0, worst 12 (unchanged)
+    compare_runtime  1,692 matched, 1,683 identical / 9 different at all three sample points
+
+Unlike `ovc49_body1`, `O15.OBJ` **is** linked, so this function is present in REBUILT.EXE and its
+fidelity was checked there rather than in a listing.
+
+Two pre-existing siblings still carry the same near-cast defect and are queued: `stats_compute4`'s
+`*(byte *)((int)&agnt->entity + 3)` argument to `ovr_agnt_abilityModifier`, and the
+`*(uint8_t *)((int)&x + n)` idiom elsewhere in the tree.
