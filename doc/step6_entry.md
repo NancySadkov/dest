@@ -20994,3 +20994,22 @@ the field comment says so.
     compare_state    1,628/0/0 (unchanged)
     diff_dgroup      1,639/1,805 matched, 5 runs, sum|delta| 18 (unchanged)
     compare_runtime  1,692 matched, 1,683 identical / 9 different at all three sample points
+
+### `5087:056e`'s `lcall 0x208,0x20` is unresolvable by construction
+
+The one call in that routine that no cross-reference can name was checked directly: scanning the whole
+image for the five-byte `9A ofs_lo ofs_hi sel_lo sel_hi` form with selector 0x208 gives exactly one
+occurrence, at file offset 0x41c83.  Two segment:offset spellings alias that byte (`5087:1413` =
+0x50870+0x1413 and `51c8:0003` = 0x51c80+3), which is why the address looked ambiguous; both are the
+same instruction, inside `ovc22_textRingProt`'s tail, feeding `GLeaderSheets[partyIndex]->+0x84`.
+
+Because the selector is used once in the entire binary there is no second module whose derived body
+could supply the target's name - the cross-reference method used for every other thunk in this session
+has nothing to match against.  So a body for `5087:056e` needs either
+
+  * a documented placeholder entry in the existing `func_0x...` convention
+    (scripts/model/unresolved.tsv already carries that class of entry for VROOMM funref targets), or
+  * this single call left as a marked gap in the body.
+
+Either way it is one call out of eleven, and both the argument (partyIndex) and the destination
+(sheet +0x84) are known.
