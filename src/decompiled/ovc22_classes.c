@@ -259,7 +259,18 @@ uint __cdecl16far ovc22_seasonalIncome(byte bldType,uint8_t partyIndex,uint16_t 
      - the party bit `0x1000 << GLeaderSheets[partyIndex]->faction` (+0x3f);
      - per-unit pass over GUnits[0xf8..GUnitCount]: bldType (+0), x (+4), y (+6),
        accumulating the 0x3000 bits of the four surrounding GMapFlags words;
-     - a 22-way switch `jmp word ptr cs:[bx+0x1444]` over `GBuildingTypes[..]+0x133 - 7`;
+     - a 22-way switch `jmp word ptr cs:[bx+0x1444]` over `GBuildingTypes[..]+0x133 - 7`
+       (type = index + 7): 7 -> sheet->+0xad++, 14 -> budget[2*bldtp->+0x131] += 5,
+       15 -> sheet->+0x99[val] += 3, 17 -> sheet->+0xa6++ and sheet->+0x5d |= 8,
+       18/22 -> sheet->+0xa0 += the map word at +0x128, 20 -> sheet->+0x5d &= ~4,
+       21 -> sheet->+0xa5++, 23 -> if (sheet->+0x3f == 0) g_90e8 = 1, 26 -> sheet->+0xa9++,
+       28 -> sheet->+0xa9 += 3*bldtp->+0x131 then clamp to 100; types 8-13, 16, 19, 24-25, 27
+       have no case;
+
+     - tail: dirBudget words (+0x94/+0x96/+0x98), levelLimit (+0x53 = 0xff/0xc/8/4 by
+       [bp-0x3c]/[bp-0x3e]/[bp-0x40]), +0x82, the +0x7e/+0x80 pair (0xffff/0 when negative),
+       +0x5b/+0x4d/+0x4f/+0x54, the +0x8a/+0x8c long, dirBudget[3] at +0x64/+0x66/+0x68,
+       ringBudget[3] at +0x70/+0x72/+0x74, +0x52 = min([bp-0x22],0xff), +0x84 = overlay result;
      - thresholds from Difficulty (0x909d): 1 -> 0xfa0, 2 -> 0xbb8, else 0x7d0;
      - tail: `GLeaderSheets[partyIndex]->+0x52 = min(levelLimit,0xff)`, then
        `+0x84 = (overlay result)`, then the 0x1470 helper.
