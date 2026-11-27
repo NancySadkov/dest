@@ -320,7 +320,6 @@ void __cdecl16far draw_freeRingBuffers(void);
 uint16_t __cdecl16far draw_compute4(byte type);
 void __cdecl16far draw_usesToggle_pause(void);
 bool __cdecl16far draw_textProvidesMoreHousing(void);
-void __stdcall16far draw_textGoldProvidesHousing(void);
 void __cdecl16far stshCopyFontChar(uint8_t *src,uint8_t *dst,int16_t width,int16_t count);
 far_t * __cdecl16far stshProcessFontSub(far_t *__return_storage_ptr__,far_t hndl,uint16_t arg3);
 far_t * __cdecl16far stshProcessFont(far_t *__return_storage_ptr__,int16_t file_id);

@@ -20380,6 +20380,29 @@ Thunks resolved with `tmp/thunk_names.py`: 0x118,0x20 -> `ovr_stshRleCut`; 0x118
 0x170,0x70 -> `ovr_stshFree`; 0x140,0x2f -> `ovr_play_sfxU`. The DX half of stshRleCut's far result
 keeps the tree's `in_DX` placeholder (as at ovc28_ui.c:544 and ovc16_saveui.c:116).
 
+## Removing a fake function: `draw_textGoldProvidesHousing` (2e25:1e42)
+
+`audit/functions_real.tsv` lists a 171-byte Function with 0 calls at 2e25:1e42, and the tree carried a
+99-line body (175 `?Var`/`Stack_` names) for it. The image bytes are not code:
+
+    2e25:1d7c  push bp / mov bp,sp / ... / 2e25:1dc9 pop si / leave / 2e25:1dcb retf
+    2e25:1dcc  add byte ptr [bp+di],0x44      <- table bytes from here on
+    ...
+    2e25:1e42  clc / add al,0xd7 / add al,0xc2 / ...
+
+`draw_textProvidesMoreHousing` (2e25:1d7c, 80 bytes) ends with `retf` at 1dcb and nothing flows into
+1e42, so the function and its prototype were deleted. (This is the same class as the 37 spurious
+`emptyFunction()` calls that were removed earlier.)
+
+## Measured (HEAD 5b6924a6 -> this commit)
+
+    grep_checks      22,147 -> 21,863   (-284: the fake body)
+    REBUILT.EXE      482,336 -> 481,584 (-752)
+    build 65/65, LINK.LOG 0 problems
+    compare_state    1,628/0/0 (unchanged)
+    diff_dgroup      1,639/1,805 matched, 5 runs, sum|delta| 18 (unchanged)
+    compare_runtime  1,692 matched, 1,683 identical / 9 different at all three sample points
+
 ## Measured (HEAD 46ca9e04+1 -> this commit)
 
     grep_checks      23,850 -> 22,147   (-1,703: the mangled body's locals)
