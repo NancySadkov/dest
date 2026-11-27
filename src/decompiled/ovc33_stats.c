@@ -1894,46 +1894,46 @@ void __cdecl16far stats_compute5(byte agntIndex)
 void __cdecl16far stats_openAgentDetail(int agntIndex)
 
 {
-  byte bVar1;
-  int iVar2;
-  uint uVar3;
+  byte gindexVal;
+  int ownerIdx;
+  uint audioBusy;
   
-  iVar2 = Agnts[agntIndex].owner;
+  ownerIdx = Agnts[agntIndex].owner;
   ovr_manage_openTalkWindow();
   ScreenMode = 2;
   drawAgntStats((agnt_t far *)&Agnts[agntIndex].x,far_from_u32((uint32_t)(SEG_OF(Agnts))),0);
   drawString((char *)0x620f,0x2410,0);
-  bVar1 = (Entities)[iVar2].base.gindex;
-  if (AgntGs[(uint)bVar1].ai == '\0') {
-    if ((AgntGs[(uint)bVar1].shortName[3] == '\0') ||
-       (AgntGs[(uint)bVar1].shortName[3] == '\x04')) {
+  gindexVal = (Entities)[ownerIdx].base.gindex;
+  if (AgntGs[(uint)gindexVal].ai == '\0') {
+    if ((AgntGs[(uint)gindexVal].shortName[3] == '\0') ||
+       (AgntGs[(uint)gindexVal].shortName[3] == '\x04')) {
       CurMusicType = 0x43;
     }
-    else if (AgntGs[(uint)bVar1].shortName[3] == '\x02') {
+    else if (AgntGs[(uint)gindexVal].shortName[3] == '\x02') {
       CurMusicType = 0x42;
     }
-    else if ((AgntGs[(uint)bVar1].shortName[3] == '\x05') ||
-            (AgntGs[(uint)bVar1].shortName[3] == '\x01')) {
+    else if ((AgntGs[(uint)gindexVal].shortName[3] == '\x05') ||
+            (AgntGs[(uint)gindexVal].shortName[3] == '\x01')) {
       CurMusicType = 0x27;
     }
-    else if (AgntGs[(uint)bVar1].shortName[3] == '\x06') {
+    else if (AgntGs[(uint)gindexVal].shortName[3] == '\x06') {
       CurMusicType = 0x28;
     }
-    else if (AgntGs[(uint)bVar1].shortName[3] == '\x03') {
+    else if (AgntGs[(uint)gindexVal].shortName[3] == '\x03') {
       CurMusicType = 0x20;
     }
     else {
       CurMusicType = 0xc;
     }
   }
-  else if ((AgntGs[(uint)bVar1].flags3 & 8) == 0) {
+  else if ((AgntGs[(uint)gindexVal].flags3 & 8) == 0) {
     CurMusicType = 0x29;
   }
   else {
     CurMusicType = 0x59;
   }
-  uVar3 = ovr_audio_isPlaying();
-  if ((uVar3 & 0xff) == 0) {
+  audioBusy = ovr_audio_isPlaying();
+  if ((audioBusy & 0xff) == 0) {
     ovr_play_sfx(CONCAT11(0x24,CurMusicType),0,0);
   }
   return;

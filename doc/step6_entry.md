@@ -15665,3 +15665,29 @@ twice - the doubling applies only to names of the form `p[iusbc]Var` (e.g. `puVa
 TOOLING: tmp/screen_all5.py ranks all 258 phantom-free functions by the occurrences that belong to
 single-assignment names, and prints each name with its assignment.  tmp/reachable5.py already
 established the ceiling: 3,009 occurrences in phantom-free bodies, 11,180 behind phantoms.
+
+### section 5: batch 2 of the all-258 screen (35,525 -> 35,492)
+section 5: batch 2 of the all-258 screen (35,525 -> 35,492)
+
+    stats_openAgentDetail (47 lines, phantom-free)
+        iVar2  Agnts[agntIndex].owner, then indexes Entities[]   -> ownerIdx   (3)
+        bVar1  Entities[ownerIdx].base.gindex, indexes AgntGs[]  -> gindexVal  (11)
+        uVar3  ovr_audio_isPlaying()                             -> audioBusy  (3)
+
+    ovc39_loadArchiveEntry (43 lines, phantom-free)
+        uVar1  *(uint32_t *)((uint)fileId * 4 + -0x6c70), the archive table entry
+                                                                 -> entryPtr   (4)
+        uVar5  (uint16_t)((ulong)uVar1 >> 0x10), its segment half -> entrySeg   (2)
+        iVar4  (int)uVar1, its offset half                        -> entryOfs   (4)
+        uVar3  0x2410, the segment used by MK_FP(uVar3, psVar2)   -> archiveSeg (3)
+        bVar6  0xfffe < wStack_e, the carry out of the 32-bit increment
+                                                                 -> carry      (3)
+
+`gindexVal` rather than `gindex` because the assignment's own right-hand side is
+`(Entities)[iVar2].base.gindex`, and a local of the same name beside the field reads as a mistake -
+the pre-check caught that before writing.
+
+  grep_checks 35,525 -> 35,492; build 65/65; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,625/0/0
+  diff_dgroup 1,627/1,805 matched, 19 runs, sum|delta| 44,867, mean 27, worst 148
+  compare_runtime 1,684 matched, 1,675 identical / 9 different

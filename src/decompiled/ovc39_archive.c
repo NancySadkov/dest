@@ -14,37 +14,37 @@
 int __cdecl16far ovc39_loadArchiveEntry(byte fileId)
 
 {
-  uint32_t uVar1;
+  uint32_t entryPtr;
   far_t handle;
   stg_tmp_t *psVar2;
   stg_tmp_t *in_DX;
-  uint16_t uVar3;
-  int iVar4;
-  uint16_t uVar5;
-  bool bVar6;
+  uint16_t archiveSeg;
+  int entryOfs;
+  uint16_t entrySeg;
+  bool carry;
   word wStack_e;
   int iStack_c;
   char *buf;
   stg_tmp_t *psStack_8;
   
   if (fileId < 0x22) {
-    uVar3 = 0x2410;
+    archiveSeg = 0x2410;
     handle.seg = *(uint16_t *)((uint)fileId * 4 + -0x6c6e);
     handle.ofs = *(uint16_t *)((uint)fileId * 4 + -0x6c70);
     psVar2 = ovr_stshLoadGfx(handle);
-    uVar1 = *(uint32_t *)((uint)fileId * 4 + -0x6c70);
-    uVar5 = (uint16_t)((ulong)uVar1 >> 0x10);
-    iVar4 = (int)uVar1;
-    iStack_c = *(int *)(iVar4 + 7);
-    wStack_e = *(uint *)(iVar4 + 5);
+    entryPtr = *(uint32_t *)((uint)fileId * 4 + -0x6c70);
+    entrySeg = (uint16_t)((ulong)entryPtr >> 0x10);
+    entryOfs = (int)entryPtr;
+    iStack_c = *(int *)(entryOfs + 7);
+    wStack_e = *(uint *)(entryOfs + 5);
     if (wStack_e == 0 && iStack_c == 0) {
-      bVar6 = 0xfffe < wStack_e;
+      carry = 0xfffe < wStack_e;
       wStack_e = wStack_e + 1;
-      iStack_c = iStack_c + (uint)bVar6;
+      iStack_c = iStack_c + (uint)carry;
     }
     psStack_8 = psVar2;
     buf = ovr_stshAlloc(CONCAT22(iStack_c,wStack_e));
-    _fmemmove((char far *)MK_FP(psStack_8,buf),(char far *)MK_FP(uVar3,psVar2),wStack_e);
+    _fmemmove((char far *)MK_FP(psStack_8,buf),(char far *)MK_FP(archiveSeg,psVar2),wStack_e);
   }
   else {
     buf = ovr_stshAlloc(1);
