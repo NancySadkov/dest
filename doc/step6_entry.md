@@ -18321,3 +18321,56 @@ string is `s__Empty__2410_272b + 7` (a lone NUL at ds:0x2732).
     compare_state    1,628/0/0 (unchanged)
     diff_dgroup      1,639/1,805 matched, 5 runs, sum|delta| 18, mean 0, worst 12 (unchanged)
     compare_runtime  1,692 matched, 1,683 identical / 9 different at all three sample points
+
+### step 6: stats_textRingProt re-decompiled (grep 28,900 -> 27,596)
+step 6: `stats_textRingProt` re-decompiled from the image (grep 28,900 -> 27,596)
+
+Second queue entry this session: image 182 bytes / 16 calls, export 804 lines / 57 calls.
+
+## The image (`tmp/dis_seg.py 6386 0411 0xb6`)
+
+    0411  if (type == 1) {
+            if (value == 0)     strcat(dst, "")                    ds:0x620f (a lone NUL: no-op)
+            else if (value > 0) sprintf(dst, "+%d ring of prot.", value)   ds:0x6220
+            return dst;
+          }
+    045f  count -= value;
+    0462  if (type == 3)   switch (count - 6)   table CS:0x5c9 = 4a5,491,47d,47d,47d
+            0 "+1 leather armor"  1 "leather armor"  2/3/4 "no armor"  default "+2 leather armor"
+    04d4  switch (count)   table CS:0x5b7 = 59d,589,575,561,54d,539,525,510,4fb
+            0 suit armor        1 plate and shield +1   2 plate and shield   3 plate mail
+            4 banded armor      5 chain mail           6 scale armor        7 leather armor
+            8 shield            default no armor
+    05af  return dst
+
+The packed string blocks are reached through the tree's own symbols plus the interior offsets the audit
+table records: `s_normal_weaponry_2410_6210 + 0x10` (ds:0x6220),
+`s_leather_armor_2410_623b + 0xe` (ds:0x6249) and `+ 0x1f` (ds:0x625a),
+`s_plate_and_shield_2410_62a1 + 0x11` (ds:0x62b2).
+
+## Verified in REBUILT.EXE (O33 is linked)
+
+`tmp/dis_ours.py _STATS_TEXTRINGPROT` reproduces the image's branch structure - `cmp byte [bp+0xa],1 /
+jne`, `cmp byte [bp+0xe],0 / jle`, `sub al,[bp-3]`, `cmp byte [bp-1],3`, the `cwde / add ax,0xfffa /
+cmp bx,4 / ja` tier switch - and, more tellingly, emits **all fourteen string offsets in the original's
+order**:
+
+    0x6220 (sprintf) | 0x6249 0x623b 0x6232 0x625a | 0x62c6 0x62b2 0x62a1 0x6296
+    0x6289 0x627e 0x6272 0x623b 0x626b 0x6232
+
+so 15 calls against the image's 16 - the missing one is the `strcat(dst, "")` no-op for value 0, which
+is behaviourally identical and is noted in the source rather than left as a fake call.
+
+The parameter list is kept as declared, `(char *dst, uint16_t src, uint16_t term, far_t ringValue)`:
+it reproduces the image's five stack words exactly (dst ofs, dst seg, type, count, value) and the one
+caller passes them in that shape.  `src` is the destination segment, implicit in our near-data model -
+the same model substitution as `strcat`/`sprintf` being near in our CRT.
+
+## Measured (HEAD 679d6bcd -> this commit)
+
+    grep_checks      28,900 -> 27,596   (-1,304; the 804-line body is gone)
+    REBUILT.EXE      513,252 -> 504,388
+    build 65/65, LINK.LOG 65 bytes / 0 problems
+    compare_state    1,628/0/0 (unchanged)
+    diff_dgroup      1,639/1,805 matched, 5 runs, sum|delta| 18, mean 0, worst 12 (unchanged)
+    compare_runtime  1,692 matched, 1,683 identical / 9 different at all three sample points
