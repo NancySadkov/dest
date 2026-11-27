@@ -47,7 +47,7 @@ def run(tag, exe_path):
     open(os.path.join(d, "KEY.COM"), "wb").write(build_tsr(N))
     os.makedirs(os.path.join(d, "strong.sav"), exist_ok=True)
     open(os.path.join(d, "strong.sav", "game.cfg"), "wb").write(b"111")
-    bat = ["@echo off", "c:", "cd \\", "KEY.COM", "STRONG.EXE > DGR.BIN", "echo DONE > DONE.FLG"]
+    bat = ["@echo off", "c:", "cd \\", "KEY.COM", "STRONG.EXE", "echo DONE > DONE.FLG"]
     open(os.path.join(d, "GO.BAT"), "w", encoding="ascii", newline="\r\n").write("\n".join(bat) + "\n")
     conf = ["[sdl]", "output = surface", "[dosbox]", "machine = svga_s3", "memsize = 16",
             "[cpu]", "core = normal", "cputype = 386", "cycles = max",

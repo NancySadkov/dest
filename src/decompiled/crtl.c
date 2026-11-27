@@ -4444,6 +4444,27 @@ uint16_t __cdecl16far setvbuf(FILE *stream, uint8_t *bufOfs, uint mode,
   return 0;
 }
 
+/* printf, built on the library formatter but without a FILE record.  CM.LIB was compiled in
+   MEDIUM model, so its FILE is 16 bytes with near pointers, while _streams here is the
+   original's LARGE-model layout: 20 bytes per record with far pointers.  The library's printf
+   therefore walks the wrong shape of record - it left _streams[1].bsize at 0x0206 and wrote six
+   bytes into s_fighter_unit_2410_01fa.  Formatting into the CRT's own stream buffer and writing
+   the bytes out directly keeps the same formatter and touches no FILE record at all. */
+void __cdecl16far printf(char *fmt,...)
+
+{
+  int16_t n;
+  uint16_t ap;
+
+  ap = (uint16_t)&fmt + 2;   /* first variadic word, right after the format pointer */
+  n = vsprintf(streamBuf0, fmt, ap);
+  if (0 < n) {
+    write(1, streamBuf0, (uint)n);
+  }
+  return;
+}
+
+
 
 /* 1000:2c3f */
 

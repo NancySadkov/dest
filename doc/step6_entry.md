@@ -17044,3 +17044,77 @@ printf the original never had, and the record would still not match the original
 Gates re-measured after the probes (no source change): build 65/65, LINK.LOG 65 bytes / 0 problems,
 grep_checks 34,700, compare_state 1,628/0/0, diff_dgroup 1,639/1,805 matched, sum|delta| 18, runtime
 1,683 identical at main and init_game and 1,682 / 10 at the key read.
+
+### step 6: fixed - CM.LIB is medium-model, our FILE records are large-model
+step 6: fixed - CM.LIB is medium-model and our FILE records are the original's large-model ones
+
+## Root cause
+
+`scripts/build_standalone.py` compiles with `-mm` (MEDIUM: near data, far code) and the link pulls
+**CM.LIB**, the medium-model library.  Turbo C's own header shows what that means for `FILE`:
+
+    typedef struct {
+            int   level;  unsigned flags;  char fd;  unsigned char hold;
+            int   bsize;  unsigned char _FAR *buffer;  unsigned char _FAR *curp;
+            unsigned istemp;  short token;
+    } FILE;
+
+With `_FAR` empty in medium model, `buffer`/`curp` are two-byte near pointers and the record is **16
+bytes**.  Our `st_types.h` declares the same fields with explicit `uint32_t` pointers - deliberately,
+because that is what the *original* build used: its `_streams` spans 0x190 bytes (400 = 20 x 20) at
+DGROUP:0x8626 and the next symbol, `_nfile`, is at 0x87b6.  So this tree reproduces a **large-model**
+`_streams` (20-byte records, far pointers) while the library that services it was compiled medium.
+
+The library's `printf` consequently indexes `_streams` with a 16-byte stride: its `stdout` is
+`_streams + 16 = 0x8636`, which in our layout is *inside* record 0.  It wrote record fields at the wrong
+shape - turning `_streams[1].bsize` from 0x0200 into 0x0206 and storing six bytes at a computed address
+that landed on `s_fighter_unit_2410_01fa` (DGROUP:0x0200).
+
+## Fix: a printf that uses the same formatter but no FILE record
+
+`crtl.c` now defines (after `setvbuf`, where the stream buffers are declared):
+
+    void __cdecl16far printf(char *fmt,...)
+    {
+      int16_t n;
+      uint16_t ap;
+
+      ap = (uint16_t)&fmt + 2;   /* first variadic word, right after the format pointer */
+      n = vsprintf(streamBuf0, fmt, ap);
+      if (0 < n) {
+        write(1, streamBuf0, (uint)n);
+      }
+    }
+
+`vsprintf` is the same library formatter the library's printf would have used, so the text is unchanged;
+the difference is that the result goes through the CRT's own stream buffer and `write`, and **no `FILE`
+record is read or written**.  The medium/large mismatch is thereby confined to a path that no longer runs.
+
+## Harness: the TSR now creates DGR.BIN itself
+
+Our printf writes to handle 1 directly, so the old `STRONG.EXE > DGR.BIN` redirect put the game's text in
+front of the dump and shifted every offset (a 65,536-byte file whose 0x1fa held `\0Halfling\0fi`).
+`scripts/make_dump_tsr.py` now opens `DGR.BIN` from inside the handler (INT 21h AH=3Ch with the name in
+its own segment), writes the caller's 64 KB and closes it, and `scripts/dump_at_key.py` runs the game with
+no redirection at all.  (A first attempt saved the caller's DS into SI with `89 D6` - `mov si,dx` - which
+dumped a random segment; `8C DE` is `mov si,ds`.)
+
+## Measured (HEAD b661a61b -> this commit)
+
+    key-read sample (N=1)   identical 1,682 -> 1,683   DIFFERENT 10 -> 9
+
+so the third sample point now matches the other two exactly, and all nine remaining differences are the
+known CRT/timestamp set (`_StartTime`, `_brklvl`, `_exitbuf`, `_exitfopen`, `_exitopen`, `_streams`,
+`_video`, `brk_normalize_xsize`, `__setargv_SavedReturn`).
+
+    build 65/65, LINK.LOG 65 bytes / 0 problems
+    grep_checks 34,700 -> 34,701   (the new function adds one matched name)
+    compare_state 1,628/0/0 (unchanged)
+    diff_dgroup 1,639/1,805 matched, 5 runs, sum|delta| 18, mean 0, worst 12 (unchanged)
+    compare_runtime  main entry 1,683/9,  init_game 1,683/9,  key read 1,683/9
+    REBUILT.EXE 532,484 bytes; DGROUP segment 6f62 -> 6f64
+
+Note for later: the same medium/large mismatch still exists for any *other* library routine that takes a
+`FILE *` (`fopen`, `fclose`, `fread`, `fwrite`, `fgets`, ...).  They are not on the sampled paths, but if
+one is ever reached it will corrupt the same way; the durable fix is to compile large model and link
+CL.LIB, which is what the original did.
