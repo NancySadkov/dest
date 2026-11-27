@@ -21684,3 +21684,33 @@ documented instead.
     compare_state    1,628 matched / 0 different / missing 2   (unchanged)
     diff_dgroup      1,639/1,805 matched                       (unchanged)
     compare_runtime  1,692 matched / 1,683 identical / 9 different  (unchanged)
+
+
+## Census is continuation-aware; the spurious `5ded:1433` split removed
+
+`audit/functions_real.tsv` files three entries for one routine at `5ded:10ea`, `5ded:1433` (117 B,
+`ovc27_textCharmed`) and `5ded:14a8` (1855 B). Both extras are spurious, and the evidence is direct:
+
+* `5ded:14a8` has no prologue, reads `10ea`'s frame (`[bp-8]`/`[bp-0xa]`, the three buffers) and is
+  reached by `jmp 0x14a8` from inside `10ea`;
+* `5ded:1433` is reached by **neither a near call nor any jump** - it sits mid-flow of `10ea`'s
+  state-3/5 arm (`0x140a..0x14a5`), so the Ghidra entry is an artefact. The tree's `ovc27_textCharmed`
+  body (never referenced, no prototype users) duplicated that arm and has been deleted.
+
+`scripts/screen_calls.py` now merges an explicit continuation list, because the general heuristics were
+measured and rejected: "entry has a prologue" flags 591 entries and "byte before is a terminator" flags
+568 - almost all CRT or overlay code that legitimately has no frame. The list is evidence-backed and
+documented, so the census cannot silently drift.
+
+Result: `5ded:10ea` is measured over its true extent (`0x10ea..0x1be7`) and drops off the delta table;
+`5ded:1433`/`5ded:14a8` no longer appear as separate targets.
+
+## Measured (HEAD d828570c -> this commit)
+
+    grep_checks      11,791 -> 11,763   (-28: the dead duplicate body)
+    REBUILT.EXE      461,028 -> 460,852
+    build 65/65, LINK.LOG 0 errors
+    compare_state    1,628 matched / 0 different / missing 2   (unchanged)
+    diff_dgroup      1,639/1,805 matched                       (unchanged)
+    compare_runtime  1,692 matched / 1,683 identical / 9 different  (unchanged)
+    screen_calls     5ded:10ea removed from the delta table; 1433/14a8 no longer listed
