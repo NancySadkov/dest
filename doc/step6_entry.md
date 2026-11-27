@@ -21783,3 +21783,45 @@ Two related measurement notes, both verified this pass:
     grep_checks 11,760 · compare_state 1,628/0/0 · diff_dgroup 1,639/1,805
     compare_runtime 1,692 matched / 1,683 identical / 9 different
     screen_calls  6ffe:02f7 removed from the delta table (was -143)
+
+
+## `constrct_unitFlagsClear` far-record fix, and a correction about `7e7c:0b9c`'s blocker
+
+**Fix.** `7e7c:2e8e` reached the leader sheet through a near cast:
+
+    sheetRef = *(uint32_t *)((uint)units[unitIndex].unitType << 2);
+    if (*(char *)((int)sheetRef + 0x3f) != '\0') return 0;
+
+The image does `mov dx,0x70 / les bx,es:[bx]`, i.e. `GLeaderSheets[kind]` as a far record, so the cast
+kept only the offset and read the wrong byte. Now:
+
+    if (GLeaderSheets[units[unitIndex].unitType]->faction != 0) return 0;
+
+This is the same defect class already fixed in `manage_usesGUnitCount`.
+
+**Correction.** Earlier notes claimed `7e7c:0b9c`'s overlay calls "cannot be named" because the module
+has no same-module votes. That conflated two different things. Re-checking the map, **10 of its 12
+`(selector, offset)` pairs resolve uniquely** and cover 182 of the 187 calls:
+
+    170,004d  ovr_fmVsprintf            250,0084  ovc45_compute6
+    160,0025  ovc15_usesStshRealloc     250,0039  ovc45_compute9
+    000,2d31  strcpy                    250,00a2  ovc45_costOrIncomeLabel
+    000,2cc2  strcat                    250,009d  ovc45_compute8
+                                        250,008e  ovc45_usesGfxRndSeed2
+                                        250,0020  ovc45_getUnitIndex
+
+Only two pairs are ambiguous: `0x198,0x3e` (3 sites) and `0x1f8,0x2a` (2 sites). So `7e7c:0b9c` is
+**writable** with 5 of 187 sites marked as gaps - it is large (8,096 bytes, ~2,400 instructions), not
+blocked. The "derive an anchor first" plan was based on the wrong premise: the anchor functions
+(`constrct_compute1`, `constrct_unitFlagsClear`, `constrct_usesGLeaderCount`) already have correct
+bodies, and the pairs unique to `0b9c` (`0x250,*`) cannot have same-module votes from any sibling
+regardless.
+
+## Measured (HEAD 4bb41563 -> this commit)
+
+    grep_checks      11,760 (unchanged - the fix changes no placeholder names)
+    REBUILT.EXE      459,892 -> 459,876
+    build 65/65, LINK.LOG 0 errors
+    compare_state    1,628 matched / 0 different / missing 2   (unchanged)
+    diff_dgroup      1,639/1,805 matched                       (unchanged)
+    compare_runtime  1,692 matched / 1,683 identical / 9 different  (unchanged)

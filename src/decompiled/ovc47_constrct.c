@@ -503,7 +503,6 @@ byte __cdecl16far constrct_unitFlagsClear(int unitIndex)
      +0x3f byte is set, or when any of the four words has the bit.  All three exits set only
      AL, so the exported CONCAT11 / <<8 returns were stale-AH artifacts of the
      `and ax,0x1000` inside the loop. */
-  uint32_t sheetRef;
   unit_t *units;
   uint entY;
   uint alignedX;
@@ -515,8 +514,9 @@ byte __cdecl16far constrct_unitFlagsClear(int unitIndex)
   if (units[unitIndex].unitType == 0xff) {
     return 0;
   }
-  sheetRef = *(uint32_t *)((uint)units[unitIndex].unitType << 2);
-  if (*(char *)((int)sheetRef + 0x3f) != '\0') {
+  /* GLeaderSheets is a far pointer array (image: `mov dx,0x70 / les bx,es:[bx]`), so the sheet must
+     be reached as a far record - the previous near cast kept only the offset. */
+  if (GLeaderSheets[units[unitIndex].unitType]->faction != 0) {
     return 0;
   }
   alignedX = ovr_alignUp4(units[unitIndex].x,0,0);
