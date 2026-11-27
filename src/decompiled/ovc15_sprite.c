@@ -8,7 +8,7 @@
 
 
 /* 4207:0000 */
-spr_t * __cdecl16far stshRleAnims(uint8_t *src,anm_t *anms,uint16_t nanims)
+spr_t far * __cdecl16far stshRleAnims(uint8_t far *src,anm_t far *anms,uint16_t nanims)
 
 {
   uint uVar1;
@@ -133,42 +133,34 @@ spr_t * __cdecl16far stshRleAnims(uint8_t *src,anm_t *anms,uint16_t nanims)
 
 
 /* 4207:03ac */
-far_t * __cdecl16far
-stshSprite(far_t *retStorage,int16_t file_id,anm_t *anms,uint16_t nanims,bool grab)
+
+/* Load one animation sprite set: with nanims == 0 the caller only wants a stub, otherwise the LBM is
+   grabbed, its palette remapped, the animation frames cut out with stshRleAnims, the temporary
+   buffers freed and the result registered with stshStoreSprite.  Returns the sprite stash handle in
+   DX:AX. */
+spr_t far * __cdecl16far stshSprite(int16_t file_id,anm_t far *anms,uint16_t nanims,uint8_t grab)
 
 {
-  far_t handle;
-  uint16_t ofs;
-  uint16_t seg;
-  uint16_t unaff_SI;
-  spr_t *spr;
-  stg_tmp_t *fVar6;
-  far_t pixels;
-  far_t handle_00;
-  
-  if ((char)nanims == '\0') {
-    (*(uint16_t *)((uint8_t *)&(spr))) = ovr_stshSpriteStub((anm_t *)file_id,(uint16_t)(anm_t *)anms);
+  stg_tmp_t far *tmp;
+  spr_t far *result;
+  far_t aptr;
+
+  result = (spr_t far *)0;
+  if (nanims == 0) {
+    result = (spr_t far *)ovr_stshSpriteStub(anms,nanims);
   }
   else {
-    (*(uint16_t *)((uint8_t *)&(fVar6))) = ovr_grabLbm((int16_t)retStorage,0,0);
-    pixels.seg = (((stg_tmp_t *)fVar6)->aptr).seg;
-    pixels.ofs = (&((stg_tmp_t *)fVar6)->aptr)->ofs;
-    seg = (*(uint16_t *)((uint8_t *)&(fVar6) + 2));
-    ovr_grabRemap(pixels,0xff,0x0);
-    ofs = (uint16_t)
-          stshRleAnims((uint8_t *)CONCAT22(file_id,(uint8_t *)(((stg_tmp_t *)fVar6)->aptr).seg),anms
-                       ,unaff_SI);
-    handle_00.seg = (((stg_tmp_t *)fVar6)->bptr).seg;
-    handle_00.ofs = (&((stg_tmp_t *)fVar6)->bptr)->ofs;
-    ovr_stshFree(handle_00);
-    handle.seg = (*(uint16_t *)((uint8_t *)&(fVar6) + 2));
-    handle.ofs = (uint16_t)(stg_tmp_t *)fVar6;
-    ovr_stshFree(handle);
-    stshStoreSprite((spr_t *)CONCAT22(file_id,seg),anms,unaff_SI);
-    (*(uint16_t *)((uint8_t *)&(spr))) =(uint16_t)( (spr_t *)ofs);
+    tmp = ovr_grabLbm(file_id,0,0);
+    aptr = tmp->aptr;
+    grabRemap(aptr,0xff,0);
+    result = stshRleAnims((uint8_t far *)MK_FP(aptr.seg,aptr.ofs),anms,nanims);
+    stshFree(tmp->bptr);
+    stshFree(*(far_t *)&tmp);
+    stshStoreSprite(result,anms,nanims);
   }
-  return (far_t far *)(spr_t *)spr;
+  return result;
 }
+
 
 
 /* 4207:0462 */
@@ -205,80 +197,34 @@ void __cdecl16far stshInitSprites(bool grab)
   uint16_t j;
   far_t pixels;
   long sz;
+  spr_t far *sprite;
   
   StshSprIndex = 0;
-  pfVar1 = stshSprite((far_t *)((byte *)__C0_ASM_CopyRight + 0x21),0,(anm_t *)0x9195d,
-                      CONCAT11((char)((uint)in_AX >> 8),grab),SUB21(unaff_DI,0));
-  SprProjectiles.ofs = (uint16_t)pfVar1;
-  SprProjectiles.seg = in_DX;
+  /* 4207:0483-04a0: the projectile sprite set - file id 0x25, anms at offset 0 of the entity data
+     segment, nine animations.  Our far data starts at BuildingTypes (far offset 0). */
+  sprite = stshSprite(0x25,(anm_t far *)BuildingTypes,9,grab);
+  SprProjectiles = *(far_t *)&sprite;
   for (i = 0; (int)i < 0x2a; i = i + 1) {
-    pfVar1 = stshSprite((far_t *)AgntGs[i].sprfls[0],
-                        *(int16_t *)((int)&AgntGs[0].anms + i * 0x95),
-                        (anm_t *)(ulong)CONCAT12(*(undefined1 *)((int)&AgntGs[0].nanims + i * 0x95),
-                                                 *(uint16_t *)
-                                                  ((int)&AgntGs[0].anms + 2 + i * 0x95)),
-                        CONCAT11((char)((uint)pfVar1 >> 8),grab),SUB21(unaff_DI,0));
-    asm { mov uVar6,dx };
-    *(uint16_t far *)((uint8_t far *)&AgntGs[i].sprs[0] + 2) = uVar6;
-    *(uint16_t far *)((uint8_t far *)&AgntGs[i].sprs[0]) =(uint16_t)( pfVar1);
+    AgntGs[i].sprs[0] = stshSprite(AgntGs[i].sprfls[0],AgntGs[i].anms,AgntGs[i].nanims,grab);
     if (AgntGs[i].sprfls[1] == 0) {
-      uVar6 = *(uint16_t far *)((uint8_t far *)&AgntGs[i].sprs[0]);
-      *(uint16_t far *)((uint8_t far *)&AgntGs[i].sprs[1] + 2) =
-           *(uint16_t far *)((uint8_t far *)&AgntGs[i].sprs[0] + 2);
-      *(uint16_t far *)((uint8_t far *)&AgntGs[i].sprs[1]) = uVar6;
+      AgntGs[i].sprs[1] = AgntGs[i].sprs[0];
     }
     else {
-      pfVar1 = stshSprite((far_t *)AgntGs[i].sprfls[1],
-                          *(int16_t *)((int)&AgntGs[0].anms + i * 0x95),
-                          (anm_t *)(ulong)CONCAT12(*(undefined1 *)
-                                                    ((int)&AgntGs[0].nanims + i * 0x95),
-                                                   *(uint16_t *)
-                                                    ((int)&AgntGs[0].anms + 2 + i * 0x95)),
-                          CONCAT11((char)(i * 0x95 >> 8),grab),SUB21(unaff_DI,0));
-      asm { mov uVar6,dx };
-      *(uint16_t far *)((uint8_t far *)&AgntGs[i].sprs[1] + 2) = uVar6;
-      *(uint16_t far *)((uint8_t far *)&AgntGs[i].sprs[1]) =(uint16_t)( pfVar1);
+      AgntGs[i].sprs[1] = stshSprite(AgntGs[i].sprfls[1],AgntGs[i].anms,AgntGs[i].nanims,grab);
     }
     if (AgntGs[i].sprfls[2] == 0) {
-      uVar6 = *(uint16_t far *)((uint8_t far *)&AgntGs[i].sprs[1]);
-      *(uint16_t far *)((uint8_t far *)&AgntGs[i].sprs[2] + 2) =
-           *(uint16_t far *)((uint8_t far *)&AgntGs[i].sprs[1] + 2);
-      *(uint16_t far *)((uint8_t far *)&AgntGs[i].sprs[2]) = uVar6;
+      AgntGs[i].sprs[2] = AgntGs[i].sprs[1];
     }
     else {
-      pfVar1 = stshSprite((far_t *)AgntGs[i].sprfls[2],
-                          *(int16_t *)((int)&AgntGs[0].anms + i * 0x95),
-                          (anm_t *)(ulong)CONCAT12(*(undefined1 *)
-                                                    ((int)&AgntGs[0].nanims + i * 0x95),
-                                                   *(uint16_t *)
-                                                    ((int)&AgntGs[0].anms + 2 + i * 0x95)),
-                          CONCAT11((char)(i * 0x95 >> 8),grab),SUB21(unaff_DI,0));
-      asm { mov uVar6,dx };
-      *(uint16_t far *)((uint8_t far *)&AgntGs[i].sprs[2] + 2) = uVar6;
-      *(uint16_t far *)((uint8_t far *)&AgntGs[i].sprs[2]) =(uint16_t)( pfVar1);
+      AgntGs[i].sprs[2] = stshSprite(AgntGs[i].sprfls[2],AgntGs[i].anms,AgntGs[i].nanims,grab);
     }
     for (slot = 0; slot < 3; slot = slot + 1) {
-      labelOfs = i * 0x95 + slot * 2;
       if (AgntGs[i].sprfls[3 + slot] == 0) {
-        labelOfs = i * 0x95 + slot * 4;
-        uVar6 = *(uint16_t far *)((uint8_t far *)&AgntGs[i].sprs[slot]);
-        prtOfs = i * 0x95 + slot * 4;
-        *(uint16_t far *)((uint8_t far *)&AgntGs[i].sprs[3 + slot] + 2) =
-             *(uint16_t far *)((uint8_t far *)&AgntGs[i].sprs[slot] + 2);
-        *(uint16_t far *)((uint8_t far *)&AgntGs[i].sprs[3 + slot]) = uVar6;
+        AgntGs[i].sprs[3 + slot] = AgntGs[i].sprs[slot];
       }
       else {
-        pfVar1 = stshSprite((far_t *)AgntGs[i].sprfls[3 + slot],
-                            *(int16_t *)((int)&AgntGs[0].anms + i * 0x95),
-                            (anm_t *)(ulong)CONCAT12(*(undefined1 *)
-                                                      ((int)&AgntGs[0].nanims + i * 0x95),
-                                                     *(uint16_t *)
-                                                      ((int)&AgntGs[0].anms + 2 + i * 0x95)),
-                            CONCAT11((char)((uint)labelOfs >> 8),grab),SUB21(unaff_DI,0));
-        asm { mov uVar6,dx };
-        labelOfs = i * 0x95 + slot * 4;
-        *(uint16_t *)((int)AgntGs[0].sprs + 0xe + labelOfs) = uVar6;
-        *(uint16_t *)((int)AgntGs[0].sprs + 0xc + labelOfs) =(uint16_t)( pfVar1);
+        AgntGs[i].sprs[3 + slot] =
+             stshSprite(AgntGs[i].sprfls[3 + slot],AgntGs[i].anms,AgntGs[i].nanims,grab);
       }
     }
     for (j = 0; (int)j < 6; j = j + 1) {
@@ -995,7 +941,7 @@ char * __cdecl16far ovc15_capitalize(char *text)
 
 
 /* 4207:1cae */
-void __cdecl16far stshStoreSprite(spr_t *spr,anm_t *anms,int16_t nanims)
+void __cdecl16far stshStoreSprite(spr_t far *spr,anm_t far *anms,uint16_t nanims)
 
 {
   uint16_t frameWord3;

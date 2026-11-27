@@ -20556,6 +20556,51 @@ The `iVar10` scratch name became `slot` (43 hits). Verified in the rebuilt listi
 `mov word ptr es:[bx+0x25cd],ax` (sprs[0].ofs), `push word ptr es:[bx+0x25f4]` (anms), etc., i.e. the
 same ES-relative form the image uses, where before they were DS-relative.
 
+## `stshInitSprites` calls stshSprite with the image's argument list (4207:047b)
+
+Following the AgntGs access conversion, the calls themselves were rebuilt from the image push windows:
+
+    04bc  al = es:[bx+0x26d8]  ->  push grab / push nanims / push anms.seg / push anms.ofs / push sprfls[n]
+    04f0  call stshSprite      ->  store dx:ax into AgntGs[i].sprs[n]
+
+so `stshSprite` takes four parameters, five words: `(int16_t file_id, anm_t far *anms, uint16_t
+nanims, uint8_t grab)`, and returns the sprite handle in DX:AX (`spr_t far *`). The five call sites are
+now
+
+    sprite = stshSprite(0x25,(anm_t far *)BuildingTypes,9,grab);   /* projectile set, anms at far +0 */
+    AgntGs[i].sprs[0] = stshSprite(AgntGs[i].sprfls[0],AgntGs[i].anms,AgntGs[i].nanims,grab);
+    ...
+    AgntGs[i].sprs[3 + slot] = stshSprite(AgntGs[i].sprfls[3 + slot],AgntGs[i].anms,
+                                          AgntGs[i].nanims,grab);
+
+`stshRleAnims` and `stshStoreSprite` prototypes follow to far pointers (each is called only here).
+`stshSprite`'s body is re-derived from 4207:03ac (grabLbm -> grabRemap -> stshRleAnims -> stshFree x2
+-> stshStoreSprite, returning the RLE handle).
+
+Verified in the rebuilt listing (`_STSHINITSPRITES`):
+
+    0011  push ax                  ; grab
+    0012  push 9                   ; nanims
+    0014  push 0x5bb8 / push 0     ; anms = segment:0
+    001a  push 0x25                ; file id
+    001d  call stshSprite
+    0020  add sp,0xa               ; five words
+
+matching the image's `push [bp+6] / push 9 / push 0x60 / push 0 / push 0x25 / call 0x3ac /
+add sp,0xa`. The per-record call does `push grab`, then `imul 0x95` + `mov es,seg` +
+`mov al,es:[bx+0x25ca]` (nanims) and `push es:[bx+0x25f2]` (anms), i.e. the ES-relative reads the
+image uses. (Our AgntGs base is 0x25ca rather than 0x26d6; the _FARDATA layout itself is the known
+gap.)
+
+## Measured (HEAD 6eae040f -> this commit)
+
+    grep_checks      21,209 -> 21,185   (-24: the CONCAT11/SUB21/in_DX/unaff_DI rescue code is gone)
+    REBUILT.EXE      480,288 -> 479,872 (-416)
+    build 65/65, LINK.LOG 0 problems
+    compare_state    1,628/0/0 (unchanged)
+    diff_dgroup      1,639/1,805 matched, 5 runs, sum|delta| 18 (unchanged)
+    compare_runtime  1,692 matched, 1,683 identical / 9 different at all three sample points
+
 ## Measured (HEAD 5642b0f7 -> this commit)
 
     grep_checks      21,247 -> 21,209   (-38: `iVar10` -> `slot`; the element accesses themselves add
