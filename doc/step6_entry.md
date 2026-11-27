@@ -21527,3 +21527,26 @@ nothing was edited.
     build 65/65 · LINK.LOG 0 errors · REBUILT.EXE 461,908
     grep_checks 11,960 · compare_state 1,628/0/0 · diff_dgroup 1,639/1,805
     compare_runtime 1,692 matched / 1,683 identical / 9 different
+
+
+## A selector does not name a function by itself (tool caveat)
+
+`0x140,0x2f` is the decisive counter-example. The static map (`audit/overlay_segments.csv`) resolves it
+to `ovr_stop_audio` in segment 22F8, and `stop_audio` is `void(void)` - but scanning the image shows
+`lcall 0x140,0x2f` pushes **3 words at 39 of its 44 sites** (0 words once, 1 word four times), and the
+already-derived modules name those sites `ovr_play_sfxU`, a 3-argument call.
+
+So VROOMM reuses one runtime segment for different overlay segments at different times, and a
+(selector, offset) pair is only meaningful together with the caller's residency. `resolve_selector.py`
+now states this in its usage text.
+
+**Consequence for `5ded:10ea`:** its body cannot be written faithfully from the selector map alone. Five
+of its call sites are `0x140,0x2f` with 3 pushed words each (`play_sfxU`-shaped), and other pairs carry
+the same hazard. The rule is: take the name from derived code in the same module where one exists, and
+validate it against the pushed-word count; fall back to the static map only when both agree.
+
+## Measured (no code change this pass)
+
+    build 65/65 · LINK.LOG 0 errors · REBUILT.EXE 461,908
+    grep_checks 11,960 · compare_state 1,628/0/0 · diff_dgroup 1,639/1,805
+    compare_runtime 1,692 matched / 1,683 identical / 9 different
