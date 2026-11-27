@@ -15926,3 +15926,32 @@ but that does not affect these four, which are ordinary locals with one assignme
 
 TOOLING: tmp/screen_one5.py lists the single-assignment names inside one named function, without the
 phantom filter, so phantom-laden bodies can be screened too.
+
+### section 5: ovc23_textAdlibNone, five of twelve names (35,313 -> 35,294)
+section 5: ovc23_textAdlibNone, five of its twelve names (35,313 -> 35,294)
+
+671 lines, 560 section-5 occurrences, 12 single-assignment names (40 occurrences); five of them are
+clear enough to name:
+
+    bVar11  ovr_ovc45_getUnitType(GfxRndSeed + iVar25), used to index
+            BuildingTypes[] and as the sfxType source          -> unitTypeVal (6)
+    uVar21  (int)uVar18 >> 0xf, the sign mask of the y difference, so that
+            (v ^ m) - m is |v|                                 -> dySign      (4)
+    uVar28  0x60, the HIGH byte of CONCAT11(uVar28,uVar27), compared
+            against Entities[i].base.y                         -> boundYHi    (3)
+    uVar30  0x10, the HIGH byte of the x bound                 -> boundXHi    (3)
+    uVar29  0, its LOW byte                                    -> boundXLo    (3)
+
+`unitTypeVal` rather than `unitType` because the assignment's own right-hand side sits next to
+`puVar23[uVar15].unitType`, and the pre-check caught that collision.
+
+Left unnamed deliberately: uVar31/uVar32 (0xca / 99) and uVar33/uVar34 (0x83 / 0x9a) are packed pairs
+compared against `iVar24`, an entity index, so naming them after a coordinate would be a guess;
+`uVar6` duplicates `sheetPtr` from the line above; `bVar4` and `uVar8` are single reads of scratch.
+
+  grep_checks 35,313 -> 35,294; build 65/65; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,625/0/0
+  diff_dgroup 1,627/1,805 matched, 19 runs, sum|delta| 44,867, mean 27, worst 148
+  compare_runtime 1,684 matched, 1,675 identical / 9 different (both sample points)
+
+Turn total: 35,334 -> 35,294 (-40) across the first two phantom-laden bodies.

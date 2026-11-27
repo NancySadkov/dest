@@ -26,7 +26,7 @@ byte * __cdecl16far ovc23_textAdlibNone(uint partyIndex,uint16_t outFlag,agnt_t 
   ulong uVar8;
   byte bVar9;
   char cVar10;
-  byte bVar11;
+  byte unitTypeVal;
   int iVar12;
   uint32_t *puVar13;
   byte *pbVar14;
@@ -38,7 +38,7 @@ byte * __cdecl16far ovc23_textAdlibNone(uint partyIndex,uint16_t outFlag,agnt_t 
   char in_CL;
   uint in_DX;
   uint uVar20;
-  uint uVar21;
+  uint dySign;
   entity_t *peVar22;
   unit_t *puVar23;
   int iVar24;
@@ -56,9 +56,9 @@ byte * __cdecl16far ovc23_textAdlibNone(uint partyIndex,uint16_t outFlag,agnt_t 
   uint16_t uStackY_2a;
   uint16_t in_stack_0000ffd8;
   undefined1 uVar27;
-  undefined1 uVar28;
-  undefined1 uVar29;
-  undefined1 uVar30;
+  undefined1 boundYHi;
+  undefined1 boundXLo;
+  undefined1 boundXHi;
   undefined1 uVar31;
   undefined1 uVar32;
   undefined1 uVar33;
@@ -80,10 +80,10 @@ byte * __cdecl16far ovc23_textAdlibNone(uint partyIndex,uint16_t outFlag,agnt_t 
   }
   cursorRecordFound = '\0';
   _fmemset(MK_FP(_DS, 0x91d7), 0xFF, 8);
-  uVar29 = 0;
-  uVar30 = 0x10;
+  boundXLo = 0;
+  boundXHi = 0x10;
   uVar27 = 0x5e;
-  uVar28 = 0x60;
+  boundYHi = 0x60;
   _fmemset(MK_FP(_DS, 0x90ea), 0, 4);
   for (uStack_c = 0; uStack_c < GRecordCount; uStack_c = uStack_c + 1) {
     in_DX = 0x2410;
@@ -123,9 +123,9 @@ byte * __cdecl16far ovc23_textAdlibNone(uint partyIndex,uint16_t outFlag,agnt_t 
   uStack_8 =(uint16_t)(unsigned long)(byte *)((uint)(*(uint8_t *)((uint8_t *)&(uStack_8) + 1)) << 8);
   for (iVar25 = -2; cVar10 = (char)unaff_DI, iVar25 < 2; iVar25 = iVar25 + 1) {
     uVar15 = ovr_ovc45_getUnitIndex(GfxRndSeed + iVar25);
-    bVar11 = ovr_ovc45_getUnitType(GfxRndSeed + iVar25);
+    unitTypeVal = ovr_ovc45_getUnitType(GfxRndSeed + iVar25);
     uVar7 = (ulong)uStack_6;
-    uStack_8 =(uint16_t)(unsigned long)(byte *)CONCAT11(bVar11,(byte)(uint16_t)(unsigned long)(uStack_8));
+    uStack_8 =(uint16_t)(unsigned long)(byte *)CONCAT11(unitTypeVal,(byte)(uint16_t)(unsigned long)(uStack_8));
     uVar26 = (uint16_t)((ulong)GUnits >> 0x10);
     puVar23 = GUnits;
     bVar9 = puVar23[uVar15].unitType;
@@ -144,13 +144,13 @@ byte * __cdecl16far ovc23_textAdlibNone(uint partyIndex,uint16_t outFlag,agnt_t 
     uVar7 = (ulong)uStack_6;
     if ((*(char *)((int)*(uint32_t *)((uint)(*(uint8_t *)((uint8_t *)&(uStack_6) + 2)) << 2) + 0x3f) == '\0') &&
        (puVar23[uVar15].unitType != 0xff)) {
-      iVar24 = iVar24 + (uint)BuildingTypes[bVar11].size;
+      iVar24 = iVar24 + (uint)BuildingTypes[unitTypeVal].size;
     }
-    cVar10 = BuildingTypes[bVar11].sfxType;
+    cVar10 = BuildingTypes[unitTypeVal].sfxType;
     uStack_6 = (byte *)CONCAT13(cVar10,(uint3)uStack_6);
     in_DX = 0x2410;
     if (((5 < puVar23[uVar15].level) && (cVar10 == -0x7a)) &&
-       ((*(uint8_t *)((uint8_t *)&(uStack_8))) = (byte)(uint16_t)(unsigned long)(uStack_8) + 1, uStack_8 = (uint16_t)(unsigned long)(byte *)CONCAT11(bVar11,(byte)(uint16_t)(unsigned long)(uStack_8)),
+       ((*(uint8_t *)((uint8_t *)&(uStack_8))) = (byte)(uint16_t)(unsigned long)(uStack_8) + 1, uStack_8 = (uint16_t)(unsigned long)(byte *)CONCAT11(unitTypeVal,(byte)(uint16_t)(unsigned long)(uStack_8)),
        (byte)(uint16_t)(unsigned long)(uStack_8) < 2)) {
       uStack_6 = (byte *)uVar7;
     }
@@ -383,8 +383,8 @@ byte * __cdecl16far ovc23_textAdlibNone(uint partyIndex,uint16_t outFlag,agnt_t 
             uVar20 = (int)uVar15 >> 0xf;
             uVar18 = (GLeaderSheets[uStack_a])->y -
                      (Entities)[iVar24].base.y;
-            uVar21 = (int)uVar18 >> 0xf;
-            uVar15 = (int)((uVar15 ^ uVar20) - uVar20) / 2 + ((uVar18 ^ uVar21) - uVar21);
+            dySign = (int)uVar18 >> 0xf;
+            uVar15 = (int)((uVar15 ^ uVar20) - uVar20) / 2 + ((uVar18 ^ dySign) - dySign);
           }
           if (((GLeaderSheets[uStack_a])->enemiesNear == 0) || (9 < uVar15)) break;
           ovc25_usesEntityCount((byte)uStack_a);
@@ -628,9 +628,9 @@ byte * __cdecl16far ovc23_textAdlibNone(uint partyIndex,uint16_t outFlag,agnt_t 
       return pbVar14;
     }
     pbVar14 = (byte far *)Entities[iVar24].base.y;
-    if ((pbVar14 != (byte *)CONCAT11(uVar28,uVar27)) ||
+    if ((pbVar14 != (byte *)CONCAT11(boundYHi,uVar27)) ||
        (pbVar14 = (byte *)alignUp4(((Entities + iVar24)->base).x,0,0),
-       pbVar14 != (byte *)CONCAT11(uVar30,uVar29))) goto L_OVC24_5943_026e_08A7;
+       pbVar14 != (byte *)CONCAT11(boundXHi,boundXLo))) goto L_OVC24_5943_026e_08A7;
     uVar26 = (uint16_t)((ulong)Entities >> 0x10);
     peVar22 = Entities;
     if (AgntGs[(uint)peVar22[iVar24].base.gindex].ai ==
