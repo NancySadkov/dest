@@ -186,17 +186,17 @@ void __cdecl16far miceBlitAtSeg(uint16_t dst_seg,far_t src,int16_t dst_x,int16_t
 void __cdecl16far videoMiceEvent(uint16_t x,uint16_t y,uint16_t mask)
 
 {
-  uint16_t uVar1;
-  uint16_t uVar2;
-  byte bVar3;
+  uint16_t prevY;
+  uint16_t prevX;
+  byte shapeIdx;
   int dst_x;
   int dst_y;
   uint16_t dx;
   uint16_t dy;
   far_t src;
   
-  uVar2 = MiceX;
-  uVar1 = MiceY;
+  prevX = MiceX;
+  prevY = MiceY;
   if ((mask & 2) == 0) {
     if (MiceNeedsUpdate == '\0') {
       MiceNeedsUpdate = 1;
@@ -214,13 +214,13 @@ void __cdecl16far videoMiceEvent(uint16_t x,uint16_t y,uint16_t mask)
       if (199 < (int)MiceY) {
         MiceY = 199;
       }
-      bVar3 = video_usesMiceUnkState();
-      if ((((MiceProcessed == '\0') || (MiceX != uVar2)) || (MiceY != uVar1)) ||
-         (bVar3 != MiceIndex)) {
+      shapeIdx = video_usesMiceUnkState();
+      if ((((MiceProcessed == '\0') || (MiceX != prevX)) || (MiceY != prevY)) ||
+         (shapeIdx != MiceIndex)) {
         MiceFlag = 1;
         if (MiceProcessed != '\0') {
-          dst_x = uVar2 - *(int *)(&MiceOfsX[MiceIndex]);
-          dst_y = uVar1 - *(int *)(&MiceOfsY[MiceIndex]);
+          dst_x = prevX - *(int *)(&MiceOfsX[MiceIndex]);
+          dst_y = prevY - *(int *)(&MiceOfsY[MiceIndex]);
           if (dst_x < 0) {
             dst_x = 0;
           }
@@ -229,7 +229,7 @@ void __cdecl16far videoMiceEvent(uint16_t x,uint16_t y,uint16_t mask)
           }
           miceBlitAtSeg(0xa000,far_from_u32((uint32_t)(0x224a0000)),dst_x,dst_y);
         }
-        MiceIndex = (uint)bVar3;
+        MiceIndex = (uint)shapeIdx;
         dx = MiceX - *(int *)(&MiceOfsX[MiceIndex]);
         dy = MiceY - *(int *)(&MiceOfsY[MiceIndex]);
         if ((int)dx < 0) {

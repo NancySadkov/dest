@@ -15691,3 +15691,24 @@ the pre-check caught that before writing.
   compare_state 1,625/0/0
   diff_dgroup 1,627/1,805 matched, 19 runs, sum|delta| 44,867, mean 27, worst 148
   compare_runtime 1,684 matched, 1,675 identical / 9 different
+
+### section 5: batch 3 - videoMiceEvent (35,492 -> 35,480)
+section 5: batch 3 - videoMiceEvent (35,492 -> 35,480)
+
+    videoMiceEvent (video.c, 74 lines, phantom-free)
+        uVar2  MiceX, captured before MiceX is updated     -> prevX    (4)
+        uVar1  MiceY, captured before MiceY is updated     -> prevY    (4)
+        bVar3  video_usesMiceUnkState(), the cursor shape   -> shapeIdx (4)
+
+All three are the pre-update snapshots used by the "did the cursor move" test and by the un-blit of
+the old position, so the names follow directly from the assignments.  The function is now free of
+section-5 names.
+
+  grep_checks 35,492 -> 35,480; build 65/65; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,625/0/0
+  diff_dgroup 1,627/1,805 matched, 19 runs, sum|delta| 44,867, mean 27, worst 148
+  compare_runtime 1,684 matched, 1,675 identical / 9 different
+
+Batch total this turn: 35,568 -> 35,480 (-88) across five functions and nineteen names, using
+tmp/screen_all5.py, which ranks all 258 phantom-free functions by the occurrences belonging to
+single-assignment names and prints each name with its assignment.
