@@ -16332,3 +16332,76 @@ that cannot be aliased by name, because C0L carries them inside an *unnamed* seg
 `DATASEG@`) and publishes no symbol for either; a TASM label inside that segment does not merge with it
 (measured earlier: it landed in a separate segment at 7CF8:0004).  The remaining routes are to name that
 SEGDEF inside C0L.OBJ, or to move the two objects to the tail and accept their name-pair deltas.
+
+### layout: the header is C0L own, game data at 0x94 (sum -> 16,526)
+layout: the header is now C0L's own, and the game data starts at 0x94 (sum 68,590 -> 16,526)
+
+C0L.OBJ's header segment turned out to be *named* after all: tmp/omf_segdef4.py decodes the SEGDEF as
+
+    SEGDEF acbp=0x68 len=0x0093 name='_DATA' class='DATA'
+
+The earlier attempt failed because it guessed the name from TLINK's map, which prints the group's first
+member as `DATASEG@` - that is a display, not the segment name.  Two more details had to be right:
+
+  * `combine=common`, not `public`.  TLINK *appends* each module's contribution to a merged segment, so
+    a `public` contribution - even a zero-length one - is placed at the end (measured: the labels
+    landed at 6F62:99B4).  A COMMON contribution is overlaid at offset 0 instead, which is what makes
+    `org 0/4/7d` mean absolute offsets.
+  * the labels must exist in a module that declares the group: `DGROUP group _DATA` in ovr_thunks.asm.
+
+So ovr_thunks.asm now carries
+
+    DGROUP group _DATA
+    _DATA segment common 'DATA'
+            org 0
+            public __DATA
+    __DATA          label dword          ; 0x00  the far pointer to DGROUP
+            org 4
+            public ___C0_ASM_COPYRIGHT
+    ___C0_ASM_COPYRIGHT     label byte   ; 0x04  43 bytes of copyright text
+            org 07dh
+            public _DOSVERSION
+    _DOSVERSION     label word           ; 0x7d  written once by the startup
+    _DATA ends
+
+which allocates nothing, and the three declarations that used to occupy 0x94..0xd5 are gone from
+st_globals.c.  REBUILT.MAP confirms they land inside DGROUP at the original's offsets:
+
+    6F62:0004  ___C0_ASM_COPYRIGHT        (original 0x0004)
+    6F62:007D  _DOSVERSION                (original 0x007d)
+    6F62:0000  __DATA / _DATA             (original 0x0000)
+
+and our DGROUP head is now the original's, symbol for symbol:
+
+    0000  4  DATASEG@ (ours: __DATA)     006b  2  __C0ARGC      0081  4  __STARTTIME
+    0004 87  ___C0_ASM_COPYRIGHT         006d  4  __C0ARGV      0085  2  ___BRKLVL
+    005b  4  __INT0VECTOR                0071  4  __C0ENVIRON   0087  4  __HEAPBASE
+    005f  4  __INT4VECTOR                0075  2  __ENVLNG      008b  4  __BRKLVL
+    0063  4  __INT5VECTOR                0077  2  __ENVSEG      008f  5  __HEAPTOP
+    0067  4  __INT6VECTOR                0079  2  __ENVSIZE     0094  1  _GMICEDS  <- game data
+                                         007b  2  __PSP
+                                         007d  1  _DOSVERSION
+                                         007f  2  _ERRNO
+
+MEASURED (HEAD 075b89cc -> this commit)
+
+  diff_dgroup sum|delta|   68,590 -> 16,526   (-76%)
+  diff_dgroup mean             42 ->     10
+  diff_dgroup worst           148 ->     42
+  diff_dgroup runs             13 ->     12
+  diff_dgroup matched        1,630 ->  1,630
+  compare_state              1,628/0/0 (unchanged)
+  compare_runtime            1,687 matched, 1,678 identical / 9 different (both sample points)
+  grep_checks                34,866 (unchanged)
+  build 65/65, LINK.LOG 65 bytes / 0 problems
+
+The profile's head is now exactly the original's:
+
+  delta +0 from _DATA (0000), 2 symbols
+  delta +0 from _heaptop (008f)
+  delta +4 from s__2410_0094 (0094)   <- 457 symbols, the game data, 4 bytes long
+
+and what remains are the small local shortfalls: -5 at 0x279d, -7 at 0x4e41, -8 at 0x576a, -10 at
+0x5cef, -15 at 0x6f63, +12 at 0x7394, -12 at 0x747d, -1 at 0x748e, plus -6 at _brklvl.  The +4 at the
+start of the game data is our `GMiceDS/GMiceSS/GMiceSP` (3 bytes) plus a 2-byte `__DATA` that precede
+`s__2410_0094`; the original starts that area with the 1-byte `s__2410_0094` itself.

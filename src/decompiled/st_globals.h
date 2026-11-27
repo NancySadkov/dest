@@ -84,8 +84,10 @@ extern uint8_t MiceSaveBuf[289];
 extern uint8_t far far miceTileTail[15];
 extern uint32_t ovrAuxSlot;
 extern char s_vdisk_fake[];
+/* C0L, at DGROUP:0x00 - see the label block in ovr_thunks.asm */
 extern uint32_t _DATA;
-extern byte __C0_ASM_CopyRight[43];
+/* C0L, at DGROUP:0x04 */
+extern byte __C0_ASM_CopyRight[];
 
 
 /* C0M's own saved INT 0/4/5/6 vectors, DGROUP:0x74..0x84.  The four 4-byte slots are
