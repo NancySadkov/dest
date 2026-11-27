@@ -386,7 +386,7 @@ void __cdecl16far getcache(bool updateFile)
     bVar15 = 0xfffb < StshCtOfs.lo;
     StshCtOfs.lo = StshCtOfs.lo + 4;
     StshCtOfs.hi = StshCtOfs.hi + bVar15;
-    lbmTmp = ovr_grabLbm(129,0,0,0,0);
+    lbmTmp = ovr_grabLbm(129,0,0);
     src.seg = 0;
     src.ofs = (lbmTmp->aptr).seg;
     (*(uint16_t *)((uint8_t *)&(tg) + 2)) = rleSeg;
@@ -449,7 +449,7 @@ void __cdecl16far getcache(bool updateFile)
   if (updateFile != false) {
     ovr_stgFreeTmp((stg_tmp_t *)tg,(char)(*(uint16_t *)((uint8_t *)&(tg) + 2)));
     resId = 0xcb;
-    (*(uint16_t *)((uint8_t *)&(tg))) = ovr_grabLbm(508,0,0,0,0);
+    (*(uint16_t *)((uint8_t *)&(tg))) = ovr_grabLbm(508,0,0);
     farPtr = CONCAT22(rleSeg,MiceCursors[3].ofs);
     (*(uint16_t *)((uint8_t *)&(tg) + 2)) = rleSeg;
   }
@@ -2523,7 +2523,7 @@ void __cdecl16far getcache(bool updateFile)
   iVar12 = 0x92;
   rleSeg = rleSeg2;
   if (updateFile != false) {
-    (*(uint16_t *)((uint8_t *)&(tg))) = ovr_grabLbm(17,0,0,0,0);
+    (*(uint16_t *)((uint8_t *)&(tg))) = ovr_grabLbm(17,0,0);
     resId = 0xa6;
     pixels.seg = (((stg_tmp_t *)tg)->aptr).seg;
     pixels.ofs = (&((stg_tmp_t *)tg)->aptr)->ofs;

@@ -20512,6 +20512,26 @@ and the rebuilt listing reproduces the image's six pushes (`push es:[bx+0x25ee]`
 (Our `AgntGs` sits at a different _FARDATA offset - 0x25ec instead of 0x26fa - which is the
 not-yet-matched far-data layout, not a code difference.)
 
+## `grabLbm` takes three arguments, not five (71 call sites)
+
+Scanning every `lcall 0x100,0x20` in the image (71 sites) with a backward walk that stops at any
+control transfer or `add sp,N` gives a single shape: three pushed words (69 sites directly; the two
+remaining counts are the function prologue's `push bp`). So the call is `grabLbm(file_id, x, y)`.
+
+The tree passed five words everywhere - `ovr_grabLbm(X,0,0,0,0)` at 54 sites and
+`ovr_grabLbm(file,220,0,0,0)` at 17 - i.e. two trailing literal zeros that the image never pushes.
+All 71 were narrowed and the definition/prototype went from five parameters to three
+(`arg4`/`arg5` were unused in the body).
+
+## Measured (HEAD cc57411d -> this commit)
+
+    grep_checks      21,247 (unchanged)
+    REBUILT.EXE      480,400 -> 480,128 (-272: two fewer pushes per call)
+    build 65/65, LINK.LOG 0 problems
+    compare_state    1,628/0/0 (unchanged)
+    diff_dgroup      1,639/1,805 matched, 5 runs, sum|delta| 18 (unchanged)
+    compare_runtime  1,692 matched, 1,683 identical / 9 different at all three sample points
+
 ## Measured (HEAD 14b1c959 -> this commit)
 
     grep_checks      21,250 -> 21,247

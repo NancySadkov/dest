@@ -208,7 +208,7 @@ lbm_decode_body(lbm_type_t format,int8_t encoding,uint8_t nplanes,uint8_t mask,f
 
 
 /* 30e6:0321 */
-stg_tmp_t far * __cdecl16far grabLbm(int16_t file_id,int16_t x,int16_t y,uint16_t arg4,uint16_t arg5)
+stg_tmp_t far * __cdecl16far grabLbm(int16_t file_id,int16_t x,int16_t y)
 
 {
   far_t handle;

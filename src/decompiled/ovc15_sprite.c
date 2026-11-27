@@ -150,7 +150,7 @@ stshSprite(far_t *retStorage,int16_t file_id,anm_t *anms,uint16_t nanims,bool gr
     (*(uint16_t *)((uint8_t *)&(spr))) = ovr_stshSpriteStub((anm_t *)file_id,(uint16_t)(anm_t *)anms);
   }
   else {
-    (*(uint16_t *)((uint8_t *)&(fVar6))) = ovr_grabLbm((int16_t)retStorage,0,0,0,0);
+    (*(uint16_t *)((uint8_t *)&(fVar6))) = ovr_grabLbm((int16_t)retStorage,0,0);
     pixels.seg = (((stg_tmp_t *)fVar6)->aptr).seg;
     pixels.ofs = (&((stg_tmp_t *)fVar6)->aptr)->ofs;
     seg = (*(uint16_t *)((uint8_t *)&(fVar6) + 2));
@@ -286,7 +286,7 @@ void __cdecl16far stshInitSprites(bool grab)
       if (*(int *)((int)AgntGs[0].prtfls + i * 0x95 + j * 2) != 0) {
         if (grab) {
           puVar7 = (uint8_t *)((int)&BuildingTypes[0x9f].income + 1);
-          gfx = ovr_grabLbm(*(int16_t *)((int)AgntGs[0].prtfls + i * 0x95 + j * 2),0,0,0,0);
+          gfx = ovr_grabLbm(*(int16_t *)((int)AgntGs[0].prtfls + i * 0x95 + j * 2),0,0);
           puVar8 = puVar7;
           ovr_stshUniqueColorsRemap(gfx,puVar7);
           pixels.seg = 0;

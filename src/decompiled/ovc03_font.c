@@ -130,7 +130,7 @@ far_t * __cdecl16far stshProcessFont(far_t *retStorage,int16_t file_id)
   far_t *font;
   uint16_t in_DX;
   
-  lbm = ovr_grabLbm((int16_t)retStorage,0,0,0,0);
+  lbm = ovr_grabLbm((int16_t)retStorage,0,0);
   if (lbm == (stg_tmp_t *)0x0 && in_DX == 0) {
                     /* WARNING: Subroutine does not return */
     ovr_stExit(6);
