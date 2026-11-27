@@ -21494,3 +21494,36 @@ resident segment is 0x50 at run time (`agnt_t` stride 0x34 matches). That has to
     build 65/65 · LINK.LOG 0 errors · REBUILT.EXE 461,908
     grep_checks 11,960 · compare_state 1,628/0/0 · diff_dgroup 1,639/1,805
     compare_runtime 1,692 matched / 1,683 identical / 9 different
+
+
+## RETRACTION: `5ded:10ea` is not truncated; the size data is consistent
+
+The previous note claimed `5ded:10ea` runs to `0x1be7` and that `audit/functions_real.tsv`'s 956 bytes
+is wrong. **That was wrong on both counts.** Checking the table for an entry at that address gives:
+
+    5ded:1be7  size=4  emptyFunction
+
+`emptyFunction` is the shared return-epilogue stub Borland emits for a common `return;`, so
+`jmp 0x1be7` is a *return*, and 956 bytes (`0x10ea..0x14a6`) is correct. The `+69` delta for that
+function is a genuine misattribution, not a measurement artefact.
+
+`scripts/screen_calls.py` does not use either size column either: it measures an extent as
+`next_start_in_segment - ofs`. For `5ded:10ea` the next entry is `0x14a8`, so the extent is 958 bytes
+and all 36 image calls fall inside it. The same rule gives 3,842 bytes for `5087:056e` (next entry
+`0x1470`), which matches the printed figure and includes its switch table.
+
+**New tool: `scripts/audit_function_sizes.py`.** It flags recorded sizes that leave a jump target
+outside the function and outside every known entry. It is precise about the `emptyFunction` case
+(tail jumps to it are returns, not truncation). Result: 1,475 functions checked, 64 flagged. Those 64
+are regions where the TSV boundaries merge or split code - e.g. `48ac:0382` (14 targets), `6a8f:15a0`
+(8), `8699:18c4` (7) - not a systematic size bug. Since the ranking script uses next-start extents,
+none of this distorts target selection.
+
+Conclusion: no audit data needed changing. The premise for "fix the size data first" does not hold, so
+nothing was edited.
+
+## Measured (no code change this pass)
+
+    build 65/65 · LINK.LOG 0 errors · REBUILT.EXE 461,908
+    grep_checks 11,960 · compare_state 1,628/0/0 · diff_dgroup 1,639/1,805
+    compare_runtime 1,692 matched / 1,683 identical / 9 different
