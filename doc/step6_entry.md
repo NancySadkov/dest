@@ -19500,3 +19500,82 @@ It removes 1,600 bytes of invented code and makes the function's *entry* correct
 rather than the local the setup now fills.  That body is the next piece of this function, and the
 `screen_calls` head still lists it (`4d05:277a` is no longer a separate marker, so it now reports
 under `4d05:26f6` only).
+
+### step 6: 4d05:26f6..2bc3 fully mapped - 0x277a is a loop head, 0x2b09 is its menu tail
+step 6: `4d05:26f6..2bc3` fully mapped - one function, 0x277a is a loop head, `0x2b09` is its menu tail
+
+`0x277a` is not a function entry either: the code at `0x2b99` jumps **back to it**:
+
+    4d05:2b99  jmp 0x277a
+
+so `0x26f6..0x2bc3` is one function (0x4ce bytes, frame `sub sp,0x156`) whose real entry is
+`0x26f6`, with `0x277a` as its loop head and `0x2b09` as the menu tail.  `0x2bc4` begins
+`manage_highlightStructures` with a proper `push bp / mov bp,sp / sub sp,0x104`, which fixes the
+end boundary.
+
+## The whole control flow, from the image
+
+    entry 0x26f6
+      apList[0..4]      = ManageResultPtrs[0..4]          ("Done", "Summary 1..3", "Damage")
+      apList[5..34]     = GStructures[0..29].name
+      apSel = 2 ; manage_openTalkWindow() ; apFlag = 0
+
+    loop 0x277a
+      if (apSel != 2 && apSel != 3 && apSel != 4) goto 0x2b09
+      if (ScreenMode == 0) manage_openTalkWindow() else <backdrop path>
+      ... panel: blitLabel x2, ovc45_compute9, manage_playerTitle, stsprintf, blitLabel,
+          blitLabel, manage_usesBlitLabel2 x4 ...
+      if (apSel == 4 || apSel == 3) goto 0x2b09
+      list loop 0x2933..0x2b07
+          blitLabel(apList[i]) ; manage_usesGUnitCount ; then four numeric columns, each
+          litoa10 | stsprintf followed by manage_blitLabelRight          (x4)
+          . .. 0x2b02  jge 0x2b07 ; else jmp 0x2933
+
+    0x2b09  (the address the audit calls manage_usesCurSfxType3)
+      if (apSel == 5) manage_highlightStructures(partyArg, 0xfe)
+      else            manage_highlightStructures(partyArg, menuHighlightTable[apSel])
+      keyboardInputMode = 1
+      CurSfxType3 = 0x3c
+      apSel = ovc28_usesUiInputText(apList, 0x23, 0, 0, &apFlag)    ; 7 words, add sp,0xe
+      keyboardInputMode = 0
+      if (apSel != 0 && apSel != 1 && apSel != 0xfe) goto 0x277a
+
+    0x2b9c  if (ScreenMode == 0 && apSel != 0xfe) manage_openTalkWindow()
+            if (apSel == 0xfe) Cancelled = 1
+            pop di / pop si / leave / retf
+
+Two details worth recording because they confirm the earlier merge: the `uiInputText` list is
+`ss:[bp-0x142]` - exactly the array the `0x26f6` head fills - and the function takes one word
+argument at `[bp+6]` (read at `0x2b12` and `0x2b3e` as the first argument of
+`manage_highlightStructures`), which the head never touches.
+
+## Call census (image, 30 calls)
+
+    0x81            1    manage_openTalkWindow
+    0x118,0x34      1    (backdrop path)
+    0xf8,0x57       4    blitLabel
+    0x250,0x39      1    ovc45_compute9
+    near 0x3a4      1    manage_playerTitle
+    0x170,0x7a      5    stsprintf
+    near 0x519      4    manage_usesBlitLabel2
+    near 0x217a     4    litoa10
+    near 0x23fc     1    manage_usesGUnitCount
+    near 0x4c6      8    manage_blitLabelRight
+    0x1c8,0x3e      1    ovc28_usesUiInputText   (in the 0x2b09 tail)
+
+which matches the tree's 36 minus the extra five that come from the two fragments being compiled
+as separate functions.
+
+## Why the body is not rewritten yet
+
+The tree splits this function into `manage_textAllProperty2` (the 0x277a body) and
+`manage_usesCurSfxType3` (the 0x2b09 tail), and both read everything through `unaff_BP` - 49
+occurrences in the first body alone, plus `[bp-0x15]` (the menu selection), `[bp-0x16]` (the
+flag), `[bp-0x142]` (the list) and `[bp+6]` (the argument).  Rewriting it means converting all
+of those to `apSel` / `apFlag` / `apList` / a `partyArg` parameter *and* folding the tail behind
+a label, in one pass over ~250 lines: that is one turn's work, and I would not start it with only
+enough budget to leave it half-converted.
+
+Measured: no source change this turn; gates unchanged - build 65/65, LINK.LOG 65 bytes / 0
+problems, grep_checks 26,390, compare_state 1,628/0/0, diff_dgroup 1,639/1,805 with sum|delta| 18,
+compare_runtime 1,692 matched / 1,683 identical / 9 different at all three sample points.
