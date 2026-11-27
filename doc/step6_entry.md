@@ -21276,3 +21276,58 @@ emits 3-digit octal, which cannot merge.
 bytes around `s_d`). Those 41 blobs were real DGROUP data; deleting them shifts everything after them.
 `compare_state` still reports 0 *different* among the symbols that remain, so no surviving byte
 changed - only placement did.
+
+
+## Reverted the string inlining: the data gates matter more than the grep line
+
+`2153aca2` inlined 41 string constants at 53 call sites and moved `char [N] = ""` from 1,459 to 1,418.
+Its measured cost, recorded in that commit, was worse than its gain:
+
+    grep_checks      12,680 -> 12,639   (-41)
+    compare_state    genuinely missing 2 -> 33
+    diff_dgroup      1,639 -> 1,606 matched, layout runs 5 -> 36 (largest new run +5,447 bytes)
+    compare_runtime  1,692 -> 1,653 matched, 1,683 -> 1,644 identical
+
+AGENTS.md requires byte exactness for data, and `compare_state`/`diff_dgroup` are the only gates that
+prove it; 41 grep hits do not justify losing 33 symbols of that check. `src/` is restored to the
+`2153aca2^` state. Confirmed:
+
+    grep_checks 12,680 · compare_state 1,628 matched / 0 different / missing 2
+    diff_dgroup 1,639 matched, 5 layout runs · compare_runtime 1,692 / 1,683 / 9
+    build 65/65 · LINK.LOG 0 errors · REBUILT.EXE 466,534
+
+**What the experiment established, kept for later:**
+
+* Only **41** of 1,457 declarations are used *solely* at call sites; **1,367** are referenced by
+  nothing but their own extern, and **34** are taken by address in far-pointer data tables such as
+  `GMenuStrings[8] = { (char far *)&s_New_Game_2410_27eb[0], ... }`. So this grep line can only fall as
+  those data blobs acquire real readers - i.e. as the remaining stubs are recovered.
+* Five sites need their literal **sliced**, not concatenated:
+  `ovc33_stats.c:280/288/299/309` and `ovc16_saveui.c:930`, where the original used
+  `s_x + 0xNN` to select a suffix. Emitting `"long" + 0xNN` reintroduces grep #2.
+* Two escaping traps, both now understood: `re.subn` interprets backslashes in the **replacement**
+  (`\r` became CR -> "Unterminated string"), so a lambda replacement is mandatory; and hex escapes
+  merge with a following hex digit (`\x1A` + `'A'`), so an octal `\NNN` encoder is the safe choice.
+
+## `3381:08dc` derivation status
+
+Read through `0x1150` of the 1,290 instructions. Established:
+
+* 148-byte height synthesis into `[bp-0xa2]` (`randBelow(10)`, `randBelow(2)`, clamped to [-1,1],
+  `h[0] = h[0x93] = 0`);
+* `_fsetmem(GMapCells,0x4560,0)` and `_fsetmem(GMapFlags,0x4560,0)`;
+* the grid is three views of one 60x148 map: `GMapAreas` bytes, stride 0x94 (rows = 60);
+  `GMapFlags` words, stride 0x128; `GMapCells` **transposed**, `cells[col*0x78 + row*2]` where the
+  outer index is the *column*;
+* mirrored height passes (even rows ascend, odd rows descend) with the 0x55/0x40/0x2a/0x15/0 ladder
+  selecting `randBelow` spreads 9/0x13/0xf/5/0xb;
+* the slope pass setting bit `4` in `GMapFlags` when `|h[si+1]-h[down]| < |h[si]-h[right]|`;
+* a terrain-type ladder over `h > 0x6a / 0x55 / 0x3f / 0x2a / 0x15`, each branch a
+  `randBelow(4)` choice plus a `constr_usesGMapFlags(x,y)` guard, writing `randBelow(n) + 0x67`,
+  `+0x3d`, etc. into `GMapCells`;
+* 60 image calls: 43 `ovr_randBelow`, 6 `ovr_constr_usesGMapFlags`, 2 `ovr_constr_usesGMapFlags2`,
+  2 `_fsetmem`, 7 near.
+
+Remaining: the last ~300 instructions (the `h > 0x3f` / `0x2a` / `0x15` / else arms) and assembling
+the body. It runs at init and the runtime dumps sample at *entry* points, so there is no oracle for it;
+a listing comparison is the only check, which is why it was not half-written here.

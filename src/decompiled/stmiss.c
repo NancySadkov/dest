@@ -11,7 +11,7 @@
 
 /* s_absentOfs removed: unreferenced, and its indices shift as entries migrate. */
 
-/* Moved out of GLOB.OBJ's head so that DGROUP:0x94 is the original's "".
+/* Moved out of GLOB.OBJ's head so that DGROUP:0x94 is the original's s__2410_0094.
    The audit puts GMiceDS/GMiceSS/GMiceSP in the mouse module's code segment
    (138e:0102/0104/0106), not in DGROUP, and `__DATA` here is the one-byte symbol that
    mangles to ___DATA - not the DGROUP pointer `_DATA`, which lives at 0x00.  They are

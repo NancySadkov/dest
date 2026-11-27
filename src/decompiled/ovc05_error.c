@@ -45,7 +45,7 @@ void __cdecl16far stExit(int n,...)
   }
   xmsFree();
   emsFree();
-  ovr_chpath((char *)"",0x2410);
+  ovr_chpath((char *)GOriginalDir,0x2410);
   if (n != 0) {
                     /* WARNING: Subroutine does not return */
     exit(0x80);

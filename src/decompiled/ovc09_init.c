@@ -136,7 +136,7 @@ void __cdecl16far init_paths(void)
 {
   /* Recovered shape:
        getcwd(DGROUP:[0x44])                     ; the current directory
-       strcpy(&GWorkDir, "")           ; same buffer
+       strcpy(&GWorkDir, GOriginalDir)           ; same buffer
        ensure_tail_slash(&GWorkDir, 0x2410)
        strcat(&GWorkDir, (char *)GSaveFileName)
        append_name_to_path(exe path, work dir) ; chdir to the exe's directory
@@ -144,10 +144,10 @@ void __cdecl16far init_paths(void)
      The decompiled form addressed the original image's data segment (0x2410) for the
      cwd buffer and passed that segment number as ensure_tail_slash's second argument.
      The buffer it fills is copied into GWorkDir immediately afterwards, so it is
-     "".  The trailing append_name_to_path/chpath only changes to the
+     GOriginalDir.  The trailing append_name_to_path/chpath only changes to the
      program's own directory, which is where this build already runs. */
-  getcwd((char *)"",68);
-  strcpy((char *)&GWorkDir,(char *)"");
+  getcwd((char *)&GOriginalDir,68);
+  strcpy((char *)&GWorkDir,(char *)&GOriginalDir);
   ensure_tail_slash((char *)&GWorkDir,0);
   strcat((char *)&GWorkDir,(char *)GSaveFileName);
   return;
@@ -1235,7 +1235,7 @@ void __cdecl16far init_computeMaxSquares(void)
   do {
     if (row < '\0') {
       if (GMaxSquare != 0x1b0) {
-        printf((char *)"NEW MAXSQUARE %d \r");
+        printf((char *)s_new_maxsquare_d);
         ovr_gameProcessKey();
       }
       GSMaxSquare = 0;
@@ -1243,7 +1243,7 @@ void __cdecl16far init_computeMaxSquares(void)
       do {
         if (row < '\0') {
           if (GSMaxSquare != 0x24) {
-            printf((char *)"NEW SMAXSQUARE %d \r");
+            printf((char *)s_new_smaxsquare_d);
             ovr_gameProcessKey();
           }
           return;
@@ -2117,7 +2117,7 @@ void __cdecl16far copyProtectionCheck(void)
       ovr_blitText(pcVar2,(byte *)CONCAT22(uVar1,in_DX),uVar3,uVar4);
       TextBlitX = 0x16;
       TextBlitY = 0x57;
-      ovr_blitText((char *)(char *)"Enter the first word.",
+      ovr_blitText((char *)(char *)s_enter_the_first_word,
                    (byte *)CONCAT22(Font03.ofs,(char *)0x26510),Font03.seg,0xde);
       pbStack_a = (byte *)0x0;
       input = 0;

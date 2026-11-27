@@ -630,7 +630,7 @@ void __stdcall16far attact_usesGMapFlags3(void)
         AGNT_FIELD(&(Entities)[entIdx], base.entity, 1) = 1;
       }
       else {
-        ovr_uiNotify(stsprintf(msg,"Intelligence reports %s unit drained of energy. (%d, %d)",
+        ovr_uiNotify(stsprintf(msg,s_intelligence_rep_2410_5700,
                                AgntGs[(uint)(Entities)[entIdx].base.gindex].name,
                                alignedX,entY),0xa000);
         AGNT_FIELD(&(Entities)[entIdx], base.entity, 1) = 1;
@@ -678,7 +678,7 @@ void __stdcall16far attact_usesGMapFlags3(void)
   }
   GGameState = 0x3d;
   if (DebugVerbose != false) {
-    printf("%d \r",GGameState);
+    printf(s_d,GGameState);
   }
   ovr_OVC23_55fe_29a2_entry();
   return;

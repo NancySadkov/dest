@@ -836,7 +836,7 @@ void __cdecl16far dbgPromoteEnemy(void)
       if (0x29 < (Entities)[i].base.gindex) {
         (Entities)[i].base.gindex = 0;
       }
-      msg = ovr_stsprintf((char far *)buf,(char far *)"Enemy %s.",
+      msg = ovr_stsprintf((char far *)buf,(char far *)s_Enemy_2410_6f33,
                           AgntGs[(Entities)[i].base.gindex].name);
       asm { mov uVar3,dx };
       ovr_say(msg,uVar3);
