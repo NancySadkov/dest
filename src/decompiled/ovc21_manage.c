@@ -329,7 +329,7 @@ void __cdecl16far manage_blitLabelRight(char *text,int x)
 
 /* [R4] calls ovr_blitLabel */
 
-void __cdecl16far manage_usesBlitLabel2(char *text,int x)
+void __cdecl16far manage_usesBlitLabel2(char *text,int x,uint16_t colour)
 
 {
   int iVar1;
@@ -591,8 +591,8 @@ void __cdecl16far manage_usesLitoa10(char_sheet_t *sheet)
     TextBlitY = TextBlitY + 0xf;
     if (((sheet_00->titleIndex != 0) && (firstLeader != 0xff)) &&
        (dsSegment = _DS, (GLeaderSheets[firstLeader])->titleIndex < 9)) {
-      manage_usesBlitLabel2("popularity",0x7d);
-      manage_usesBlitLabel2("city blocks",0xdc);
+      manage_usesBlitLabel2("popularity",0x7d,0xe0);
+      manage_usesBlitLabel2("city blocks",0xdc,0xe0);
       TextBlitY = TextBlitY + 10;
       TextBlitX = 0x11;
       ovr_blitLabel((char *)"Current",(uint8_t *)CONCAT22(Font02.ofs,(char *)0x26510),
@@ -1862,9 +1862,7 @@ L_menuLoop:
   }
   TextBlitY = 0xc;
   TextBlitX = 0x11;
-  if (partyArg == -1) {
-    ovr_blitLabel((char *)"All property.",(uint8_t *)CONCAT22(Font02.ofs,(char *)0x26510),
-                  Font02.seg,0xde,(char)Font02.seg,0xde,0x50);
+  if (partyArg == -1) { ovr_blitLabel((char far *)"All property.",(byte far *)MK_FP(Font02.seg,Font02.ofs),0xde,0x50);
   }
   else {
     puVar2 = (uint16_t *)((uint)partyArg * 4);
@@ -1884,17 +1882,15 @@ L_menuLoop:
                                 apNameSeg,(char)iVar9,puVar6);
     numText = ovr_stsprintf((char *)((int)&apMsg),(char *)CONCAT22(0x52a1,_SS),
                            (char *)CONCAT22(pvVar3,(char *)0x26510),puVar6);
-    ovr_blitLabel(numText,(uint8_t *)CONCAT22(fontOfs,puVar6),CONCAT11(fontSegHi,uVar11),term,uVar11,term
-                  ,uVar7);
+  ovr_blitLabel((char far *)numText,(byte far *)MK_FP(Font02.seg,Font02.ofs),0xde,0x50);
   }
   TextBlitY = TextBlitY + 0xc;
   TextBlitX = 0x11;
-  ovr_blitLabel((char *)"Buildings",(uint8_t *)CONCAT22(Font02.ofs,(char *)0x26510),
-                Font02.seg,0xde,(char)Font02.seg,0xde,0xe0);
-  manage_usesBlitLabel2("Total",100);
-  manage_usesBlitLabel2("Level 1",0x8c);
-  manage_usesBlitLabel2("Level 2",0xb4);
-  manage_usesBlitLabel2("Level 3",0xdc);
+  ovr_blitLabel((char far *)"Buildings",(byte far *)MK_FP(Font02.seg,Font02.ofs),0xde,0xe0);
+  manage_usesBlitLabel2("Total",100,0xe0);
+  manage_usesBlitLabel2("Level 1",0x8c,0xe0);
+  manage_usesBlitLabel2("Level 2",0xb4,0xe0);
+  manage_usesBlitLabel2("Level 3",0xdc,0xe0);
   TextBlitY = TextBlitY + 0xc;
   if (apSel == '\x04') {
     iVar9 = 0x1a;
@@ -1911,11 +1907,7 @@ L_menuLoop:
     if (iVar8 + iVar9 < 0x1e) {
       TextBlitX = 0x11;
       iVar4 = (iVar8 + iVar9) * 6;
-      ovr_blitLabel((char *)*(uint16_t *)((int)&GStructures[0].name + iVar4),
-                    (uint8_t *)
-                    CONCAT22(Font02.ofs,
-                             (uint8_t *)*(uint16_t *)((int)&GStructures[0].name + 2 + iVar4)),
-                    Font02.seg,0xde,(char)Font02.seg,0xde,0xe0);
+  ovr_blitLabel((char far *)MK_FP(GStructures[iVar8 + iVar9].name.seg,GStructures[iVar8 + iVar9].name.ofs),(byte far *)MK_FP(Font02.seg,Font02.ofs),0xde,0xe0);
       lVar1 = (long)(iVar8 + iVar9) * 6;
       uVar7 = (uint16_t)((ulong)lVar1 >> 0x10);
       iVar4 = manage_usesGUnitCount
@@ -2047,8 +2039,8 @@ int owner;
   undefined1 uStack0006;
   undefined1 uStack0007;
   
-  manage_usesBlitLabel2((char *)CONCAT22(textSeg,in_stack_00000002),uStack0006);
-  manage_usesBlitLabel2("Level 3",0xdc);
+  manage_usesBlitLabel2((char *)CONCAT22(textSeg,in_stack_00000002),uStack0006,0xe0);
+  manage_usesBlitLabel2("Level 3",0xdc,0xe0);
   TextBlitY = TextBlitY + 0xc;
   if (*(char *)(unaff_BP + -0x15) == '\x04') {
     iVar6 = 0x1a;

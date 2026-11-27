@@ -19651,3 +19651,72 @@ The four numeric columns and the `manage_usesGUnitCount` call keep their previou
 image's `push ss / lea ax,[bp-...]` pairs.  `manage_usesGUnitCount`'s fourth out-parameter is
 mapped to `apLvl3Value` on the strength of the image's `[bp-0xc]` test, which is the one slot
 mapping in this commit I inferred from a single use rather than from a write and a read.
+
+### step 6: 4d05:277a blitLabel and usesBlitLabel2 given the image argument lists (grep 26,387 -> 26,384)
+step 6: `4d05:277a` blitLabel and usesBlitLabel2 given the image's argument lists (grep 26,387 -> 26,384)
+
+Image windows in the `0x277a` body:
+
+    27ff / 2888 / 28c0 / 2973   0xf8,0x57   add sp,0xc    (six words)
+        push Font02 seg/ofs ; push ds ; push <string>   -> (far text, far font, 0xde, colour)
+        the tree passed nine: text, CONCAT22(font), Font02.seg, 0xde, (char)seg, 0xde, colour
+
+    28d2 / 28e3 / 28f4 / 2905   0x519       add sp,8      (four words)
+        push 0xe0 ; push <x> ; push ds ; push <string>  -> (far text, x, 0xe0)
+        the tree passed two arguments and dropped the 0xe0
+
+so the four label blits are now
+
+    ovr_blitLabel((char far *)"All property.",(byte far *)MK_FP(Font02.seg,Font02.ofs),0xde,0x50);
+    ovr_blitLabel((char far *)numText,          ... ,0xde,0x50);
+    ovr_blitLabel((char far *)"Buildings",      ... ,0xde,0xe0);
+    ovr_blitLabel((char far *)MK_FP(GStructures[iVar8+iVar9].name.seg,
+                                   GStructures[iVar8+iVar9].name.ofs), ... ,0xde,0xe0);
+
+(the structure-name one now builds its far pointer from `GStructures[i].name` instead of two
+separate word loads at `&GStructures[0].name + offset`) and the four headings are
+`manage_usesBlitLabel2(text, x, 0xe0)`.
+
+`manage_usesBlitLabel2` was declared `(char *text,int x)`; the image pushes a **far** text
+pointer, so its prototype and definition are now `(char *text,int x,uint16_t colour)`, and the
+three other call sites in the file (`4d05:0c61`, `4d05:0c72`, and the duplicate fragment at
+`4d05:28f4`) were checked against the image and all pass `0xe0`:
+
+    4d05:0c61  push 0xe0 ; push 0x7d ; push ds ; push 0x4d6c   add sp,8
+    4d05:0c72  push 0xe0 ; push 0xdc ; push ds ; push 0x4d77   add sp,8
+
+## Verified
+
+    ovr_blitLabel    -> 0x2a7,0x174  add sp,0xc   x4     (image: 0xf8,0x57, 6 words, x4)
+    usesBlitLabel2   -> near call    add sp,6     x4     (image: 0x519, 4 words, x4)
+
+## Measured (HEAD 0d1c137a -> this commit)
+
+    grep_checks      26,387 -> 26,384   (-3)
+    REBUILT.EXE      493,798 -> 493,782
+    build 65/65, LINK.LOG 65 bytes / 0 problems
+    compare_state    1,628/0/0 (unchanged)
+    diff_dgroup      1,639/1,805 matched, 5 runs, sum|delta| 18, mean 0, worst 12 (unchanged)
+    compare_runtime  1,692 matched, 1,683 identical / 9 different at all three sample points
+
+## What is still mismatched in this function (measured, not guessed)
+
+Our extent for `manage_textAllProperties2` is 0x67a with 38 call sites against the image's 30.
+The remaining differences, per class:
+
+    image                          ours                        fix needed
+    0x81     openTalkWindow   x1   near x3, no add sp          one of the three is the
+                                                               gated `ScreenMode == 0` path
+    0x118,0x34 blitGfxRect  x1   0x2a7,0x1a1 add sp,0x1a      13 words vs 8: the tree passes
+                                                               twelve arguments
+    0x250,0x39 compute9     x1   0x2a7,0x877 add sp,0xe       7 words vs 8
+    near 0x3a4 playerTitle  x1   near       add sp,0xa        5 words vs 2 (should be the one
+                                                               far name pointer)
+    0x170,0x7a stsprintf    x5   0x2a7,0x4cb add sp,8 x1 / 2 x4   8 words vs 0x10, and 2 vs 0xc
+    0x217a     litoa10      x4   near       add sp,0xa        5 words vs 4
+    0x23fc     gUnitCount   x1   near       add sp,0xc        6 words vs 16
+    near 0x4c6 blitLabelRight x8 near      add sp,4          2 words vs 3 (the text must be far)
+    --                           2 x `lcall 0,0x337`          F_LXMUL@ from the `(long)` casts
+
+That list is the next pass: each entry is a `(char *)CONCAT22(...)`/`(int *)((int)&local)` argument
+that needs the image's `push ss / lea ax,[bp-…]` shape, exactly like the four classes fixed here.
