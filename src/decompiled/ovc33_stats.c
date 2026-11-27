@@ -1081,7 +1081,7 @@ char __cdecl16far stats_compute4(agnt_t far *agnt,uint16_t arg2)
   else {
     compute10Val = ovr_agnt_compute10(agnt,in_stack_00000006);
     cVar3 = AgntGs[(uint)gindexVal].shortName[4] - compute10Val;
-    abilityMod = ovr_agnt_abilityModifier(*(byte *)((int)&agnt->entity + 3),3);
+    abilityMod = ovr_agnt_abilityModifier(*(uint8_t far *)((uint8_t far *)agnt + 0x1a),3);
     cVar3 = cVar3 - (char)abilityMod;
   }
   return cVar3;
