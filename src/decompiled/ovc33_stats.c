@@ -1278,7 +1278,7 @@ stats_usesAlignUp42(byte agntIndex,byte gfxIndex,int16_t x,int16_t y,brect_t *re
   }
   gfx_00.seg = FontHandle.seg;
   gfx_00.ofs = FontHandle.ofs;
-  ovr_blitLoadRleGfx(gfx_00,far_from_u32((uint32_t)(0xa000c31d)),0x1d);
+  ovr_blitLoadRleGfx(FontHandle,far_from_u32((uint32_t)(0xa000c31d)));
   Cancelled = 0;
   ovr_attact_usesAgntFlag1();
   ovr_draw_freeRingBuffers();

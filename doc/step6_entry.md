@@ -20346,6 +20346,19 @@ kind/size/unitType) that copies one template and substitutes the values. Writing
 0x250-* accessor bindings per site (the slot is shared by several overlay entries, so the selector
 pair alone does not identify the target - the same limitation as `4d05:1bee`).
 
+## A wrong argument list in `stats_usesAlignUp42` (6386:1cb8)
+
+The image pushes four words for the opening blit - `0xa000`, `0xc31d`, `FontHandle.seg`,
+`FontHandle.ofs` - and then `add sp,8`, i.e. two far arguments: `FontHandle` and
+`MK_FP(0xa000,0xc31d)`. The tree passed a third argument `0x1d` (five words, `add sp,0xa`), which
+appears nowhere in the image window. Now:
+
+    ovr_blitLoadRleGfx(FontHandle,far_from_u32((uint32_t)(0xa000c31d)));
+
+(The same call appears at `6a8f:15a0`, where the four words are the same and the argument list was
+written as `ovr_blitLoadRleGfx(FontHandle,0xc31d,0xa000)` - identical push order, so the emitted code
+matches there too.)
+
 ## Measured (HEAD 34dbbdd2 -> this commit)
 
 
