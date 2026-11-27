@@ -44,6 +44,19 @@ for line in io.open(os.path.join(ROOT, "audit", "functions_real.tsv"), encoding=
 for seg in starts:
     starts[seg] = sorted(starts[seg])
 
+# Continuation-aware boundaries.  Ghidra splits some routines across several entries: a block that
+# shares the preceding function's stack frame is not an entry point.  A general heuristic is not safe -
+# "has a prologue" flags 591 entries and "byte before is a terminator" flags 568, almost all of them CRT
+# or overlay code that legitimately has no frame - so the merged entries are listed explicitly with
+# their evidence in the measurement log.  Each is (segment, offset).
+CONTINUATIONS = [
+    (0x5ded, 0x14a8),   # no prologue, reads 5ded:10ea's frame, reached by `jmp 0x14a8`
+    (0x5ded, 0x1433),   # no caller and no jump reaches it: mid-flow of 10ea's state-3/5 arm
+]
+for seg, ofs in CONTINUATIONS:
+    if seg in starts and ofs in starts[seg]:
+        starts[seg].remove(ofs)
+
 IDENTS = re.compile(r"\b([A-Za-z_][A-Za-z0-9_]*)\s*\(")
 MARK = re.compile(r"^/\* ([0-9a-f]{4}):([0-9a-f]{4}) \*/$")
 
