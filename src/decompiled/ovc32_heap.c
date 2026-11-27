@@ -19,7 +19,7 @@ bool __cdecl16far heapIsBadPtr(far_t ptr)
   }
   else {
     ovr_biosReadKey();
-    printf("Bad Pointer %lx \r");
+    printf("Bad Pointer %lx \r",ptr.seg);
     ovr_biosReadKey();
     bVar1 = true;
   }

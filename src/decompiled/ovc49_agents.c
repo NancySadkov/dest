@@ -1169,7 +1169,7 @@ void __cdecl16far ovc49_drawAgents(void)
   agentRect.seg = GSavedBlitSeg;
   GGameState = 0x2b;
   if (DebugVerbose != false) {
-    printf("%d \r");
+    printf("%d \r",GGameState);
   }
   (*(uint8_t *)((uint8_t *)&(gfx.seg))) = (char)audioSaveCut1Seg;
   gfx.ofs = audioSaveCut1Ofs;
@@ -1202,7 +1202,7 @@ void __cdecl16far ovc49_drawAgents(void)
   }
   GGameState = 0x2d;
   if (DebugVerbose != false) {
-    printf("%d \r");
+    printf("%d \r",GGameState);
   }
   for (agentIndex = 0; (int)agentIndex < (int)(uint)AgntCount; agentIndex = agentIndex + 1) {
     sprPtr = CONCAT22(AGNT_WORD(&Agnts[agentIndex], frames, 2),
@@ -1395,7 +1395,7 @@ void __cdecl16far ovc49_drawAgents(void)
   }
   GGameState = 0x2e;
   if (DebugVerbose != false) {
-    printf("%d \r");
+    printf("%d \r",GGameState);
   }
   for (agentIndex = 0; (int)agentIndex < (int)(uint)AgntCount; agentIndex = agentIndex + 1) {
     uVar13 = AGNT_WORD(&Agnts[agentIndex], frames, 2);
@@ -1408,7 +1408,7 @@ void __cdecl16far ovc49_drawAgents(void)
     rec = (uint8_t far *)MK_FP((uint16_t)(recPtr >> 0x10),(uint16_t)recPtr);
     GGameState = 0x37;
     if (DebugVerbose != false) {
-      printf("%d \r");
+      printf("%d \r",GGameState);
     }
     uVar13 = SEG_OF(Agnts);
     uVar21 = (uint16_t)((ulong)sprPtr >> 0x10);
@@ -1420,7 +1420,7 @@ void __cdecl16far ovc49_drawAgents(void)
     stgFar = (stg_tmp_t *)CONCAT22(uVar13,stgTmp);
     GGameState = 0x38;
     if (DebugVerbose != false) {
-      printf("%d \r");
+      printf("%d \r",GGameState);
     }
     iVar17 = Agnts[agentIndex].x + 0xc;
     if (Agnts[agentIndex].animVariant == '\0') {
@@ -1664,7 +1664,7 @@ void __cdecl16far ovc49_drawAgents(void)
     }
     GGameState = 0x39;
     if (DebugVerbose != false) {
-      printf("%d \r");
+      printf("%d \r",GGameState);
     }
     pTarget = (int *)&Agnts[agentIndex].targetY;
     *pTarget = *pTarget + 1;
@@ -1756,12 +1756,12 @@ void __cdecl16far ovc49_drawAgents(void)
   }
   GGameState = 0x3a;
   if (DebugVerbose != false) {
-    printf("%d \r");
+    printf("%d \r",GGameState);
   }
   ovr_constr_blitRowObjects(&agentRect);
   GGameState = 0x2f;
   if (DebugVerbose != false) {
-    printf("%d \r");
+    printf("%d \r",GGameState);
   }
   if (AgentsChanged != '\0') {
     ovr_attact_usesEntityCount();

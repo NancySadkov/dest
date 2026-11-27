@@ -2884,7 +2884,7 @@ void __cdecl16far init_assets(void)
     write(StshFile,&StshCtOfs,4);
     close(StshFile);
     if (StshCount != 0xd93) {
-      printf("getcache %d  SIZESTASH %d  \r");
+      printf("getcache %d  SIZESTASH %d  \r",(uint16_t)StshCount,0xd93);
       ovr_biosReadKey();
     }
   }

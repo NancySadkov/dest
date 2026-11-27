@@ -730,7 +730,7 @@ void __cdecl16far attact_usesAlignUp42(void)
   _fmemset(MK_FP(_SS, &zeroScratch), 0, 5);
   GGameState = 0x3f;
   if (DebugVerbose != false) {
-    printf("%d %d %d \r");
+    printf("%d %d %d \r",GGameState,debugStaleTickCount,debugEmptyCellCount);
   }
   segArg = 0x1000;
   debugStaleTickCount = 0;
@@ -741,17 +741,17 @@ void __cdecl16far attact_usesAlignUp42(void)
       GGameState = 0x3c;
       if (DebugVerbose != false) {
         segArg = 0x1000;
-        printf("%d %d %d  \r");
+        printf("%d %d %d  \r",GGameState,debugEmptyCellCount,debugStaleTickCount);
       }
       func_0x0004fcda(segArg);
       GGameState = 0x3d;
       if (DebugVerbose != false) {
-        printf("%d %d %d  \r");
+        printf("%d %d %d  \r",GGameState,debugEmptyCellCount,debugStaleTickCount);
       }
       ovr_OVC23_55fe_29a2_entry();
       GGameState = 0xc;
       if (DebugVerbose != false) {
-        printf("%d %d %d  \r");
+        printf("%d %d %d  \r",GGameState,debugEmptyCellCount,debugStaleTickCount);
       }
       segArg = 0x2379;
       ovr_ovc24_removeOtherEntities(&reported);
@@ -770,7 +770,7 @@ void __cdecl16far attact_usesAlignUp42(void)
       }
       GGameState = 0xd;
       if (DebugVerbose != false) {
-        printf("%d %d %d  \r");
+        printf("%d %d %d  \r",GGameState,debugEmptyCellCount,debugStaleTickCount);
       }
       ovr_ovc24_checkStrongholds();
       GGameState = 0xe;
@@ -1472,7 +1472,7 @@ void __cdecl16far attact_usesUpdSeason(void)
   GameTick = GameTick + 1;
   GGameState = 3;
   if (DebugVerbose) {
-    printf("%d \r");
+    printf("%d \r",GGameState);
   }
   timePassing = 0;
   attact_usesAlignUp42();
@@ -1482,7 +1482,7 @@ void __cdecl16far attact_usesUpdSeason(void)
       spyReportTimer = 0;
       GGameState = 7;
       if (DebugVerbose != false) {
-        printf("%d \r");
+        printf("%d \r",GGameState);
       }
       ovr_ovc25_spyReportNotice();
     }
@@ -1491,7 +1491,7 @@ void __cdecl16far attact_usesUpdSeason(void)
       seasonTimer = 0;
       GGameState = 5;
       if (DebugVerbose != false) {
-        printf("%d \r");
+        printf("%d \r",GGameState);
       }
       ovr_ovc22_spawnForLeaders();
       ovr_season_usesGPromotableCount();
@@ -1506,12 +1506,12 @@ void __cdecl16far attact_usesUpdSeason(void)
       unitUpdateTimer = 0;
       GGameState = 0x20;
       if (DebugVerbose != false) {
-        printf("%d \r");
+        printf("%d \r",GGameState);
       }
       ovr_upd_usesAlignUp4();
       GGameState = 0x3c;
       if (DebugVerbose != false) {
-        printf("%d \r");
+        printf("%d \r",GGameState);
       }
     }
     bVar1 = 0xfffe < tickCountLo;

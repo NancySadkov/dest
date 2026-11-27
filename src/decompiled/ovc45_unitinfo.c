@@ -3841,7 +3841,7 @@ L_init_assets_4EA5:
     close(StshFile);
     x = 0x2410;
     if (StshCount != 0xd93) {
-      printf("getcache %d  SIZESTASH %d  \r");
+      printf("getcache %d  SIZESTASH %d  \r",(uint16_t)StshCount,0xd93);
       x = ovr_biosReadKey();
     }
   }

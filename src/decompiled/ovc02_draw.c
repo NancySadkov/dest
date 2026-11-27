@@ -868,12 +868,12 @@ void __cdecl16far draw_usesPrintf(void)
   DrawBusy = 1;
   GGameState = 1;
   if (DebugVerbose) {
-    printf("%d \r");
+    printf("%d \r",GGameState);
   }
   draw_usesBlitLoadRleGfx();
   GGameState = 2;
   if (DebugVerbose != false) {
-    printf("%d \r");
+    printf("%d \r",GGameState);
   }
   ovr_agnt_usesAlignToSeg();
   if ((timePassing != '\0') ||
@@ -886,17 +886,17 @@ void __cdecl16far draw_usesPrintf(void)
   if (GGameInProgress == '\0') {
     GGameState = 4;
     if (DebugVerbose != false) {
-      printf("%d \r");
+      printf("%d \r",GGameState);
     }
     ovr_ovc13_usesMiceBlitRect();
     GGameState = 6;
     if (DebugVerbose != false) {
-      printf("%d \r");
+      printf("%d \r",GGameState);
     }
     draw_usesPlay_sfx();
     GGameState = 8;
     if (DebugVerbose != false) {
-      printf("%d \r");
+      printf("%d \r",GGameState);
     }
     if (strongholdCheckPending != '\0') {
       ovr_ovc24_checkStrongholds();
@@ -1065,14 +1065,14 @@ uint16_t __cdecl16far draw_usesGameProcessKey(void)
       draw_usesResetTextBlitCycle();
       GGameState = 0x36;
       if (DebugVerbose != false) {
-        printf("%d \r");
+        printf("%d \r",GGameState);
       }
       return 0xffff;
     }
   }
   GGameState = 0x3b;
   if (DebugVerbose != false) {
-    printf("%d \r");
+    printf("%d \r",GGameState);
   }
   ovr_miceRestoreArea((brect_t *)(BlitRects + 1),0x2410);
   draw_usesResetTextBlitCycle();
@@ -1085,7 +1085,7 @@ uint16_t __cdecl16far draw_usesGameProcessKey(void)
     GGameState = 0x35;
     return key;
   }
-  printf("%d \r");
+  printf("%d \r",GGameState);
   return key;
 }
 
@@ -1406,7 +1406,7 @@ void __cdecl16far draw_usesToggle_pause(void)
   
   GGameState = 0x36;
   if (DebugVerbose) {
-    printf("%d \r");
+    printf("%d \r",GGameState);
   }
   if ((((MouseX < 0xc) || (0xde < MouseX)) || (MouseY < 7)) ||
      ((0x96 < MouseY || (MouseMoved != 0)))) {

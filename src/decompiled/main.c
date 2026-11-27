@@ -55,14 +55,14 @@ int __cdecl16far main(int argc,str_t *argv,str_t *envp)
     TextBlitDstSeg = 0xa000;
     GGameState = 0x21;
     if (DebugVerbose != false) {
-      printf("%d \r");
+      printf("%d \r",GGameState);
     }
     if (key == 0xffff) {
       ovr_draw_usesToggle_pause();
     }
     GGameState = 0x16;
     if (DebugVerbose != false) {
-      printf("%d \r");
+      printf("%d \r",GGameState);
     }
     if (key == 0x2f56) {
 L_main_051D:
@@ -311,7 +311,7 @@ L_main_0525:
     }
     GGameState = 0x17;
     if (DebugVerbose != false) {
-      printf("%d \r");
+      printf("%d \r",GGameState);
     }
   } while( true );
 }

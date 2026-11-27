@@ -496,7 +496,7 @@ void __cdecl16far constr_usesAgnt_clear(void)
     ovr_ovc23_textAdlibNone(unaff_DI,unaff_SI,(agnt_t far *)(*(uint16_t *)((uint8_t *)&(buf))));
     GGameState = 0x24;
     if (DebugVerbose != false) {
-      printf("%d \r");
+      printf("%d \r",GGameState);
     }
     seedOffset = GfxRndSeed >> 2;
     if (0xb < 0x14bU - seedOffset) {
@@ -523,7 +523,7 @@ void __cdecl16far constr_usesAgnt_clear(void)
                         (char)BlitRects[0].seg);
     GGameState = 0x53;
     if (DebugVerbose != false) {
-      printf("%d \r");
+      printf("%d \r",GGameState);
     }
     for (row = 8; -1 < row; row = row + -1) {
       for (sq = ((uint16_t *)rowMapSquareFirst)[row]; uVar12 = (undefined1)row,
@@ -641,7 +641,7 @@ void __cdecl16far constr_usesAgnt_clear(void)
             bldIndex = CONCAT11(extraout_AH,tileType);
             GGameState = 0x37;
             if (DebugVerbose != false) {
-              printf("%d \r");
+              printf("%d \r",GGameState);
             }
             if (bldIndex < 0xf8) {
               if ((bldIndex != 0) &&
@@ -873,7 +873,7 @@ void __cdecl16far constr_usesAgnt_clear(void)
     }
     GGameState = 0x25;
     if (DebugVerbose != false) {
-      printf("%d \r");
+      printf("%d \r",GGameState);
     }
     constr_usesScreenOriginY(0x440,0x2410,0x10);
     iStack_8 = 0;
@@ -917,7 +917,7 @@ void __cdecl16far constr_usesAgnt_clear(void)
     GAnimPlaying = 1;
     GGameState = 0x26;
     if (DebugVerbose != false) {
-      printf("%d \r");
+      printf("%d \r",GGameState);
     }
     savedDstSeg = TextBlitDstSeg;
     uVar9 = 0x2410;

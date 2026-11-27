@@ -3002,7 +3002,7 @@ void __cdecl16far upd_usesAlignUp4(void)
     }
     GGameState = 0x3e;
     if (DebugVerbose != false) {
-      printf("%d \r");
+      printf("%d \r",GGameState);
     }
     for (unitIdx = 0xf8; unitIdx < GUnitCount; unitIdx = unitIdx + 1) {
       unitsSeg = (uint16_t)((ulong)GUnits >> 0x10);
@@ -3047,7 +3047,7 @@ void __cdecl16far upd_usesAlignUp4(void)
     }
     GGameState = 0x43;
     if (DebugVerbose != false) {
-      printf("%d \r");
+      printf("%d \r",GGameState);
     }
     for (idx = 0; (int)idx < (int)(uint)GLeaderCount; idx = idx + 1) {
       if ((GLeaderSheets[idx])->active != '\0') {
@@ -3461,7 +3461,7 @@ void __cdecl16far upd_usesAlignUp4(void)
     }
     GGameState = 0x40;
     if (DebugVerbose != false) {
-      printf("%d \r");
+      printf("%d \r",GGameState);
     }
     for (unitIdx = 0xf8; unitIdx < GUnitCount; unitIdx = unitIdx + 1) {
       unitsSeg = (uint16_t)((ulong)GUnits >> 0x10);
@@ -3494,7 +3494,7 @@ void __cdecl16far upd_usesAlignUp4(void)
     }
     GGameState = 0x42;
     if (DebugVerbose != false) {
-      printf("%d \r");
+      printf("%d \r",GGameState);
     }
     ovr_driver_clearMapFlagsRect((uint32_t)GMapFlags,0,0,0x93,0x3b,0xfff7,0x3b,0xf7);
     for (idx = 0; idx < SquareRecCount; idx = idx + 1) {
@@ -3696,7 +3696,7 @@ void __cdecl16far upd_usesAlignUp4(void)
     ovr_unit_usesAlignUp4();
     GGameState = 0x44;
     if (DebugVerbose != false) {
-      printf("%d \r");
+      printf("%d \r",GGameState);
     }
     uVar23 = EntityCount;
     if (cStack_1d != '\0') {

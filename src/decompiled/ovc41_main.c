@@ -880,27 +880,27 @@ void __cdecl16far ovc41_usesAgnt_clear(char playSound)
   ovr_gfxInitRand();
   GGameState = 9;
   if (DebugVerbose != false) {
-    printf("%d \r");
+    printf("%d \r",GGameState);
   }
   ovr_resetTextBlitCycle();
   GGameState = 10;
   if (DebugVerbose != false) {
-    printf("%d \r");
+    printf("%d \r",GGameState);
   }
   ovr_agnt_clear();
   GGameState = 0xb;
   if (DebugVerbose != false) {
-    printf("%d \r");
+    printf("%d \r",GGameState);
   }
   ovr_constr_usesBlitRect4();
   GGameState = 0xc;
   if (DebugVerbose != false) {
-    printf("%d \r");
+    printf("%d \r",GGameState);
   }
   ovr_attact_usesSquareRecCount2();
   GGameState = 0xd;
   if (DebugVerbose != false) {
-    printf("%d \r");
+    printf("%d \r",GGameState);
   }
   TextBlitDstSeg = 0xa000;
   if (GameRunning == false) {
@@ -910,38 +910,38 @@ void __cdecl16far ovc41_usesAgnt_clear(char playSound)
     }
     GGameState = 0xe;
     if (DebugVerbose != false) {
-      printf("%d \r");
+      printf("%d \r",GGameState);
     }
   }
   GGameState = 0xf;
   if (DebugVerbose != false) {
-    printf("%d \r");
+    printf("%d \r",GGameState);
   }
   ovr_ovc18_showLeaderView();
   GGameState = 0x10;
   if (DebugVerbose != false) {
-    printf("%d \r");
+    printf("%d \r",GGameState);
   }
   ovc41_initIndexPerms();
   GGameState = 0x11;
   if (DebugVerbose != false) {
-    printf("%d \r");
+    printf("%d \r",GGameState);
   }
   if (trianglesShown == '\0') {
     ovc41_removeIndexPerm(8);
   }
   GGameState = 0x12;
   if (DebugVerbose != false) {
-    printf("%d \r");
+    printf("%d \r",GGameState);
   }
   GGameState = 0x13;
   if (DebugVerbose != false) {
-    printf("%d \r");
+    printf("%d \r",GGameState);
   }
   ovr_draw_toolbarLabels();
   GGameState = 0x14;
   if (DebugVerbose != false) {
-    printf("%d \r");
+    printf("%d \r",GGameState);
   }
   if ((GPaused != '\0') && (GOngoingBattle == '\0')) {
     ovr_update_pause_button();
@@ -1103,14 +1103,14 @@ char * __cdecl16far ovc41_usesBiosKeyAvail(char backdropIndex,uint16_t arg2)
     AgntFlag1 = false;
     GGameState = 0x33;
     if (DebugVerbose != false) {
-      printf("%d \r");
+      printf("%d \r",GGameState);
     }
     ovc41_usesAgnt_clear('\x01');
     GGameState = 0x35;
     pcVar12 = 0x2410;   /* hand fix: segment-half slot */
     if (DebugVerbose != false) {
       pcVar12 = 0x2410;   /* hand fix: segment-half slot */
-      printf("%d \r");
+      printf("%d \r",GGameState);
     }
     return pcVar12;
   }
