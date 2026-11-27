@@ -16825,3 +16825,35 @@ first menu frame.  Three word writes with a zero low byte (`0x27`, `0x13`, `0x1d
 configuration/geometry values rather than text.  This is the first evidence of a *behavioural* mismatch
 identified by the third sample point, and diagnosing it is the next step: bracket the write by sampling at
 `init_cfg` and `init_game` (`tmp/dump_at.py` can do both), then follow the value.
+
+### step 6: the 0x0200 writer is bracketed to printf
+step 6: bracket the DGROUP:0x0200 writer to printf's body
+
+The 6-byte write into `s_fighter_unit_2410_01fa` was bracketed by sampling at successive points with
+`tmp/dump_at.py` (which patches a resident function's entry with a dump-and-return stub) and reading
+DGROUP:0x1fa..0x206 out of both dumps:
+
+    point                     original            rebuild
+    init_base entry           66 69 67 68 74 65   66 69 67 68 74 65   intact
+    init_strong_sav entry     66 69 67 68 74 65   66 69 67 68 74 65   intact
+    printf entry (line 300)   66 69 67 68 74 65   66 69 67 68 74 65   intact
+    first INT 16h AH=00      66 69 67 68 74 65   66 69 67 68 74 65 00 27 00 13 00 1d   damaged
+
+so the only code between the last intact sample and the damaged one is
+
+  * `printf("ENTER: use previous configuration, SPACE: reconfigure, ESC: quit")` - the 62-character
+    prompt at ovc31_config.c:300, and
+  * the thunk into `ovr_biosReadKey`.
+
+And the `printf` sample is not merely "before the call": `tmp/dump_at.py` replaces printf's entry with the
+dump stub, so printf's body does not execute at all in that run, while it does in the TSR run.  The write
+therefore happens inside our recovered `printf`/`vprinter` path, on its first call, and lands 6 bytes past
+the start of a 13-byte string at DGROUP:0x1fa as three words 0x2700, 0x1300, 0x1d00.
+
+That is a much narrower target than "somewhere in init_base": the values are segment-like (all with a zero
+low byte), which suggests a far-pointer fixup or a segment store rather than text, and the destination is
+computed (no `mov [0x200],...` exists anywhere in either EXE - checked by byte pattern `C7 06 00 02`,
+`A3 00 02`, `A1 00 02`, zero hits in both images).
+
+Next: instrument or read our `vprinter` path for a store of three words to a computed DGROUP address, and
+compare against what the original's `printf` at 1000:2747 actually does with the same 62-byte argument.
