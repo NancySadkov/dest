@@ -20394,6 +20394,23 @@ keeps the tree's `in_DX` placeholder (as at ovc28_ui.c:544 and ovc16_saveui.c:11
 1e42, so the function and its prototype were deleted. (This is the same class as the 37 spurious
 `emptyFunction()` calls that were removed earlier.)
 
+## Removing a second fake function: `SUB_5b66_1d94`
+
+`audit/symbols.tsv` classifies 5b66:1d94 as a **Label**, and the image bytes are a table
+(`1b ad 1b 97 1b 84 1b 6e 1b 55 1b 36 ...`). The word 0x1d94 appears nowhere in the image (neither
+as data nor as a `push`/`mov ax` immediate), and the preceding function `ovc25_tickCountdown`
+(5b66:1b48, 161 bytes) ends at 5b66:1be9, so 1be9.. is a data region. The tree still carried a
+247-line body with 421 `?Var`/`Stack_` names and no callers; it is deleted.
+
+## Measured (HEAD 2909784e -> this commit)
+
+    grep_checks      21,863 -> 21,263   (-600: the fake body and its neighbours)
+    REBUILT.EXE      481,584 -> 479,232 (-2,352)
+    build 65/65, LINK.LOG 0 problems
+    compare_state    1,628/0/0 (unchanged)
+    diff_dgroup      1,639/1,805 matched, 5 runs, sum|delta| 18 (unchanged)
+    compare_runtime  1,692 matched, 1,683 identical / 9 different at all three sample points
+
 ## Measured (HEAD 5b6924a6 -> this commit)
 
     grep_checks      22,147 -> 21,863   (-284: the fake body)

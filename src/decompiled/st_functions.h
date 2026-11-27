@@ -766,7 +766,6 @@ void __cdecl16far ovc25_attackingNotice(byte partyIndex);
 int __cdecl16far ovc25_compute1(byte gindex);
 void __cdecl16far ovc25_intelAttackingNotice(byte partyIndex);
 void __cdecl16far ovc25_tickCountdown(int partyIndex);
-uint16_t __cdecl16far SUB_5b66_1d94();
 void __cdecl16far ovc26_usesFillGrid(int x,int y,uint8_t ignoreBlocked);
 uint __cdecl16far ovc26_usesStExit(int entityIndex);
 uint __cdecl16far ovc26_usesRandBelow(int entityIndex,uint16_t outFlag,uint16_t outFlagSeg,uint16_t flagsOfs,uint16_t flagsSeg);
