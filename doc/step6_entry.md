@@ -18563,3 +18563,84 @@ matched, 1,683 identical / 9 different).
 The entry above says the byte counts did not close (32 removed vs 20 accounted). Recounting push by push, with each `add sp` removing only the words of the call it follows, the stack at the final `fmVsprintf` holds 34 bytes and `add sp,0x20` then leaves exactly 2 - the word pushed at 6a8f:2207, discarded by `leave`. So the packing is consistent; what remains unresolved is only *which* staged value maps to each of the seven conversions, and the identities of `0x160,0x25` and `0xf8,0x39`.
 
 The words left on the stack for that call, in push order, are: `ds:[0x8ff7]`, the entity's post-heal strength, the two `pluralSuffix` results, the first `statusText` result, `CureSpellPtrs[level]`, and the `0x160` result - seven values for seven format arguments, which is the right shape.
+
+### step 6: ovc41_textOnlyPlaceSingle re-decompiled (grep 27,368 -> 26,977)
+step 6: `ovc41_textOnlyPlaceSingle` re-decompiled from the image (grep 27,368 -> 26,977)
+
+The heal-notice builder, 438 code bytes and 15 calls, against a 546-line body with 71 calls.
+
+## Both remaining thunks resolved by cross-reference
+
+`ovc27_spellHalfDamage` (5ded:0fd2, 140 bytes) makes four calls and its body is
+`statusText -> usesStshRealloc -> stsprintf -> uiNotify`, in exactly that order.  Its audit row lists
+`0x148,0x2f*1;0x160,0x25*1;0x170,0x7a*1;0xf8,0x39*1`, so:
+
+    0x160,0x25 -> ovc15_usesStshRealloc
+    0xf8,0x39  -> uiNotify
+
+(0x140,0x48 = `audio_panFromX` and 0x140,0x2f = `play_sfxU` were already pinned by ovc27_spellNotice.)
+
+## The image (`tmp/dis_seg.py 6a8f 2084 0x23d`)
+
+    208b  copy 16 bytes of CureSpellPtrs (four far pointers to the cure spell names)
+    209c  ent = &Entities[[bp+0xa]]                    ; stride 0x34, record flags at +0x2b
+    20af  if (ent->base.flags & 0x820) return
+    20bd  agnt->flags &= ~0x800
+    20c5  switch (agnt->entity->level): <8 -> 0, <10 -> 1, <12 -> 2, else 3
+    2105  switch (that)                       table CS:0x22c3 = 211b,212f,2145,215b
+            0: healed = rollDice(1,6) + 1   1: + 2   2: + 3
+            3: healed = (strengthMax - strength) - rollDice(1,6)
+               if (healed < 6) { healed = rollDice(3,6) + 3; level = 2 }
+    21a4  old = strength; strength += healed; clamp to strengthMax; if unchanged return
+    21ec  pan = audio_panFromX(agnt);  play_sfxU(0x3b,0,pan)
+    2207  [kept for uiNotify] ds:[0x8ff7]
+    2211  pluralA = pluralSuffix(strength)              ; the post-heal total
+    222e  pluralB = pluralSuffix(strength - old)        ; the delta
+    225f  text1 = statusText(ent, buf1)
+    226f  curePtrs[level]
+    2285  text2 = statusText(agnt, buf2)
+    229b  stash = usesStshRealloc(text2)
+    22af  msg = stsprintf(buf3, ds:0x6feb, stash, curePtrs[level], text1,
+                          delta, pluralB, total, pluralA)
+    22b9  uiNotify(msg, ds:[0x8ff7], 0)
+
+The stack accounting closes exactly: 34 bytes pushed before `stsprintf` and `add sp,0x20` removes 32,
+leaving the `ds:[0x8ff7]` word that `uiNotify` then consumes.
+
+## Verified in REBUILT.EXE (O41 is linked)
+
+`tmp/dis_ours.py _OVC41_TEXTONLYPLACESINGLE`:
+
+    0009  cure-array copy loop over 4 entries of CureSpellPtrs
+    004a  test word es:[bx+0x2b],0x820         ; ent->base.flags
+    005c  and ax,0xf7ff                        ; agnt->flags &= ~0x800
+    006b  cmp byte es:[bx+0xf],8 / 0xa / 0xc   ; the level ladder
+    00b9  push 6 / push 1 / lcall rollDice / inc ax
+    01a0  lcall audio_panFromX ; 01b0 push 0x3b ; 01b2 lcall play_sfxU
+    01be/01d0 call pluralSuffix
+    01ea/0204 lcall statusText
+    0216  lcall usesStshRealloc
+    0241  shl ax,2 / lea dx,[bp-0x38] / push [bx+2] / push [bx]   ; curePtrs[level]
+    0256  or ax,0x6feb / push ds                                 ; the format constant
+    0263  lcall stsprintf / add sp,0x20                          ; 32 bytes, as the image
+    027b  lcall uiNotify / add sp,8                              ; (image 6: our prototype adds the
+                                                                   always-zero third argument)
+    0289  retf                                                   ; function ends here
+
+The call order, the `0x3b` sound id, the `0x6feb` format offset and the `add sp,0x20` all match.
+
+## One pre-existing discrepancy noted
+
+`&Entities[entityIndex]` compiles to a stride of `0x37` in our build (`mov dx,0x37 / imul`), while the
+image uses `0x34`: our `entity_t` is three bytes larger than the original's.  That is a struct-layout
+issue affecting every `Entities[i]` access, not something this rewrite introduced, and it is recorded
+here rather than papered over.
+
+## Measured (HEAD 24b3ec6b -> this commit)
+
+    grep_checks      27,368 -> 26,977   (-391)
+    REBUILT.EXE      504,388 -> 500,282
+    build 65/65, LINK.LOG 65 bytes / 0 problems
+    compare_state    1,628/0/0 (unchanged)
+    diff_dgroup      1,639/1,805 matched, 5 runs, sum|delta| 18, mean 0, worst 12 (unchanged)
+    compare_runtime  1,692 matched, 1,683 identical / 9 different at all three sample points
