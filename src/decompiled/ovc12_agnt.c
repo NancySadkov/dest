@@ -220,9 +220,9 @@ undefined1 __cdecl16far agnt_usesStrengthMax(agnt_t far *agnt,byte *out)
 
 {
   uint8_t factionId;
-  uint16_t uVar2;
+  uint16_t framesHi;
   int frameOfs;
-  bool bVar5;
+  bool compute4Flag;
   undefined1 result;
   int iVar7;
   int *framePtr;
@@ -242,7 +242,7 @@ undefined1 __cdecl16far agnt_usesStrengthMax(agnt_t far *agnt,byte *out)
   }
   else {
     factionId = agnt->faction;
-    uVar2 = *(uint16_t *)((int)&agnt->frames + 2);
+    framesHi = *(uint16_t *)((int)&agnt->frames + 2);
     framePtr = (int *)(*(int *)&agnt->frames + (uint)agnt->frameIndex * 4);
     iVar7 = framePtr[1];
     frameOfs = *framePtr;
@@ -299,8 +299,8 @@ undefined1 __cdecl16far agnt_usesStrengthMax(agnt_t far *agnt,byte *out)
                  ((Agnts[AgntArrayA[iVar7][colA] - 1].gdata->flags & 0x20) == 0)))))) {
               *(byte *)CONCAT22(in_stack_0000000a,(*(uint16_t *)((uint8_t *)&(out) + 2))) =
                    AgntArrayA[iVar7][colA];
-              bVar5 = agnt_compute4((char *)CONCAT22(in_stack_0000000a,(*(uint16_t *)((uint8_t *)&(out) + 2))));
-              if ((bVar5) &&
+              compute4Flag = agnt_compute4((char *)CONCAT22(in_stack_0000000a,(*(uint16_t *)((uint8_t *)&(out) + 2))));
+              if ((compute4Flag) &&
                  ((*(byte *)((uint)*(byte *)CONCAT22(in_stack_0000000a,(*(uint16_t *)((uint8_t *)&(out) + 2))) * 0x34 + -0x13) <
                    *(byte *)((uint)*(byte *)CONCAT22(in_stack_0000000a,(*(uint16_t *)((uint8_t *)&(out) + 2))) * 0x34 + -0x12) &&
                   ((*(uint *)((uint)*(byte *)CONCAT22(in_stack_0000000a,(*(uint16_t *)((uint8_t *)&(out) + 2))) * 0x34 + -9) &

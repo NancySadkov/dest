@@ -17786,3 +17786,30 @@ season_checkEndGame (ovc37_season.c)
   compare_state 1,628/0/0
   diff_dgroup 1,639/1,805 matched, 5 runs, sum|delta| 18, mean 0, worst 12
   compare_runtime 1,692 matched, 1,683 identical / 9 different at all three sample points
+
+### section 5: batch 32 - six functions (34,199 -> 34,169)
+section 5: batch 32 - six functions (34,199 -> 34,169)
+
+manage_compute1 (ovc21_manage.c) - the English ordinal-suffix selector
+    iVar1  n % 10, tested for 1/2/3 with the 11/12/13 exceptions -> lastDigit (5)
+
+alignmentDlg (ovc21_manage.c)
+    uVar3  (uint)inputResult & 0xff, the key the user typed       -> choice (5)
+
+ovc13_usesBlitRect (ovc13_panel.c)
+    bVar1  MiceNeedsUpdate == '\0'                                -> mouseIdle (5)
+
+agnt_usesStrengthMax (ovc12_agnt.c)
+    bVar5  agnt_compute4(...)                                     -> compute4Flag (3)
+    uVar2  *(uint16_t *)((int)&agnt->frames + 2)                  -> framesHi    (2)
+
+fmFreeAudio (ovc11_audio.c)
+    uVar2  (uint)MUS_2410_07a9, tested against 0 before the free   -> musState (5)
+
+init2_updateMouseButtons (ovc08_init2.c)
+    uVar1  ovr_miceButton0PressStates(), bit-tested for 1/2/4      -> pressStates (5)
+
+  grep_checks 34,199 -> 34,169 (-30); build 65/65; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,628/0/0
+  diff_dgroup 1,639/1,805 matched, 5 runs, sum|delta| 18, mean 0, worst 12
+  compare_runtime 1,692 matched, 1,683 identical / 9 different at all three sample points

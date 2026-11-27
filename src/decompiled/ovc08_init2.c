@@ -237,16 +237,16 @@ void __cdecl16far ovr_miceButton0PressStates_entry(void)
 uint __cdecl16far init2_updateMouseButtons(void)
 
 {
-  uint16_t uVar1;
+  uint16_t pressStates;
   
-  uVar1 = ovr_miceButton0PressStates();
-  if ((uVar1 & 2) != 0) {
+  pressStates = ovr_miceButton0PressStates();
+  if ((pressStates & 2) != 0) {
     rightButtonLatch = 1;
   }
-  if ((uVar1 & 4) != 0) {
+  if ((pressStates & 4) != 0) {
     middleButtonLatch = 1;
   }
-  return uVar1 & 1;
+  return pressStates & 1;
 }
 
 

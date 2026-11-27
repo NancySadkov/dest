@@ -1051,19 +1051,19 @@ void __cdecl16far ovc13_usesBlitLoadRleGfx3(int x,int y,char force)
 void __cdecl16far ovc13_usesBlitRect(void)
 
 {
-  bool bVar1;
+  bool mouseIdle;
   
   BlitRects[3].seg = GSavedBlitSeg;
-  bVar1 = MiceNeedsUpdate == '\0';
-  if (bVar1) {
+  mouseIdle = MiceNeedsUpdate == '\0';
+  if (mouseIdle) {
     ovr_miceRestoreArea((brect_t *)(BlitRects + 3),0x2410);
   }
   ovc13_usesBlitRects();
-  if (bVar1) {
+  if (mouseIdle) {
     ovr_miceBlitRect((brect_t *)(BlitRects + 3),0x2410);
   }
   ovr_blitRect((brect_t *)(BlitRects + 3),0x2410);
-  if (bVar1) {
+  if (mouseIdle) {
     ovr_miceUpdate();
   }
   BlitRects[3].seg = 0xa000;

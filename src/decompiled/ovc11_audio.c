@@ -146,7 +146,7 @@ bool __cdecl16far fmFreeAudio(uint16_t force)
 
 {
   bool playing;
-  uint uVar2;
+  uint musState;
   far_t handle;
   far_t handle_00;
   uint8_t result;
@@ -167,12 +167,12 @@ bool __cdecl16far fmFreeAudio(uint16_t force)
     result = 0x1;
   }
   if (((MusRunning != '\0') && (MUSHandle.ofs != 0 || MUSHandle.seg != 0)) &&
-     (uVar2 = (uint)MUS_2410_07a9, uVar2 == 0)) {
-    if (((char)force == '\0') && (ovr_midGetSequenceStatus(), uVar2 == 1)) {
+     (musState = (uint)MUS_2410_07a9, musState == 0)) {
+    if (((char)force == '\0') && (ovr_midGetSequenceStatus(), musState == 1)) {
       return (bool)result;
     }
     ovr_midGetSequenceStatus();
-    if (uVar2 == 1) {
+    if (musState == 1) {
       ovr_midMidiStop();
     }
     handle_00.seg = MUSHandle.seg;

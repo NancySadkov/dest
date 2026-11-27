@@ -144,17 +144,17 @@ void __cdecl16far manage_rollStats(char_sheet_t *sheet,uint16_t arg2)
 char * __cdecl16far manage_compute1(int n,uint16_t arg2)
 
 {
-  int iVar1;
+  int lastDigit;
   char *pcStack_6;
   
-  iVar1 = n % 10;
-  if ((iVar1 == 1) && (n != 0xb)) {
+  lastDigit = n % 10;
+  if ((lastDigit == 1) && (n != 0xb)) {
     pcStack_6 = (char *)"st";
   }
-  else if ((iVar1 == 2) && (n != 0xc)) {
+  else if ((lastDigit == 2) && (n != 0xc)) {
     pcStack_6 = (char *)"nd";
   }
-  else if ((iVar1 == 3) && (n != 0xd)) {
+  else if ((lastDigit == 3) && (n != 0xd)) {
     pcStack_6 = (char *)"rd";
   }
   else {
@@ -795,7 +795,7 @@ uint16_t __cdecl16far alignmentDlg(char_sheet_t *sheet)
   uint16_t widths;
   far_t dst;
   char *inputResult;
-  uint uVar3;
+  uint choice;
   far_t entries;
   char align;
   uint8_t inputBuf;
@@ -807,8 +807,8 @@ uint16_t __cdecl16far alignmentDlg(char_sheet_t *sheet)
   do {
     ovr_drawString((char *)"Select an alignment.",0x2410,0x10);
     inputResult = ovr_uiInputText(far_from_u32((uint32_t)(0x24104927)),3,far_from_u32((uint32_t)(0x0)),0x0,0);
-    uVar3 = (uint)inputResult & 0xff;
-    if (uVar3 == 0) {
+    choice = (uint)inputResult & 0xff;
+    if (choice == 0) {
       return 0;
     }
     align = (char)inputResult;
@@ -818,8 +818,8 @@ uint16_t __cdecl16far alignmentDlg(char_sheet_t *sheet)
     if (CurPartySlot != '\0') {
       return 1;
     }
-    widths = *(uint16_t *)((int)&GAlignmentString.seg + uVar3 * 4);
-    ovr_drawString((char *)((far_t *)&GAlignmentString + uVar3)->ofs,widths,(char)widths);
+    widths = *(uint16_t *)((int)&GAlignmentString.seg + choice * 4);
+    ovr_drawString((char *)((far_t *)&GAlignmentString + choice)->ofs,widths,(char)widths);
     entries.seg = _SS;
     entries.ofs = (uint16_t)&inputBuf;
     inputResult = ovr_uiInputText(entries,2,far_from_u32((uint32_t)(0x0)),0x0,0);
