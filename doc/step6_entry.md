@@ -18738,3 +18738,44 @@ produce half of it.
 Gates unchanged this turn (the only `src` change was the Agnts/Entities correction committed as
 `ebb1b9da`): grep_checks 26,977; build 65/65; LINK.LOG 65 bytes / 0 problems; compare_state 1,628/0/0;
 diff_dgroup 1,639/1,805 with sum|delta| 18; compare_runtime 1,692 matched, 1,683 identical / 9 different.
+
+### step 6: two screen entries verified correct; 4d05:2d79 head decoded
+step 6: two screen entries verified as already-correct, and 4d05:2d79's decoded head
+
+## Screen false positives (shape, not behaviour)
+
+    ovc30_waves.c 619c:025d  ovc30_usesRandBelow   192 bytes  image 1 call, C 4
+    ovc27_combat.c 5ded:10ea ovc27_textTakesHalfDamage3  958 bytes  image 36, C 47
+
+`ovc30_usesRandBelow`'s body matches the image line for line - the `LevelBandMin`/`LevelBandMax`
+32-bit copies into `[bp-4]`/`[bp-8]`, the `band == 4 -> 0x29` early return, the
+`do { randVal = randBelow(0x2a); } while (low == 0x29 || ai == 0 || menu < bandMin || menu >= bandMax)`
+loop.  Its C writes the two 32-bit copies as `memcpy(..., 2)` twice, which the original inlines as four
+`mov` pairs; that is a two-call shape difference with identical behaviour, not a defect.  Same situation
+for `5ded:10ea`, whose call multiset matches exactly except for the nine `emptyFunction()` placeholders
+already documented as intra-function calls.
+
+## `4d05:2d79` (`manage_textTotalPopulation`) - decoded head
+
+Frame 0x1b4 bytes; three `fmemcpy` templates at 0x2d8f/0x2da1/0x2db2 into `ss:[bp-0x94]` (0x30),
+`ss:[bp-0xc4]` (0x30) and `ss:[bp-8]` (7), from `ds:0x4b06`, `ds:0x4b36` and `ds:0x4b66`.
+
+    2db7  [bp-0xa] = 0                                  ; a flag
+    2dbb  if (charIndex == 0xff) [bp-9] = 0xc
+          else [bp-9] = [bp-8 + GLeaderSheets[charIndex]->[0x2f]]    ; class -> template byte
+    2e23  if (GLeaderSheets[charIndex]->[0x2f] >= 4) [bp-0xa] = 1
+    2e2e  three far pointers written into [bp-0x64]: ds:0x50fb, ds:0x54e5, ds:0x54ed
+    2e6c  for (si = 0; si < ...; si++)                  ; the label loop begins here
+           2e70  if (si >= 5 && [bp-0xa] != 0)
+                   build "class * 0x10 + si * 4" into [bp-0x104] ...
+
+so the pattern is the same as the other panel renderers: a class byte selects a template row, then a
+loop emits one label per band.  The remaining ~0x450 bytes are the label loop, eight `blitLabel`
+calls, four `fmVsprintf` and the tail.
+
+This is 450 instructions; completing it needs a full decode pass, which is the next turn's work rather
+than a fragment at the end of this one.
+
+Gates unchanged (no `src` change this turn): grep_checks 26,977; build 65/65; LINK.LOG 65 bytes / 0
+problems; compare_state 1,628/0/0; diff_dgroup 1,639/1,805 with sum|delta| 18; compare_runtime 1,692
+matched, 1,683 identical / 9 different.
