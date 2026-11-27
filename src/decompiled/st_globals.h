@@ -2406,3 +2406,6 @@ extern undefined1 s_stshFileSizeTail[1];
 
 /* 0x2798 */
 extern char s_done_2410_2798[5];
+
+/* 0x56f8 */
+extern char s_kill_3_2410_56f8[8];

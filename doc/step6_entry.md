@@ -16498,3 +16498,49 @@ The three remaining steps are small and local: 6 bytes at `_brklvl`, 8 bytes in 
 range, 8 bytes before 0x747d.  The +/-12 around 0x7394 is not a layout error at all: the original's
 symbol table contains the name `s_and_grow` twice (0x7394 "and grow..." and 0x73a0 a 33-byte run of
 spaces), and a name-pairing tool necessarily maps both to our one declaration.
+
+### layout: the second s_kill_3 (sum|delta| 3,322 -> 18)
+layout: the second `s_kill_3` closes the last region (sum|delta| 3,322 -> 18)
+
+The residual was one 8-byte object.  The original's symbol table carries "kill 3\r" TWICE - at 0x55e5
+and again at 0x56f8 - and the second copy sits in the gap between our `s_intelligence_rep_2410_5680`
+chain and the object at 0x5700.  Declared it, and every symbol from 0x576a onward - 262 + 152 of them -
+falls into place.
+
+MEASURED (HEAD 13723724 -> this commit)
+
+  diff_dgroup sum|delta|    3,322 -> 18
+  diff_dgroup mean               2 -> 0
+  diff_dgroup worst              8 -> 12
+  diff_dgroup runs               6 -> 5
+  diff_dgroup matched        1,631 -> 1,631
+  compare_state              1,628/0/0 (unchanged)
+  compare_runtime matched    1,691 -> 1,692, identical 1,682 -> 1,683 / 9 different (both points)
+  grep_checks               34,870 -> 34,871
+  build 65/65, LINK.LOG 65 bytes / 0 problems
+
+## The profile is now five entries, and both non-zero ones are name collisions
+
+    delta +0 from _DATA (0000), 2 symbols
+    delta -6 from _brklvl (008b), 1 symbols
+    delta +0 from _heaptop (008f), 1,475 symbols     <- exact
+    delta +12 from s_and_grow (7394), 1 symbols
+    delta +0 from s_empty_2410_747d (747d), 152 symbols   <- exact
+
+1,627 of the 1,631 matched symbols are at offset 0.  The two stragglers are defects of *name
+resolution*, not of layout, and both are demonstrable:
+
+  * `_brklvl` (0x008b): the tool's `key()` strips leading underscores, so the original's `__brklvl`
+    (0x85) and `_brklvl` (0x8b) both reduce to `BRKLVL`, and so do our `___BRKLVL` (0x85) and
+    `__BRKLVL` (0x8b).  tmp/delta_pair.py shows both at +0.  The skip list at the top of
+    scripts/diff_dgroup.py also drops the original's `__brklvl`, which is why the matcher's
+    "next address must be greater" rule hands `_brklvl` our 0x85 symbol.
+  * `s_and_grow` (0x7394): the original's table uses that name twice - 0x7394 ("and grow...") and
+    0x73a0 (a 33-byte run of spaces).  Our two objects exist and match, but a name-keyed matcher
+    cannot express "the same name at two addresses".
+
+So the layout axis is, for the first time, at exact offsets across the whole of DGROUP except for two
+single-symbol name-resolution artefacts.  `matched` (1,631 of 1,805) is now limited not by offsets but
+by the 174 originals we still have no declaration for: the startup's own error strings and saved-vector
+block (whose bytes are C0L's, under C0L's internal names), and game objects that are still only present
+as stmiss.c blob text.

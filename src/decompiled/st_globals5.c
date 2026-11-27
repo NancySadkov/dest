@@ -1294,6 +1294,8 @@ char s_construction_abandoned[] = "Construction abandoned.";
 char s_s_unit_drowns_d_d[27] = "%s unit drowns.  (%d, %d)";
 char s_intelligence_rep_2410_5680[] = "Intelligence reports %s unit fleeing from battle. (%d, %d)";
 char s_intelligence_rep_2410_56bb[] = "Intelligence reports %s unit infected with disease. (%d, %d)";
+/* the original carries "kill 3\r" twice; the other copy is at 0x55e5 */
+char s_kill_3_2410_56f8[8] = "kill 3\r";
 char s_intelligence_rep_2410_5700[] = "Intelligence reports %s unit drained of energy. (%d, %d)";
 char s_intelligence_rep_2410_5739[] = "Intelligence reports %s unit destroyed. (%d, %d)";
 char s_mindark_s_keep_destroyed_d_d[] = "Mindark's keep destroyed. (%d, %d)";
