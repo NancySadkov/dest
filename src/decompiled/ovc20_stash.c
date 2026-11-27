@@ -363,13 +363,13 @@ spr_t * __cdecl16far stshSpriteStub(anm_t *anms,uint16_t nanims)
       for (j = 0; pstub.seg = (uint16_t)((ulong)((long)(int)i * 0x1e) >> 0x10),
           j < (&anms->nframes)[(int)((long)(int)i * 0x1e)]; j = j + 1) {
         if (j == 0) {
-          pstub.ofs = (uint16_t)ovr_stshAllocStub(unaff_DI);
+          pstub.ofs = (uint16_t)ovr_stshAllocStub();
           iVar1 = dst.ofs + k * 4;
           *(uint16_t *)(iVar1 + 0x5a) = pstub.seg;
           *(uint16_t *)(iVar1 + 0x58) = pstub.ofs;
         }
         else {
-          ovr_stshAllocStub(unaff_DI);
+          ovr_stshAllocStub();
         }
       }
       i = i + 1;
@@ -591,7 +591,7 @@ void __cdecl16far stshInitAudioAssets(char grab)
       *(uint16_t *)(&AudioHandles[i]) = 0;
     }
     if (grab == '\0') {
-      pfVar7 = ovr_stshAllocStub(unaff_DI);
+      pfVar7 = ovr_stshAllocStub();
       ((uint16_t *)(i * 4))[1] = in_DX;
       *(uint16_t *)(i * 4) =(uint16_t)( pfVar7);
       iVar10 = in_DX;
@@ -1015,55 +1015,55 @@ void __cdecl16far stshLoadAudioDrivers(bool grab)
     mt32mpuAdvSeg =(uint16_t)( pfVar2);
   }
   else {
-    midpakAd.ofs = (uint16_t)ovr_stshAllocStub(unaff_BP);
+    midpakAd.ofs = (uint16_t)ovr_stshAllocStub();
     midpakAd.seg = in_DX;
-    cmidpakComOfs = ovr_stshAllocStub(unaff_BP);
+    cmidpakComOfs = ovr_stshAllocStub();
     cmidpakComSeg = in_DX;
-    ibmsndComOfs = ovr_stshAllocStub(unaff_BP);
+    ibmsndComOfs = ovr_stshAllocStub();
     ibmsndComSeg = in_DX;
-    sblasterComOfs = ovr_stshAllocStub(unaff_BP);
+    sblasterComOfs = ovr_stshAllocStub();
     audioPlaceholder2.seg = 0;
     audioPlaceholder2.ofs = 0;
     sblasterComSeg = in_DX;
-    fibmbakComOfs = ovr_stshAllocStub(unaff_BP);
+    fibmbakComOfs = ovr_stshAllocStub();
     fibmbakComSeg = in_DX;
-    pfVar1 = ovr_stshAllocStub(unaff_BP);
+    pfVar1 = ovr_stshAllocStub();
     sbproComOfs =(uint16_t)( pfVar1);
     sbproComSeg = in_DX;
     sbproComCopyOfs =(uint16_t)( pfVar1);
     sbproComCopySeg = in_DX;
-    paudioComOfs = ovr_stshAllocStub(unaff_BP);
+    paudioComOfs = ovr_stshAllocStub();
     sblasterComCopySeg = sblasterComSeg;
     sblasterComCopyOfs = sblasterComOfs;
     pfVar2 = sblasterComOfs;
     paudioComSeg =(uint16_t)( pfVar1);
-    adlibComOfs = ovr_stshAllocStub(unaff_BP);
+    adlibComOfs = ovr_stshAllocStub();
     adlibComSeg =(uint16_t)( pfVar2);
-    adlibgComOfs = ovr_stshAllocStub(unaff_BP);
+    adlibgComOfs = ovr_stshAllocStub();
     audioPlaceholder3.seg = 0;
     audioPlaceholder3.ofs = 0;
     musDriver0Seg = 0;
     musDriver0Ofs = 0;
     adlibgComSeg =(uint16_t)( pfVar2);
-    sbfmAdvOfs = ovr_stshAllocStub(unaff_BP);
+    sbfmAdvOfs = ovr_stshAllocStub();
     audioPlaceholder0.seg = 0;
     audioPlaceholder0.ofs = 0;
     audioPlaceholder1.seg = 0;
     audioPlaceholder1.ofs = 0;
     sbfmAdvSeg =(uint16_t)( pfVar2);
-    sbp2fmAdvOfs = ovr_stshAllocStub(unaff_BP);
+    sbp2fmAdvOfs = ovr_stshAllocStub();
     sbp2fmAdvSeg =(uint16_t)( pfVar2);
-    sbp1fmAdvOfs = ovr_stshAllocStub(unaff_BP);
+    sbp1fmAdvOfs = ovr_stshAllocStub();
     sbp1fmAdvSeg =(uint16_t)( pfVar2);
-    pasfmAdvOfs = ovr_stshAllocStub(unaff_BP);
+    pasfmAdvOfs = ovr_stshAllocStub();
     pasfmAdvSeg =(uint16_t)( pfVar2);
-    pasoplAdvOfs = ovr_stshAllocStub(unaff_BP);
+    pasoplAdvOfs = ovr_stshAllocStub();
     pasoplAdvSeg =(uint16_t)( pfVar2);
-    adlibAdvOfs = ovr_stshAllocStub(unaff_BP);
+    adlibAdvOfs = ovr_stshAllocStub();
     adlibAdvSeg =(uint16_t)( pfVar2);
-    adlibgAdvOfs = ovr_stshAllocStub(unaff_BP);
+    adlibgAdvOfs = ovr_stshAllocStub();
     adlibgAdvSeg =(uint16_t)( pfVar2);
-    mt32mpuAdvOfs = ovr_stshAllocStub(unaff_BP);
+    mt32mpuAdvOfs = ovr_stshAllocStub();
     mt32mpuAdvSeg =(uint16_t)( pfVar2);
   }
   return;

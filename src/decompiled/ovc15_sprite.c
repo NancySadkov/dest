@@ -251,11 +251,11 @@ void __cdecl16far stshInitSprites(bool grab)
         ovr_stgFreeTmp(gfx,puVar7);
       }
       else {
-        pfVar1 = ovr_stshAllocStub(unaff_DI);
+        pfVar1 = ovr_stshAllocStub();
         asm { mov uVar6,dx };
         AgntGs[i].prts[j].seg = uVar6;
         AgntGs[i].prts[j].ofs = (uint16_t)( pfVar1);
-        pfVar1 = ovr_stshAllocStub(unaff_DI);
+        pfVar1 = ovr_stshAllocStub();
         asm { mov uVar9,dx };
         AgntGs[i].prtpals[j].seg = uVar9;
         AgntGs[i].prtpals[j].ofs = (uint16_t)( pfVar1);

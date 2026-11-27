@@ -589,21 +589,21 @@ void __cdecl16far init_assets1(bool grab)
     ovr_stshStubifyBld(0xae);
     ovr_stshStubifyBld(0xb1);
     ovr_stshStubifyBld(0xb4);
-    BldGfxNormal[0x225].ofs = (uint16_t)ovr_stshAllocStub(siArg);
+    BldGfxNormal[0x225].ofs = (uint16_t)ovr_stshAllocStub();
     BldGfxNormal[0x225].seg = in_DX;
-    BldGfxNormal[0x226].ofs = (uint16_t)ovr_stshAllocStub(siArg);
+    BldGfxNormal[0x226].ofs = (uint16_t)ovr_stshAllocStub();
     BldGfxNormal[0x226].seg = rleSeg;
-    BldGfxNormal[0x227].ofs = (uint16_t)ovr_stshAllocStub(siArg);
+    BldGfxNormal[0x227].ofs = (uint16_t)ovr_stshAllocStub();
     BldGfxNormal[0x227].seg = rleSeg2;
-    BldGfxRuin[0x225].ofs = (uint16_t)ovr_stshAllocStub(siArg);
+    BldGfxRuin[0x225].ofs = (uint16_t)ovr_stshAllocStub();
     BldGfxRuin[0x225].seg = rleSeg;
-    BldGfxRuin[0x226].ofs = (uint16_t)ovr_stshAllocStub(siArg);
+    BldGfxRuin[0x226].ofs = (uint16_t)ovr_stshAllocStub();
     BldGfxRuin[0x226].seg = rleSeg2;
-    BldGfxRuin[0x227].ofs = (uint16_t)ovr_stshAllocStub(siArg);
+    BldGfxRuin[0x227].ofs = (uint16_t)ovr_stshAllocStub();
     BldGfxRuin[0x227].seg = rleSeg;
-    BldGfxNormal[0x229].ofs = (uint16_t)ovr_stshAllocStub(siArg);
+    BldGfxNormal[0x229].ofs = (uint16_t)ovr_stshAllocStub();
     BldGfxNormal[0x229].seg = rleSeg2;
-    BldGfxRuin[0x229].ofs = (uint16_t)ovr_stshAllocStub(siArg);
+    BldGfxRuin[0x229].ofs = (uint16_t)ovr_stshAllocStub();
     BldGfxRuin[0x229].seg = rleSeg;
   }
   BldGfxNormal[0x228].seg = BldGfxNormal[0x229].seg;
@@ -666,17 +666,17 @@ void __cdecl16far init_assets1(bool grab)
     ovr_stgFreeTmp(lbmTmp,rleSeg3);
   }
   else {
-    BldGfxNormal[0x23e].ofs = (uint16_t)ovr_stshAllocStub(siArg);
+    BldGfxNormal[0x23e].ofs = (uint16_t)ovr_stshAllocStub();
     BldGfxNormal[0x23e].seg = rleSeg;
-    BldGfxNormal[0x241].ofs = (uint16_t)ovr_stshAllocStub(siArg);
+    BldGfxNormal[0x241].ofs = (uint16_t)ovr_stshAllocStub();
     BldGfxNormal[0x241].seg = rleSeg2;
-    BldGfxNormal[0x244].ofs = (uint16_t)ovr_stshAllocStub(siArg);
+    BldGfxNormal[0x244].ofs = (uint16_t)ovr_stshAllocStub();
     BldGfxNormal[0x244].seg = rleSeg;
-    BldGfxRuin[0x23e].ofs = (uint16_t)ovr_stshAllocStub(siArg);
+    BldGfxRuin[0x23e].ofs = (uint16_t)ovr_stshAllocStub();
     BldGfxRuin[0x23e].seg = rleSeg2;
-    BldGfxRuin[0x241].ofs = (uint16_t)ovr_stshAllocStub(siArg);
+    BldGfxRuin[0x241].ofs = (uint16_t)ovr_stshAllocStub();
     BldGfxRuin[0x241].seg = rleSeg;
-    BldGfxRuin[0x244].ofs = (uint16_t)ovr_stshAllocStub(siArg);
+    BldGfxRuin[0x244].ofs = (uint16_t)ovr_stshAllocStub();
     BldGfxRuin[0x244].seg = rleSeg2;
   }
   BldGfxNormal[0x23d].seg = BldGfxNormal[0x23e].seg;
@@ -726,9 +726,9 @@ void __cdecl16far init_assets1(bool grab)
   }
   else {
     rleSeg = BldGfxRuin[0x244].seg;
-    BldGfxNormal[0x247].ofs = (uint16_t)ovr_stshAllocStub(siArg);
+    BldGfxNormal[0x247].ofs = (uint16_t)ovr_stshAllocStub();
     BldGfxNormal[0x247].seg = rleSeg;
-    BldGfxRuin[0x247].ofs = (uint16_t)ovr_stshAllocStub(siArg);
+    BldGfxRuin[0x247].ofs = (uint16_t)ovr_stshAllocStub();
     BldGfxRuin[0x247].seg = rleSeg2;
   }
   BldGfxNormal[0x246].seg = BldGfxNormal[0x247].seg;
@@ -762,9 +762,9 @@ void __cdecl16far init_assets1(bool grab)
   }
   else {
     rleSeg = BldGfxRuin[0x247].seg;
-    BldGfxNormal[0x24a].ofs = (uint16_t)ovr_stshAllocStub(siArg);
+    BldGfxNormal[0x24a].ofs = (uint16_t)ovr_stshAllocStub();
     BldGfxNormal[0x24a].seg = rleSeg;
-    BldGfxRuin[0x24a].ofs = (uint16_t)ovr_stshAllocStub(siArg);
+    BldGfxRuin[0x24a].ofs = (uint16_t)ovr_stshAllocStub();
     BldGfxRuin[0x24a].seg = rleSeg2;
   }
   BldGfxNormal[0x249].seg = BldGfxNormal[0x24a].seg;
@@ -915,9 +915,9 @@ void __cdecl16far init_assets1(bool grab)
   else {
     rleSeg = BldGfxRuin[0x24a].seg;
     ovr_stshStubifyBld(0xc4);
-    BldGfxNormal[0x256].ofs = (uint16_t)ovr_stshAllocStub(siArg);
+    BldGfxNormal[0x256].ofs = (uint16_t)ovr_stshAllocStub();
     BldGfxNormal[0x256].seg = rleSeg;
-    BldGfxRuin[0x256].ofs = (uint16_t)ovr_stshAllocStub(siArg);
+    BldGfxRuin[0x256].ofs = (uint16_t)ovr_stshAllocStub();
     BldGfxRuin[0x256].seg = rleSeg2;
   }
   BldGfxNormal[0x255].seg = BldGfxNormal[0x256].seg;
@@ -975,17 +975,17 @@ void __cdecl16far init_assets1(bool grab)
   }
   else {
     rleSeg = BldGfxRuin[0x256].seg;
-    BldGfxNormal[0x259].ofs = (uint16_t)ovr_stshAllocStub(siArg);
+    BldGfxNormal[0x259].ofs = (uint16_t)ovr_stshAllocStub();
     BldGfxNormal[0x259].seg = rleSeg;
-    BldGfxNormal[0x25c].ofs = (uint16_t)ovr_stshAllocStub(siArg);
+    BldGfxNormal[0x25c].ofs = (uint16_t)ovr_stshAllocStub();
     BldGfxNormal[0x25c].seg = rleSeg2;
-    BldGfxNormal[0x25f].ofs = (uint16_t)ovr_stshAllocStub(siArg);
+    BldGfxNormal[0x25f].ofs = (uint16_t)ovr_stshAllocStub();
     BldGfxNormal[0x25f].seg = rleSeg;
-    BldGfxRuin[0x259].ofs = (uint16_t)ovr_stshAllocStub(siArg);
+    BldGfxRuin[0x259].ofs = (uint16_t)ovr_stshAllocStub();
     BldGfxRuin[0x259].seg = rleSeg2;
-    BldGfxRuin[0x25c].ofs = (uint16_t)ovr_stshAllocStub(siArg);
+    BldGfxRuin[0x25c].ofs = (uint16_t)ovr_stshAllocStub();
     BldGfxRuin[0x25c].seg = rleSeg;
-    BldGfxRuin[0x25f].ofs = (uint16_t)ovr_stshAllocStub(siArg);
+    BldGfxRuin[0x25f].ofs = (uint16_t)ovr_stshAllocStub();
     BldGfxRuin[0x25f].seg = rleSeg3;
   }
   ovr_stshStubifyCopy1to0(200);
@@ -1034,17 +1034,17 @@ void __cdecl16far init_assets1(bool grab)
     ovr_stgFreeTmp(lbmTmp,rleSeg3);
   }
   else {
-    BldGfxNormal[0x262].ofs = (uint16_t)ovr_stshAllocStub(siArg);
+    BldGfxNormal[0x262].ofs = (uint16_t)ovr_stshAllocStub();
     BldGfxNormal[0x262].seg = rleSeg2;
-    BldGfxNormal[0x265].ofs = (uint16_t)ovr_stshAllocStub(siArg);
+    BldGfxNormal[0x265].ofs = (uint16_t)ovr_stshAllocStub();
     BldGfxNormal[0x265].seg = rleSeg;
-    BldGfxNormal[0x268].ofs = (uint16_t)ovr_stshAllocStub(siArg);
+    BldGfxNormal[0x268].ofs = (uint16_t)ovr_stshAllocStub();
     BldGfxNormal[0x268].seg = rleSeg2;
-    BldGfxRuin[0x262].ofs = (uint16_t)ovr_stshAllocStub(siArg);
+    BldGfxRuin[0x262].ofs = (uint16_t)ovr_stshAllocStub();
     BldGfxRuin[0x262].seg = rleSeg;
-    BldGfxRuin[0x265].ofs = (uint16_t)ovr_stshAllocStub(siArg);
+    BldGfxRuin[0x265].ofs = (uint16_t)ovr_stshAllocStub();
     BldGfxRuin[0x265].seg = rleSeg2;
-    BldGfxRuin[0x268].ofs = (uint16_t)ovr_stshAllocStub(siArg);
+    BldGfxRuin[0x268].ofs = (uint16_t)ovr_stshAllocStub();
     BldGfxRuin[0x268].seg = rleSeg;
   }
   ovr_stshStubifyCopy1to0(0xcb);
