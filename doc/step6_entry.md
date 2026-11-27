@@ -15525,3 +15525,54 @@ CONCLUSION: section 5 cannot be driven to 0 by renaming.  Reaching 0 requires ei
 register/stack provenance of 165 functions, or a decision that the grep is a heuristic which a
 Ghidra-derived export cannot satisfy - and the same is true of the last large diff_dgroup item, the
 ~+18 head surplus, which needs C0M.OBJ's startup data replaced.
+
+### startup: link C0L instead of C0M (sum|delta| -> 44,867)
+startup: link C0L instead of C0M (sum|delta| 72,064 -> 44,867)
+
+The ~+18 head surplus that has capped every layout gain comes from C0M.OBJ's `DATASEG`, which
+carries a 25-byte "Null pointer assignment" string the original image does not have.  C0L.OBJ is
+the only startup shipped with Turbo C 3.0 that lacks it, and `link_standalone.py` already honours a
+`C0OBJ` override, so the substitution costs nothing:
+
+    $env:C0OBJ='D:\LIB\C0L.OBJ'; python scripts/link_standalone.py
+    LINK.LOG 65 bytes / 0 problems
+
+I had tried this before and reported 11 undefined symbols, but that measurement was invalid: the
+`GLOB.OBJ` in the tree at the time was left over from the `#if 0` experiment that disabled the C0
+header block.  With the correct objects the link is clean.
+
+Why it is legitimate rather than a hack: C0's own code never runs.  The link patches the EXE entry
+to `_STARTX` (crtl.c), so only C0's *data* symbols matter, and C0L supplies the same
+`_psp`/`errno`/`_StartTime`/`_heapbase`/`_brklvl`/`_heaptop` set that CM.LIB and OVERLAY.LIB
+expect; C0M's `__MMODEL` flag is referenced nowhere in our tree.  Nothing in `src/` references
+`__MMODEL`, and the original's header has no null-check string either, so C0L is the closer match
+to what the original was built with.
+
+MEASURED (HEAD a0edab70 -> this commit)
+
+  diff_dgroup sum|delta|   72,064 -> 44,867   (-27,197, -38%)
+  diff_dgroup mean             44 ->     27
+  diff_dgroup worst           170 ->    148
+  diff_dgroup runs             19 ->     19
+  diff_dgroup matched       1,627 ->  1,627
+  compare_state             1,625/0/0 (unchanged, 0 different)
+  compare_runtime           1,684 matched, 1,675 identical / 9 different at BOTH sample points
+                            (main entry and init_game) - unchanged
+  grep_checks              35,568 (unchanged)
+  build 65/65, LINK.LOG 65 bytes / 0 problems
+
+and the head of the profile improves exactly where predicted:
+
+  _DATA          +170 -> +148      (our _DATA moves from DGROUP:0xaa to 0x94)
+  _StartTime      +21 ->   +0      (the CRT variables now land on the original's offsets)
+  _heaptop        +23 ->   +0
+  first game string s__2410_0094  +92 -> +70
+  DGROUP segment  6f6e -> 6f6b
+
+So the head surplus is now ~+70 rather than ~+92, and the remaining offset is the C0 data that both
+objects still carry in front of the game's own data - not something the choice of startup can
+remove.
+
+Default changed in scripts/link_standalone.py (both the overlay and non-overlay link paths) and in
+scripts/probe_dgroup_layout.py; the stale "C0M must match -mm" comment is corrected, since that is
+untrue once C0's startup is bypassed.  `C0OBJ` still overrides it if needed.

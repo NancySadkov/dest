@@ -54,7 +54,7 @@ io.open(os.path.join(B, "PB.C"), "w", encoding="ascii", newline="\r\n").write(PR
 
 globs = sorted(n for n in os.listdir(B)
                if n.upper().startswith("GLOB") and n.lower().endswith(".obj"))
-rsp = ("D:\\LIB\\C0M.OBJ PB.OBJ " + " ".join(globs) +
+rsp = ("D:\\LIB\\C0L.OBJ PB.OBJ " + " ".join(globs) +
        "\r\nPB.EXE\r\nPB.MAP\r\nD:\\LIB\\CM.LIB")
 io.open(os.path.join(B, "PB.RSP"), "w", encoding="ascii", newline="").write(rsp + "\r\n")
 

@@ -145,8 +145,14 @@ def main():
     # is what separates inputs from outputs
     # printf("%f") pulls in the floating-point printer, which needs the emulator
     # library; without it TLINK reports a fixup overflow on __REALCVT.
-    # C0M is the medium-model startup and must match -mm on the objects
-    # (C0L is the large-model one).
+    # C0L is the startup used here.  Its DATASEG carries no 25-byte "Null pointer
+    # assignment" string, which is the original image's header shape: with C0M our
+    # _DATA lands at DGROUP:0xaa and _StartTime at +21, with C0L they land at 0x94 and
+    # +0, and diff_dgroup sum|delta| falls from 72,064 to 44,867 with every other gate
+    # unchanged.  C0's own code never runs (the entry is patched to _STARTX below), so
+    # only its data symbols matter, and C0L supplies the same _psp/errno/_StartTime/
+    # heap set that CM.LIB and OVERLAY.LIB expect - an earlier note here claimed C0M
+    # "must match -mm", which is not true once C0's startup is bypassed.
     # Resident: the startup, the recovered CRT, the drivers, the globals and the
     # overlay thunks.  Everything else (the recovered game modules O01..O50) becomes
     # an overlay - TLINK's /o applies to the modules that follow it.
@@ -164,18 +170,18 @@ def main():
     # game data instead of in front of it.  Measured: sum|delta| 276,979 -> 238,507
     # with match count and runtime sample unchanged.
     res.sort(key=lambda n: (n.upper() == "CRTL.OBJ", n))
-    # C0M.OBJ supplies the startup's data symbols (_psp, errno, _StartTime, the
+    # C0L.OBJ supplies the startup's data symbols (_psp, errno, _StartTime, the
     # heap variables, _terminate) that CM.LIB and OVERLAY.LIB expect.  The
     # original's entry is startx (CRTL), not C0's _startup, so the linked EXE's
     # entry is moved to _STARTX below.
-    rsp = ((os.environ.get("C0OBJ") or "D:\\LIB\\C0M.OBJ") + " " + " ".join(res) + " /o " + " ".join(ovl) +
+    rsp = ((os.environ.get("C0OBJ") or "D:\\LIB\\C0L.OBJ") + " " + " ".join(res) + " /o " + " ".join(ovl) +
            " /m /s" + ",REBUILT.EXE,REBUILT.MAP,D:\\LIB\\OVERLAY.LIB D:\\LIB\\CM.LIB")
     if not os.environ.get("WITH_OVERLAY"):
         # Ordinary (non-VROOMM) link - now the default.  With /o the generated
         # thunks bind to TLINK's resident STUBSEG copies, whose bodies are
         # INT 3Fh stubs; without a VROOMM manager that never returns, which is
         # exactly where the rebuild used to stop (doc/step6_entry.md).
-        rsp = ((os.environ.get("C0OBJ") or "D:\\LIB\\C0M.OBJ") + " " + " ".join(res) + " " + " ".join(ovl) +
+        rsp = ((os.environ.get("C0OBJ") or "D:\\LIB\\C0L.OBJ") + " " + " ".join(res) + " " + " ".join(ovl) +
                " /m /s" + ",REBUILT.EXE,REBUILT.MAP,D:\\LIB\\CM.LIB D:\\LIB\\EMU.LIB")
     with open(os.path.join(BUILDSRC, "LINK.RSP"), "w", encoding="ascii",
               newline="\r\n") as f:

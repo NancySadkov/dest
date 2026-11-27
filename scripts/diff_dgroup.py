@@ -47,7 +47,7 @@ for line in io.open(SYMS, encoding="utf-8"):
     if name.startswith(("__C0", "_argc", "_argv", "_environ", "_env", "_psp",
                         "DosVersion", "errno", "__brklvl", "_heapbase",
                         "__stklen", "__ovr")):
-        continue               # the startup's own data belongs to C0M, not to us
+        continue               # the startup's own data belongs to C0, not to us
     if ":" not in addr:
         continue
     off = int(addr.split(":")[1], 16)
