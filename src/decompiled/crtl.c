@@ -661,23 +661,23 @@ uint32_t * __cdecl16far xms_init(uint32_t *retStorage)
 
 {
   code *pcVar1;
-  char cVar2;
+  char driverByte;
   code *in_BX;
   uint16_t unaff_ES;
-  uint32_t uVar3;
+  uint32_t xmsResult;
   
   pcVar1 = (code *)swi(0x2f);
-  cVar2 = (*pcVar1)();
-  if (cVar2 == -0x80) {
+  driverByte = (*pcVar1)();
+  if (driverByte == -0x80) {
     pcVar1 = (code *)swi(0x2f);
     (*pcVar1)();
     xms_driver.ofs = (uint16_t)in_BX;
     xms_driver.seg = unaff_ES;
     xms_handle = (*in_BX)(0x1000);
     if (xms_handle != 0) {
-      uVar3 = (*(code *)xms_driver.ofs)(0x1000);
-      if ((int)uVar3 != 0) {
-        xms_data2 = (int)((ulong)uVar3 >> 0x10);
+      xmsResult = (*(code *)xms_driver.ofs)(0x1000);
+      if ((int)xmsResult != 0) {
+        xms_data2 = (int)((ulong)xmsResult >> 0x10);
         return (uint32_t *)(xms_handle << 10);
       }
     }
@@ -1131,24 +1131,24 @@ uint16_t ioErrorHndlr(void)
 
 {
   code *pcVar1;
-  undefined1 uVar3;
-  uint16_t uVar2;
+  undefined1 argHi;
+  uint16_t handlerResult;
   uint16_t in_stack_00000002;
   
   pcVar1 = (code *)swi(0x21);
   GIOErrorCode = (*pcVar1)(0x2410);
-  uVar3 = (undefined1)((uint)in_stack_00000002 >> 8);
+  argHi = (undefined1)((uint)in_stack_00000002 >> 8);
   if (GIOErrorCode == 0x20) {
-    return CONCAT11(uVar3,3);
+    return CONCAT11(argHi,3);
   }
   if ((GIOErrorRetryCount != '\0') && (GIOErrorCode == 0x37)) {
     GIOErrorRetryCount = GIOErrorRetryCount + -1;
-    return CONCAT11(uVar3,1);
+    return CONCAT11(argHi,1);
   }
                     /* WARNING: Could not recover jumptable at 0x000107e2. Too many branches */
                     /* WARNING: Treating indirect jump as call */
-  uVar2 = (*(code *)(ulong)GSavedErrorHandler.ofs)();
-  return uVar2;
+  handlerResult = (*(code *)(ulong)GSavedErrorHandler.ofs)();
+  return handlerResult;
 }
 
 

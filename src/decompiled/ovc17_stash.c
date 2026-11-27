@@ -444,12 +444,12 @@ far_t * __cdecl16far fmMalloc(far_t *retStorage,uint32_t nbytes)
 
 {
   far_t *pfVar1;
-  uint uVar2;
+  uint recovered;
   int in_DX;
   int iVar3;
   ulong in_stack_0000fff8;
   ulong uVar4;
-  uint16_t uVar5;
+  uint16_t mallocSeg;
   
   uVar4 = in_stack_0000fff8 & 0xffff0000;
   ovr_fmFreeAudio(0);
@@ -458,21 +458,21 @@ far_t * __cdecl16far fmMalloc(far_t *retStorage,uint32_t nbytes)
     ovr_stExit(0x1c);
   }
   do {
-    uVar5 = (uint16_t)(uVar4 >> 0x10);
+    mallocSeg = (uint16_t)(uVar4 >> 0x10);
     if (HeapReady == '\0') {
-      pfVar1 = farmalloc(retStorage,CONCAT22(uVar5,(int)nbytes));
+      pfVar1 = farmalloc(retStorage,CONCAT22(mallocSeg,(int)nbytes));
       iVar3 = in_DX;
     }
     else {
-      pfVar1 = ovr_heapMalloc(retStorage,CONCAT22(uVar5,(int)nbytes));
+      pfVar1 = ovr_heapMalloc(retStorage,CONCAT22(mallocSeg,(int)nbytes));
       iVar3 = in_DX;
     }
     uVar4 = ZEXT24(pfVar1) << 0x10;
     in_DX = iVar3;
     if (pfVar1 == (far_t *)0x0 && iVar3 == 0) {
       uVar4 = ZEXT24(pfVar1) << 0x10;
-      uVar2 = fmMallocRecover();
-      if ((uVar2 & 0xff) == 0) {
+      recovered = fmMallocRecover();
+      if ((recovered & 0xff) == 0) {
         return (far_t *)0x0;
       }
     }

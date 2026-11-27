@@ -404,15 +404,15 @@ int __cdecl16far ovc27_usesRandBelow4(byte level,byte threshold)
   uint16_t in_AX;
   byte bVar3;
   int iVar1;
-  uint16_t uVar2;
+  uint16_t randVal;
   
   bVar3 = (byte)((uint)in_AX >> 8);
   if (level < threshold) {
     iVar1 = (uint)bVar3 << 8;
   }
   else if (level == threshold) {
-    uVar2 = ovr_randBelow(8,0);
-    if ((uVar2 & 0xff) == 0) {
+    randVal = ovr_randBelow(8,0);
+    if ((randVal & 0xff) == 0) {
       iVar1 = 1;
     }
     else {

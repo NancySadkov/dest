@@ -17596,3 +17596,30 @@ ovc41_usesMenuItemEnabled
   compare_state 1,628/0/0
   diff_dgroup 1,639/1,805 matched, 5 runs, sum|delta| 18, mean 0, worst 12
   compare_runtime 1,692 matched, 1,683 identical / 9 different at all three sample points
+
+### section 5: batches 24-25 - twelve functions (34,471 -> 34,395)
+section 5: batch 24 and 25 - twelve small functions (34,471 -> 34,395)
+
+batch 24
+    ovc41_compute8        bVar1 ovr_agnt_compute14(level) -> baseRank (3),  bVar3 (byte)(rank+4>>8) -> packHi (4)
+    ovc36_usesLDIV_at_    uVar9 (uint16_t)lVar6 -> longLo (4),  iVar10 high word -> dividendHi (3)
+    bldng_usesRandBelow   uVar1 ovr_randBelow(...) -> randVal (3),  iVar2 -> tableOfs (4)
+    ovc30_usesRandBelow   uVar2 ovr_randBelow(0x2a,0) -> randVal (7)
+    ovc27_usesRandBelow4  uVar2 ovr_randBelow(8,0) -> randVal (3)
+    stshWriteFile         uVar1 sz.lo - wrsz -> remaining (4),  uVar2 -> bufSeg (3)
+
+batch 25
+    stshReadFile          uVar1 nbytes.lo - n -> remaining (4),  uVar2 pdst.seg -> dstSeg (3)
+    fmMalloc              uVar5 (uint16_t)(uVar4 >> 0x10) -> mallocSeg (4),  uVar2 fmMallocRecover() -> recovered (3)
+    stshStoreSprite       uVar2 word at pframe.ofs+1 -> frameWord1 (4),  uVar1 word at +3 -> frameWord3 (3)
+    xms_init              uVar3 driver call result -> xmsResult (4),  cVar2 -> driverByte (3)
+    ioErrorHndlr          uVar3 high byte of a stack arg -> argHi (4),  uVar2 -> handlerResult (3)
+    agnt_computeFrameExtents  bVar4 agnt_compute4(...) -> compute4Flag (3)
+
+  grep_checks 34,471 -> 34,395 (-76); build 65/65; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,628/0/0
+  diff_dgroup 1,639/1,805 matched, 5 runs, sum|delta| 18, mean 0, worst 12
+  compare_runtime 1,692 matched, 1,683 identical / 9 different at all three sample points
+
+`frameWord1`/`frameWord3` state the offsets (pframe.ofs + 1 and + 3) rather than claiming which fields they
+are; the same for `remaining`, which is exactly `sz.lo - wrsz` / `nbytes.lo - n`.

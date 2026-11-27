@@ -999,8 +999,8 @@ char * __cdecl16far ovc15_capitalize(char *text)
 void __cdecl16far stshStoreSprite(spr_t *spr,anm_t *anms,int16_t nanims)
 
 {
-  uint16_t uVar1;
-  uint16_t uVar2;
+  uint16_t frameWord3;
+  uint16_t frameWord1;
   bool bVar3;
   uint16_t index;
   uint16_t o;
@@ -1022,12 +1022,12 @@ void __cdecl16far stshStoreSprite(spr_t *spr,anm_t *anms,int16_t nanims)
       bVar3 = true;
       while( true ) {
         if (pframe.ofs == 0 && pframe.seg == 0) break;
-        uVar1 = *(uint16_t *)(pframe.ofs + 3);
-        uVar2 = *(uint16_t *)(pframe.ofs + 1);
+        frameWord3 = *(uint16_t *)(pframe.ofs + 3);
+        frameWord1 = *(uint16_t *)(pframe.ofs + 1);
         *(uint16_t *)(pframe.ofs + 3) = 0;
         *(uint16_t *)(pframe.ofs + 1) = 0;
         if (bVar3) {
-          (*(uint16_t *)((uint8_t *)&(cte) + 2)) = uVar2;
+          (*(uint16_t *)((uint8_t *)&(cte) + 2)) = frameWord1;
           (*(uint16_t *)((uint8_t *)&(cte))) = ovr_stshStoreFile((uint8_t *)pframe.ofs,pframe.seg);
           iVar4 = in_stack_00000004 + index * 4;
           *(uint16_t *)(iVar4 + 0x5a) = (*(uint16_t *)((uint8_t *)&(cte) + 2));
@@ -1037,8 +1037,8 @@ void __cdecl16far stshStoreSprite(spr_t *spr,anm_t *anms,int16_t nanims)
           ovr_stshStoreFile((uint8_t *)pframe.ofs,pframe.seg);
         }
         bVar3 = false;
-        pframe.seg = uVar1;
-        pframe.ofs = uVar2;
+        pframe.seg = frameWord3;
+        pframe.ofs = frameWord1;
       }
     }
     i = i + 1;

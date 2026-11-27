@@ -24,9 +24,9 @@ uint __cdecl16far ovc36_usesLDIV_at_(byte partyIndex)
   long lVar6;
   long *plVar7;
   uint16_t uVar8;
-  uint16_t uVar9;
+  uint16_t longLo;
   uint32_t in_stack_0000fffa;
-  int iVar10;
+  int dividendHi;
   
   lVar6 = CONCAT22((int)((ulong)in_stack_0000fffa >> 0x10),unaff_SI);
   if ((GLeaderSheets[partyIndex])->population == 0) {
@@ -46,17 +46,17 @@ uint __cdecl16far ovc36_usesLDIV_at_(byte partyIndex)
     plVar7 = (long *)(GLeaderSheets[partyIndex])->population;
     uVar2 = 0;
     plVar1 = LXMUL_at_(plVar7,(ulong)unaff_DI << 0x10,lVar6);
-    uVar9 = (uint16_t)lVar6;
+    longLo = (uint16_t)lVar6;
     lVar6 = LDIV_at_((long)CONCAT22(uVar2,plVar1),(long)CONCAT22(uVar8,plVar7));
-    lVar5 = CONCAT22((uint)lVar6,uVar9);
+    lVar5 = CONCAT22((uint)lVar6,longLo);
     if (200 < (uint)lVar6) {
-      lVar5 = CONCAT22(200,uVar9);
+      lVar5 = CONCAT22(200,longLo);
     }
     uVar8 = 0;
     plVar7 = (long *)(GLeaderSheets[partyIndex])->population;
     uVar2 = 0;
     plVar1 = LXMUL_at_(plVar7,(ulong)unaff_DI << 0x10,lVar5);
-    iVar10 = (int)((ulong)lVar5 >> 0x10);
+    dividendHi = (int)((ulong)lVar5 >> 0x10);
     lVar6 = LDIV_at_((long)CONCAT22(uVar2,plVar1),(long)CONCAT22(uVar8,plVar7));
     iVar3 = (int)lVar6;
     if (iVar3 < 0) {
@@ -65,7 +65,7 @@ uint __cdecl16far ovc36_usesLDIV_at_(byte partyIndex)
     if (200 < iVar3) {
       iVar3 = 200;
     }
-    uVar4 = (uVar4 + iVar10 + iVar3) / 6;
+    uVar4 = (uVar4 + dividendHi + iVar3) / 6;
   }
   return uVar4;
 }

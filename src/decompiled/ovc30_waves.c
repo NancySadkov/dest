@@ -112,7 +112,7 @@ uint16_t __cdecl16far ovc30_usesRandBelow(byte band)
 
 {
   uint16_t packed;
-  uint16_t uVar2;
+  uint16_t randVal;
   uint8_t bandMax;
   byte abStack_8 [2];
   uint8_t bandMin;
@@ -128,13 +128,13 @@ uint16_t __cdecl16far ovc30_usesRandBelow(byte band)
   else {
     do {
       do {
-        uVar2 = ovr_randBelow(0x2a,0);
-      } while ((char)uVar2 == ')');
-    } while (((AgntGs[(uVar2 & 0xff)].ai == '\0') ||
-             (*(byte *)((int)&worldMenuLabels[0xc].seg + (uVar2 & 0xff) * 0x95) < (&bandMin)[band]))
-            || ((&bandMax)[band] < *(byte *)((int)&worldMenuLabels[0xc].seg + (uVar2 & 0xff) * 0x95)
+        randVal = ovr_randBelow(0x2a,0);
+      } while ((char)randVal == ')');
+    } while (((AgntGs[(randVal & 0xff)].ai == '\0') ||
+             (*(byte *)((int)&worldMenuLabels[0xc].seg + (randVal & 0xff) * 0x95) < (&bandMin)[band]))
+            || ((&bandMax)[band] < *(byte *)((int)&worldMenuLabels[0xc].seg + (randVal & 0xff) * 0x95)
                ));
-    packed = CONCAT11((char)((uint)(&bandMax + band) >> 8),(char)uVar2);
+    packed = CONCAT11((char)((uint)(&bandMax + band) >> 8),(char)randVal);
   }
   return packed;
 }

@@ -112,7 +112,7 @@ undefined1 __cdecl16far agnt_computeFrameExtents(agnt_t far *agnt,uint8_t *resul
   uint8_t factionVal;
   uint16_t framesHi;
   int iVar3;
-  bool bVar4;
+  bool compute4Flag;
   int iVar5;
   int *piVar6;
   uint16_t in_stack_0000000a;
@@ -180,8 +180,8 @@ undefined1 __cdecl16far agnt_computeFrameExtents(agnt_t far *agnt,uint8_t *resul
                 ))) {
               *(char *)CONCAT22(in_stack_0000000a,(*(uint16_t *)((uint8_t *)&(result) + 2))) =
                    AgntArrayA[iVar5][iStack_a];
-              bVar4 = agnt_compute4((char *)CONCAT22(in_stack_0000000a,(*(uint16_t *)((uint8_t *)&(result) + 2))));
-              if (bVar4) {
+              compute4Flag = agnt_compute4((char *)CONCAT22(in_stack_0000000a,(*(uint16_t *)((uint8_t *)&(result) + 2))));
+              if (compute4Flag) {
                 return *(char *)CONCAT22(in_stack_0000000a,(*(uint16_t *)((uint8_t *)&(result) + 2)));
               }
             }

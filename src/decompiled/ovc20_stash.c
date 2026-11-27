@@ -277,8 +277,8 @@ void __cdecl16far stshStubifyCopy1to0(int index)
 void __cdecl16far stshWriteFile(int fhandle,far_t buf,DW sz,uint16_t arg4,uint16_t arg5)
 
 {
-  uint16_t uVar1;
-  uint16_t uVar2;
+  uint16_t remaining;
+  uint16_t bufSeg;
   uint16_t wrsz;
   uint16_t unaff_DI;
   uint32_t pbuf;
@@ -288,15 +288,15 @@ void __cdecl16far stshWriteFile(int fhandle,far_t buf,DW sz,uint16_t arg4,uint16
       wrsz = 0xc000;
     }
     (*(uint16_t *)((uint8_t *)&(pbuf))) = ovr_mkp((uint32_t *)buf.ofs,buf.seg,unaff_DI);
-    uVar2 = (*(uint16_t *)((uint8_t *)&(pbuf) + 2));
+    bufSeg = (*(uint16_t *)((uint8_t *)&(pbuf) + 2));
     write(fhandle,(uint32_t *)CONCAT22((*(uint16_t *)((uint8_t *)&(pbuf) + 2)),(uint32_t *)pbuf),wrsz);
     buf.seg = (*(uint16_t *)((uint8_t *)&(pbuf) + 2));
     buf.ofs = (int)(uint32_t *)pbuf + wrsz;
-    uVar1 = sz.lo - wrsz;
+    remaining = sz.lo - wrsz;
     sz.hi = sz.hi - (sz.lo < wrsz);
-    sz.lo = uVar1;
-    (*(uint16_t *)((uint8_t *)&(pbuf) + 2)) = uVar2;
-  } while (uVar1 != 0 || sz.hi != 0);
+    sz.lo = remaining;
+    (*(uint16_t *)((uint8_t *)&(pbuf) + 2)) = bufSeg;
+  } while (remaining != 0 || sz.hi != 0);
   return;
 }
 
@@ -305,8 +305,8 @@ void __cdecl16far stshWriteFile(int fhandle,far_t buf,DW sz,uint16_t arg4,uint16
 void __cdecl16far stshReadFile(int handle,far_t dst,DW nbytes,uint16_t arg4)
 
 {
-  uint16_t uVar1;
-  uint16_t uVar2;
+  uint16_t remaining;
+  uint16_t dstSeg;
   uint uVar3;
   uint16_t unaff_DI;
   far_t pdst;
@@ -316,15 +316,15 @@ void __cdecl16far stshReadFile(int handle,far_t dst,DW nbytes,uint16_t arg4)
       uVar3 = 0xc000;
     }
     pdst.ofs = (uint16_t)ovr_mkp((uint32_t *)dst.ofs,dst.seg,unaff_DI);
-    uVar2 = pdst.seg;
+    dstSeg = pdst.seg;
     read(handle,(void *)CONCAT22(uVar3,pdst.seg),unaff_DI);
     dst.seg = pdst.seg;
     dst.ofs = pdst.ofs + uVar3;
-    uVar1 = nbytes.lo - uVar3;
+    remaining = nbytes.lo - uVar3;
     nbytes.hi = nbytes.hi - (nbytes.lo < uVar3);
-    nbytes.lo = uVar1;
-    pdst.seg = uVar2;
-  } while (uVar1 != 0 || nbytes.hi != 0);
+    nbytes.lo = remaining;
+    pdst.seg = dstSeg;
+  } while (remaining != 0 || nbytes.hi != 0);
   return;
 }
 

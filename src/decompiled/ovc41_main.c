@@ -606,17 +606,17 @@ void __cdecl16far ovc41_rollStatDice(byte rank,uint8_t level)
 int __cdecl16far ovc41_compute8(byte rank,uint8_t level)
 
 {
-  byte bVar1;
-  byte bVar3;
+  byte baseRank;
+  byte packHi;
   int iVar2;
   
-  bVar1 = ovr_agnt_compute14(level);
-  bVar3 = (byte)(rank + 4 >> 8);
-  if (bVar1 + 1 < rank + 4) {
-    iVar2 = (uint)bVar3 << 8;
+  baseRank = ovr_agnt_compute14(level);
+  packHi = (byte)(rank + 4 >> 8);
+  if (baseRank + 1 < rank + 4) {
+    iVar2 = (uint)packHi << 8;
   }
   else {
-    iVar2 = CONCAT11(bVar3,1);
+    iVar2 = CONCAT11(packHi,1);
   }
   return iVar2;
 }
