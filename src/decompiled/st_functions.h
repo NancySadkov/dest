@@ -381,7 +381,7 @@ void __cdecl16far init_cfg_mice(void);
 void __cdecl16far init_cfg(void);
 void __cdecl16far init_game(void);
 void __cdecl16far init_rebuildMapFlags(void);
-stg_tmp_t * __cdecl16far init_textFilename(void);
+void __cdecl16far init_textFilename(void);
 void __cdecl16far init_initGUnits(void);
 void __cdecl16far init_buffers(void);
 void __cdecl16far init_computeMaxSquares(void);

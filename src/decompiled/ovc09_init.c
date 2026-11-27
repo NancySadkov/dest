@@ -385,7 +385,7 @@ void __cdecl16far init_rebuildMapFlags(void)
 
 
 /* 3381:08dc */
-stg_tmp_t * __cdecl16far init_textFilename(void)
+void __cdecl16far init_textFilename(void)
 
 {
   undefined1 stk_d744;   /* stack slot d744 */

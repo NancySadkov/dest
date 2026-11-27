@@ -21331,3 +21331,63 @@ Read through `0x1150` of the 1,290 instructions. Established:
 Remaining: the last ~300 instructions (the `h > 0x3f` / `0x2a` / `0x15` / else arms) and assembling
 the body. It runs at init and the runtime dumps sample at *entry* points, so there is no oracle for it;
 a listing comparison is the only check, which is why it was not half-written here.
+
+
+## `3381:08dc` fully read; body not written (one arity dependency remains)
+
+The whole 1,290-instruction trace is now walked. It is a **terrain generator**, and the tree's name
+`init_textFilename` is wrong (recorded, not renamed - renaming would touch the ovr thunk mapping).
+
+**Its return type was wrong and is now fixed.** The epilogue is
+`call 0x2d36; pop di; pop si; leave; retf` with DX:AX untouched, and `0x2d36` is
+`init_rebuildAllDirectionFlags`, declared `void`. So `stg_tmp_t * init_textFilename(void)` is now
+`void __cdecl16far init_textFilename(void)` in both the definition and `st_functions.h`. Gates are
+unchanged (the single caller at `ovc09_init.c:1549` discards the value):
+
+    build 65/65 · LINK.LOG 0 errors · REBUILT.EXE 466,534 (unchanged)
+    grep_checks 12,680 · compare_state 1,628/0/0 · diff_dgroup 1,639/1,805
+    compare_runtime 1,692 / 1,683 / 9
+
+**Complete structure (all four phases):**
+
+1. *Height profile*, 148 bytes at `[bp-0xa2]`: `for i in 0..0x93`, when `randBelow(10)==0` walk
+   `v += randBelow(2)*2 - 1`, clamp to [-1,1]; `v[0] = v[0x93] = 0`.
+2. `_fsetmem(GUnitGrid, 0x4560, 0)` then `_fsetmem(GMapFlags, 0x4560, 0)` (0x4560 = 148*60*2 words).
+   Confirmed at `0x2642` = `_fsetmem(dest,len,val)`, not `memset`.
+3. *Height synthesis* `for row in 0..0x3b`, mirrored: even rows `col` 0..0x93, odd rows 0x93..0.
+   Per cell with `d = (row&1) ? -1 : +1` and `nb = col + d`:
+   `h = (in-range(nb) ? cells[row][nb] : 0) + (row ? profile[col] + cells[row-1][col] : 0);
+    h >>= 1;`
+   then if `in-range(nb) && profile[nb] != profile[col]`: `r = randBelow(row&1 ? 0x10 : 8)`, and
+   `r==1 -> profile[col] = profile[nb]`, `r==2 -> profile[nb] = profile[col]`.
+   Then **only if `randBelow(0x10) == 0`**: possibly re-walk `profile[col]` from `profile[nb]`
+   (clamped), pick `dy` by the height ladder, add
+   `randBelow(spread) - spread/2 + dy + 1`, clamp `h` to `[-0x23, 0x7f]` **reflecting `dy`**
+   (`dy = |dy|` at the floor, `dy = -|dy|` at the ceiling), and store `GMapCells[row][col] = h`.
+   The two ladders are NOT the same shape:
+   `dy`: h>0x55 -> randBelow(0x11)-8; h>0x40 -> randBelow(8)-4; h>0x2a -> randBelow(0xb)-5;
+         h>0x15 -> randBelow(0x10)-8; h>0 -> randBelow(8)-5; else randBelow(9)-2
+   `spread`: h>0x55 -> 9; h>0x40 -> 0x13; h>0x2a -> 5; h>0x15 -> 0xf; h>0 -> 5; else 0xb
+4. `init_rebuildMapFlags(); init_usesRandBelow2(); init_rebuildMapFlags();`
+5. *Terrain typing* `for row in 0..0x3b, col in 0..0x93`: skip unless
+   `cells[row][col] && cells[row][col+1] && cells[row+1][col] && !init_getMapFlags(row,col)`;
+   `h = cells[row][col]`; then the ladder
+   `h > 0x6a`: `randBelow(4)` in {2,3} and `constr_usesGMapFlags(row,col)` -> `GUnitGrid[col][row] = randBelow(9)+0x67`
+   `h > 0x55`: `randBelow(4)`; 1 -> (`randBelow(2)==0` ? `randBelow(6)+0x3d` : `randBelow(9)+0x67`), 3 -> guarded `randBelow(9)+0x67`
+   `h > 0x3f`: `randBelow(4)==3` -> guarded `randBelow(9)+0x67`
+   `h > 0x2a`: `randBelow(4)`; 1 -> `randBelow(6)+0x3d`, 3 -> guarded `randBelow(9)+0x67`
+   `h > 0x15`: jump table at `cs:0x168f`, 4 arms (one is `randBelow(6)+0x3d`)
+   `else`: `randBelow(4)`; 2 -> `randBelow(6)+0x3d`, 3 -> guarded write
+   writes go to the **transposed** `GUnitGrid[col][row]` (`col*0x78 + row*2`).
+6. *Shore pass* `for row in 1..0x39, col in 1..0x91`: requires all eight neighbours non-zero and a
+   monotone slope, `init_getMapFlags(row,col)==0`, `init_getMapFlags(row,col-1)==0`, and
+   `constr_usesGMapFlags2(row,col)==2`; then reads `GUnitGrid[col-1][row]`, looks up
+   `GUnits[idx].bldType` and skips unless `BuildingTypes[bld].size < 2` and
+   `constr_usesGMapFlags2(row,col) < 3`, finally
+   `GUnitGrid[col-1][row] = randBelow(5)+0x92; GUnitGrid[col][row] = 0;`
+7. `init_rebuildAllDirectionFlags();`
+
+**The one blocker for the body:** step 5/6 call `constr_usesGMapFlags` with **two** pushed words
+(`push row; push col`), but the tree declares `(int x, int y, uint16_t arg3)`. Writing the body needs
+that signature narrowed, which ripples into its other callers - the same class of arity fix already
+done for `grabLbm`/`grabRemap`/`stshSprite`, and it should be done as its own verified change.
