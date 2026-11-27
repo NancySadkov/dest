@@ -20302,7 +20302,52 @@ named), `ovc33_stats.c` (`Exp %ld` reads `entity+0x10` as a long, which disagree
 `entity_t` map), `ovc07_gfxutil.c` and `ovc09_init.c` (register-only arguments), and the five sites in
 `5087:056e` plus two in `ovc45_unitinfo.c` that have no image site because those bodies are stubs.
 
-## Measured (HEAD 46ca9e04 -> this commit)
+## `7e7c:0b9c` decoded (the largest body still missing)
+
+`constrct_buildInfoText` is the last `DECOMPILATION FAILED` body (Ghidra timed out). The image is
+`0x0b9c..0x2372` (6,106 bytes, frame `sub sp,0x2f0`) and it is the building/improvement info text
+builder. Census of its overlay calls (137 `lcall`s, 18 distinct pairs):
+
+    0x170,0x4d   35   -> ovr_fmVsprintf            (18 of 20 referencing modules agree)
+    0x160,0x25   33   -> ovr_ovc15_usesStshRealloc  (the text-allocation helper)
+    0,0x2d31     32   -> strcpy                     (same use as the getcache path)
+    0x250,0x84    9   }  building-type/leader accessors reached through slot 0x250
+    0x250,0x39    5   }
+    0x250,0xa2    5   }
+    0x198,0x3e    3   }
+    0,0x2cc2      3   -> strcat
+    0x1f8,0x2a    2   }
+    0x250,0x9d    2   }
+    0x250,0x8e    1   }
+    0x250,0x20    1   }  ovr_ovc45_getUnitIndex
+
+It pushes 33 distinct DGROUP strings, all of the same shape - the per-improvement description
+templates:
+
+    0x7a45 "%s (%d/%d): Owned by %s. Active party is %s the "      0x7d94 "%s: Costs %d gold. Provides %u units of gold sto..."
+    0x7a79 "%s: Owned by %s. Active party is %s the %s."           0x7dca "%s: Costs %d gold. Claim trees automatically."
+    0x7aa5 "%s: Active party is %s the %s."                        0x7df8 "%s: Costs %d gold. Repairs buildings at season c..."
+    0x7ac4 "%s: Costs %d gold and provides training to level..."   0x7e30 "%s: Trades %d food for gold. Total trade is %d f..."
+    0x7af9 "%s: Costs %d gold of income. Replaces broken wea..."   0x7e65 "%s: Creates %d gold of income, and accesses %d%%..."
+    0x7b2f "%s: Costs %d gold of income. Forges +%d weapons."      0x7eaa "%s: Costs %d gold of income and provides visibil..."
+    0x7b60 "%s: Costs %d gold of income. Improves armor."          0x7f01 "%s: Costs %d gold of income and provides storage..."
+    0x7b8d "%s: Costs %d gold of income. Improves armor clas..."   0x7f3f "%s: Costs %d gold of income and provides storage..."
+    0x7bc7 "%s: Costs %d gold of income. Replaces broken bow..."   0x7f7d "%s: Provides housing for %d %s and storage for %..."
+    0x7bfa "%s: Costs %d gold of income. Creates +%d bow and..."
+    0x7c33 "%s: Costs %d gold. Increases unit size of five u..."
+    0x7c6f "%s: Costs %d gold. Increases building speed by %..."
+    0x7ca5 "%s: Costs %d gold. Enhances training by %d%%."
+    0x7cd3 "%s: Costs %d gold. Produces +%d rings of protect..."
+    0x7d08 "%s: Costs %d gold. Produces mirrors for medusae "
+    0x7d5c "%s: Costs %d gold. Attracts new units to this lo..."
+
+so the body is a per-building-type selection ladder over `BuildingTypes[]` (name/description/cost/
+kind/size/unitType) that copies one template and substitutes the values. Writing it needs the
+0x250-* accessor bindings per site (the slot is shared by several overlay entries, so the selector
+pair alone does not identify the target - the same limitation as `4d05:1bee`).
+
+## Measured (HEAD 34dbbdd2 -> this commit)
+
 
     grep_checks      23,850 (unchanged)
     REBUILT.EXE      487,694 -> 487,710 (+16: the two argument pushes)
