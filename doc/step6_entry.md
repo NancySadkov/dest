@@ -21825,3 +21825,75 @@ regardless.
     compare_state    1,628 matched / 0 different / missing 2   (unchanged)
     diff_dgroup      1,639/1,805 matched                       (unchanged)
     compare_runtime  1,692 matched / 1,683 identical / 9 different  (unchanged)
+
+
+## `4d05:1bee` decoded; body blocked on three in-module helper signatures
+
+I decoded the whole function (500 instructions) and wrote the body, but it would not link, and the
+reason is a real dependency rather than a misreading:
+
+* the image calls `0x26f6` and `0x2d79` as **near** calls with **one** pushed word
+  (`push [bp+6]; push cs; call 0x26f6`), but `manage_textTotalPopulation` is declared
+  `(byte charIndex, short arg6, char_sheet_t *sheet, ...)` - three parameters against the image's one;
+* `manage_textAllProperty` **does not exist** in the tree at all (the name `0x26f6` carries is
+  something else), and `manage_usesLitoa10` is fine (2 words = the far `sheet` pointer).
+
+So the body needs those three prototypes settled first, exactly as `constr_usesGMapFlags`, `grabLbm`,
+`grabRemap`, `stsh_store` and `stshSprite` had to be. The tree has been restored to green and the body
+was not committed.
+
+**The decode** (for the next pass, `tmp/o21_1bee.txt`): a redraw loop over the current leader -
+
+    save GfxRndSeed/GfxRndSeed2; Cancelled = 0; firstPass = 0; manage_openTalkWindow();
+    do {
+      sheet = GLeaderSheets[partyIndex];
+      if (sheet->faction == 0) { GfxRndSeed = sheet->x; GfxRndSeed2 = sheet->y; }
+      else                     { GfxRndSeed = savedX;   GfxRndSeed2 = savedY;   }
+      partyFilter = partyIndex; unitTypeFilter = 0xfe; stshAlloc();
+      unitTypeFilter = 0xff;    partyFilter = 0xff;    manage_usesLitoa10(sheet);
+      found = manage_findFirstLeader();
+      if (!redraw) {
+        if (found == partyIndex) {
+          if (!GHighScoreSaved) stsprintf(title, "Year %d. %s", GYear+1, RankReqMsgPtrs[sheet->alignment]);
+          else                  stsprintf(title, "Year %d. This leader %s", GYear+1,
+                                          menuHighlightTable[sheet->alignment]);
+        } else title[0] = 0;
+      }
+      /* menu: far pointers in items[] + codes[] at [bp-0x10]
+         0 = other leader seen by findFirstLeader (menuHighlightTable[titleIndex*2+gender]), code 2
+         1 = "Next Leader" (0x50a5),                     code 3, only if faction==0 && nextLeader != 0xff
+         2 = "Auto-build    \\x7f"/"Auto-build" (0x50b1/0x50c1 by flags5d bit 1), code 8, if faction==0
+         3 = "Census" (0x50cc) code 4;  4 = "Property" (0x50d3) code 5
+         5,6 = "Total Census" (0x50dc) / "All Property" (0x50e9), codes 6/7,
+               only if faction==0 && found==partyIndex
+         7 = "Help" (0x50f6) code 0xa;  8 = "Done" (0x50fb) code 1
+      */
+      if (sheet->faction == 0 && !firstPass) {
+        if (usesDifficulty() <= found)      SfxPending = 0x41;
+        else if (found <= 0x1e)             SfxPending = 0x5b;
+        else                                SfxPending = 0x3c;
+        CurSfxType3 = 0x3c; firstPass = 1;
+      }
+      sel = uiInputText(items, title, n, 0); if (sel) sel = codes[sel];
+      switch (sel - 2) {            /* jump table cs:0x2168 -> 200d 201a 202f 2051 2073 2094 20b3 212c 2123 */
+        0: partyIndex = found; redraw = 1;                                  /* select leader */
+        1: partyIndex = nextLeader(partyIndex); redraw = 1;                  /* next leader  */
+        2: textTotalPopulation(partyIndex);  redraw = !Cancelled;
+        3: textAllProperty(partyIndex);      redraw = !Cancelled;
+        4: textTotalPopulation(0xff);        redraw = !Cancelled;
+        5: textAllProperty(0xff);            redraw = !Cancelled;
+        6: sheet->flags5d ^= 2;  capitalize(sheet, nameBuf);
+           stsprintf(title, flags5d&2 ? "%s will no longer build houses automatically."
+                                      : "%s will now build homes automatically.", nameBuf);
+           redraw = 1;
+        7: /* no action */
+        8: lcall 0x278,0x20 ; redraw = 1;   /* GAP: selector absent from overlay_segments.csv */
+      }
+      if (redraw) continue;
+      if (!Cancelled) { GfxRndSeed = savedX; GfxRndSeed2 = savedY; stshAlloc(); stop_audio(); }
+    } while (0);
+
+## Measured (tree restored; no commit of the body)
+
+    build 65/65 · LINK.LOG 0 errors · REBUILT.EXE 459,876
+    grep_checks 11,760 · compare_state 1,628/0/0 · diff_dgroup 1,639/1,805
