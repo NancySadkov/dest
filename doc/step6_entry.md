@@ -20642,6 +20642,42 @@ The store *values* keep the tree's existing expressions: `stsh_store`, `stshWrit
 `stshUniqueColorsRemap` and `stgFreeTmp` still carry decompiler-garbled argument lists (the image
 pushes 2/4/8/2/2 words respectively), which is a separate tree-wide arity cleanup.
 
+## Shared sprite thunks: `stshAllocStub` takes no arguments, `stgFreeTmp`/`stshUniqueColorsRemap` one far pointer
+
+Image scanning (backward walk from each `lcall`, stopping at any control transfer or `add sp,N`):
+
+    lcall 0x248,0x20  stshAllocStub          202 sites -> 0 pushed words
+    lcall 0x188,0x66  stgFreeTmp             164 sites -> 2 words (one far pointer)
+    lcall 0x188,0x61  stshUniqueColorsRemap   19 sites -> 2 words (one far pointer)
+    lcall 0x188,0x25  stsh_store             539 sites -> 2 words (one far pointer; the tree's
+                                             st_stubs.c wrapper already pushes exactly two words
+                                             and hands back DX:AX, so only the call-site shape differs)
+    lcall 0x188,0x34  stshWrite               24 sites -> 4 words (far pointer + 2 words, grouping
+                                             varies: `push 0/push 0x300/push gfx` at one site,
+                                             `push 0x8984/0x8982/push gfx` at another)
+    lcall 0x118,0x25  stshRleType2           447 sites -> 8 words (far source + 6 scalars)
+
+Fixed this turn:
+
+* `ovr_stshAllocStub(unaff_DI|siArg|in_stack_...)` -> `ovr_stshAllocStub()` at 202 sites;
+* `ovr_stgFreeTmp(X,segArg|tmpSeg|rleSeg3|...)` -> `ovr_stgFreeTmp(X)` and the same for
+  `ovr_stshUniqueColorsRemap` (183 sites), with `(stg_tmp_t *)tg` -> `(stg_tmp_t far *)tg`;
+* the six `stg_tmp_t *` locals that receive `ovr_grabLbm`'s far result (`lbmTmp` x5, `gfx`) are now
+  `stg_tmp_t far *`, so the one-argument calls push two words and the field accesses are ES-relative.
+
+Verified in the rebuilt listing: the `stgFreeTmp`/`uniqueColors` calls now push `dx; ax` (the far
+temporary) instead of two unrelated near pointers, and the asset dump functions grew by the segment
+loads the image has.
+
+## Measured (HEAD 2712eab4 -> 6213530a)
+
+    grep_checks      21,176 -> 21,016   (-160: the register placeholders and second arguments)
+    REBUILT.EXE      480,016 -> 480,640
+    build 65/65, LINK.LOG 0 errors
+    compare_state    1,628/0/0 (unchanged)
+    diff_dgroup      1,639/1,805 matched, 5 runs, sum|delta| 18 (unchanged)
+    compare_runtime  1,692 matched, 1,683 identical / 9 different at all three sample points
+
 ## Measured (HEAD 568b7cf4 -> this commit)
 
     grep_checks      21,184 -> 21,176
