@@ -676,7 +676,6 @@ uint16_t __cdecl16far sub_OVC21_manage_c_23C2();
 int __cdecl16far manage_usesGUnitCount(char partyIndex,char unitType,int *resource1Count,int *resource2Count,int *resource3Count,int *recordCount);
 uint16_t __cdecl16far sub_OVC21_manage_c_24B1();
 uint16_t __cdecl16far manage_usesGUnits(void);
-void __cdecl16near manage_textAllProperty(uint16_t partyIndex);
 void manage_textAllProperty2(void);
 uint16_t __cdecl16far manage_usesLitoa103();
 void __cdecl16far manage_usesCurSfxType3(void);

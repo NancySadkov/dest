@@ -1801,225 +1801,6 @@ uint16_t __cdecl16far manage_usesGUnits(void)
 
 
 
-/* 4d05:26f6 */
-
-/* [R2] string "All property." */
-
-void __cdecl16near manage_textAllProperty(uint16_t partyIndex)
-
-{
-  long lVar1;
-  far_t gfx;
-  far_t entries;
-  far_t dst;
-  void *pvVar2;
-  int iVar3;
-  char *numText;
-  char_sheet_t *pcVar5;
-  uint16_t uVar6;
-  int iVar7;
-  int iVar8;
-  byte in_stack_00000004;
-  uint16_t fontOfs;
-  undefined1 fontSegLo;
-  undefined1 fontSegHi;
-  uint8_t term;
-  uint8_t resultPtrs;
-  uint16_t auStack_156 [9];
-  uint8_t menuItems;
-  uint16_t auStack_142 [9];
-  uint8_t structNames;
-  uint16_t auStack_12e [59];
-  char acStack_b8 [80];
-  char acStack_68 [80];
-  /* GUESS: byte whose address is passed to ovc28_usesUiInputText and then used as the
-     choice; the callee takes it as an out-parameter. */
-  uint8_t selected;
-  char cStack_17;
-  int unitCount;
-  int iStack_14;
-  int iStack_12;
-  int iStack_10;
-  int resultFlag;
-  int iStack_c;
-  int iStack_a;
-  int iStack_8;
-  char_sheet_t *sheetPtr;
-  char *titlePtr;
-  
-  dst.seg = (uint16_t)_SS;
-  dst.ofs = (uint16_t)&resultPtrs;
-  F_SCOPY(far_from_u32((uint32_t)(0x24104ada)),dst,20);
-  for (iVar7 = 0; iVar7 < 5; iVar7 = iVar7 + 1) {
-    uVar6 = *(uint16_t *)(&resultPtrs + iVar7 * 4);
-    auStack_142[iVar7 * 2] = auStack_156[iVar7 * 2];
-    *(uint16_t *)(&menuItems + iVar7 * 4) = uVar6;
-  }
-  for (iVar7 = 0; iVar7 < 0x1e; iVar7 = iVar7 + 1) {
-    uVar6 = *(uint16_t *)((int)&GStructures[0].name + iVar7 * 6);
-    auStack_12e[iVar7 * 2] = *(uint16_t *)((int)&GStructures[0].name + 2 + iVar7 * 6);
-    *(uint16_t *)(&structNames + iVar7 * 4) = uVar6;
-  }
-  cStack_17 = '\x02';
-  manage_openTalkWindow();
-  selected = 0x0;
-  if (((cStack_17 != '\x02') && (cStack_17 != '\x03')) && (cStack_17 != '\x04')) {
-    manage_usesCurSfxType3();
-    return;
-  }
-  if (ScreenMode == '\0') {
-    manage_openTalkWindow();
-  }
-  else {
-    gfx.seg = talkwin9Cut1Seg;
-    gfx.ofs = talkwin9Cut1Ofs;
-    ovr_blitGfxRect(gfx,0,0,(brect_t *)(BlitRects + 1),0x10,true,0,0x10,0x10,0,0,0);
-  }
-  TextBlitY = 0xc;
-  TextBlitX = 0x11;
-  fontSegLo = (undefined1)Font02.seg;
-  fontSegHi = (undefined1)(Font02.seg >> 8);
-  if (in_stack_00000004 == 0xff) {
-    ovr_blitLabel((char *)"All property.",(uint8_t *)CONCAT22(Font02.ofs,(char *)0x26510),
-                  Font02.seg,0xde,fontSegLo,0xde,0x50);
-  }
-  else {
-    titlePtr = (char *)((uint16_t *)((uint)in_stack_00000004 * 4))[1];
-    pcVar5 = (char_sheet_t *)*(uint16_t *)((uint)in_stack_00000004 * 4);
-    uVar6 = 0x50;
-    term = 0xde;
-    fontOfs = Font02.ofs;
-    sheetPtr = pcVar5;
-    iVar7 = ovr_ovc45_compute9(acStack_68,(char *)CONCAT22(pcVar5,_SS),
-                               (char *)CONCAT22(Font02.ofs,titlePtr),Font02.seg,'i',0x69,3);
-    pvVar2 = manage_playerTitle(sheetPtr,titlePtr,(char)iVar7,pcVar5);
-    numText = ovr_stsprintf(acStack_b8,(char *)CONCAT22(0x52a1,_SS),
-                           (char *)CONCAT22(pvVar2,(char *)0x26510),pcVar5);
-    ovr_blitLabel(numText,(uint8_t *)CONCAT22(fontOfs,pcVar5),CONCAT11(fontSegHi,fontSegLo),term,fontSegLo,term,
-                  uVar6);
-  }
-  TextBlitY = TextBlitY + 0xc;
-  TextBlitX = 0x11;
-  ovr_blitLabel((char *)"Buildings",(uint8_t *)CONCAT22(Font02.ofs,(char *)0x26510),
-                Font02.seg,0xde,(char)Font02.seg,0xde,0xe0);
-  manage_usesBlitLabel2("Total",100);
-  manage_usesBlitLabel2("Level 1",0x8c);
-  manage_usesBlitLabel2("Level 2",0xb4);
-  manage_usesBlitLabel2("Level 3",0xdc);
-  TextBlitY = TextBlitY + 0xc;
-  if (cStack_17 == '\x04') {
-    iVar7 = 0x1a;
-  }
-  else if (cStack_17 == '\x03') {
-    iVar7 = 0xd;
-  }
-  else {
-    iVar7 = 0;
-  }
-  iVar8 = 0;
-  while( true ) {
-    if (0xc < iVar8) break;
-    if (iVar8 + iVar7 < 0x1e) {
-      TextBlitX = 0x11;
-      iVar3 = (iVar8 + iVar7) * 6;
-      ovr_blitLabel((char *)*(uint16_t *)((int)&GStructures[0].name + iVar3),
-                    (uint8_t *)
-                    CONCAT22(Font02.ofs,
-                             (uint8_t *)*(uint16_t *)((int)&GStructures[0].name + 2 + iVar3)),
-                    Font02.seg,0xde,(char)Font02.seg,0xde,0xe0);
-      lVar1 = (long)(iVar8 + iVar7) * 6;
-      uVar6 = (uint16_t)((ulong)lVar1 >> 0x10);
-      unitCount = manage_usesGUnitCount
-                            (in_stack_00000004,(&((unk01_t *)GStructures)->type)[(int)lVar1],
-                             (int *)CONCAT22(_SS,&iStack_8),(int *)CONCAT22(_SS,&iStack_a)
-                             ,(int *)CONCAT22(_SS,&iStack_c),
-                             (int *)CONCAT22(_SS,&resultFlag));
-      if (resultFlag == 0) {
-        iVar3 = 100;
-        numText = litoa10(acStack_68,
-                         CONCAT13((char)((uint)unitCount >> 8),CONCAT12((char)unitCount,_SS)),
-                         (char)unitCount,0);
-        manage_blitLabelRight
-                  ((char *)CONCAT13((char)((uint)uVar6 >> 8),CONCAT12((char)uVar6,numText)),iVar3);
-      }
-      else {
-        iVar3 = 100;
-        numText = ovr_stsprintf(acStack_b8);
-        manage_blitLabelRight
-                  ((char *)CONCAT13((char)((uint)uVar6 >> 8),CONCAT12((char)uVar6,numText)),iVar3);
-      }
-      lVar1 = (long)(iVar8 + iVar7) * 6;
-      uVar6 = (uint16_t)((ulong)lVar1 >> 0x10);
-      if (*(char *)((int)&GStructures[0].pad + (int)lVar1) != '\0') {
-        if (iStack_10 == 0) {
-          iVar3 = 0x8c;
-          numText = litoa10(acStack_68,
-                           CONCAT13((char)((uint)iStack_8 >> 8),CONCAT12((char)iStack_8,_SS)),
-                           (char)iStack_8,0);
-          manage_blitLabelRight
-                    ((char *)CONCAT13((char)((uint)uVar6 >> 8),CONCAT12((char)uVar6,numText)),iVar3);
-        }
-        else {
-          iVar3 = 0x8c;
-          numText = ovr_stsprintf(acStack_b8);
-          manage_blitLabelRight
-                    ((char *)CONCAT13((char)((uint)uVar6 >> 8),CONCAT12((char)uVar6,numText)),iVar3);
-        }
-        if (iStack_12 == 0) {
-          iVar3 = 0xb4;
-          numText = litoa10(acStack_68,
-                           CONCAT13((char)((uint)iStack_a >> 8),CONCAT12((char)iStack_a,_SS)),
-                           (char)iStack_a,0);
-          manage_blitLabelRight
-                    ((char *)CONCAT13((char)((uint)uVar6 >> 8),CONCAT12((char)uVar6,numText)),iVar3);
-        }
-        else {
-          iVar3 = 0xb4;
-          numText = ovr_stsprintf(acStack_b8);
-          manage_blitLabelRight
-                    ((char *)CONCAT13((char)((uint)uVar6 >> 8),CONCAT12((char)uVar6,numText)),iVar3);
-        }
-        if (iStack_14 == 0) {
-          iVar3 = 0xdc;
-          numText = litoa10(acStack_68,
-                           CONCAT13((char)((uint)iStack_c >> 8),CONCAT12((char)iStack_c,_SS)),
-                           (char)iStack_c,0);
-          manage_blitLabelRight
-                    ((char *)CONCAT13((char)((uint)uVar6 >> 8),CONCAT12((char)uVar6,numText)),iVar3);
-        }
-        else {
-          iVar3 = 0xdc;
-          numText = ovr_stsprintf(acStack_b8);
-          manage_blitLabelRight
-                    ((char *)CONCAT13((char)((uint)uVar6 >> 8),CONCAT12((char)uVar6,numText)),iVar3);
-        }
-      }
-      TextBlitY = TextBlitY + 0xc;
-    }
-    iVar8 = iVar8 + 1;
-  }
-  CurSfxType3 = 0x3c;
-  (*(uint8_t *)((uint8_t *)&(entries.seg))) = (char)_SS;
-  entries.ofs = (uint16_t)&menuItems;
-  (*(uint8_t *)((uint8_t *)&(entries.seg) + 1)) = (char)((uint)_SS >> 8);
-  uVar6 = ovr_ovc28_usesUiInputText(entries,0x23,far_from_u32((uint32_t)(0x0)),&selected,0,(char)&selected);
-  cStack_17 = (char)uVar6;
-  keyboardInputMode = 0;
-  if (((cStack_17 != '\0') && (cStack_17 != '\x01')) && (cStack_17 != -2)) {
-    manage_textAllProperty2();
-    return;
-  }
-  if ((ScreenMode == '\0') && (cStack_17 != -2)) {
-    manage_openTalkWindow();
-  }
-  if (cStack_17 == -2) {
-    Cancelled = 1;
-  }
-  return;
-}
-
-
-
 /* 4d05:277a */
 void manage_textAllProperty2(void)
 
@@ -2041,6 +1822,21 @@ void manage_textAllProperty2(void)
   undefined1 fontSegHi;
   uint8_t term;
   
+  far_t apList[35];
+  uint8_t apSel;
+  uint8_t apFlag;
+  int apI;
+
+  /* The five menu results, then one entry per structure type. */
+  for (apI = 0; apI < 5; apI++) {
+    apList[apI] = ManageResultPtrs[apI];
+  }
+  for (apI = 0; apI < 30; apI++) {
+    apList[5 + apI] = GStructures[apI].name;
+  }
+  apSel = 2;
+  manage_openTalkWindow();
+  apFlag = 0;
   if (((*(char *)(unaff_BP + -0x15) != '\x02') && (*(char *)(unaff_BP + -0x15) != '\x03')) &&
      (*(char *)(unaff_BP + -0x15) != '\x04')) {
     manage_usesCurSfxType3();

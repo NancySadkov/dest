@@ -19431,3 +19431,72 @@ The extra `0x26` was leaving two bytes on the stack at every execution of that b
     compare_state    1,628/0/0 (unchanged)
     diff_dgroup      1,639/1,805 matched, 5 runs, sum|delta| 18, mean 0, worst 12 (unchanged)
     compare_runtime  1,692 matched, 1,683 identical / 9 different at all three sample points
+
+### step 6: 4d05:26f6 folded into 4d05:277a - the head is the merged function table setup (grep 26,543 -> 26,390)
+step 6: `4d05:26f6` folded into `4d05:277a` - the 132-byte head is the merged function's table setup (grep 26,543 -> 26,390)
+
+## The two addresses are one function
+
+`0x26f6` has no epilogue at all - it falls straight through:
+
+    4d05:26f6  push bp / mov bp,sp / sub sp,0x156 / push si / push di
+    26ff       fmemcpy(ss:[bp-0x156], ds:0x4ada, 0x14)
+    2711       for (si = 0; si < 5; si++)    [bp-0x142][si] = [bp-0x156][si]
+    273f       for (si = 0; si < 0x1e; si++) [bp-0x12e][si] = *(far_t *)(ds:0x4a28 + si*6)
+    276e       [bp-0x15] = 2
+    2772       push cs / call 0x81              ; manage_openTalkWindow()
+    2776       [bp-0x16] = 0
+    277a       cmp byte ptr [bp-0x15], 2         <- the address the audit calls a second function
+    277e       je 0x278f ...                    (and 0x2b09 is where it leaves)
+
+and the segment contains two `call 0x26f6` and no `call 0x277a`.  So `0x26f6..0x2b09` is one
+0x413-byte function with frame `sub sp,0x156` - the same split pattern as `5ded:10ea`/`14a8`.
+
+## The head is now semantic rather than resolved addresses
+
+`ds:0x4ada` is the tree's `ManageResultPtrs[5]` - "Done", "Summary 1", "Summary 2", "Summary 3",
+"Damage" - and `ds:0x4a28` is `GStructures[0].name.ofs`.  `unk01_t` is six bytes
+(`type`, `pad`, `far_t name`), so the 6-byte stride is exactly `GStructures[i].name` for 30
+entries.  The setup now reads
+
+    for (apI = 0; apI < 5; apI++)     apList[apI]     = ManageResultPtrs[apI];
+    for (apI = 0; apI < 30; apI++)    apList[5 + apI] = GStructures[apI].name;
+    apSel = 2;
+    manage_openTalkWindow();
+    apFlag = 0;
+
+and the emitted code matches the image operand for operand:
+
+    ours                                 image
+    0022 mov ax,[si+0x4adc]              2709 mov cx,0x14 / 270c lcall memcpy
+    0026 mov dx,[si+0x4ada]              2715..2736 the five-entry copy
+    004e mov dx,6 / 0051 imul dx         2750 mov dx,6 / 2753 imul dx
+    0055 mov ax,[si+0x4a2a]              2758 mov ax,[bx+0x4a2a]
+    0059 mov dx,[si+0x4a28]              275c mov dx,[bx+0x4a28]
+    006b mov byte [bp-0x22],2            276e mov byte [bp-0x15],2
+    006f push cs / 0070 call ...         2772 push cs / 2773 call 0x81
+    0073 mov byte [bp-0x23],0            2776 mov byte [bp-0x16],0
+
+The frame is 0xb2 in ours against the image's 0x156 (BC packs our locals tighter); the table
+addresses, the `imul dx,6` stride and the five-entry copy are identical.
+
+`manage_textAllProperty` (the fragment) was dead - nothing in the tree called it - so it and its
+prototype were deleted.
+
+## Verified
+
+    grep_checks      26,543 -> 26,390   (-153)
+    REBUILT.EXE      495,590 -> 493,990
+    build 65/65, LINK.LOG 65 bytes / 0 problems
+    compare_state    1,628/0/0 (unchanged)
+    diff_dgroup      1,639/1,805 matched, 5 runs, sum|delta| 18, mean 0, worst 12 (unchanged)
+    compare_runtime  1,692 matched, 1,683 identical / 9 different at all three sample points
+
+## What this does and does not fix
+
+It removes 1,600 bytes of invented code and makes the function's *entry* correct.  The body at
+`0x277a` is still the never-verified tree rendering - its first statement is
+`cmp byte ptr [di - 0x15], 2`, i.e. it still reads the menu selection through a garbage register
+rather than the local the setup now fills.  That body is the next piece of this function, and the
+`screen_calls` head still lists it (`4d05:277a` is no longer a separate marker, so it now reports
+under `4d05:26f6` only).
