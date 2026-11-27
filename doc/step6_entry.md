@@ -21550,3 +21550,49 @@ validate it against the pushed-word count; fall back to the static map only when
     build 65/65 · LINK.LOG 0 errors · REBUILT.EXE 461,908
     grep_checks 11,960 · compare_state 1,628/0/0 · diff_dgroup 1,639/1,805
     compare_runtime 1,692 matched / 1,683 identical / 9 different
+
+
+## Residency-aware overlay-call resolver (co-residency from the module's own derived code)
+
+`overlay_segments.csv` cannot name an overlay call on its own: VROOMM reuses one runtime segment for
+different overlay segments at different times, so a (selector, offset) pair means one function for one
+residency and another for the next. `audit/overlay_blocks.csv` does not fill the gap either - it has 50
+overlay ids with exactly two rows each (a STUBSEG and its `:OVY`) and no co-residency column.
+
+What the data *does* contain is empirical co-residency: a module's already-derived functions ran under
+that module's residency, so when they agree on a name for a pair, that name is right for that module.
+`scripts/resolve_overlay_calls.py` implements exactly that:
+
+* collects, per (selector, offset), the names used by every derived function **in the same module**
+  (skipping any body whose call list does not line up with its image range, so a mis-attributed body
+  cannot vote),
+* reports the observed **pushed-word count** at each site of the target function,
+* flags a split vote, which is the signature of the residency problem.
+
+Result for `5ded:10ea` (30 overlay calls) - every pair now has a name and an arity:
+
+    148,002f  pushes=5  -> ovr_agnt_statusText             vote 2/2
+    170,007a  pushes=6  -> ovr_stsprintf                   vote 3/3
+    160,0025  pushes=2  -> ovr_ovc15_usesStshRealloc        vote 3/3
+    0f8,0039  pushes=2  -> ovr_uiNotify                    vote 3/3
+    170,005c  pushes=1  -> ovr_randBelow                   vote 6/6
+    140,0048  pushes=2  -> ovr_audio_panFromX              vote 2/3  [split: play_sfxU 1]
+    140,002f  pushes=3  -> ovr_play_sfxU                   vote 2/3  [split: settleAgentCombat 1]
+    190,0057  pushes=2  -> NO SAME-MODULE VOTE
+    230,00a2  pushes=5  -> NO SAME-MODULE VOTE
+    230,00c5  pushes=2  -> NO SAME-MODULE VOTE
+
+The static map would have named `140,002f` `ovr_stop_audio` (`void(void)`) against 3 pushed words; the
+module's own code says `play_sfxU`, and the vote split confirms this is the residency-sensitive pair.
+
+**Consequence for `7e7c:0b9c`:** its module has **no derived sibling at all** - every one of its 185
+overlay calls reports `NO SAME-MODULE VOTE`. So there is no co-residency evidence to name them, and the
+static map is demonstrably unreliable for at least this class of pair. Writing that body now would mean
+inventing its call targets. It is the wrong next target; the module needs a derived anchor function
+first (one whose body contains few or no overlay calls).
+
+## Measured (tooling only; no code change)
+
+    build 65/65 · LINK.LOG 0 errors · REBUILT.EXE 461,908
+    grep_checks 11,960 · compare_state 1,628/0/0 · diff_dgroup 1,639/1,805
+    compare_runtime 1,692 matched / 1,683 identical / 9 different
