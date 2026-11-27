@@ -48,7 +48,14 @@ IDENTS = re.compile(r"\b([A-Za-z_][A-Za-z0-9_]*)\s*\(")
 MARK = re.compile(r"^/\* ([0-9a-f]{4}):([0-9a-f]{4}) \*/$")
 
 
+COMMENTS = re.compile(r"/\*.*?\*/", re.S)
+
+
 def count_calls(body):
+    # Prose in a comment mentions call shapes ("digSoundPlaying()", 'strcat(dst, "") ...'), and
+    # matching those reported already-correct bodies as mismatches - audio_isPlaying and
+    # file_open_rdonly both appeared on the list with their bodies right.  Strip comments first.
+    body = COMMENTS.sub("", body)
     return sum(1 for m in IDENTS.finditer(body)
                if m.group(1) in known or m.group(1).startswith("ovr_") or m.group(1).startswith("litoa"))
 

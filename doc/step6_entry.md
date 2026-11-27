@@ -18374,3 +18374,52 @@ the same model substitution as `strcat`/`sprintf` being near in our CRT.
     compare_state    1,628/0/0 (unchanged)
     diff_dgroup      1,639/1,805 matched, 5 runs, sum|delta| 18, mean 0, worst 12 (unchanged)
     compare_runtime  1,692 matched, 1,683 identical / 9 different at all three sample points
+
+### tools: screen_calls.py ignores comments; two queue entries blocked on unnamed BSS
+tools: screen_calls.py must ignore comments, and two queue entries are blocked on unnamed BSS
+
+## The screen was counting prose
+
+`count_calls` matched identifiers followed by `(` anywhere in the function text, including comments.  Two
+entries that had already been re-derived correctly showed up as mismatches because their *comments* spell
+out call shapes:
+
+    ovc11_audio.c 3a5b:034e  audio_isPlaying       image 2 calls, body correct
+        ("... digSoundPlaying() ; if (al) return 1 ...")
+    ovc31_config.c 6257:003b file_open_rdonly      image 3 calls, body correct
+        ("... _open(path, 0x41); retry while ...")
+
+Comments are now stripped before counting.  The screen's head is unchanged (it is all real), but every
+entry under ~200 bytes in the previous listing came from prose: `crtl.c 1000:199f` (7 bytes, "5 calls"),
+`crtl.c 1000:0171` (9, "3"), `ovc25_intel.c 5b66:170e` (21, "8"), `ovc11_audio.c 3a5b:034e` (48, "6"),
+`ovc31_config.c 6257:0000/003b` (59/60, "6").  Those five are gone.
+
+## Two queue entries that cannot be written faithfully yet
+
+**`ovc41_main.c 6a8f:15a0` (`ovc41_usesBiosKeyAvail`, 679 bytes).**  The image is a clean pan routine -
+`tmp/dis_seg.py 6a8f 15a0 0x2c0` shows two four-entry jump tables (CS:0x183f = 15df,1616,1650,1687 and
+CS:0x1837 = 16d1,1703,1739,176c) moving the view by 8 then by 1, storing `0/2/4/6` into `byte[0xd8]`,
+clamping against 0x39/0x94, and printing `s_d` ("%d \r") through `printf` when `DebugVerbose` is set.
+But the coordinates it moves are `word[0x899d]` and `word[0x899f]`, which are **anonymous**:
+
+    nearest DGROUP label before 0x899d in audit/symbols.tsv:  0x88fe __setargv_SavedReturn
+    labels between 0x88fe and the end of DGROUP:              none
+
+So the original has no name for them, and our own BSS is laid out differently (`_TRIANGLSCUT3SEG` and
+`_FULLSCREENGFXOFS` sit at those offsets in REBUILT.MAP, which are unrelated).  Writing the function
+would require inventing two names *and* ensuring they alias those addresses; declaring new globals would
+move our BSS and restate semantics the binary does not carry.  Recorded, not guessed.
+
+**`ovc23_bldrec.c 55fe:0000` (`ovc23_textAdlibNone`, 1,028 bytes).**  Same shape as the ones already
+fixed (image 7 calls vs 70 in the body, 1,028 bytes vs 671 lines), but its body is not merely merged: the
+export references a different set of globals than the image's `es:[0x899d]/[0x899f]` family, so it needs
+the same treatment as above before it can be rewritten.
+
+## What did move
+
+The two functions fixed earlier in this session are still in place and the gates are unchanged:
+
+  build 65/65, LINK.LOG 65 bytes / 0 problems
+  grep_checks 27,596; compare_state 1,628/0/0
+  diff_dgroup 1,639/1,805 matched, 5 runs, sum|delta| 18
+  compare_runtime 1,692 matched, 1,683 identical / 9 different at all three sample points
