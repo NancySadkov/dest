@@ -2150,7 +2150,7 @@ byte * __cdecl16far ovc41_textOnlyPlaceSingle(agnt_t far *agntPtr,int agntIndex)
   uint16_t *count;
   uint32_t drawPtr;
   bool type;
-  undefined1 uVar21;
+  undefined1 ssHi;
   uint16_t uVar22;
   uint8_t uStack_120;
   undefined1 uStack_11f;
@@ -2216,7 +2216,7 @@ byte * __cdecl16far ovc41_textOnlyPlaceSingle(agnt_t far *agntPtr,int agntIndex)
     }
     uVar16 = (uint)(*(uint8_t *)((uint8_t *)&(fStack_6.seg) + 1));
     type = SUB21(_SS,0);
-    uVar21 = (undefined1)((uint)_SS >> 8);
+    ssHi = (undefined1)((uint)_SS >> 8);
     if (uVar16 < 4) {
       iVar20 = 0x6000;
       switch(uVar16) {
@@ -2352,7 +2352,7 @@ switchD_6000_ca06_caseD_1:
         (*(uint16_t *)((uint8_t *)&(drawPtr) + 2)) = 0x22de;
         (*(uint16_t *)((uint8_t *)&(drawPtr))) = (uint16_t)(agnt_t far *)0x69b5;
         uVar22 = keyprocessor_usesBiosKeyAvail
-                           ((uint16_t *)CONCAT13(uVar21,CONCAT12(type,&paStack_36)),
+                           ((uint16_t *)CONCAT13(ssHi,CONCAT12(type,&paStack_36)),
                             (uint16_t *)CONCAT22(_SS,&paStack_38),
                             (byte *)CONCAT22(_SS,&bStack_3b));
         if ((char)uVar22 != '\0') goto L_ui_unit_order_6616_0689_1054;
@@ -2396,7 +2396,7 @@ switchD_6000_ca06_caseD_1:
         (*(uint16_t *)((uint8_t *)&(drawPtr))) = (uint16_t)(agnt_t far *)0x6b14;
         (*(uint16_t *)((uint8_t *)&(drawPtr) + 2)) = iVar12;
         uVar22 = keyprocessor_usesBiosKeyAvail
-                           ((uint16_t *)CONCAT13(uVar21,CONCAT12(type,&paStack_36)),
+                           ((uint16_t *)CONCAT13(ssHi,CONCAT12(type,&paStack_36)),
                             (uint16_t *)CONCAT22(_SS,&paStack_38),
                             (byte *)CONCAT22(_SS,&bStack_3b));
         if ((char)uVar22 != '\0') goto L_ui_unit_order_6616_0689_1054;

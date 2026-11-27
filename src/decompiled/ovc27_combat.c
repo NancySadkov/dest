@@ -15,8 +15,8 @@ void __cdecl16far ovc27_intelAttackingNotice(int x1,int y1,int x2,int y2,int *re
 
 {
   undefined1 *puVar1;
-  uint uVar2;
-  uint uVar3;
+  uint slopeRem;
+  uint remSign;
   int iVar4;
   int iVar5;
   int *piVar6;
@@ -28,7 +28,7 @@ void __cdecl16far ovc27_intelAttackingNotice(int x1,int y1,int x2,int y2,int *re
   int iStack_c;
   int iStack_a;
   int iStack_8;
-  int iStack_6;
+  int y2Saved;
   byte bStack_3;
   
   iVar5 = y2;
@@ -39,7 +39,7 @@ void __cdecl16far ovc27_intelAttackingNotice(int x1,int y1,int x2,int y2,int *re
   if (x2 < x1) {
     x2 = x1;
     x1 = iVar4;
-    iStack_6 = y2;
+    y2Saved = y2;
     y2 = y1;
     y1 = iVar5;
   }
@@ -57,9 +57,9 @@ void __cdecl16far ovc27_intelAttackingNotice(int x1,int y1,int x2,int y2,int *re
     }
     else {
       iStack_a = (y2 - y1) / (x2 - x1);
-      uVar2 = (y2 - y1) % (x2 - x1);
-      uVar3 = (int)uVar2 >> 0xf;
-      iStack_c = (uVar2 ^ uVar3) - uVar3;
+      slopeRem = (y2 - y1) % (x2 - x1);
+      remSign = (int)slopeRem >> 0xf;
+      iStack_c = (slopeRem ^ remSign) - remSign;
     }
     yStep = ovr_ovc07_signum(y2 - y1);
     iStack_10 = x2 - x1 >> 1;

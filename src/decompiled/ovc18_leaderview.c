@@ -795,12 +795,12 @@ void __cdecl16far ovc18_checkFortressPlacement(char strongholdKind)
   undefined1 stk_ffec;   /* stack slot ffec */
   uint32_t lastPartyPtr;
   far_t dst;
-  bool bVar2;
+  bool arenaDrawn;
   uint uVar3;
   char *textPtr;
   undefined1 *bufPtr;
-  uint uVar6;
-  uint uVar7;
+  uint entSign;
+  uint uVar3Sign;
   uint entityIndex;
   int leaderIndex;
   uint16_t unaff_DI;
@@ -886,17 +886,17 @@ void __cdecl16far ovc18_checkFortressPlacement(char strongholdKind)
       return;
     }
   }
-  bVar2 = ovr_draw_textArena();
-  if (bVar2) {
+  arenaDrawn = ovr_draw_textArena();
+  if (arenaDrawn) {
     if (1 < CurPartySlot) {
       foundIdx = 0xffff;
       for (leaderIndex = 0; leaderIndex < (int)(uint)GLeaderCount; leaderIndex = leaderIndex + 1) {
         if ((((GLeaderSheets[leaderIndex])->active != '\0') &&
             (*((char far *)GLeaderSheets[leaderIndex] + 0x3f) == '\0')) &&
            (entityIndex = (GLeaderSheets[leaderIndex])->x - GfxRndSeed,
-           uVar6 = (int)entityIndex >> 0xf,
+           entSign = (int)entityIndex >> 0xf,
            uVar3 = (GLeaderSheets[leaderIndex])->y - GfxRndSeed2,
-           uVar7 = (int)uVar3 >> 0xf, entityIndex = ((entityIndex ^ uVar6) - uVar6) + ((uVar3 ^ uVar7) - uVar7),
+           uVar3Sign = (int)uVar3 >> 0xf, entityIndex = ((entityIndex ^ entSign) - entSign) + ((uVar3 ^ uVar3Sign) - uVar3Sign),
            entityIndex < foundIdx)) {
           foundIdx = entityIndex;
         }

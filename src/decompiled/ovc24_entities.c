@@ -538,7 +538,7 @@ void __cdecl16far ovc24_checkStrongholds(void)
 {
   bool bVar1;
   bool bVar2;
-  uint16_t uVar3;
+  uint16_t unitIdx;
   uint aligned;
   char *pcVar5;
   uint uVar6;
@@ -579,8 +579,8 @@ void __cdecl16far ovc24_checkStrongholds(void)
           flagMask = flagMask | (*(short (*) [60] [148])GMapFlags)[uVar6][cellX + probeOfs];
         }
         if (((flagMask & enemyMask) == 0) && ((flagMask & ownMask) != 0)) {
-          uVar3 = ovc24_unitAtLeader((byte)leaderIndex);
-          if (((char)uVar3 == '\0') || (bVar2 = ovc24_textArena(cellX,uVar6,side), bVar2))
+          unitIdx = ovc24_unitAtLeader((byte)leaderIndex);
+          if (((char)unitIdx == '\0') || (bVar2 = ovc24_textArena(cellX,uVar6,side), bVar2))
           goto L_OVC24_5943_112e_1255;
         }
         else {

@@ -16738,3 +16738,36 @@ source), `NextChar`'s two names (one is an ABI register, the other reads through
   compare_state 1,628/0/0
   diff_dgroup 1,639/1,805 matched, 5 runs, sum|delta| 18, mean 0, worst 12
   compare_runtime 1,692 matched, 1,683 identical / 9 different (both sample points)
+
+### section 5: batch 13 - five more functions (34,735 -> 34,700)
+section 5: batch 13 - five more functions (34,735 -> 34,700)
+
+manage_textAllProperty (212 lines)
+    uVar10  (undefined1)Font02.seg         -> fontSegLo (5)
+    uVar11  (undefined1)(Font02.seg >> 8)  -> fontSegHi (3)
+    uVar9   Font02.ofs                     -> fontOfs   (3)
+
+ovc18_checkFortressPlacement (168 lines)
+    uVar6  (int)entityIndex >> 0xf  -> entSign    (4)
+    uVar7  (int)uVar3 >> 0xf        -> uVar3Sign  (4)
+    bVar2  ovr_draw_textArena()     -> arenaDrawn (3)
+        the two masks are the absolute-value idiom `(v ^ m) - m` applied to entityIndex and uVar3.
+
+ovc27_intelAttackingNotice (77 lines)
+    uVar2  (y2 - y1) % (x2 - x1)    -> slopeRem (4)
+    uVar3  (int)uVar2 >> 0xf        -> remSign  (4)
+    iStack_6  y2                    -> y2Saved  (2)
+        `iStack_c = (slopeRem ^ remSign) - remSign`, i.e. |slopeRem|.
+
+ovc24_checkStrongholds (184 lines)
+    uVar3  ovc24_unitAtLeader(leaderIndex) -> unitIdx (3)
+
+ovc41_textOnlyPlaceSingle (545 lines)
+    uVar21  (undefined1)((uint)_SS >> 8)   -> ssHi (4)
+        its other seven single-assignment names are never-assigned stack slots - incoming arguments the
+        export does not declare - so this one is all the function offers.
+
+  grep_checks 34,735 -> 34,700 (-35); build 65/65; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,628/0/0
+  diff_dgroup 1,639/1,805 matched, 5 runs, sum|delta| 18, mean 0, worst 12
+  compare_runtime 1,692 matched, 1,683 identical / 9 different (both sample points)

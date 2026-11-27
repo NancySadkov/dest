@@ -2518,9 +2518,9 @@ void __cdecl16near manage_textAllProperty(uint16_t partyIndex)
   int iVar7;
   int iVar8;
   byte in_stack_00000004;
-  uint16_t uVar9;
-  undefined1 uVar10;
-  undefined1 uVar11;
+  uint16_t fontOfs;
+  undefined1 fontSegLo;
+  undefined1 fontSegHi;
   uint8_t term;
   uint8_t resultPtrs;
   uint16_t auStack_156 [9];
@@ -2575,25 +2575,25 @@ void __cdecl16near manage_textAllProperty(uint16_t partyIndex)
   }
   TextBlitY = 0xc;
   TextBlitX = 0x11;
-  uVar10 = (undefined1)Font02.seg;
-  uVar11 = (undefined1)(Font02.seg >> 8);
+  fontSegLo = (undefined1)Font02.seg;
+  fontSegHi = (undefined1)(Font02.seg >> 8);
   if (in_stack_00000004 == 0xff) {
     ovr_blitLabel((char *)"All property.",(uint8_t *)CONCAT22(Font02.ofs,(char *)0x26510),
-                  Font02.seg,0xde,uVar10,0xde,0x50);
+                  Font02.seg,0xde,fontSegLo,0xde,0x50);
   }
   else {
     titlePtr = (char *)((uint16_t *)((uint)in_stack_00000004 * 4))[1];
     pcVar5 = (char_sheet_t *)*(uint16_t *)((uint)in_stack_00000004 * 4);
     uVar6 = 0x50;
     term = 0xde;
-    uVar9 = Font02.ofs;
+    fontOfs = Font02.ofs;
     sheetPtr = pcVar5;
     iVar7 = ovr_ovc45_compute9(acStack_68,(char *)CONCAT22(pcVar5,_SS),
                                (char *)CONCAT22(Font02.ofs,titlePtr),Font02.seg,'i',0x69,3);
     pvVar2 = manage_playerTitle(sheetPtr,titlePtr,(char)iVar7,pcVar5);
     numText = ovr_stsprintf(acStack_b8,(char *)CONCAT22(0x52a1,_SS),
                            (char *)CONCAT22(pvVar2,(char *)0x26510),pcVar5);
-    ovr_blitLabel(numText,(uint8_t *)CONCAT22(uVar9,pcVar5),CONCAT11(uVar11,uVar10),term,uVar10,term,
+    ovr_blitLabel(numText,(uint8_t *)CONCAT22(fontOfs,pcVar5),CONCAT11(fontSegHi,fontSegLo),term,fontSegLo,term,
                   uVar6);
   }
   TextBlitY = TextBlitY + 0xc;
