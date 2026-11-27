@@ -20669,6 +20669,44 @@ Verified in the rebuilt listing: the `stgFreeTmp`/`uniqueColors` calls now push 
 temporary) instead of two unrelated near pointers, and the asset dump functions grew by the segment
 loads the image has.
 
+## The three remaining sprite thunks now push the image's word count
+
+**`stsh_store` (405 sites)** - image `lcall 0x188,0x25` pushes two words (one far pointer). The
+`st_stubs.c` wrapper became `far_t stsh_store(void far *data)`; every call site is a whole-`far_t`
+assignment:
+
+    367 x   DEST.ofs = stsh_store((uint8_t *)P,S,&T);  ...  DEST.seg = T;   ->  DEST = stsh_store(MK_FP(S,P));
+     36 x   stored = stsh_store(...); DEST.seg = T; ...->ofs = stored;      ->  DEST = stsh_store(MK_FP(S,P));
+      1 x   the portrait site:  pcVar4 = (char *)stsh_store(...);          ->  asm { mov segArg,dx };
+             + .seg/.ofs stores                                              AgntGs[i].prts[j] = stsh_store(MK_FP(segArg,pfVar1));
+
+(the portrait site also gained the missing `asm { mov segArg,dx }` - the image's `push dx` is the
+RLE result's segment, which the tree had replaced with an unrelated `puVar8`).
+
+**`stshWrite` (24 sites)** - image pushes four words = far source + long. The tree passed four
+arguments (near source, far pointer, long, word) = six words; now `ovr_stshWrite(<far src>,<long>)`:
+
+    4207:0811  push 0 / push 0x300 / push [bp-2] / push [bp-4]   -> (far src, long 0x300)
+    0x74297    push 0 / push 8     / push 0x280 / push 0x89a1    -> (far src, long 8)
+
+**`stshRleType2` (447 sites)** - image pushes eight words. Pairing every tree call with its image
+window (`tmp/rletype2_pairs.py`) gives one fixed mapping:
+
+    tree (A, B, C, D, E, F, G, H, I, J)   ->   image (A, 0, C, D, E, F, G)
+
+with `B` (the decompiler's `pixels` pseudo-argument) and `H,I,J` never pushed and a constant 0 in the
+second slot. Verified on several sites, e.g. `(src,pixels,130,99,194,26,-1,unaff,0,0)` pairs with
+pushes `-1,0x1a,0xc2,0x63,0x82,0` after the source, i.e. `(src,0,130,99,194,26,-1)`.
+
+## Measured (HEAD 4e98f767 -> d967fb0f + this commit)
+
+    grep_checks      21,016 -> 20,716   (-300)
+    REBUILT.EXE      480,640 -> 474,208 (-6,432: the three thunks now receive the image's word count)
+    build 65/65, LINK.LOG 0 errors
+    compare_state    1,628/0/0 (unchanged)
+    diff_dgroup      1,639/1,805 matched, 5 runs, sum|delta| 18 (unchanged)
+    compare_runtime  1,692 matched, 1,683 identical / 9 different at all three sample points
+
 ## Measured (HEAD 2712eab4 -> 6213530a)
 
     grep_checks      21,176 -> 21,016   (-160: the register placeholders and second arguments)

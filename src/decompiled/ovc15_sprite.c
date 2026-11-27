@@ -239,8 +239,7 @@ void __cdecl16far stshInitSprites(bool grab)
         ovr_stshUniqueColorsRemap(gfx);
         pixels.seg = 0;
         pixels.ofs = (gfx->aptr).seg;
-        pfVar1 = ovr_stshRleType2((far_t far *)(&gfx->aptr)->ofs,pixels,0,114,103,0,0,
-                                  (int16_t)unaff_DI,0,0);
+        pfVar1 = ovr_stshRleType2((far_t far *)(&gfx->aptr)->ofs,0,0,114,103,0,0);
         asm { mov segArg,dx };
         AgntGs[i].prts[j] = stsh_store(MK_FP(segArg,pfVar1));
         sz = ZEXT24(unaff_DI) << 0x10;
