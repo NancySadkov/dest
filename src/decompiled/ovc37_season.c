@@ -142,20 +142,20 @@ uint __cdecl16far season_textHalflingCastle(uint8_t formatIndex)
 uint __cdecl16far season_checkEndGame(byte leaderIndex)
 
 {
-  byte bVar1;
+  byte bandIndex;
   uint uVar2;
   
   if (*(char *)((int)*(uint32_t *)((uint)leaderIndex << 2) + 0x3f) == '\0') {
     uVar2 = 0;
   }
   else {
-    bVar1 = ovr_ovc30_compute1(*(byte *)((int)&worldMenuLabels[0xc].seg +
+    bandIndex = ovr_ovc30_compute1(*(byte *)((int)&worldMenuLabels[0xc].seg +
                                         (uint)(GLeaderSheets[leaderIndex])->classStr * 0x95));
-    if (bVar1 < 2) {
-      if (((byte *)promotionBandUsed)[bVar1] != 0) {
+    if (bandIndex < 2) {
+      if (((byte *)promotionBandUsed)[bandIndex] != 0) {
         return 0;
       }
-      ((byte *)promotionBandUsed)[bVar1] = 1;
+      ((byte *)promotionBandUsed)[bandIndex] = 1;
     }
     uVar2 = season_textHalflingCastle(0x0);
   }

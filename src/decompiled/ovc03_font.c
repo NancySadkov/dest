@@ -398,10 +398,10 @@ uint16_t __cdecl16far inputUpdate(ulong msg_delay)
   uint16_t uVar4;
   bool mouseDirty;
   ulong in_stack_0000fff8;
-  uint uVar7;
+  uint longHi;
   long lVar6;
   uint16_t uVar8;
-  undefined1 uVar9;
+  undefined1 retHi;
   
   rightButtonLatch = 0;
   mouseDirty = MiceNeedsUpdate != '\0';
@@ -416,7 +416,7 @@ uint16_t __cdecl16far inputUpdate(ulong msg_delay)
     housing = ovr_draw_textProvidesMoreHousing();
   } while (housing);
   do {
-    uVar7 = (uint)(in_stack_0000fff8 >> 0x10);
+    longHi = (uint)(in_stack_0000fff8 >> 0x10);
     uVar4 = *(uint16_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs);
     if ((*(uint16_t far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2) != InputEventTime.hi) ||
        (uVar4 != InputEventTime.lo)) {
@@ -425,7 +425,7 @@ uint16_t __cdecl16far inputUpdate(ulong msg_delay)
       InputEventTime.lo = uVar4;
       ovr_draw_usesBlitLoadRleGfx();
     }
-    lVar6 = (ulong)uVar7 << 0x10;
+    lVar6 = (ulong)longHi << 0x10;
     housing = ovr_draw_textProvidesMoreHousing();
     uVar8 = (uint16_t)(CONCAT13(housing,(int3)lVar6) >> 0x10);
     if (housing) break;
@@ -434,12 +434,12 @@ uint16_t __cdecl16far inputUpdate(ulong msg_delay)
     uVar8 = (uint16_t)(in_stack_0000fff8 >> 0x10);
   } while ((uVar4 < (*(uint16_t *)((uint8_t *)&(msg_delay) + 2))) ||
           ((uVar4 == (*(uint16_t *)((uint8_t *)&(msg_delay) + 2)) && (puVar3 < (ulong *)msg_delay))));
-  uVar9 = (undefined1)((uint)uVar8 >> 8);
+  retHi = (undefined1)((uint)uVar8 >> 8);
   if (mouseDirty) {
     ovr_miceRestoreArea((brect_t *)(BlitRects + 1),0);
   }
   GDebug = debugFlag;
-  return CONCAT11(0x24,uVar9);
+  return CONCAT11(0x24,retHi);
 }
 
 

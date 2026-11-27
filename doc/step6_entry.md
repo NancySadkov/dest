@@ -17752,3 +17752,37 @@ audio_usesLDIV_at_ (ovc11_audio.c)
   compare_state 1,628/0/0
   diff_dgroup 1,639/1,805 matched, 5 runs, sum|delta| 18, mean 0, worst 12
   compare_runtime 1,692 matched, 1,683 identical / 9 different at all three sample points
+
+### section 5: batch 31 - six functions and one dead declaration (34,234 -> 34,199)
+section 5: batch 31 - six functions and one dead declaration (34,234 -> 34,199)
+
+chpath (ovc09_init.c)
+    iVar2  chdir(...)                                            -> chdirResult (3)
+    cVar1  toupper((int)(char)c), the drive letter setdisk uses   -> driveLetter (3)
+
+ovc07_usesFillRect (ovc07_gfxutil.c)
+    iVar2  y2, saved so the y-clamp can swap the ends             -> y2Orig (3)
+    iVar1  x2, saved for the same reason                          -> x2Orig (3)
+
+inputUpdate (ovc03_font.c)
+    uVar9  (undefined1)((uint)uVar8 >> 8), packed as CONCAT11(0x24, uVar9)
+                                                                 -> retHi  (3)
+    uVar7  (uint)(in_stack_0000fff8 >> 0x10), the high word of a long
+                                                                 -> longHi (3)
+
+__crtinit (crtl.c)
+    iVar3  _crtinit_system("COMPAQ", 0xf000ffea)                 -> compaqResult (3)
+    cVar2  egainstalled()                                        -> egaInstalled (3)
+    uVar1  declared and never referenced anywhere in the body    -> declaration deleted
+
+constrct_compute1 (ovc47_constrct.c)
+    bVar1  ovr_manage_findFirstLeader()                          -> leaderIdx (5)
+
+season_checkEndGame (ovc37_season.c)
+    bVar1  ovr_ovc30_compute1(...), then used to index promotionBandUsed[]
+                                                                 -> bandIndex (5)
+
+  grep_checks 34,234 -> 34,199 (-35); build 65/65; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,628/0/0
+  diff_dgroup 1,639/1,805 matched, 5 runs, sum|delta| 18, mean 0, worst 12
+  compare_runtime 1,692 matched, 1,683 identical / 9 different at all three sample points

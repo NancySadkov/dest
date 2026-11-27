@@ -214,18 +214,18 @@ ovc07_usesBiosReadKey(int x1,int y1,int x2,int y2,int x3,int y3,uint16_t rectSeg
 void __cdecl16far ovc07_usesFillRect(int x1, int y1, int x2, int y2, uint16_t colour, brect_t far *rect, uint16_t arg7)
 
 {
-  int iVar1;
-  int iVar2;
+  int x2Orig;
+  int y2Orig;
   
-  iVar2 = y2;
-  iVar1 = x2;
+  y2Orig = y2;
+  x2Orig = x2;
   if (x2 < x1) {
     x2 = x1;
-    x1 = iVar1;
+    x1 = x2Orig;
   }
   if (y2 < y1) {
     y2 = y1;
-    y1 = iVar2;
+    y1 = y2Orig;
   }
   if (x1 < rect->x) {
     x1 = rect->x;

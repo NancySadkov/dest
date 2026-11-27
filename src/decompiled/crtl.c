@@ -3003,10 +3003,9 @@ void __cdecl16near _c0crtinit(void)
 void __cdecl16near __crtinit(uint8_t videoMode)
 
 {
-  uint8_t uVar1;
-  char cVar2;
+  char egaInstalled;
   uint8_t uVar4;
-  int16_t iVar3;
+  int16_t compaqResult;
   undefined1 extraout_AH;
   
   _video.currmode = videoMode;
@@ -3037,10 +3036,10 @@ void __cdecl16near __crtinit(uint8_t videoMode)
     _video.screenheight = 0x19;
   }
   if (_video.currmode != 0x7) {
-    iVar3 = _crtinit_system("COMPAQ",(char *)0xf000ffea);
-    if (iVar3 == 0) {
-      cVar2 = egainstalled();
-      if (CONCAT11(extraout_AH,cVar2) == 0) {
+    compaqResult = _crtinit_system("COMPAQ",(char *)0xf000ffea);
+    if (compaqResult == 0) {
+      egaInstalled = egainstalled();
+      if (CONCAT11(extraout_AH,egaInstalled) == 0) {
         _video.snow = 0x1;
         goto L__crtinit_159A;
       }

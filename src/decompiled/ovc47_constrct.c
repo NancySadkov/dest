@@ -374,18 +374,18 @@ void __cdecl16far land_info(byte tileOffset)
 int __cdecl16far constrct_compute1(void)
 
 {
-  byte bVar1;
+  byte leaderIdx;
   int iVar2;
   
-  bVar1 = ovr_manage_findFirstLeader();
-  if (bVar1 == 0xff) {
+  leaderIdx = ovr_manage_findFirstLeader();
+  if (leaderIdx == 0xff) {
     iVar2 = 0;
   }
-  else if ((GLeaderSheets[bVar1])->titleIndex < 5) {
+  else if ((GLeaderSheets[leaderIdx])->titleIndex < 5) {
     iVar2 = 0x14;
   }
   else {
-    iVar2 = (uint)(GLeaderSheets[bVar1])->titleIndex * 4 + 0x14;
+    iVar2 = (uint)(GLeaderSheets[leaderIdx])->titleIndex * 4 + 0x14;
   }
   return iVar2;
 }

@@ -112,16 +112,16 @@ void __cdecl16far chpath(char far *path, uint16_t arg2)
 
 {
   uint8_t c;
-  char cVar1;
-  int iVar2;
+  char driveLetter;
+  int chdirResult;
   undefined1 extraout_AH;
   
-  iVar2 = chdir((char *)CONCAT22(arg2,path));
-  if (iVar2 == 0) {
+  chdirResult = chdir((char *)CONCAT22(arg2,path));
+  if (chdirResult == 0) {
     c = toupper((int)*path);
     if (((path[1] == ':') && ('@' < (char)c)) && ((char)c < '[')) {
-      cVar1 = toupper((int)(char)c);
-      setdisk(CONCAT11(extraout_AH,cVar1) + -0x41);
+      driveLetter = toupper((int)(char)c);
+      setdisk(CONCAT11(extraout_AH,driveLetter) + -0x41);
     }
   }
   return;
