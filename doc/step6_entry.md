@@ -18252,3 +18252,72 @@ fidelity was checked there rather than in a listing.
 Two pre-existing siblings still carry the same near-cast defect and are queued: `stats_compute4`'s
 `*(byte *)((int)&agnt->entity + 3)` argument to `ovr_agnt_abilityModifier`, and the
 `*(uint8_t *)((int)&x + n)` idiom elsewhere in the tree.
+
+### step 6: saveui_configureMessageDelay re-decompiled (grep 29,329 -> 28,900)
+step 6: `saveui_configureMessageDelay` re-decompiled from the image (grep 29,329 -> 28,900)
+
+Next entry from the call-count screen: image 210 bytes / 9 calls, export 430 lines / 32 calls.
+
+## The image (`tmp/dis_seg.py 4528 1303 0xd0`)
+
+    1303  prologue; sub sp,0x1e
+    130d  GMenuItem = 1
+    1318  loop:
+            resetTextBlitCycle()                         (0xf8:0x48)
+            saveui_blitPanel()                           (near 0x533)
+            fmVsprintf("Message delay is now %d.", MessageDelay) then say() it
+                                                         (0x170:0x4d, 0xf8:0x3e)
+            items[0] = "Decrease message delay" if (MessageDelay != 0) else NULL
+            items[1] = "Increase message delay" if (MessageDelay < 0x28) else NULL
+            items[2] = "Test";  items[3] = "Done"
+            choice = uiMenuSub("Change message delay:", items, 4, GMenuItem)   (near 0x706)
+            switch (choice)      table CS:0x1444 = 1432,13c7,13e2,13fd,1432
+              1: if (MessageDelay != 0)   --MessageDelay
+              2: if (MessageDelay < 0x28) ++MessageDelay
+              3: resetTextBlitCycle(); fmVsprintf("This message appears at the message delay
+                 of %d.", ...) and say it; then say("") to clear the line
+              0/4: done = 1
+    1436  loop while (!done); return done in AL
+
+The four entries are ofs/seg pairs at [bp-0x1e]/-0x1c, -0x1a/-0x18, -0x16/-0x14, -0x12/-0x10, and
+`uiMenuSub` gets `ss:&items` as its second argument - so the local is `far_t items[4]` and the
+argument is a `far_t` holding SS:&items, matching the tree's
+`uiMenuSub(char far *, far_t, uint16_t, uint16_t)`.
+
+## Verified in REBUILT.EXE (O16 is linked)
+
+`tmp/dis_ours.py _SAVEUI_CONFIGUREMESSAGEDELAY` tracks the image almost instruction for instruction:
+
+    ours                                   image
+    sub sp,0x1a                            1306 sub sp,0x1e
+    mov byte [bp-1],0 / byte[GMenuItem]=1  1309/1312 same
+    lcall resetTextBlitCycle               1318 same
+    push cs / call saveui_blitPanel        131d same
+    push MessageDelay / push ds / push 0x274c / lcall fmVsprintf / add sp,6
+                                           1326..1336 same (same string offset 0x274c)
+    push dx / push ax / lcall say          1339..133b same
+    items: 0/0 then 0x2765/ds ...          1343.. same offsets 0x2765, 0x277c, 0x2793, 0x2798
+    lea ax,[bp-0x1a] / [bp-6]=ax / [bp-4]=ss
+                                           1395 push ss / lea ax,[bp-0x1e] / push ax
+    push GMenuItem / push 4 / push ss:items / push ds:0x279d / call uiMenuSub / add sp,0xc
+                                           139e..13ae same six words
+    cmp 1/2/3 switch                       13b4 jump table (equivalent)
+    case 1: cmp [MessageDelay],0 / je / add al,0xff / store
+                                           13c7 same
+    case 2: cmp [MessageDelay],0x28 / jae / inc al / store
+                                           13e2 same
+    case 3: resetTextBlitCycle / fmVsprintf 0x27b3 / say / say(empty)
+                                           13fd..1430 same
+
+The string offsets are identical to the original's (0x274c, 0x2765, 0x277c, 0x2793, 0x2798, 0x279d,
+0x27b3), which is a direct confirmation of the byte-exact DGROUP layout in that region.  The empty
+string is `s__Empty__2410_272b + 7` (a lone NUL at ds:0x2732).
+
+## Measured (HEAD dbce945e -> this commit)
+
+    grep_checks      29,329 -> 28,900   (-429; the 430-line body is gone)
+    REBUILT.EXE      515,980 -> 513,252
+    build 65/65, LINK.LOG 65 bytes / 0 problems
+    compare_state    1,628/0/0 (unchanged)
+    diff_dgroup      1,639/1,805 matched, 5 runs, sum|delta| 18, mean 0, worst 12 (unchanged)
+    compare_runtime  1,692 matched, 1,683 identical / 9 different at all three sample points
