@@ -20172,6 +20172,41 @@ Verified from a two-function listing (`tmp/chk_o44.py`, since O44 cannot be list
 
 with `bx = (3*index + i) * 4`, matching the image's `bx = index*0xc + i*4`.
 
+## `4d05:1bee` decoded for the next pass (still a stub)
+
+`manage_settlementScreen` is a `DECOMPILATION FAILED` stub in the tree; the image body is
+`0x1bee..0x2177` (1,420 bytes, 24 calls, 57 branches) plus the nine-entry switch jump table at
+cs:0x2168 (codes 2..0xa). Recorded here so the body can be written directly:
+
+* frame: `sub sp,0x21c`, `si`/`di` saved; locals `[bp-6]` = `far_t sheet`, `[bp-1]` = the
+  `manage_findFirstLeader` result, `[bp-2]` = redraw flag, `[bp-0x11]` = menu code,
+  `[bp-0x12]` = replay flag, `[bp-0x13]` = first-pass cursor flag, `[bp-0x1f4]` = title buffer,
+  `[bp-0x21c]` = the far_t menu-entry array, `[bp+si-0x10]` = per-entry code bytes,
+  `[bp-0x64]` = the auto-build description buffer;
+* `sheet` comes from the segment-0x70 table indexed by the byte parameter (`GLeaderSheets[arg]`);
+  the fields read are `+0x33` (alignment, indexes the two message tables), `+0x34` (gender),
+  `+0x39`/`+0x3b` (x/y), `+0x3f` (faction), `+0x5d` (flags5d, bit 2), `+0x86` (titleIndex, which
+  with gender indexes `0x4955 + title*8 + gender*4`);
+* globals: `GfxRndSeed`/`GfxRndSeed2` (0x899f/0x899d) are saved into
+  `Seed_2000_d1da`/`Seed_2000_d1d8` (0x90da/0x90d8) and restored on both exits; `partyFilter`
+  (0x4b6e) receives the parameter, `unitTypeFilter` (0x4b6d) is set to 0xfe then 0xff; `Cancelled`
+  (0x4926) is the replay test; `GYear` (0x91e4) feeds the title line; `GHighScoreSaved` (0x6a88)
+  selects between the two `RankReqMsgPtrs`/`menuHighlightTable` variants; `SfxPending` (0x5cf1)
+  and `CurSfxType3` (0x7a7) are set on the first pass;
+* strings: 0x5081 "Year %d. %s", 0x508d "Year %d. This leader %s", 0x50a5 "Next Leader",
+  0x50b1 "Auto-build    \x7f" / 0x50c1 "Auto-build" (bit 2 of flags5d), 0x50cc "Census",
+  0x50d3 "Property", 0x50dc "Total Census", 0x50e9 "All Property", 0x50f6 "Help",
+  0x50fb "Done", 0x5100 "%s will now build homes automatically.",
+  0x5127 "%s will no longer build houses automatically.";
+* in-module calls: `manage_openTalkWindow` (0x81), `manage_usesGLeaderCount` (0x44e, its result
+  held in di), `manage_usesLitoa10` (0x56e), `manage_findFirstLeader` (0x1b1d),
+  `manage_usesGLeaderCount3` (0x1b51), `manage_textAllProperty` (0x26f6),
+  `manage_textTotalPopulation` (0x2d79);
+* overlay calls: 0x1c8,0x20 is the unique `ovr_uiInputText`; 0x150,0x34 / 0x1f0,0x34 /
+  0x160,0x2a / 0x278,0x20 / 0x140,0x2a / 0x210,0x39 are still selector-ambiguous
+  (audit/overlay_segments.csv lists several candidate segments each), which is what blocks writing
+  the body - the same reason the 77eb:0d61 rewrite is on hold.
+
 ## Measured (HEAD ac32b3b5 -> this commit)
 
     grep_checks      24,431 (unchanged)
