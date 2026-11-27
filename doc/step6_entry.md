@@ -15329,3 +15329,53 @@ The original's band is s_magic_mill 12, s_armory 8, this string, s_empty_2410_69
     performs the INT itself, only its register outputs are unrecovered.
 
 No entry can be closed by data recovery; they are runtime-owned or non-code.
+
+### layout: close the 6-byte residual before GTxtFiles (sum -> 85,896)
+layout: close the 6-byte residual before GTxtFiles (sum 86,658 -> 85,896)
+
+`tmp/delta_pair.py` pairs every original symbol in a band to ours by the same key rules
+diff_dgroup uses and prints each delta, which makes a step visible at the exact symbol rather than
+at the start of a run.  For 0x7581..0x8230 it showed a flat -3 up to 0x7a02 and -6 from 0x7a79 -
+i.e. our whole filename block sat 6 bytes early (0x82ae vs the original's 0x82b4).
+
+Two objects were missing, 3 bytes each:
+
+  0x74ad  PersonWordPtrs    the original's symbol spans **11** bytes
+                            (0x74ad..0x74b8): e2 77 10 24  e9 77 10 24  08 0c 24
+                            i.e. the two far pointers we already declare plus three more bytes.
+                            Kept as a separate `undefined1 s_personWordPtrs_tail[3]` rather than
+                            a third far pointer, which the bytes do not support; `fixFarTable`
+                            still sees the two entries.
+
+  0x7a02  s_no              "No", 3 bytes, immediately before
+                            `s_construction_of_s_will_be_permanently_suspended...` at 0x7a05.
+                            We already declare `char s_no[] = "No";`, but it lands at 0x77b7 where
+                            another of the original's "No" strings lives, so this position had no
+                            copy.  Declared as `s_no_2410_7a02[3]`.
+
+MEASURED (HEAD f897bd6b -> this commit)
+
+  diff_dgroup sum|delta|   86,658 -> 85,896
+  diff_dgroup runs              28 -> 26
+  diff_dgroup mean              53 -> 52
+  diff_dgroup worst         14,314 -> 14,320
+  diff_dgroup matched        1,626 -> 1,626
+  compare_state              1,625/0/0 (unchanged)
+  compare_runtime matched    1,682 -> 1,683, identical 1,673 -> 1,674 (9 different, both points)
+  grep_checks               35,567 -> 35,568
+  build 65/65, LINK.LOG 65 bytes / 0 problems
+
+The band 0x748e..0x7a02 is now a flat **+0** across 139 symbols and 0x7a79 onward is +0 as well,
+and the map confirms the result directly:
+
+  822c 136 _GTXTFILES
+  82b4  10 _S_HELP0_TXT_2410_82B4
+  82be  10 _S_HELP1_TXT_2410_82BE
+
+which are the original's own offsets (GTxtFiles 0x822c, help0.txt 0x82b4).  That is why the
+runtime comparison gained a symbol at both sample points: the far-pointer entries now hold the
+original's offsets too, not just equivalent strings.
+
+Remaining steps in the profile are the tail: `-4` from `_dosErrorToSV` (after the `_doserrno`
+mis-pair), `-5` at `rand_Seed`, `-6` at `_video`, and the upstream `+16` that still sits over
+0x6601..0x6f63.

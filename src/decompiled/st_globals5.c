@@ -1685,6 +1685,10 @@ uint32_t StshFileSizeVar = 0x0;
 char s_getcache__d_SIZESTA_2410_748e[30] = "getcache %d  SIZESTASH %d  \r";
 undefined1 selectedPartyIndex = 0xFF;
 far_t PersonWordPtrs[2] = { { 0x77E2, 0x2410 }, { 0x77E9, 0x2410 } };
+/* GUESS: the original's PersonWordPtrs symbol spans 11 bytes (0x74ad..0x74b8), three more
+   than the two far pointers it holds; the trailing bytes are 08 0C 24 in the image.  Kept as
+   a separate object rather than a third far pointer, which the bytes do not support. */
+undefined1 s_personWordPtrs_tail[3] = { 0x08, 0x0C, 0x24 };
 char s_choose_party_to_build_fo_296a[] = "Choose party to build for.  Now building for %s the %s.";
 char s_s_2410_74f0[] = "%s:";
 char s_you_can_only_place_a_sin_6023[] = " You can only place a single arena.";
@@ -1745,6 +1749,7 @@ char s_suspend[] = "Suspend";
 char s_change_party_2410_7971[] = "Change party";
 char s_s_d_complete_owned_by_s__c800[] = "%s: %d%% complete. Owned by %s. Active party is %s the %s.";
 char s_clearing_of_land_d_compl_546b[] = "Clearing of land: %d%% complete. Owned by %s. Active party is %s the %s.";
+char s_no_2410_7a02[3] = "No";
 char s_construction_of_s_will_b_7f3b[] = "Construction of %s will be permanently suspended. Are you sure?";
 char s_s_d_d_owned_by_s_active__9dba[] = "%s (%d/%d): Owned by %s. Active party is %s the %s.";
 char s_s_Owned_by_s_2410_7a79[44] = "%s: Owned by %s. Active party is %s the %s.";

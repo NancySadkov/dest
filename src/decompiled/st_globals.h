@@ -2379,3 +2379,7 @@ extern char s_s_for_city_2410_6de7[25];
 /* 0x690b / 0x6a50 */
 extern char s_Building_is_now_2410_690b[46];
 extern char s_The_season_has_2410_6a50[30];
+
+/* 0x74b5 / 0x7a02 */
+extern undefined1 s_personWordPtrs_tail[3];
+extern char s_no_2410_7a02[3];
