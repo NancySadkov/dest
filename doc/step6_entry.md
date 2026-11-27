@@ -21750,3 +21750,36 @@ symbol, so it was not counted and the body looked 17 calls short. `screen_calls.
     diff_dgroup      1,639/1,805 matched                       (unchanged)
     compare_runtime  1,692 matched / 1,683 identical / 9 different  (unchanged)
     screen_calls     81b9:3e84 leaves the delta table
+
+
+## The largest remaining "delta" was a counting artefact: `6ffe:02f7` is complete
+
+The wrapper-aware census ranked `ovc44_strong_dat.c 6ffe:02f7` first at **C 653 vs image 796
+(-143)**. That gap is not missing code. It is the tree's `func_0x0007ffe0` placeholder, which is not an
+image symbol, so `count_calls` skipped all 143 of its sites.
+
+`func_0x0007ffe0` is already documented in `st_stubs.c` as *"Original: `push cs; call 0` inside the
+overlay - a far call to offset 0 of the module segment, i.e. stshAllocStub, whose result comes back in
+DX:AX"*. Its body really does call `stshAllocStub()` and re-pack DX:AX as a `uint32_t`, because the
+recovered sites consume it that way (e.g. `MiceCursors[0] = far_from_u32(...)`).
+
+Adding it to `screen_calls.py`'s `LOCAL_WRAPPERS` makes the counts agree: `6ffe:02f7` **drops off the
+delta table entirely**. So that 28,741-byte region - the largest single body in the tree - matches the
+image's call census, with no missing calls.
+
+Two related measurement notes, both verified this pass:
+
+* the image range for `6ffe:02f7` is 8,188 bytes (`real_size`) carrying 234 calls; the 28,741-byte
+  figure that `screen_calls` uses is the next-start extent, which spans several original functions that
+  Ghidra merged into one entry. The C body covers that merged region, so comparing it against the
+  merged extent is the meaningful measurement - but it means "bytes" in that table is a region, not a
+  function.
+* `LOCAL_WRAPPERS` now holds `stsh_store` and `func_0x0007ffe0`; both are C wrappers that perform a real
+  image call, so both must count.
+
+## Measured (tool only; no code change)
+
+    build 65/65 · LINK.LOG 0 errors · REBUILT.EXE 459,892
+    grep_checks 11,760 · compare_state 1,628/0/0 · diff_dgroup 1,639/1,805
+    compare_runtime 1,692 matched / 1,683 identical / 9 different
+    screen_calls  6ffe:02f7 removed from the delta table (was -143)

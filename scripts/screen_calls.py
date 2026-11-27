@@ -66,7 +66,7 @@ COMMENTS = re.compile(r"/\*.*?\*/", re.S)
 # Local C wrappers that stand in for an image callee, so they must count as calls too.  stsh_store is
 # the st_stubs.c wrapper around ovr_stshStoreFile: it performs the image's two-word call and returns
 # DX:AX.  Counting it closes the gap for every asset loader that stores a sprite.
-LOCAL_WRAPPERS = {"stsh_store"}
+LOCAL_WRAPPERS = {"stsh_store", "func_0x0007ffe0"}
 
 
 def count_calls(body):
