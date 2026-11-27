@@ -251,21 +251,21 @@ void __cdecl16far ovc41_removeAgent(uint agntIndex,int notify,uint16_t arg3)
 uint16_t __cdecl16far ovc41_usesMenuItemEnabled(byte menuIndex,int gfxVariant)
 
 {
-  byte bVar1;
-  uint32_t uVar2;
+  byte itemFlag;
+  uint32_t itemPtr;
   uint16_t uVar3;
   
   if (((uint8_t *)MenuItemEnabled)[menuIndex] == 0xff) {
     uVar3 = 0x6e74;
   }
   else {
-    uVar2 = *(uint32_t *)((uint)((uint8_t *)MenuItemEnabled)[menuIndex] << 2);
-    bVar1 = *(byte *)((int)uVar2 + 0x2f);
+    itemPtr = *(uint32_t *)((uint)((uint8_t *)MenuItemEnabled)[menuIndex] << 2);
+    itemFlag = *(byte *)((int)itemPtr + 0x2f);
     if (gfxVariant == 1) {
-      uVar3 = *(uint16_t *)((uint)bVar1 * 4 + 0x123);
+      uVar3 = *(uint16_t *)((uint)itemFlag * 4 + 0x123);
     }
     else {
-      uVar3 = *(uint16_t *)((uint)bVar1 * 4 + 0x107);
+      uVar3 = *(uint16_t *)((uint)itemFlag * 4 + 0x107);
     }
   }
   return uVar3;

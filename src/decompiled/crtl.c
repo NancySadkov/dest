@@ -1210,17 +1210,17 @@ void __cdecl16far __FAR_RETURN(void)
 bool __cdecl16far _atexit(uint16_t funcOfs,uint16_t funcSeg)
 
 {
-  int iVar1;
-  bool bVar2;
+  int slotOfs;
+  bool notFull;
   
-  bVar2 = _atexitcnt != 0x20;
-  if (bVar2) {
-    iVar1 = _atexitcnt * 4;
-    *(uint16_t *)(iVar1 + -0x6be6) = funcSeg;
-    *(uint16_t *)((undefined *)&_atexittbl + iVar1) = funcOfs;
+  notFull = _atexitcnt != 0x20;
+  if (notFull) {
+    slotOfs = _atexitcnt * 4;
+    *(uint16_t *)(slotOfs + -0x6be6) = funcSeg;
+    *(uint16_t *)((undefined *)&_atexittbl + slotOfs) = funcOfs;
     _atexitcnt = _atexitcnt + 1;
   }
-  return !bVar2;
+  return !notFull;
 }
 
 
@@ -3606,8 +3606,8 @@ uint16_t __cdecl16far _movetext(int x1,int y1,int x2,int y2,int dstX,int dstY)
 {
   int iVar1;
   uint16_t uVar2;
-  uint32_t uVar3;
-  uint32_t uVar4;
+  uint32_t dstPtr;
+  uint32_t srcPtr;
   int iStack_6;
   int iStack_4;
   
@@ -3626,10 +3626,10 @@ uint16_t __cdecl16far _movetext(int x1,int y1,int x2,int y2,int dstX,int dstY)
       iVar1 = y2;
     }
     for (; iStack_4 + iStack_6 != iVar1; iVar1 = iVar1 + iStack_6) {
-      uVar3 = __VPTR(dstY + (iVar1 - y1),dstX);
-      uVar4 = __VPTR(iVar1,x1);
-      __SCREENIO((x2 - x1) + 1,(uint16_t)uVar4,(uint16_t)((ulong)uVar4 >> 0x10),(uint16_t)uVar3,
-                 (uint16_t)((ulong)uVar3 >> 0x10));
+      dstPtr = __VPTR(dstY + (iVar1 - y1),dstX);
+      srcPtr = __VPTR(iVar1,x1);
+      __SCREENIO((x2 - x1) + 1,(uint16_t)srcPtr,(uint16_t)((ulong)srcPtr >> 0x10),(uint16_t)dstPtr,
+                 (uint16_t)((ulong)dstPtr >> 0x10));
     }
     uVar2 = 1;
   }

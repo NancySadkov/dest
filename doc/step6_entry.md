@@ -17563,3 +17563,36 @@ without claiming a different meaning.
   compare_state 1,628/0/0
   diff_dgroup 1,639/1,805 matched, 5 runs, sum|delta| 18, mean 0, worst 12
   compare_runtime 1,692 matched, 1,683 identical / 9 different at all three sample points
+
+### section 5: batch 23 - six small functions (34,515 -> 34,471)
+section 5: batch 23 - six small functions (34,515 -> 34,471)
+
+_movetext
+    uVar4  __VPTR(iVar1, x1)                          -> srcPtr (4)
+    uVar3  __VPTR(dstY + (iVar1 - y1), dstX)          -> dstPtr (4)
+
+_atexit
+    iVar1  _atexitcnt * 4, the slot's byte offset     -> slotOfs (4)
+    bVar2  _atexitcnt != 0x20, room left in the table -> notFull (4)
+
+ovc50_usesStshLoadGfx
+    uVar2  *(uint32_t *)((uint)gfxIndex * 4 - 0x6c70) -> gfxPtr   (3)
+    iVar1  *(int *)((int)uVar2 + 5)                   -> gfxField (4)
+
+ovc45_showLandInfo
+    uVar1  video_pointInButton(screenX, y)            -> hitCode   (3)
+    bVar2  (char)uVar1 != '\0'                        -> hitButton (4)
+
+ovc45_compute8
+    uVar1  (uint32_t)GLeaderSheets[partyIndex]        -> sheetPtr (3)
+    bVar3  (byte)(((uint)partyIndex << 2) >> 8)       -> partySeg (4)
+        the segment byte of the `partyIndex * 4` far pointer the function builds.
+
+ovc41_usesMenuItemEnabled
+    uVar2  *(uint32_t *)(MenuItemEnabled[menuIndex] << 2) -> itemPtr  (3)
+    bVar1  *(byte *)((int)uVar2 + 0x2f)                   -> itemFlag (4)
+
+  grep_checks 34,515 -> 34,471 (-44); build 65/65; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,628/0/0
+  diff_dgroup 1,639/1,805 matched, 5 runs, sum|delta| 18, mean 0, worst 12
+  compare_runtime 1,692 matched, 1,683 identical / 9 different at all three sample points

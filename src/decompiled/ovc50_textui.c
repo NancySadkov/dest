@@ -44,8 +44,8 @@ void __cdecl16far ovc50_usesBlitText(char *text,uint16_t widths)
 void __cdecl16far ovc50_usesStshLoadGfx(byte gfxIndex)
 
 {
-  int iVar1;
-  uint32_t uVar2;
+  int gfxField;
+  uint32_t gfxPtr;
   far_t handle;
   stg_tmp_t *widths;
   char *pcVar3;
@@ -55,10 +55,10 @@ void __cdecl16far ovc50_usesStshLoadGfx(byte gfxIndex)
   handle.seg = *(uint16_t *)((uint)gfxIndex * 4 + -0x6c6e);
   handle.ofs = *(uint16_t *)((uint)gfxIndex * 4 + -0x6c70);
   widths = ovr_stshLoadGfx(handle);
-  uVar2 = *(uint32_t *)((uint)gfxIndex * 4 + -0x6c70);
-  iVar1 = *(int *)((int)uVar2 + 5);
-  if (iVar1 != 0) {
-    widths->cmap[iVar1 + -1] = 0x0;
+  gfxPtr = *(uint32_t *)((uint)gfxIndex * 4 + -0x6c70);
+  gfxField = *(int *)((int)gfxPtr + 5);
+  if (gfxField != 0) {
+    widths->cmap[gfxField + -1] = 0x0;
     ovc50_usesBlitText((char *)CONCAT22(unaff_SI,pcVar3),(uint16_t)widths);
   }
   return;

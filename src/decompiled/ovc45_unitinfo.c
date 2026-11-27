@@ -4379,15 +4379,15 @@ uint16_t __cdecl16far ovc45_compute7(byte a,byte b,uint16_t arg3,uint16_t arg4,u
 bool __cdecl16far ovc45_showLandInfo(int screenX,uint16_t y)
 
 {
-  uint16_t uVar1;
-  bool bVar2;
+  uint16_t hitCode;
+  bool hitButton;
   
-  uVar1 = video_pointInButton(screenX,y);
-  bVar2 = (char)uVar1 != '\0';
-  if (bVar2) {
+  hitCode = video_pointInButton(screenX,y);
+  hitButton = (char)hitCode != '\0';
+  if (hitButton) {
     ovr_land_info((byte)((screenX - 9U) / 0x30));
   }
-  return bVar2;
+  return hitButton;
 }
 
 
@@ -4401,22 +4401,22 @@ bool __cdecl16far ovc45_showLandInfo(int screenX,uint16_t y)
 uint __cdecl16far ovc45_compute8(byte partyIndex)
 
 {
-  uint32_t uVar1;
+  uint32_t sheetPtr;
   uint in_AX;
   uint uVar2;
-  byte bVar3;
+  byte partySeg;
   
   if (partyIndex == 0xff) {
     uVar2 = in_AX & 0xff00;
   }
   else {
-    uVar1 = (uint32_t)GLeaderSheets[partyIndex];
-    bVar3 = (byte)(((uint)partyIndex << 2) >> 8);
-    if (*(char *)((int)uVar1 + 0x3f) == '\0') {
-      uVar2 = CONCAT11(bVar3,1);
+    sheetPtr = (uint32_t)GLeaderSheets[partyIndex];
+    partySeg = (byte)(((uint)partyIndex << 2) >> 8);
+    if (*(char *)((int)sheetPtr + 0x3f) == '\0') {
+      uVar2 = CONCAT11(partySeg,1);
     }
     else {
-      uVar2 = (uint)bVar3 << 8;
+      uVar2 = (uint)partySeg << 8;
     }
   }
   return uVar2;
