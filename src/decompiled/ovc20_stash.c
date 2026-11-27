@@ -55,38 +55,38 @@ void __cdecl16far stshUniqueColorsRemap(stg_tmp_t *gfx,uint16_t arg2)
 
 /* 4b0a:010c */
 
-/* [R2] string "uc%lx %d len %ld loc %ld \r" */
-
+/* Walk both stash chains and print each node.  Re-derived from the image: the head of the first
+   chain is StshCtPtr2 (47fa/47fc) and its link is at +9/+0xb; the second chain starts at
+   Stsh_2410_47f6 (47f6/47f8) and links through +0xd/+0xf.  Each node is a cte_t: `ofs` at +1,
+   `sz` at +5, `info[12]` at +9 (the long at +0x11 is printed as "@%lx").  The count of nodes is
+   printed after each pass and the key wait comes from the overlay manager. */
 void __cdecl16far ovc20_textLenLoc(void)
 
 {
-  /* Re-derived: walks the two stash chains, printing each node's statistics, and waits for a
-     key after each pass.  `StshCtPtr2` links through +0x9 (next offset) / +0xb (next segment);
-     `Stsh_2410_47f6` through +0xd / +0xf.  The printf calls carry format strings only - their
-     variadic arguments live on the stack and the exporter did not recover them. */
-  uint16_t *nextSegPtr;
-  uint16_t cursorOfs;
-  uint16_t cursorSeg;
+  cte_t far *node;
+  uint16_t count;
 
-  cursorSeg = StshCtPtr2.seg;
-  cursorOfs = StshCtPtr2.ofs;
-  while (cursorOfs != 0 || cursorSeg != 0) {
-    printf("uc%lx %d len %ld loc %ld \r");
-    nextSegPtr = (uint16_t *)(cursorOfs + 0xb);
-    cursorOfs = *(uint16_t *)(cursorOfs + 9);
-    cursorSeg = *nextSegPtr;
+  count = 0;
+  node = (cte_t far *)MK_FP(StshCtPtr2.seg,StshCtPtr2.ofs);
+  while (node != (cte_t far *)0) {
+    printf("uc%lx %d len %ld loc %ld \r",(uint32_t)node,count,node->sz,node->ofs,
+           *(uint32_t far *)(node->info + 8));
+    count++;
+    node = (cte_t far *)MK_FP(*(uint16_t far *)(node->info + 2),
+                              *(uint16_t far *)(node->info + 0));
   }
-  printf("N UP = %d \r");
+  printf("N UP = %d \r",count);
   ovr_gameProcessKey();
-  cursorSeg = Stsh_2410_47f6.seg;
-  cursorOfs = Stsh_2410_47f6.ofs;
-  while (cursorOfs != 0 || cursorSeg != 0) {
-    printf("dc%lx %d ln %ld lc %ld @%lx \r");
-    nextSegPtr = (uint16_t *)(cursorOfs + 0xf);
-    cursorOfs = *(uint16_t *)(cursorOfs + 0xd);
-    cursorSeg = *nextSegPtr;
+  count = 0;
+  node = (cte_t far *)MK_FP(Stsh_2410_47f6.seg,Stsh_2410_47f6.ofs);
+  while (node != (cte_t far *)0) {
+    printf("dc%lx %d ln %ld lc %ld @%lx \r",(uint32_t)node,count,node->sz,node->ofs,
+           *(uint32_t far *)(node->info + 8));
+    count++;
+    node = (cte_t far *)MK_FP(*(uint16_t far *)(node->info + 6),
+                              *(uint16_t far *)(node->info + 4));
   }
-  printf("N DOWN = %d \r");
+  printf("N DOWN = %d \r",count);
   ovr_gameProcessKey();
   return;
 }

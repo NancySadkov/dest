@@ -20409,6 +20409,34 @@ before `ds:0x4855` = "type %d len %ld \r". So the call is
 `printf("type %d len %ld \r",*data,sz)` - the block's first byte and the DW size (high word [bp-6], low
 word [bp-8]), which is the same `sz` the function uses two statements earlier at `sizeLo = sz.lo`.
 
+## `ovc20_textLenLoc` re-derived (4b0a:010c) - far nodes and all five printf arguments
+
+The tree walked both stash chains with *near* pointer arithmetic (`*(uint16_t *)(cursorOfs + 9)`),
+which cannot reach a far node, and left every printf argumentless. The image is a regular pair of
+loops (236 bytes):
+
+* first chain from `StshCtPtr2` (47fa/47fc), link at `es:[bx+9]`/`es:[bx+0xb]`, format
+  `ds:0x4802` "uc%lx %d len %ld loc %ld \\r";
+* second chain from `Stsh_2410_47f6` (47f6/47f8), link at `es:[bx+0xd]`/`es:[bx+0xf]`, format
+  `ds:0x4829` "dc%lx %d ln %ld lc %ld @%lx \\r";
+* each node is a `cte_t`: `ofs` at +1..+4, `sz` at +5..+8, `info[12]` at +9..; the long at +0x11 is
+  the one printed as "@%lx" (the first format does not consume it, but the image pushes it anyway -
+  the developer passed five values);
+* after each pass `printf("N UP/DOWN = %d \\r",count)` and `ovr_gameProcessKey()`.
+
+The node pointer is printed as `(uint32_t)node`, i.e. seg<<16|ofs, which is exactly the order the
+image pushes. Verified in the rebuilt listing: the nine argument pushes are identical (the format is
+one word shorter because the tree's `printf` takes a near `char *`, a model-wide convention).
+
+## Measured (HEAD 10dd3662 -> this commit)
+
+    grep_checks      21,263 (unchanged)
+    REBUILT.EXE      479,248 -> 479,328 (+80: the new printf argument pushes)
+    build 65/65, LINK.LOG 0 problems
+    compare_state    1,628/0/0 (unchanged)
+    diff_dgroup      1,639/1,805 matched, 5 runs, sum|delta| 18 (unchanged)
+    compare_runtime  1,692 matched, 1,683 identical / 9 different at all three sample points
+
 ## Measured (HEAD 07643dcd -> this commit)
 
     grep_checks      21,263 (unchanged)
