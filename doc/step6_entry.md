@@ -16193,3 +16193,75 @@ saveui_usesBlitText (ovc16_saveui.c, 107 lines)
   compare_runtime 1,684 matched, 1,675 identical / 9 different (both sample points)
 
 DGROUP 0x6f63 -> 0x6f62 (one byte, from the deleted uVar2 declaration in __fputn).
+
+### layout: three missing strings and the order fix (matched 1,627 -> 1,630)
+layout: three missing strings, and the order fix behind the +29/-66 steps (matched 1,627 -> 1,630)
+
+tmp/delta_pair.py over 0x1a90..0x1f40 showed the band was not one flat offset:
+
+    0x1a91  +70   s_%s:_enables_claiming_of_trees.
+    0x1ab0  +99   s__s__repairs_buildings_automatica...   <-- step +29
+    0x1ad5  +33   s_%s:_provides_for_food_trade.          <-- step -66
+    0x1af2  +70   s__s__enhances_training_for_entire...
+
+Cause: st_globals5.c had `s_s_food_trade_2410_1ad5` (29 bytes) declared BEFORE
+`s__s__repairs_buildin_2410_1ab0` (37 bytes), while the original has repairs at 0x1ab0 and food trade
+at 0x1ad5.  Swapping the two declarations makes the whole band a uniform +70.
+
+Then tmp/band2.py over each remaining step found three objects the original has and we did not:
+
+    0x1e09  20  "fighters' residence"   -> the -20 step at 0x1e1d
+    0x1efd  15  "halfling lodge"        -> the -15 step at 0x1f0c
+    0x2915   9  "Peaceful"              -> the -9  step at 0x291e
+
+All three already had an extern in st_globals.h but no definition and no code reference, and all three
+existed only as stmiss.c blob entries, so they were declared at their offsets and the blob entries
+removed - moved, not duplicated.
+
+MEASURED (HEAD 870e3a28 -> this commit)
+
+  diff_dgroup matched        1,627 -> 1,630
+  diff_dgroup runs              16 -> 13
+  diff_dgroup worst            148 -> 148
+  diff_dgroup sum|delta|    44,875 -> 94,606   (up, see below)
+  diff_dgroup mean              27 -> 58
+  compare_state              1,625/0/0 (unchanged)
+  compare_runtime            1,684 matched, 1,675 identical / 9 different (both sample points)
+  grep_checks                34,863 (unchanged)
+  build 65/65, LINK.LOG 65 bytes / 0 problems
+
+WHY THE SUM WENT UP, measured and explained.  sum|delta| scores the absolute distance from the
+original's offset, so it rewards a layout that is accidentally *short*.  Before this commit our data
+was 44 bytes short in three places, which pulled every later symbol closer to the original for the
+wrong reason; the profile read +70 at 0x0094 tapering to -20 at 0x748e.  With the three strings
+present the profile is a clean plateau: +70 from 0x0094, then a few small steps, ending at +24.  The
+number of distinct error regions fell 16 -> 13, three more original symbols pair, and the layout is now
+byte-complete in that range - so the residual is a single constant offset rather than a set of
+compensating errors.
+
+## And the constant offset itself is now measured exactly
+
+    OURS                              ORIGINAL
+    0x00  91  DATASEG@ (C0L)          0x00   4  _DATA
+    0x5b   4  __Int0Vector            0x04  43  __C0_ASM_CopyRight
+    ...                               0x2f  14  s_divide_error
+    0x94   4  _DATA  (ours)           0x3d  30  s_abnormal_program_termination
+    0x98  43  __C0_ASM_CopyRight     0x5b  16  GSTARTX_SavedVectors
+    0xc3  18  argc/argv/environ       0x6b   2  __C0argc
+    0xd3   2  DosVersion              0x6d   4  __C0argv
+    0xd5   1  _GMICEDS  <- game        0x71   4  __C0environ
+                                       0x75   4  _env/_envseg/_envSize
+                                       0x7b   2  _psp
+                                       0x7d   2  DosVersion
+                                       0x81   4  _StartTime
+                                       ...
+                                       0x94      s__2410_0094  <- game
+
+C0L occupies 0x00..0x94 with exactly the original's header content at exactly the original's offsets,
+and st_globals.c then declares a SECOND copy at 0x94..0xd5.  That duplication is the +70: deleting it
+would put our game data at 0x94.  It was verified experimentally: with the block `#if 0`-ed out the link
+reports exactly ten undefined symbols (_DATA, __C0_ASM_CopyRight, __C0argc, __C0argv, __C0argv_2,
+__C0environ, _env, _envseg_at_, _envSize_at_, DosVersion), which is the exact list that has to be
+repointed at C0L's own objects - and for eight of them C0L *does* publish the equivalent under its own
+C name (`_C0argc`, `_C0envLng`, `_envseg`, `_envSize`, `_osversion`), so those need only a rename,
+not a byte.
