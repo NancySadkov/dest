@@ -15901,3 +15901,28 @@ never declares - so naming them would be invention and they are left alone.
   compare_state 1,625/0/0
   diff_dgroup 1,627/1,805 matched, 19 runs, sum|delta| 44,867, mean 27, worst 148
   compare_runtime 1,684 matched, 1,675 identical / 9 different (both sample points)
+
+### section 5: stats_textRingProt, the first phantom-laden body (35,334 -> 35,313)
+section 5: stats_textRingProt, the first phantom-laden body (35,334 -> 35,313)
+
+803 lines, 679 section-5 occurrences - but only **4 single-assignment names** (21 occurrences); the
+other 658 belong to 24 multi-assignment scratch slots and stay unnamed:
+
+    bVar25  bVar10 - bVar45, used as the high byte of CONCAT11(bVar25,bVar26) when
+            comparing against the word at __C0_ASM_CopyRight+21      -> diffHi    (8)
+    uVar44  *(uint16_t *)(uVar15 + iVar41 + 2), a record word copied into
+            puVar36, puVar36[-1], puVar36[-10]                      -> fieldWord (5)
+    uVar9   CONCAT12(bVar12,*puVar4), a 24-bit value from a byte and a word
+                                                                    -> packed24  (4)
+    uVar8   (ulong)uVar9 << bVar10 | (ulong)(uVar9 >> 0x11 - bVar10), a 32-bit
+            rotate of packed24, stored and bit-tested              -> rotated   (4)
+
+The body carries `unaff_`/`in_stack_` provenance - which is why the phantom-free screen skipped it -
+but that does not affect these four, which are ordinary locals with one assignment each.
+
+  grep_checks 35,334 -> 35,313; build 65/65; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,625/0/0
+  diff_dgroup 1,627/1,805 matched, 19 runs, sum|delta| 44,867, mean 27, worst 148
+
+TOOLING: tmp/screen_one5.py lists the single-assignment names inside one named function, without the
+phantom filter, so phantom-laden bodies can be screened too.

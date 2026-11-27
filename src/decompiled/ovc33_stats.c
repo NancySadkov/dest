@@ -267,8 +267,8 @@ far_t * __cdecl16far stats_textRingProt(char *dst,uint16_t src,uint16_t term,far
   byte *pbVar5;
   long lVar6;
   code *intVector;
-  ulong uVar8;
-  uint3 uVar9;
+  ulong rotated;
+  uint3 packed24;
   far_t gfx;
   far_t entries;
   far_t handle;
@@ -288,7 +288,7 @@ far_t * __cdecl16far stats_textRingProt(char *dst,uint16_t src,uint16_t term,far
   uint16_t uVar19;
   uint uVar20;
   byte *pbVar21;
-  byte bVar25;
+  byte diffHi;
   far_t far *in_CX;
   far_t far *pfVar24;
   byte bVar26;
@@ -312,7 +312,7 @@ far_t * __cdecl16far stats_textRingProt(char *dst,uint16_t src,uint16_t term,far
   byte *unaff_DI;
   uint16_t unaff_ES;
   uint16_t uVar43;
-  uint16_t uVar44;
+  uint16_t fieldWord;
   bool bVar45;
   byte in_AF;
   longdouble in_ST0;
@@ -671,13 +671,13 @@ far_t * __cdecl16far stats_textRingProt(char *dst,uint16_t src,uint16_t term,far
       (void)0;
       puVar4 = (uint16_t *)((int)&unaff_SI->ofs + (int)*pasVar34);
       bVar10 = ((byte)in_CX & 0x1f) % 0x11;
-      uVar9 = CONCAT12(bVar12,*puVar4);
-      uVar8 = (ulong)uVar9 << bVar10 | (ulong)(uVar9 >> 0x11 - bVar10);
-      *puVar4 = (int)uVar8;
+      packed24 = CONCAT12(bVar12,*puVar4);
+      rotated = (ulong)packed24 << bVar10 | (ulong)(packed24 >> 0x11 - bVar10);
+      *puVar4 = (int)rotated;
       pbVar5 = (byte *)((int)&unaff_SI->ofs + (int)*pasVar34);
       bVar28 = *pbVar5;
       *pbVar5 = bVar28 << 4 |
-                (byte)(CONCAT11((bVar10 == 0) * bVar12 | (bVar10 != 0) * ((uVar8 & 0x10000) != 0),
+                (byte)(CONCAT11((bVar10 == 0) * bVar12 | (bVar10 != 0) * ((rotated & 0x10000) != 0),
                                 bVar28) >> 5);
       bVar12 = (bVar28 & 0x10) != 0;
       pbVar5 = puVar39 + 0x5110;
@@ -777,7 +777,7 @@ far_t * __cdecl16far stats_textRingProt(char *dst,uint16_t src,uint16_t term,far
       bVar27 = (byte)((uint)iVar29 >> 8);
       bVar26 = bVar26 - bVar12;
       bVar10 = bVar27 - bVar28;
-      bVar25 = bVar10 - bVar45;
+      diffHi = bVar10 - bVar45;
       pbVar5 = pbVar42 + 0x4119;
       uVar20 = (uint)(bVar27 < bVar28 || bVar10 < bVar45);
       pbVar21 = *(byte **)pbVar5;
@@ -789,8 +789,8 @@ far_t * __cdecl16far stats_textRingProt(char *dst,uint16_t src,uint16_t term,far
       uVar20 = *puVar2;
       *puVar2 = (uVar20 - (int)puVar40) - uVar13;
       uVar20 = (uint)(puVar36 < puVar40 || uVar20 - (int)puVar40 < uVar13);
-      bVar12 = (uint)(*(uint16_t *)((uint8_t *)&(__C0_ASM_CopyRight) + 21)) < CONCAT11(bVar25,bVar26);
-      uVar13 = (*(uint16_t *)((uint8_t *)&(__C0_ASM_CopyRight) + 21)) - CONCAT11(bVar25,bVar26);
+      bVar12 = (uint)(*(uint16_t *)((uint8_t *)&(__C0_ASM_CopyRight) + 21)) < CONCAT11(diffHi,bVar26);
+      uVar13 = (*(uint16_t *)((uint8_t *)&(__C0_ASM_CopyRight) + 21)) - CONCAT11(diffHi,bVar26);
       (*(uint16_t *)((uint8_t *)&(__C0_ASM_CopyRight) + 21)) = uVar13 - uVar20;
       uVar20 = (uint)(bVar12 || uVar13 < uVar20);
       piVar33 = (int *)-uVar20;
@@ -804,9 +804,9 @@ far_t * __cdecl16far stats_textRingProt(char *dst,uint16_t src,uint16_t term,far
       pbVar5 = (byte *)((char *)0x2b018 + (int)puVar39 + (int)piVar33);
       bVar28 = *pbVar5;
       bVar10 = *pbVar5;
-      *pbVar5 = (bVar10 - bVar25) - bVar12;
+      *pbVar5 = (bVar10 - diffHi) - bVar12;
       pcVar1 = (char *)((int)puVar39 + (int)piVar33 + 0x18);
-      *pcVar1 = (*pcVar1 - bVar23) - (bVar28 < bVar25 || (byte)(bVar10 - bVar25) < bVar12);
+      *pcVar1 = (*pcVar1 - bVar23) - (bVar28 < diffHi || (byte)(bVar10 - diffHi) < bVar12);
       bVar12 = CONCAT11(bVar23,bVar27) < 0x2318;
       bVar27 = bVar27 - 0x18;
       pbVar5 = pbVar31;
@@ -816,17 +816,17 @@ far_t * __cdecl16far stats_textRingProt(char *dst,uint16_t src,uint16_t term,far
       bVar28 = *pbVar5;
       bVar10 = *pbVar5;
       *pbVar5 = (bVar10 - bVar27) - bVar45;
-      uVar30 = CONCAT11(bVar25,(bVar26 - bVar27) -
+      uVar30 = CONCAT11(diffHi,(bVar26 - bVar27) -
                                (bVar28 < bVar27 || (byte)(bVar10 - bVar27) < bVar45));
-      uVar44 = *(uint16_t *)(uVar15 + iVar41 + 2);
+      fieldWord = *(uint16_t *)(uVar15 + iVar41 + 2);
       puVar36 = (uint *)(uVar15 + iVar41 + 4);
       intVector = (code *)swi(0x1e);
       uVar46 = (*intVector)();
       uVar43 = (uint16_t)((ulong)uVar46 >> 0x10);
       uVar20 = (uint)uVar46;
       uVar13 = *puVar36;
-      *puVar36 = uVar44;
-      puVar36[-1] = uVar44;
+      *puVar36 = fieldWord;
+      puVar36[-1] = fieldWord;
       bVar28 = (byte)((ulong)uVar46 >> 0x10);
       if (((uVar13 & 0x800) != 0) == ((uVar13 & 0x80) != 0)) {
 code_r0x0006013c:
@@ -855,7 +855,7 @@ code_r0x0006013c:
         puVar36[-9] = (uint)pbVar42;
         puVar37 = puVar36 + -10;
         puVar38 = puVar36 + -10;
-        puVar36[-10] = uVar44;
+        puVar36[-10] = fieldWord;
         uVar11 = in(uVar43);
         uVar15 = CONCAT11((char)((ulong)uVar46 >> 8),uVar11);
         uVar20 = (uint)((uVar13 & 1) != 0);
