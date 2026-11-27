@@ -17226,3 +17226,47 @@ dereferences `unaff_BP` as a *value* (`*(int *)(unaff_BP + -4) = unaff_BP + -0x9
 the frame pointer entirely.  Rebuilding it means re-deriving the original's printf from the 989 bytes at
 1000:2747..2b24 with a real disassembler (capstone 5.0.7 is available), which is a dedicated job rather
 than a rename batch.
+
+### diff_dgroup: the long-name matched gap cannot be closed by prefix matching
+diff_dgroup: the long-name `matched` gap cannot be closed by prefix (or offset) matching - measured
+
+The 166 unmatched originals are dominated by the 90 names longer than 30 characters, which Turbo C cannot
+emit as publics at all (31 significant characters).  Their bytes are in our image at the right offsets, so
+two ways of pairing them were tried this turn, and both are recorded here so they are not tried again.
+
+## 1. Renaming our declarations to the `_2410_<offset>` convention
+
+All 83 of them whose declaration could be located were renamed (e.g.
+`_S_SORRY_YOU_MAY_NOT_PASS_T_059E` -> `s_sorry_you_may_not_p_2410_009a`, sanitising the `%s:`/`.` characters
+the audit names contain).  Result after a full build and link:
+
+    matched 1,639 -> 1,640     sum|delta| 18 (unchanged)
+
+Only one pair was recovered, because the matcher is driven by the *original's* key: `key(original)` is the
+full long name, and the `OFS_XXXX` key that our renamed symbol now has is only consulted when the original's
+name itself carries `_2410_XXXX` (which happens for unnamed strings, not for these).  Renaming therefore
+bought +1 matched while truncating 83 identifiers mid-word, so it was reverted: a readability cost for no
+measurement gain.
+
+## 2. A prefix table in the matcher
+
+A fourth candidate table keyed on the first 21 key characters, consulted only for originals longer than 30
+characters, with the existing offset tag deciding between twins:
+
+    matched 1,639 -> 1,640     sum|delta| 18 -> 250, runs 5 -> 9, worst 12 -> 177
+
+The pairs it found were wrong: similarly-named strings share their first 21 characters
+(`s_this_location_is_unsuitable_for_a_main_stron` took a +55 delta, `s_s_takes_half_damage_from_spells`
++177), so the rule traded 8 new mis-pairings for one extra match.  Reverted.
+
+## The one rule that would "work" is the one that must not be used
+
+Pairing an unmatched original with whatever symbol sits at *exactly* its offset would drive every delta to
+zero by construction - it would not measure the layout, it would assume it.  `sum|delta| 18` with 1,639
+matched is therefore the honest state for this axis, and the remaining 174 symbols are limited by the 31-char
+public limit (90), duplicate original names (30), C0 record-field labels (17), group names (2) and the
+startup's own objects (27).
+
+Re-measured after both reverts: build 65/65, LINK.LOG 65 bytes / 0 problems, grep_checks 34,599,
+compare_state 1,628/0/0, diff_dgroup 1,639/1,805 matched, 5 runs, sum|delta| 18, mean 0, worst 12, and the
+three runtime sample points at 1,683 identical / 9 different.
