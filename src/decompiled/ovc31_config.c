@@ -209,7 +209,7 @@ void __cdecl16far input_folder_name(char *result)
     }
     if (((int)len < 0x41) &&
        (bVar1 = is_printable((char *)result,(char)((ulong)result >> 0x10)), bVar1 != 0)) {
-      printf("%c");
+      printf("%c",(uint8_t)key);
       ascii = (uint8_t)key;
       ((char *)result)[len] = ascii;
       len = len + 1;

@@ -20282,7 +20282,37 @@ REBUILT.MAP). They are a four-word record-index array (filled with 0xffff, then 
 covered square) and a four-byte "covered" flag array. Inventing their names would violate the naming
 rule, so the body stays a documented gap.
 
+## Two more printf arguments, and one argless call that is faithful
+
+Verified from the push windows (`tmp/printf_args.py` + `tmp/printf_ctx.py`):
+
+* `ovc31_config.c:212`: `6257:0316` does `mov ax,[bp-2]; and ax,0xff; push ax` before the format
+  `ds:0x5e55` = "%c", so the call is `printf("%c",(uint8_t)key)` (the key read at `6257:02af`);
+* `ovc10_constr.c:867`: `36ce:10bb` tests `[bp-0xc]` against 0xf8 and at `36ce:10c2` pushes it for
+  the format `ds:0x75a` = "Bad House # %d \r". `[bp-0xc]` is the slot the tree names `bldIndex`
+  (assigned at line 641 and tested with 0xf8 at line 646, whose `else` is this printf).
+
+One argless call is **not** a defect: `ovc31_config.c:537` ("Sound IRQ is %c ...") really is called
+with no argument in the image - `6257:087b` pushes only `ds:0x6099` (the format) and then `pop cx;
+pop cx` cleans four bytes, so the original printed an uninitialised `%c`. It is left as is.
+
+Remaining argless sites and why they are left: `ovc04_lbm.c:115/390`, `ovc20_stash.c` (nine pushes
+for seven spec words; the extra long is the developer's), `ovc32_heap.c` (the `[bp-x]` slots are not
+named), `ovc33_stats.c` (`Exp %ld` reads `entity+0x10` as a long, which disagrees with the current
+`entity_t` map), `ovc07_gfxutil.c` and `ovc09_init.c` (register-only arguments), and the five sites in
+`5087:056e` plus two in `ovc45_unitinfo.c` that have no image site because those bodies are stubs.
+
+## Measured (HEAD 46ca9e04 -> this commit)
+
+    grep_checks      23,850 (unchanged)
+    REBUILT.EXE      487,694 -> 487,710 (+16: the two argument pushes)
+    build 65/65, LINK.LOG 0 problems
+    compare_state    1,628/0/0 (unchanged)
+    diff_dgroup      1,639/1,805 matched, 5 runs, sum|delta| 18 (unchanged)
+    compare_runtime  1,692 matched, 1,683 identical / 9 different at all three sample points
+
 ## Measured (HEAD ac3d744d -> this commit)
+
 
 
     grep_checks      23,898 -> 23,850   (-48: the `in_stack_` reads)

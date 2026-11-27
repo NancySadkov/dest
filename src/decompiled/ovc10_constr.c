@@ -864,7 +864,7 @@ void __cdecl16far constr_usesAgnt_clear(void)
               }
             }
             else {
-              printf("Bad House # %d \r");
+              printf("Bad House # %d \r",bldIndex);
               ovr_biosReadKey();
             }
           }
