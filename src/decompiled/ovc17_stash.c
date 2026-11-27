@@ -802,8 +802,8 @@ stg_tmp_t * __cdecl16far stshLoadGfx(far_t handle)
 undefined1 * __cdecl16far stash_loadFromStrongDat(far_t entry)
 
 {
-  int iVar1;
-  int iVar2;
+  int recWord0F;
+  int recWord0D;
   bool bVar3;
   far_t far *pfVar4;
   far_t far *pfVar5;
@@ -866,17 +866,17 @@ undefined1 * __cdecl16far stash_loadFromStrongDat(far_t entry)
       if (bVar3) {
         pfVar5 = (far_t far *)ovr_mkp((uint32_t *)Stsh_2410_47f6.ofs,Stsh_2410_47f6.seg);
         if ((uVar7 != in_DX) || (pfVar5 != (far_t far *)entry.ofs)) {
-          iVar1 = *(int *)((int)&((far_t far *)(entry.ofs + 0xc))->seg + 1);
-          iVar2 = *(int *)((int)&((far_t far *)(entry.ofs + 0xc))->ofs + 1);
+          recWord0F = *(int *)((int)&((far_t far *)(entry.ofs + 0xc))->seg + 1);
+          recWord0D = *(int *)((int)&((far_t far *)(entry.ofs + 0xc))->ofs + 1);
           uVar6 = *(uint16_t *)((int)&((far_t far *)(entry.ofs + 8))->seg + 1);
           uVar7 = *(uint16_t *)((int)&((far_t far *)(entry.ofs + 8))->ofs + 1);
           if (uVar7 != 0 || uVar6 != 0) {
-            *(int *)(uVar7 + 0xf) = iVar1;
-            *(int *)(uVar7 + 0xd) = iVar2;
+            *(int *)(uVar7 + 0xf) = recWord0F;
+            *(int *)(uVar7 + 0xd) = recWord0D;
           }
-          if (iVar2 != 0 || iVar1 != 0) {
-            *(uint16_t *)(iVar2 + 0xb) = uVar6;
-            *(uint16_t *)(iVar2 + 9) = uVar7;
+          if (recWord0D != 0 || recWord0F != 0) {
+            *(uint16_t *)(recWord0D + 0xb) = uVar6;
+            *(uint16_t *)(recWord0D + 9) = uVar7;
             uVar7 = StshCtPtr2.ofs;
             uVar6 = StshCtPtr2.seg;
           }

@@ -17503,3 +17503,39 @@ ovc25_usesAlignUp47: `iVar5` -> `result46` (7), `uVar1` -> `tablePtr` (3).
   compare_state 1,628/0/0
   diff_dgroup 1,639/1,805 matched, 5 runs, sum|delta| 18, mean 0, worst 12
   compare_runtime 1,692 matched, 1,683 identical / 9 different at all three sample points
+
+### step 6: fputc/fflush are unreachable (measured); batch 21 renames (34,553 -> 34,543)
+step 6: fputc/fflush are unreachable in the rebuild - measured, so not rewritten
+
+The proposed next step was to write our own `fputc` and `fflush` for the 20-byte FILE record, on the grounds
+that `__fputn` calls both and they currently resolve to CM.LIB's 16-byte-record code.  Before writing code I
+checked whether that path is reachable, and it is not:
+
+    grep for callers of __fputn across src/decompiled/*.c|*.h:
+        crtl.c:4314   uint16_t __cdecl16near __fputn(far_t stream,uint16_t count,far_t buf)   (definition)
+        st_functions.h:164  the prototype
+        -- and nothing else
+
+`__fputn` has **no call sites**: it is the library-internal routine that printf/fprintf would have used, and
+our replacement printf does not.  `_fputc` is called only from inside `__fputn` (crtl.c:4342), and `fputc` /
+`fflush` only from `__fputn` and `_fputc`.  So the whole cluster - `__fputn`, `_fputc`, `fputc`, `fflush` -
+is dead code in the rebuilt image, and the medium/large FILE mismatch is **latent, not live**.
+
+Rewriting those two functions would therefore have changed code that cannot be exercised, which means it
+could not be verified by any of the gates - the opposite of how this project has handled every other
+correction.  The measurement is the deliverable instead: the exposure created by linking CM.LIB into a
+20-byte-record tree is exactly "(a) our printf, which no longer uses FILE at all, and (b) a cluster with no
+callers", which is worth knowing before anyone considers the `-ml`/CL.LIB switch.
+
+## This turn's code change
+
+stash_loadFromStrongDat: two words read from fixed offsets of the record `entry` points at
+(`.ofs` at 0x0c, `.seg` at 0x0e, each +1)
+
+    iVar2  -> recWord0D (6)
+    iVar1  -> recWord0F (4)
+
+  grep_checks 34,553 -> 34,543; build 65/65; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,628/0/0
+  diff_dgroup 1,639/1,805 matched, 5 runs, sum|delta| 18, mean 0, worst 12
+  compare_runtime 1,692 matched, 1,683 identical / 9 different at all three sample points
