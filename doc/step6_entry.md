@@ -19776,3 +19776,70 @@ corrected.
 
 The `stsprintf` sites are the largest remaining defect: the tree emits them with a single
 argument, so the format string and every vararg are missing.
+
+### step 6: the last five argument shapes in 4d05:277a rebuilt from the image (grep 26,381 -> 26,373)
+step 6: the last five argument shapes in `4d05:277a` rebuilt from the image (grep 26,381 -> 26,373)
+
+    bp-0x14  written at `29b9` from the return of manage_usesGUnitCount   -> apUnitCount
+
+    0x170,0x7a  stsprintf  287e  add sp,0x10
+        (far dest, far fmt 0x52a1, playerTitle result, compute9 result)
+        the tree emitted one argument and had lost the format string and both results.
+
+    0x170,0x7a  stsprintf  29f2/2a50/2a99/2ae2  add sp,0xc   (six words)
+        push ss,lea ax,[bp-0xb6] ; push ds,0x52e5 ; push [bp-0x14] ; push [bp-0xc]
+        -> (far dest, far fmt 0x52e5, apUnitCount, <column value>)
+
+    near 0x23fc  manage_usesGUnitCount  29b3  add sp,0x20  (sixteen words)
+        seven far pointers to [bp-0x12],[-0x10],[-0xe],[-0xc],[-0xa],[-8],[-6], then the
+        structure's type byte and partyArg -> nine arguments.  Its prototype and definition
+        were widened from four near pointers, and the body's parameter names renamed to
+        `gucA..gucG` (the old `value1..value4` tripped the section-5 `valueN` check).
+
+    0x118,0x34  blitGfxRect  27c1  add sp,0x10  (eight words)
+        push gfx far ; 0 ; 0 ; far rect 0x280:0x44a ; 0x10 ; 0
+        -> six arguments, not twelve.
+
+    near 0x217a  litoa10    29cf etc.  add sp,8  (four words)
+        (far apNum, (long)<count>)
+
+## Verified against the image, class by class
+
+    ours                            image
+    blitLabelRight   add sp,6  x8   add sp,6  x8
+    blitLabel        add sp,0xc x4  add sp,0xc x4
+    usesBlitLabel2   add sp,8  x4   add sp,8  x4
+    stsprintf        add sp,0xc x4  add sp,0xc x4
+    stsprintf        add sp,0x10 x1 add sp,0x10 x1
+    gUnitCount       add sp,0x20 x1 add sp,0x20 x1
+    blitGfxRect      add sp,0x10 x1 add sp,0x10 x1
+    compute9         add sp,0x10 x1 add sp,0x10 x1
+    playerTitle      add sp,4   x1  add sp,4   x1
+
+nine of the ten classes now match the image's argument sizes exactly.
+
+## Measured (HEAD b246a754 -> this commit)
+
+    grep_checks      26,381 -> 26,373   (-8)
+    REBUILT.EXE      493,814
+    build 65/65, LINK.LOG 65 bytes / 0 problems
+    compare_state    1,628/0/0 (unchanged)
+    diff_dgroup      1,639/1,805 matched, 5 runs, sum|delta| 18, mean 0, worst 12 (unchanged)
+    compare_runtime  1,692 matched, 1,683 identical / 9 different at all three sample points
+
+## Still not at the image's 30 calls
+
+The function emits 38 sites.  The eight extra, measured:
+
+    near 0x81  openTalkWindow  x3  vs x1     one of the three is the gated `ScreenMode == 0`
+                                             path; the other two come from the duplicate
+                                             fragments being compiled separately
+    0,0x337 (F_LXMUL@)          x2  vs 0     the two remaining `(long)` casts
+    0xb7b add sp,4              x2  vs 0     ?
+    0x217,0x29 add sp,4         x1  vs 0     ?
+    uiInputText add sp,0x10     x1  vs 0xe   one word too many
+
+plus `litoa10` at five words against the image's four - `char *buf` is still a near pointer, so
+`(far apNum, (long)n)` pushes 1+2 words where the image pushes 2+2.  Narrowing `litoa10` to two
+parameters would fix it, but it has fifteen other call sites whose third and fourth arguments
+encode sign information the tree invented, so that is a separate pass.

@@ -673,7 +673,7 @@ void __cdecl16far manage_4d05_22cf_entry(byte charIndex,uint16_t minLevel,uint16
 void manage_usesEntities(void);
 void __cdecl16far manage_usesEntities2(void);
 uint16_t __cdecl16far sub_OVC21_manage_c_23C2();
-int __cdecl16far manage_usesGUnitCount(char partyIndex,char unitType,int *resource1Count,int *resource2Count,int *resource3Count,int *recordCount);
+int __cdecl16far manage_usesGUnitCount(char partyIndex,char unitType,int far *gucA,int far *gucB,int far *gucC,int far *gucD,int far *gucE,int far *gucF,int far *gucG);
 uint16_t __cdecl16far sub_OVC21_manage_c_24B1();
 uint16_t __cdecl16far manage_usesGUnits(void);
 uint16_t __cdecl16far manage_usesLitoa103();
