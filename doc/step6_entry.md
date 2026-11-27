@@ -16156,3 +16156,40 @@ BUDGET: tmp/rank_all5.py ranks every function (ovl.c excluded) by the occurrence
 single-assignment names.  The total is now 1,613 occurrences across 227 functions, so section 5 by
 renaming has a hard ceiling of about that many more - it cannot reach 0, because 10,927 in-function
 occurrences belong to multi-assignment scratch and 1,452 to the legitimate DGROUP string data.
+
+### section 5: batch 9 - four functions (34,966 -> 34,863)
+section 5: batch 9 - __scroll, __fputn, ovc24_usesLDIV_at_, saveui_usesBlitText (34,966 -> 34,863)
+
+__scroll (crtl.c, 32 lines, 29 occurrences)
+    bVar1  y2 + 1 -> y2Next (13)   bVar2  x2 + 1 -> x2Next (9)   bVar3  y1 + 1 -> y1Next (7)
+    The BIOS scroll block is inclusive the other way round from _movetext, so each edge is
+    pre-incremented; `bVar4` (x1 + 1) is reassigned at the end of the else-branch and stays unnamed.
+
+__fputn (crtl.c, 96 lines)
+    uVar7  stream.ofs, dereferenced at +2 (flags), +4 (fd byte), +6 (buffer size), +0xc (buffer
+           position) and +0xe (buffer segment)                        -> streamPtr (21)
+    bVar1  *(byte *)MK_FP(buf.seg, buf.ofs), the source byte copied into the stream buffer
+                                                                       -> srcChar   (4)
+    uVar2  *(uint16_t *)(uVar7 + 0xe) - declared and assigned once, never read -> deleted
+
+ovc24_usesLDIV_at_ (ovc24_entities.c, 37 lines)
+    uVar9 0x80 / uVar8 0, the halves of 0x8000 passed as `LXLSH_at_((long *)CONCAT11(uVar9,uVar8))`
+                                                             -> scaleHi (4), scaleLo (4)
+    uVar4  rand()                                            -> randVal  (3)
+    iVar6  (int)uVar4 >> 0xf, its sign mask                   -> randSign (3)
+    bVar1  ovr_agnt_compute8(...), used as `(char)bVar1` and `bVar1 - 1`
+                                                             -> stepVal  (4)
+    cVar2  dir - dir % 6, the base of the 6-direction group    -> dirBase  (3)
+    cVar3  ovr_ovc22_compute3(bVar1 - 1), the offset in it     -> dirStep  (3)
+
+saveui_usesBlitText (ovc16_saveui.c, 107 lines)
+    uStack_4  uiReadKey2(), compared against 0x4b00 / 0x4b34 / 0xfffe -> keyCode    (12)
+    uVar4     high word of (prompt.seg * 0xf), stored into gfx*.ofs   -> rowOfs     (7)
+    iVar2     ovr_font_textWidth("_", ...)                            -> underscoreW (3)
+
+  grep_checks 34,966 -> 34,863 (-103); build 65/65; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,625/0/0
+  diff_dgroup 1,627/1,805 matched, 19 runs, sum|delta| 44,867, mean 27, worst 148
+  compare_runtime 1,684 matched, 1,675 identical / 9 different (both sample points)
+
+DGROUP 0x6f63 -> 0x6f62 (one byte, from the deleted uVar2 declaration in __fputn).

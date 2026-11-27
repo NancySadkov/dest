@@ -3794,29 +3794,29 @@ void _zapline(int endCol,int startCol,uint16_t *dst)
 void __scroll(uchar dir,uchar x1,uchar y1,uchar x2,uchar y2,uchar lines)
 
 {
-  byte bVar1;
-  byte bVar2;
-  byte bVar3;
+  byte y2Next;
+  byte x2Next;
+  byte y1Next;
   byte bVar4;
   uint16_t rowBuf [80];
   
   if (((_video.graphicsmode == 0x0) && (ram0x0002c9bb != 0)) && (dir == '\x01')) {
-    bVar1 = y2 + 1;
-    bVar2 = x2 + 1;
-    bVar3 = y1 + 1;
+    y2Next = y2 + 1;
+    x2Next = x2 + 1;
+    y1Next = y1 + 1;
     bVar4 = x1 + 1;
     if (lines == '\x06') {
-      _movetext((uint)bVar1,bVar2 + 1,(uint)bVar3,(uint)bVar4,(uint)bVar1,(uint)bVar2);
-      _gettext((uint)bVar1,(uint)bVar4,(uint)bVar1,(uint)bVar4,(int)rowBuf,_SS);
-      _zapline((uint)bVar3,(uint)bVar1,(uint16_t *)CONCAT22(_SS,rowBuf));
+      _movetext((uint)y2Next,x2Next + 1,(uint)y1Next,(uint)bVar4,(uint)y2Next,(uint)x2Next);
+      _gettext((uint)y2Next,(uint)bVar4,(uint)y2Next,(uint)bVar4,(int)rowBuf,_SS);
+      _zapline((uint)y1Next,(uint)y2Next,(uint16_t *)CONCAT22(_SS,rowBuf));
     }
     else {
-      _movetext((uint)bVar1,(uint)bVar2,(uint)bVar3,bVar4 - 1,(uint)bVar1,bVar2 + 1);
-      _gettext((uint)bVar1,(uint)bVar2,(uint)bVar1,(uint)bVar2,(int)rowBuf,_SS);
-      _zapline((uint)bVar3,(uint)bVar1,(uint16_t *)CONCAT22(_SS,rowBuf));
-      bVar4 = bVar2;
+      _movetext((uint)y2Next,(uint)x2Next,(uint)y1Next,bVar4 - 1,(uint)y2Next,x2Next + 1);
+      _gettext((uint)y2Next,(uint)x2Next,(uint)y2Next,(uint)x2Next,(int)rowBuf,_SS);
+      _zapline((uint)y1Next,(uint)y2Next,(uint16_t *)CONCAT22(_SS,rowBuf));
+      bVar4 = x2Next;
     }
-    _puttext((uint)bVar1,(uint)bVar4,(uint)bVar3,(uint)bVar4,(int)rowBuf,_SS);
+    _puttext((uint)y2Next,(uint)bVar4,(uint)y1Next,(uint)bVar4,(int)rowBuf,_SS);
   }
   else {
     _VideoInt(0x0200);
@@ -4314,24 +4314,23 @@ void __cdecl16far fputchar(uint16_t c)
 uint16_t __cdecl16near __fputn(far_t stream,uint16_t count,far_t buf)
 
 {
-  byte bVar1;
-  uint16_t uVar2;
+  byte srcChar;
   byte *pbVar3;
   far_t fVar4;
   uint uVar5;
   int iVar6;
-  uint16_t uVar7;
+  uint16_t streamPtr;
   uint16_t unaff_SI;
   uint16_t unaff_DI;
   uint16_t uVar8;
   int *piVar9;
   
   piVar9 = (int *)stream.seg;
-  uVar7 = stream.ofs;
+  streamPtr = stream.ofs;
   uVar8 = count;
-  if ((*(uint *)(uVar7 + 2) & 8) == 0) {
-    if ((*(uint *)(uVar7 + 2) & 0x40) == 0) {
-      if (*(int *)(uVar7 + 6) != 0) {
+  if ((*(uint *)(streamPtr + 2) & 8) == 0) {
+    if ((*(uint *)(streamPtr + 2) & 0x40) == 0) {
+      if (*(int *)(streamPtr + 6) != 0) {
         do {
           if (uVar8 == 0) {
             return count;
@@ -4343,12 +4342,11 @@ uint16_t __cdecl16near __fputn(far_t stream,uint16_t count,far_t buf)
             _fputc(*(char *)MK_FP(buf.seg, buf.ofs),(int *)CONCAT22(unaff_DI,piVar9));
           }
           else {
-            uVar2 = *(uint16_t *)(uVar7 + 0xe);
-            pbVar3 = (byte *)*(uint16_t *)(uVar7 + 0xc);
-            *(int *)(uVar7 + 0xc) = *(int *)(uVar7 + 0xc) + 1;
-            bVar1 = *(byte *)MK_FP(buf.seg, buf.ofs);
-            *pbVar3 = bVar1;
-            uVar5 = (uint)bVar1;
+            pbVar3 = (byte *)*(uint16_t *)(streamPtr + 0xc);
+            *(int *)(streamPtr + 0xc) = *(int *)(streamPtr + 0xc) + 1;
+            srcChar = *(byte *)MK_FP(buf.seg, buf.ofs);
+            *pbVar3 = srcChar;
+            uVar5 = (uint)srcChar;
           }
           buf.ofs = buf.ofs + 1;
           uVar8 = uVar8 - 1;
@@ -4357,17 +4355,17 @@ uint16_t __cdecl16near __fputn(far_t stream,uint16_t count,far_t buf)
       }
       uVar5 = __write(buf.ofs,(char *)CONCAT22(count,buf.seg),unaff_DI,unaff_SI);
     }
-    else if (*(int *)(uVar7 + 6) == 0) {
-      if ((((uint16_t *)_openfd)[*(char *)(uVar7 + 4)] & 0x800) != 0) {
-        lseek((int)*(char *)(uVar7 + 4),0x20000,unaff_DI);
+    else if (*(int *)(streamPtr + 6) == 0) {
+      if ((((uint16_t *)_openfd)[*(char *)(streamPtr + 4)] & 0x800) != 0) {
+        lseek((int)*(char *)(streamPtr + 4),0x20000,unaff_DI);
       }
-      uVar5 = write((int)*(char *)(uVar7 + 4),(void *)MK_FP(buf.seg, buf.ofs),count);
+      uVar5 = write((int)*(char *)(streamPtr + 4),(void *)MK_FP(buf.seg, buf.ofs),count);
     }
     else {
-      if (count <= *(uint *)(uVar7 + 6)) {
+      if (count <= *(uint *)(streamPtr + 6)) {
         if (SCARRY2(*(int *)MK_FP(stream.seg, stream.ofs),count) == (int)(*(int *)MK_FP(stream.seg, stream.ofs) + count) < 0) {
           if (*(int *)MK_FP(stream.seg, stream.ofs) == 0) {
-            *(int *)MK_FP(stream.seg, stream.ofs) = -1 - *(int *)(uVar7 + 6);
+            *(int *)MK_FP(stream.seg, stream.ofs) = -1 - *(int *)(streamPtr + 6);
           }
           else {
             iVar6 = fflush((int *)MK_FP(stream.seg, stream.ofs));
@@ -4376,19 +4374,19 @@ uint16_t __cdecl16near __fputn(far_t stream,uint16_t count,far_t buf)
             }
           }
         }
-        memcpy((char *)CONCAT22(*(uint16_t *)(uVar7 + 0xe),(char *)*(uint16_t *)(uVar7 + 0xc)),
+        memcpy((char *)CONCAT22(*(uint16_t *)(streamPtr + 0xe),(char *)*(uint16_t *)(streamPtr + 0xc)),
                (char *)MK_FP(buf.seg, buf.ofs),count);
         *(uint16_t *)MK_FP(stream.seg, stream.ofs) = *(int *)MK_FP(stream.seg, stream.ofs) + count;
-        *(int *)(uVar7 + 0xc) = *(int *)(uVar7 + 0xc) + count;
+        *(int *)(streamPtr + 0xc) = *(int *)(streamPtr + 0xc) + count;
         return count;
       }
       if ((*(int *)MK_FP(stream.seg, stream.ofs) != 0) && (iVar6 = fflush((int *)MK_FP(stream.seg, stream.ofs)), iVar6 != 0)) {
         return 0;
       }
-      if ((((uint16_t *)_openfd)[*(char *)(uVar7 + 4)] & 0x800) != 0) {
-        lseek((int)*(char *)(uVar7 + 4),0x20000,unaff_DI);
+      if ((((uint16_t *)_openfd)[*(char *)(streamPtr + 4)] & 0x800) != 0) {
+        lseek((int)*(char *)(streamPtr + 4),0x20000,unaff_DI);
       }
-      uVar5 = write((int)*(char *)(uVar7 + 4),(void *)MK_FP(buf.seg, buf.ofs),count);
+      uVar5 = write((int)*(char *)(streamPtr + 4),(void *)MK_FP(buf.seg, buf.ofs),count);
     }
     if (count <= uVar5) {
       return count;

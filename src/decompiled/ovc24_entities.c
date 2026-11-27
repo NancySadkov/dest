@@ -728,36 +728,36 @@ L_OVC24_5943_112e_15E7:
 void __cdecl16far ovc24_usesLDIV_at_(int entityIndex)
 
 {
-  byte bVar1;
-  char cVar2;
-  char cVar3;
-  uint uVar4;
+  byte stepVal;
+  char dirBase;
+  char dirStep;
+  uint randVal;
   long *plVar5;
-  int iVar6;
+  int randSign;
   uint16_t unaff_SI;
   long lVar7;
-  undefined1 uVar8;
-  undefined1 uVar9;
+  undefined1 scaleLo;
+  undefined1 scaleHi;
   uint16_t uVar10;
   byte in_stack_0000fffc;
   
   uVar10 = 0;
-  uVar8 = 0;
-  uVar9 = 0x80;
-  uVar4 = rand();
-  iVar6 = (int)uVar4 >> 0xf;
-  plVar5 = LXLSH_at_((long *)CONCAT11(uVar9,uVar8),CONCAT22(unaff_SI,uVar10),in_stack_0000fffc);
-  lVar7 = LDIV_at_((long)CONCAT22(iVar6,plVar5),CONCAT22(uVar10,CONCAT11(uVar9,uVar8)));
+  scaleLo = 0;
+  scaleHi = 0x80;
+  randVal = rand();
+  randSign = (int)randVal >> 0xf;
+  plVar5 = LXLSH_at_((long *)CONCAT11(scaleHi,scaleLo),CONCAT22(unaff_SI,uVar10),in_stack_0000fffc);
+  lVar7 = LDIV_at_((long)CONCAT22(randSign,plVar5),CONCAT22(uVar10,CONCAT11(scaleHi,scaleLo)));
   if ((int)lVar7 == 0) {
     uVar10 = (uint16_t)((ulong)Entities >> 0x10);
     if (((AgntGs[(uint)(Entities)[entityIndex].base.gindex].flags & 0x2000) != 0
-        ) && (bVar1 = ovr_agnt_compute8((agnt_t far *)((uint8_t *)&(Entities)[entityIndex]),uVar10),
-             -1 < (char)bVar1)) {
+        ) && (stepVal = ovr_agnt_compute8((agnt_t far *)((uint8_t *)&(Entities)[entityIndex]),uVar10),
+             -1 < (char)stepVal)) {
       uVar10 = (uint16_t)((ulong)Entities >> 0x10);
-      cVar2 = (Entities)[entityIndex].dir -
+      dirBase = (Entities)[entityIndex].dir -
               (Entities)[entityIndex].dir % 6;
-      cVar3 = ovr_ovc22_compute3(bVar1 - 1);
-      (Entities)[entityIndex].dir = cVar2 + cVar3;
+      dirStep = ovr_ovc22_compute3(stepVal - 1);
+      (Entities)[entityIndex].dir = dirBase + dirStep;
     }
   }
   return;
