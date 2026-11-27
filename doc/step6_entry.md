@@ -17949,3 +17949,22 @@ callee reads its first parameter from `[bp+6]`, which is the last word pushed ei
 `smm_restore_state` is no longer called from anywhere, which confirms last turn's finding that
 it was an artifact of the defect rather than a lost game function; its GUESS stub stays in
 st_stubs.c for now (removing it is a separate, trivially verifiable cleanup).
+
+### step 6: remove the now-unreferenced smm_restore_state GUESS stub
+step 6: remove the now-unreferenced `smm_restore_state` GUESS stub
+
+The stub existed only because the mis-decompiled `ovc18_spawnClassAgent` switch called it (the two
+entries before this one).  With the function re-derived from the image the call is gone:
+
+    grep -r smm_restore_state src/decompiled   ->  no hits at all
+
+so the invented function was deleted from st_stubs.c rather than left behind as a fake entry point.
+
+  grep_checks 34,002 (unchanged - the stub's body had no section-5 names)
+  build 65/65, LINK.LOG 65 bytes / 0 problems, REBUILT.EXE 530,170 bytes
+  compare_state 1,628/0/0
+  diff_dgroup 1,639/1,805 matched, 5 runs, sum|delta| 18, mean 0, worst 12
+  compare_runtime 1,692 matched, 1,683 identical / 9 different at all three sample points
+
+`ovr_season_usesGPromotable_e11a` stays: it is still called from ovc18_leaderview.c:708 and remains
+a GUESS until that call site is read the same way.

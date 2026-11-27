@@ -86,11 +86,6 @@ int halt_baddata()
   return 0;
 }
 
-/* GUESS: body not recovered */
-int smm_restore_state()
-{
-  return 0;
-}
 
 /* GUESS: body not recovered */
 int ovr_season_usesGPromotable_e11a()
