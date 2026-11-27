@@ -1802,7 +1802,7 @@ uint16_t __cdecl16far manage_usesGUnits(void)
 
 
 /* 4d05:277a */
-void manage_textAllProperty2(void)
+void __cdecl16near manage_textAllProperty2(uint16_t partyArg)
 
 {
   long lVar1;
@@ -1814,7 +1814,17 @@ void manage_textAllProperty2(void)
   char *numText;
   uint8_t *puVar6;
   uint16_t uVar7;
-  int unaff_BP;
+  char apMsg[80];
+  char apNum[80];
+  uint16_t apNameOfs;
+  uint16_t apNameSeg;
+  int apUnitTotal;
+  int apLvl1Value;
+  int apLvl2Value;
+  int apLvl3Value;
+  int apLvl1Shown;
+  int apLvl2Shown;
+  int apLvl3Shown;
   int iVar8;
   int iVar9;
   uint16_t fontOfs;
@@ -1837,10 +1847,10 @@ void manage_textAllProperty2(void)
   apSel = 2;
   manage_openTalkWindow();
   apFlag = 0;
-  if (((*(char *)(unaff_BP + -0x15) != '\x02') && (*(char *)(unaff_BP + -0x15) != '\x03')) &&
-     (*(char *)(unaff_BP + -0x15) != '\x04')) {
-    manage_usesCurSfxType3();
-    return;
+L_menuLoop:
+  if (((apSel != '\x02') && (apSel != '\x03')) &&
+     (apSel != '\x04')) {
+  goto L_menuTail;
   }
   if (ScreenMode == '\0') {
     manage_openTalkWindow();
@@ -1852,27 +1862,27 @@ void manage_textAllProperty2(void)
   }
   TextBlitY = 0xc;
   TextBlitX = 0x11;
-  if (*(char *)(unaff_BP + 6) == -1) {
+  if (partyArg == -1) {
     ovr_blitLabel((char *)"All property.",(uint8_t *)CONCAT22(Font02.ofs,(char *)0x26510),
                   Font02.seg,0xde,(char)Font02.seg,0xde,0x50);
   }
   else {
-    puVar2 = (uint16_t *)((uint)*(byte *)(unaff_BP + 6) * 4);
+    puVar2 = (uint16_t *)((uint)partyArg * 4);
     puVar6 = (uint8_t *)*puVar2;
-    *(uint16_t *)(unaff_BP + -2) = puVar2[1];
-    *(uint16_t *)(unaff_BP + -4) =(uint16_t)( puVar6);
+    apNameSeg = puVar2[1];
+    apNameOfs =(uint16_t)( puVar6);
     uVar7 = 0x50;
     term = 0xde;
     uVar11 = (undefined1)Font02.seg;
     fontSegHi = (undefined1)(Font02.seg >> 8);
     fontOfs = Font02.ofs;
-    iVar9 = ovr_ovc45_compute9((char *)(unaff_BP + -0x66),
-                               (char *)CONCAT22(*(uint16_t *)(unaff_BP + -4),_SS),
-                               (char *)CONCAT22(Font02.ofs,(char *)*(uint16_t *)(unaff_BP + -2)),
+    iVar9 = ovr_ovc45_compute9((char *)((int)&apNum),
+                               (char *)CONCAT22(apNameOfs,_SS),
+                               (char *)CONCAT22(Font02.ofs,(char *)apNameSeg),
                                Font02.seg,'i',0x69,3);
-    pvVar3 = manage_playerTitle((char_sheet_t *)*(uint16_t *)(unaff_BP + -4),
-                                *(uint16_t *)(unaff_BP + -2),(char)iVar9,puVar6);
-    numText = ovr_stsprintf((char *)(unaff_BP + -0xb6),(char *)CONCAT22(0x52a1,_SS),
+    pvVar3 = manage_playerTitle((char_sheet_t *)apNameOfs,
+                                apNameSeg,(char)iVar9,puVar6);
+    numText = ovr_stsprintf((char *)((int)&apMsg),(char *)CONCAT22(0x52a1,_SS),
                            (char *)CONCAT22(pvVar3,(char *)0x26510),puVar6);
     ovr_blitLabel(numText,(uint8_t *)CONCAT22(fontOfs,puVar6),CONCAT11(fontSegHi,uVar11),term,uVar11,term
                   ,uVar7);
@@ -1886,10 +1896,10 @@ void manage_textAllProperty2(void)
   manage_usesBlitLabel2("Level 2",0xb4);
   manage_usesBlitLabel2("Level 3",0xdc);
   TextBlitY = TextBlitY + 0xc;
-  if (*(char *)(unaff_BP + -0x15) == '\x04') {
+  if (apSel == '\x04') {
     iVar9 = 0x1a;
   }
-  else if (*(char *)(unaff_BP + -0x15) == '\x03') {
+  else if (apSel == '\x03') {
     iVar9 = 0xd;
   }
   else {
@@ -1909,72 +1919,72 @@ void manage_textAllProperty2(void)
       lVar1 = (long)(iVar8 + iVar9) * 6;
       uVar7 = (uint16_t)((ulong)lVar1 >> 0x10);
       iVar4 = manage_usesGUnitCount
-                        (*(char *)(unaff_BP + 6),(&((unk01_t *)GStructures)->type)[(int)lVar1],
-                         (int *)CONCAT22(_SS,(int *)(unaff_BP + -6)),
-                         (int *)CONCAT22(_SS,(int *)(unaff_BP + -8)),
-                         (int *)CONCAT22(_SS,(int *)(unaff_BP + -10)),
-                         (int *)CONCAT22(_SS,(int *)(unaff_BP + -0xc)));
-      *(int *)((char *)init_textFilename + unaff_BP) = iVar4;
-      if (*(int *)(unaff_BP + -0xc) == 0) {
+                        (partyArg,(&((unk01_t *)GStructures)->type)[(int)lVar1],
+                         (int *)CONCAT22(_SS,(int *)((int)&apLvl1Value)),
+                         (int *)CONCAT22(_SS,(int *)((int)&apLvl2Value)),
+                         (int *)CONCAT22(_SS,(int *)((int)&apUnitTotal)),
+                         (int *)CONCAT22(_SS,(int *)((int)&apLvl3Value)));
+      apUnitTotal = iVar4;
+      if (apLvl3Value == 0) {
         iVar4 = 100;
-        uVar11 = (undefined1)*(uint16_t *)((char *)init_textFilename + unaff_BP);
-        numText = litoa10((char *)(unaff_BP + -0x66),
-                         CONCAT13((char)((uint)*(uint16_t *)((char *)init_textFilename + unaff_BP)
+        uVar11 = (undefined1)apUnitTotal;
+        numText = litoa10((char *)((int)&apNum),
+                         CONCAT13((char)((uint)apUnitTotal
                                         >> 8),CONCAT12(uVar11,_SS)),uVar11,0);
         manage_blitLabelRight
                   ((char *)CONCAT13((char)((uint)uVar7 >> 8),CONCAT12((char)uVar7,numText)),iVar4);
       }
       else {
         iVar4 = 100;
-        numText = ovr_stsprintf((char *)(unaff_BP + -0xb6));
+        numText = ovr_stsprintf((char *)((int)&apMsg));
         manage_blitLabelRight
                   ((char *)CONCAT13((char)((uint)uVar7 >> 8),CONCAT12((char)uVar7,numText)),iVar4);
       }
       lVar1 = (long)(iVar8 + iVar9) * 6;
       uVar7 = (uint16_t)((ulong)lVar1 >> 0x10);
       if (*(char *)((int)&GStructures[0].pad + (int)lVar1) != '\0') {
-        if (*(int *)(unaff_BP + -0xe) == 0) {
+        if (apLvl1Shown == 0) {
           iVar4 = 0x8c;
-          uVar11 = (undefined1)*(uint16_t *)(unaff_BP + -6);
-          numText = litoa10((char *)(unaff_BP + -0x66),
-                           CONCAT13((char)((uint)*(uint16_t *)(unaff_BP + -6) >> 8),
+          uVar11 = (undefined1)apLvl1Value;
+          numText = litoa10((char *)((int)&apNum),
+                           CONCAT13((char)((uint)apLvl1Value >> 8),
                                     CONCAT12(uVar11,_SS)),uVar11,0);
           manage_blitLabelRight
                     ((char *)CONCAT13((char)((uint)uVar7 >> 8),CONCAT12((char)uVar7,numText)),iVar4);
         }
         else {
           iVar4 = 0x8c;
-          numText = ovr_stsprintf((char *)(unaff_BP + -0xb6));
+          numText = ovr_stsprintf((char *)((int)&apMsg));
           manage_blitLabelRight
                     ((char *)CONCAT13((char)((uint)uVar7 >> 8),CONCAT12((char)uVar7,numText)),iVar4);
         }
-        if (*(int *)(unaff_BP + -0x10) == 0) {
+        if (apLvl2Shown == 0) {
           iVar4 = 0xb4;
-          uVar11 = (undefined1)*(uint16_t *)(unaff_BP + -8);
-          numText = litoa10((char *)(unaff_BP + -0x66),
-                           CONCAT13((char)((uint)*(uint16_t *)(unaff_BP + -8) >> 8),
+          uVar11 = (undefined1)apLvl2Value;
+          numText = litoa10((char *)((int)&apNum),
+                           CONCAT13((char)((uint)apLvl2Value >> 8),
                                     CONCAT12(uVar11,_SS)),uVar11,0);
           manage_blitLabelRight
                     ((char *)CONCAT13((char)((uint)uVar7 >> 8),CONCAT12((char)uVar7,numText)),iVar4);
         }
         else {
           iVar4 = 0xb4;
-          numText = ovr_stsprintf((char *)(unaff_BP + -0xb6));
+          numText = ovr_stsprintf((char *)((int)&apMsg));
           manage_blitLabelRight
                     ((char *)CONCAT13((char)((uint)uVar7 >> 8),CONCAT12((char)uVar7,numText)),iVar4);
         }
-        if (*(int *)(unaff_BP + -0x12) == 0) {
+        if (apLvl3Shown == 0) {
           iVar4 = 0xdc;
-          uVar11 = (undefined1)*(uint16_t *)(unaff_BP + -10);
-          numText = litoa10((char *)(unaff_BP + -0x66),
-                           CONCAT13((char)((uint)*(uint16_t *)(unaff_BP + -10) >> 8),
+          uVar11 = (undefined1)apUnitTotal;
+          numText = litoa10((char *)((int)&apNum),
+                           CONCAT13((char)((uint)apUnitTotal >> 8),
                                     CONCAT12(uVar11,_SS)),uVar11,0);
           manage_blitLabelRight
                     ((char *)CONCAT13((char)((uint)uVar7 >> 8),CONCAT12((char)uVar7,numText)),iVar4);
         }
         else {
           iVar4 = 0xdc;
-          numText = ovr_stsprintf((char *)(unaff_BP + -0xb6));
+          numText = ovr_stsprintf((char *)((int)&apMsg));
           manage_blitLabelRight
                     ((char *)CONCAT13((char)((uint)uVar7 >> 8),CONCAT12((char)uVar7,numText)),iVar4);
         }
@@ -1983,24 +1993,33 @@ void manage_textAllProperty2(void)
     }
     iVar8 = iVar8 + 1;
   }
+L_menuTail:
+  if (apSel == 0x5) {
+    manage_highlightStructures(partyArg,0xfe);
+  }
+  else {
+    manage_highlightStructures(partyArg,
+        (uint16_t)*(uint8_t *)((uint16_t)&menuHighlightTable[2].seg + 1 +
+                               (uint16_t)apSel * 6));
+  }
+  keyboardInputMode = 1;
   CurSfxType3 = 0x3c;
   (*(uint8_t *)((uint8_t *)&(entries.seg))) = (char)_SS;
-  entries.ofs = unaff_BP + -0x142;
+  entries.ofs = (uint16_t)apList;
   (*(uint8_t *)((uint8_t *)&(entries.seg) + 1)) = (char)((uint)_SS >> 8);
   uVar7 = ovr_ovc28_usesUiInputText
-                    (entries,0x23,far_from_u32((uint32_t)(0x0)),(uint8_t *)(unaff_BP + -0x16),0,
-                     (char)(uint8_t *)(unaff_BP + -0x16));
-  *(undefined1 *)(unaff_BP + -0x15) = (char)uVar7;
+                    (entries,0x23,far_from_u32((uint32_t)(0x0)),(uint8_t *)((int)&apFlag),0,
+                     (char)(uint8_t *)((int)&apFlag));
+  *(undefined1 *)((int)&apSel) = (char)uVar7;
   keyboardInputMode = 0;
-  if (((*(char *)(unaff_BP + -0x15) != '\0') && (*(char *)(unaff_BP + -0x15) != '\x01')) &&
-     (*(char *)(unaff_BP + -0x15) != -2)) {
-    manage_textAllProperty2();
-    return;
+  if (((apSel != '\0') && (apSel != '\x01')) &&
+     (apSel != -2)) {
+  goto L_menuLoop;
   }
-  if ((ScreenMode == '\0') && (*(char *)(unaff_BP + -0x15) != -2)) {
+  if ((ScreenMode == '\0') && (apSel != -2)) {
     manage_openTalkWindow();
   }
-  if (*(char *)(unaff_BP + -0x15) == -2) {
+  if (apSel == -2) {
     Cancelled = 1;
   }
   return;
@@ -2131,50 +2150,7 @@ int owner;
   keyboardInputMode = 0;
   if (((*(char *)(unaff_BP + -0x15) != '\0') && (*(char *)(unaff_BP + -0x15) != '\x01')) &&
      (*(char *)(unaff_BP + -0x15) != -2)) {
-    manage_textAllProperty2();
-    return;
-  }
-  if ((ScreenMode == '\0') && (*(char *)(unaff_BP + -0x15) != -2)) {
-    manage_openTalkWindow();
-  }
-  if (*(char *)(unaff_BP + -0x15) == -2) {
-    Cancelled = 1;
-  }
-  return;
-}
-
-
-
-/* 4d05:2b09 */
-
-/* [R6] touches CurSfxType3, __C0_ASM_CopyRight */
-
-void __cdecl16far manage_usesCurSfxType3(void)
-
-{
-  uint16_t uVar1;
-  int unaff_BP;
-  far_t entries;
-  
-  if (*(char *)(unaff_BP + -0x15) == '\x05') {
-    manage_highlightStructures(*(uint8_t *)(unaff_BP + 6),0xfe);
-  }
-  else {
-    manage_highlightStructures
-              (*(uint8_t *)(unaff_BP + 6),
-               (uint)*(byte *)((int)&menuHighlightTable[2].seg + 1 +
-                              (uint)*(byte *)(unaff_BP + -0x15) * 6));
-  }
-  keyboardInputMode = 1;
-  CurSfxType3 = 0x3c;
-  entries.seg = _SS;
-  entries.ofs = unaff_BP - 0x142;
-  uVar1 = ovr_ovc28_usesUiInputText(entries,0x23,far_from_u32((uint32_t)(0x0)),(uint8_t *)(unaff_BP + -0x16),0,0);
-  *(undefined1 *)(unaff_BP + -0x15) = (char)uVar1;
-  keyboardInputMode = 0;
-  if (((*(char *)(unaff_BP + -0x15) != '\0') && (*(char *)(unaff_BP + -0x15) != '\x01')) &&
-     (*(char *)(unaff_BP + -0x15) != -2)) {
-    manage_textAllProperty2();
+    manage_textAllProperty2(0);   /* GUESS: the duplicate fragment below has no frame argument to forward */
     return;
   }
   if ((ScreenMode == '\0') && (*(char *)(unaff_BP + -0x15) != -2)) {
@@ -2210,7 +2186,7 @@ uint16_t __cdecl16far manage_usesCurSfxType32()
   keyboardInputMode = 0;
   if (((*(char *)(unaff_BP + -0x15) != '\0') && (*(char *)(unaff_BP + -0x15) != '\x01')) &&
      (*(char *)(unaff_BP + -0x15) != -2)) {
-    manage_textAllProperty2();
+    manage_textAllProperty2(0);   /* GUESS: the duplicate fragment below has no frame argument to forward */
     return;
   }
   if ((ScreenMode == '\0') && (*(char *)(unaff_BP + -0x15) != -2)) {

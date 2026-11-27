@@ -19579,3 +19579,75 @@ enough budget to leave it half-converted.
 Measured: no source change this turn; gates unchanged - build 65/65, LINK.LOG 65 bytes / 0
 problems, grep_checks 26,390, compare_state 1,628/0/0, diff_dgroup 1,639/1,805 with sum|delta| 18,
 compare_runtime 1,692 matched / 1,683 identical / 9 different at all three sample points.
+
+### step 6: 4d05:277a body re-derived - menu selection is a real local, tail folded in (grep 26,390 -> 26,387)
+step 6: `4d05:277a` body re-derived - menu selection is a real local, menu tail folded in (grep 26,390 -> 26,387)
+
+The body's control flow was already right: the image's `jmp 0x2b09` at `0x278c` is the tree's
+`manage_usesCurSfxType3(); return;` and the image's `jmp 0x277a` at `0x2b99` is its
+`manage_textAllProperty2(); return;`.  What was wrong is that all 47 stack accesses went through
+`unaff_BP`, an uninitialised local standing in for the frame pointer - so the menu selection,
+the flag, the uiInputText list and the buffers were all read from garbage.
+
+## The frame, from the image, and what it became
+
+    bp-0xb6  0x50-byte buffer                                    apMsg
+    bp-0x66  0x50-byte buffer                                    apNum
+    bp-0x16  the uiInputText out-parameter                       apFlag
+    bp-0x15  the menu selection                                  apSel
+    bp-0x12  .. -0x2   nine words:
+        -0x4 / -0x2                    selected structure's name   apNameOfs / apNameSeg
+        -0x6 / -0x8 / -0xa / -0xc      manage_usesGUnitCount's out values / total
+        -0xe / -0x10 / -0x12           the three "column shown" words
+    bp+6     the one-word argument                                partyArg  (now a parameter)
+    bp-0x142 apList, filled by the 0x26f6 head                    entries.ofs = (uint16_t)apList
+
+and the two call/return pairs became `goto L_menuLoop;` / `goto L_menuTail;`, with the tail's
+`manage_highlightStructures(partyArg, apSel == 5 ? 0xfe : menuHighlightTable[apSel])` and
+`keyboardInputMode = 1` written out at the label.  `manage_usesCurSfxType3` is gone.
+
+Emitted, verified with `tmp/dis_ours.py _MANAGE_TEXTALLPROPERTY2`:
+
+    before                          after
+    cmp byte ptr [di - 0x15],2      cmp byte ptr [bp - 0x32],2      ; apSel
+    (garbage register)              jmp 0x5c1                       ; goto L_menuTail
+
+so the dispatch now reads the local the `0x26f6` head writes, and the head's tables are live
+rather than dead weight.
+
+## Two duplicate fragments remain, and they are GUESS-marked
+
+The same overlay contains three more entries of this function, all with no prologue and all with
+verbatim copies of the tail:
+
+    4d05:28f4  manage_usesLitoa103    called from ovc14_attact.c:931 and :1550 with (textSeg, owner)
+    4d05:2b3e  manage_usesCurSfxType32
+    4d05:2b09  manage_usesCurSfxType3  (folded in this commit)
+
+`0x28f4` and `0x2b3e` are funref targets from other overlays, like `5ded:1433`, so they cannot
+simply be deleted.  Since `manage_textAllProperty2` now takes its argument at `[bp+6]`, their two
+internal calls need one; those functions have no frame argument of their own to forward, so the
+call passes `0` and is marked
+
+    /* GUESS: the duplicate fragment below has no frame argument to forward */
+
+That is a real guess and it is recorded as one - it only affects a fragment that is itself a
+verbatim copy of the tail, and it does not change the corrected body.
+
+## Measured (HEAD df6c348d -> this commit)
+
+    grep_checks      26,390 -> 26,387   (-3; `unaff_BP` is not itself a section-5 name)
+    REBUILT.EXE      493,990 -> 493,798
+    build 65/65, LINK.LOG 65 bytes / 0 problems
+    compare_state    1,628/0/0 (unchanged)
+    diff_dgroup      1,639/1,805 matched, 5 runs, sum|delta| 18, mean 0, worst 12 (unchanged)
+    compare_runtime  1,692 matched, 1,683 identical / 9 different at all three sample points
+
+## What is still wrong in this function
+
+The four numeric columns and the `manage_usesGUnitCount` call keep their previous shapes
+(`(int *)((int)&apLvl1Value)` style casts survive where the value is taken by address), and the
+`(char *)CONCAT22(...)` far-pointer arguments are still the tree's rendering rather than the
+image's `push ss / lea ax,[bp-...]` pairs.  `manage_usesGUnitCount`'s fourth out-parameter is
+mapped to `apLvl3Value` on the strength of the image's `[bp-0xc]` test, which is the one slot
+mapping in this commit I inferred from a single use rather than from a write and a read.
