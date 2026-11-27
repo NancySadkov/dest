@@ -15466,3 +15466,62 @@ In other words `runs` improved and `sum|delta|` worsened because the previous ar
 locally exact only by leaving two objects short.  I am keeping the complete data: a single uniform
 offset is a cleaner residual than a compensating error, and the eight bytes of head surplus that
 remain are the C0 startup, not a data omission.
+
+### section-5 analysis: the remaining mass is compiler scratch, measured
+section-5 analysis: the remaining mass is compiler scratch, measured
+
+Before spending a turn dismantling `ovc22_textRingProt` as the largest body, I measured how much of
+the remaining section-5 count can be justified from the source at all.
+
+`tmp/reachable5.py` splits every function body by whether it contains an unresolved-provenance
+marker (`unaff_`, `in_stack_`, `LAB_`, `param_`, `ram0x`):
+
+    PHANTOM-FREE:   258 functions,  3,009 section-5 occurrences
+    WITH PHANTOMS:  165 functions, 11,180 section-5 occurrences
+    total inside functions: 14,189   (the rest of grep_checks' 35,568 is data-class matches)
+
+The worst phantom-free offenders, in order:
+
+    240  ovc49_agents.c   ovc49_drawAgents      753 lines
+    177  ovc42_demo.c     run_demo              786 lines
+     80  ovc27_combat.c   ovc27_spellNotice     109 lines
+     70  crtl.c           LMOD_at_               61 lines
+     69  ovl.c            __INITEXT            153 lines
+
+and the worst phantom-laden ones:
+
+   1900  ovc22_classes.c  ovc22_textRingProt   2291 lines
+    857  ovc49_agents.c   ovc49_body1          2587 lines
+    679  ovc33_stats.c    stats_textRingProt    803 lines
+    560  ovc23_bldrec.c   ovc23_textAdlibNone   671 lines
+    485  ovc02_draw.c     draw_textTalkwin9Lbm  541 lines
+
+I then read the three largest phantom-free bodies.  All three are scratch:
+
+  * ovc49_drawAgents - `iVar17` (47 uses) is a frame pointer, then a record pointer, then an
+    `ovc49_usesStExit` result, then a clamped screen X, then a frame-data offset; `uVar10` is a
+    frame number and a predicate result; `uVar12` is six `ovr_randBelow` results and a pan value.
+  * ovc27_spellNotice - `uStack_8`/`uVar11`/`uVar12` are the spill shuffle
+    `uStack_8 = SEG_OF(Agnts); uVar11 = uStack_8; uStack_8 = SEG_OF(Agnts); uVar12 = uVar11;`
+    with `uVar12 = uStack_8` re-read inside three conditions; `uVar2` is a `randBelow` result and
+    then the constant 0x90.
+  * ovc22_textRingProt - `bVar15`/`bVar26`/`bVar27`/`bVar43` are the carry/borrow chain of a
+    hand-rolled 32-bit subtract (`SBORROW1`, `CARRY1`), each reused for several different
+    subtractions within 50 lines, and the body also carries `unaff_DI`/`unaff_SI`/`in_stack_`.
+
+Naming any of those would assert a single meaning for a slot the compiler reuses for several, which
+is exactly what this project has refused to do.  So:
+
+  * of the 14,189 section-5 occurrences inside functions, only the small single-role names found in
+    earlier turns were renameable, and that vein has been worked out (37,036 -> 35,568 over the
+    session);
+  * 11,180 occurrences sit behind `unaff_`/`in_stack_` provenance and would need the register and
+    stack mapping recovered before any name could be justified - a different and much deeper task
+    than renaming;
+  * the remaining ~21,000 grep points are the data classes (`char [N] = "..."` 1,452, accepted as
+    the readable form of DGROUP string data, plus the double-counting of `p?Var` names).
+
+CONCLUSION: section 5 cannot be driven to 0 by renaming.  Reaching 0 requires either recovering the
+register/stack provenance of 165 functions, or a decision that the grep is a heuristic which a
+Ghidra-derived export cannot satisfy - and the same is true of the last large diff_dgroup item, the
+~+18 head surplus, which needs C0M.OBJ's startup data replaced.
