@@ -542,7 +542,7 @@ void __cdecl16far ovc24_checkStrongholds(void)
   uint aligned;
   char *pcVar5;
   uint uVar6;
-  uint16_t uVar7;
+  uint16_t textSeg;
   int probeOfs;
   uint16_t unaff_DI;
   static char text[64];   /* DGROUP-backed formatting buffer */
@@ -600,19 +600,19 @@ L_OVC24_5943_112e_1255:
           strongholdsDestroyed = strongholdsDestroyed + 1;
           cStack_a = '\x01';
         }
-        uVar7 = 0x195d;
+        textSeg = 0x195d;
         if ((AgntGs[(uint)leaderClass].flags3 & 0x800) == 0) {
           aligned = alignUp4((GLeaderSheets[leaderIndex])->x,uVar6,0);
           pcVar5 = ovr_ovc15_capitalize(text);
           pcVar5 = ovr_stsprintf(sbuf,(char *)CONCAT22(0x578d,_SS),
-                                 (char *)CONCAT22(pcVar5,(char *)0x26510),uVar7,aligned);
-          ovr_uiNotify(pcVar5,uVar7,0);
+                                 (char *)CONCAT22(pcVar5,(char *)0x26510),textSeg,aligned);
+          ovr_uiNotify(pcVar5,textSeg,0);
         }
         else {
           aligned = alignUp4((GLeaderSheets[leaderIndex])->x,uVar6,0);
           pcVar5 = ovr_stsprintf(sbuf,(char *)CONCAT22(0x576a,_SS),
                                  (char *)CONCAT22(aligned,(char *)0x26510));
-          ovr_uiNotify(pcVar5,uVar7,0);
+          ovr_uiNotify(pcVar5,textSeg,0);
         }
         if (firstLeader == leaderIndex) {
           ovr_createConstructionRecordFar

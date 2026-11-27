@@ -17387,3 +17387,68 @@ The renameable total from tmp/rank_all5.py is now 1,118 occurrences across 210 f
 when the screen was first written), and the top of the ranking is entirely the code this project has
 repeatedly declined on evidence: `draw_textGoldProvidesHousing` (register fragments), `ovc22_textRingProt`'s
 `SBORROW1` chains, `draw_textTalkwin9Lbm`'s accumulator sums and the `__vprinter` helpers.
+
+### step 6: __vprinter structure and the real FILE exposure (grep 34,568 -> 34,563)
+step 6: __vprinter_func_start's structure, and which FILE functions are actually library-held
+
+## The formatter's shape, from the image
+
+`scripts/dis_orig.py 0ef0 0xa0` gives the entry of the loop.  The whole design is the classic Borland
+`_doprnt`, and the frame slots recovered last turn now line up with it:
+
+    0ef0  push es / cld
+    0ef2  lea di,[bp-0x96] / mov [bp-4],di      ; output pointer = the frame buffer
+    0ef9  mov di,[bp-4] / les si,[bp+6]         ; reload pointer, fmt = far pointer at [bp+6]
+    0efc  lodsb / or al,al
+    0f03  je  0x12fa                            ; end of format -> finish
+    0f05  cmp al,0x25 / je 0xf1a                ; '%' -> conversion
+    0f09  mov ss:[di],al / inc di
+    0f0d  dec byte ptr [bp-0x14] / jg 0xeff     ; 80-character budget
+    0f12  call 0xebc                            ; flush through the emit callback, then continue
+
+    0f1a  mov [bp-0x10],si                      ; remember the position after '%'
+    0f1d  lodsb / cmp al,0x25 / je 0xf09        ; "%%" -> literal '%'
+    0f23  mov [bp-4],di                         ; output pointer stashed
+    0f26  xor cx,cx / mov [bp-0xe],cx           ; precision accumulator
+    0f2b  mov [bp-2],0x20                       ; fill character (space)
+    0f30  mov [bp-0xb],cl                       ; flags byte
+    0f33  mov [bp-8],-1                         ; field width = -1
+    0f38  mov [bp-0xa],-1                       ; precision  = -1
+    0f41  xor ah,ah / mov dx,ax / mov bx,ax
+    0f47  sub bl,0x20 / cmp bl,0x60 / jae 0xf62 ; out of range -> invalid
+    0f4f  mov bl,[bx-0x77b5]                    ; char -> opcode table
+    0f53  cmp bx,0x17 / jbe 0xf5b               ; 24 conversions
+    0f58  jmp 0x12e6
+    0f5b  shl bx,1 / jmp word ptr cs:[bx+0x131a]  ; 24-entry jump table at CS:0x131a
+
+Two of those addresses are already symbols in our tree: the char-to-opcode table at `DS:0x884b` is
+`vprinter_printCtype[97]` (which we declare, and whose size 97 matches the 0x60 range checked above), and
+the jump table lives at `CS:0x131a`.  So the translation has: the loop, the flag/width/precision slots
+(`[bp-2]` fill, `[bp-0xb]` flags, `[bp-8]` width, `[bp-0xa]` precision, `[bp-0xe]` running precision), the
+conversion dispatch, and the three emit helpers already identified (`0e74` hex digits, `0eb3` buffered
+putc, `0ebc` flush).  What remains is the 24 handler bodies.
+
+## Which FILE functions are really library-held - measured
+
+The medium/large FILE mismatch only matters for functions that actually take a `FILE *`.  Of that set,
+exactly two are linked from CM.LIB in the current build:
+
+    FFLUSH   defined (CM.LIB, module FFLUSH)
+    FPUTC    defined (CM.LIB, module PUTC)
+    FCLOSE, FOPEN, FREAD, FWRITE, FSEEK, FPUTS, FGETS, GETS, PUTS, SCANF, FSCANF, UNGETC   not linked at all
+
+`SETVBUF`, `SPRINTF`, `VSPRINTF` and (until last turn) `PRINTF` resolve to our own recovered objects or the
+library only through the wrapper we replaced.  So the live surface of the mismatch is two functions, and
+both are reached only through our recovered `__fputn` path - which the replaced `printf` no longer uses.
+That is a much smaller exposure than "every stdio function", and it is what a future `-ml`/CL.LIB decision
+should be weighed against.
+
+## This turn's code change
+
+ovc24_checkStrongholds: `uVar7` = 0x195d, passed as the segment argument in both uses
+(`ovr_uiNotify(pcVar5, uVar7, 0)` and the `CONCAT22` that builds the stsprintf pointer) -> `textSeg` (5).
+
+  grep_checks 34,568 -> 34,563; build 65/65; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,628/0/0
+  diff_dgroup 1,639/1,805 matched, 5 runs, sum|delta| 18, mean 0, worst 12
+  compare_runtime 1,692 matched, 1,683 identical / 9 different at all three sample points
