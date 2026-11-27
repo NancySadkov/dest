@@ -198,6 +198,7 @@ void __cdecl16far stshInitSprites(bool grab)
   far_t pixels;
   long sz;
   spr_t far *sprite;
+  uint16_t segArg;
   
   StshSprIndex = 0;
   /* 4207:0483-04a0: the projectile sprite set - file id 0x25, anms at offset 0 of the entity data
@@ -240,9 +241,8 @@ void __cdecl16far stshInitSprites(bool grab)
         pixels.ofs = (gfx->aptr).seg;
         pfVar1 = ovr_stshRleType2((far_t far *)(&gfx->aptr)->ofs,pixels,0,114,103,0,0,
                                   (int16_t)unaff_DI,0,0);
-        pcVar4 = (char *)stsh_store((uint8_t *)pfVar1, (uint16_t)puVar8, &uVar6);
-        AgntGs[i].prts[j].seg = (uint16_t)(uint)puVar8;
-        AgntGs[i].prts[j].ofs = (uint16_t)( pcVar4);
+        asm { mov segArg,dx };
+        AgntGs[i].prts[j] = stsh_store(MK_FP(segArg,pfVar1));
         sz = ZEXT24(unaff_DI) << 0x10;
         puVar5 = ovr_stshWrite((uint32_t *)gfx,(uint8_t *)CONCAT22(0x300,puVar7),sz,0);
         unaff_DI = (far_t far *)((ulong)sz >> 0x10);

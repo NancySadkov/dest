@@ -140,19 +140,24 @@ int _OVRINITEXT(void)
    prototype without a return type, so DX was lost and the .seg field was filled
    with the dead link-time data-segment constant (doc/segment_195d.md).
    This wrapper performs the same call and hands both halves back. */
-uint16_t stsh_store(uint8_t *data, uint16_t arg2, uint16_t *seg)
+/* stshStoreFile returns a far pointer in DX:AX.  The image calls it with one far pointer
+   (`les bx,ptr [bp-4]; push es:[bx+0x302]; push es:[bx+0x300]; lcall 0x188,0x25; add sp,4`), so the
+   wrapper takes and returns a far_t. */
+far_t stsh_store(void far *data)
 {
+  far_t result;
   uint16_t ofs;
   uint16_t s;
 
   asm {
-    push arg2;
-    push data;
+    push word ptr [(data) + 2];
+    push word ptr [(data)];
     call far ptr ovr_stshStoreFile;
     add sp,4;
     mov ofs,ax;
     mov s,dx;
   }
-  *seg = s;
-  return ofs;
+  result.ofs = ofs;
+  result.seg = s;
+  return result;
 }
