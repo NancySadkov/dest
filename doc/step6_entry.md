@@ -21444,3 +21444,53 @@ the `dy` ladder. The body here factors the mirrored halves into one loop with a 
 The data gates are untouched because this is a code-only change, and the runtime dumps cannot see it:
 the function runs during init while the samples are taken at entry. That is why the body was verified
 against the instruction trace and the call census rather than at runtime.
+
+
+## `5ded:10ea` selector map resolved; its recorded size is wrong
+
+Resolving `5ded:10ea` (`ovc27_textTakesHalfDamage3`) with the authoritative map gives a complete,
+unambiguous 30-call signature - every selector resolves to one segment:
+
+    lcall 0148,002F  x7   ovr_agnt_statusText          (segment 22FF)
+    lcall 0170,007A  x4   ovr_stsprintf                (segment 2337)
+    lcall 0160,0025  x4   ovr_ovc15_usesStshRealloc    (segment 2322)
+    lcall 00F8,0039  x4   ovr_uiNotify                 (segment 22C4)
+    lcall 0190,0057  x2   ovr_manage_rollDice          (segment 2356)
+    lcall 0230,00A2  x2   ovr_ovc41_textParalyzed      (segment 23D5)
+    lcall 0230,00C5  x2   ovr_OVC41_6a8f_01e7_entry    (segment 23D5)
+    lcall 0140,0048  x2   ovr_audio_panFromX           (segment 22F8)
+    lcall 0140,002F  x2   ovr_stop_audio               (segment 22F8)
+    lcall 0170,005C  x1   ovr_randBelow                (segment 2337)
+
+plus 6 near in-module calls = 36, matching the census exactly.
+
+**The recorded function size is wrong.** The trace runs `0x10ea..0x14a5` and its branches end with
+`jmp 0x1be7`, which is 0xB01 bytes past the start - but `audit/functions_real.tsv` says 956 bytes
+(`0x10ea+956 = 0x14a6`). The routine therefore extends to about `0x1be7` (~2,800 bytes), and the
+"105 call sites" body the tree carries at this marker is another function's. `screen_calls.py` compares
+against that recorded size, so its `+69` delta understates the misattribution.
+
+**What the body is** (from the 346 instructions up to `0x14a5`): a damage/status message dispatcher
+keyed on the agent's state byte `+0x2e`:
+
+    state 1  : possibly halve the amount (near call 0x105e / 0xfd2), then either
+               statusText -> usesStshRealloc -> stsprintf -> uiNotify with a "paralyzed" string, or
+               ovc41_textParalyzed(...) and set +0x30 = 0xb, +0x31 = 0
+    state 2  : amount = (level / 5) * 2 + 1, rollDice(6, amount) + amount, then same halving and
+               ovc41_textParalyzed path
+    state 0xa: two message variants built from statusText on the source and target agents,
+               format strings ds:0x5c2f and ds:0x5c44, setting flag 0x20 or 0x400 in +0x2b,
+               with ovc41_6a8f_01e7_entry, audio_panFromX and stop_audio(0x1b)
+    state 3/5: the ds:0x5c2f variant again, guarded by the 0x20 flag
+    other    : branch at 0x14a8 (past the trace window)
+
+The agent array indexing needs interpretation first: the image builds the record pointer as
+`{ ofs: index*0x34, seg: 0x50 }` and dereferences it with `les`, i.e. a far `agnt_t` array whose
+resident segment is 0x50 at run time (`agnt_t` stride 0x34 matches). That has to be mapped onto our
+`Agnts` far array before the body can be written.
+
+## Measured (no code change this pass)
+
+    build 65/65 · LINK.LOG 0 errors · REBUILT.EXE 461,908
+    grep_checks 11,960 · compare_state 1,628/0/0 · diff_dgroup 1,639/1,805
+    compare_runtime 1,692 matched / 1,683 identical / 9 different
