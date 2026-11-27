@@ -3469,7 +3469,7 @@ void __cdecl16far ovc49_drawAgents(void)
   far_t gfx_07;
   far_t gfx_08;
   far_t gfx_09;
-  undefined1 uVar22;
+  undefined1 recOfsLo;
   uint8_t type;
   undefined1 ssHi;
   brect_t agentRect;
@@ -3944,11 +3944,11 @@ void __cdecl16far ovc49_drawAgents(void)
         }
         else if (Agnts[agentIndex].gindex == '\x03') {
           iVar17 = (uint)agntIndex * 0x34 + -0x34;
-          uVar22 = (undefined1)iVar17;
+          recOfsLo = (undefined1)iVar17;
           uVar10 = ovr_agnt_compute12((agnt_t far *)&Agnts[agentIndex].x,
                                       (agnt_t far *)
-                                      CONCAT13((char)((uint)iVar17 >> 8),CONCAT12(uVar22,SEG_OF(Agnts))),
-                                      0x26,uVar22,0x26);
+                                      CONCAT13((char)((uint)iVar17 >> 8),CONCAT12(recOfsLo,SEG_OF(Agnts))),
+                                      0x26,recOfsLo,0x26);
           if (((char)uVar10 != '\0') && ((Agnts[agntIndex - 1].flags & 0x800) == 0)) {
             if (((*(uint16_t far *)((uint8_t far *)&Agnts[agntIndex - 1].entity->base.frames + 1)
                    & 2) == 0) ||

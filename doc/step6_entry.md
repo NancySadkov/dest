@@ -15884,3 +15884,20 @@ agnt_abilityModifier (30 lines)
   compare_state 1,625/0/0
   diff_dgroup 1,627/1,805 matched, 19 runs, sum|delta| 44,867, mean 27, worst 148
   compare_runtime 1,684 matched, 1,675 identical / 9 different (both sample points)
+
+### section 5: ovc49_drawAgents recOfsLo (35,338 -> 35,334)
+section 5: ovc49_drawAgents recOfsLo (35,338 -> 35,334)
+
+    uVar22  (undefined1)iVar17, the low byte of the agent record offset
+            ((uint)agntIndex * 0x34), used at 3950-3951 to build
+            CONCAT13(hi, CONCAT12(uVar22, SEG_OF(Agnts))) and passed as a byte
+            argument                                  -> recOfsLo (4)
+
+The other two names the screener lists for this function (`uStack_16` 6 uses, `cStack_13` 2 uses) have
+no assignment at all - they are read-only stack slots, presumably incoming stack arguments the export
+never declares - so naming them would be invention and they are left alone.
+
+  grep_checks 35,338 -> 35,334; build 65/65; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,625/0/0
+  diff_dgroup 1,627/1,805 matched, 19 runs, sum|delta| 44,867, mean 27, worst 148
+  compare_runtime 1,684 matched, 1,675 identical / 9 different (both sample points)
