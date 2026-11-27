@@ -18985,3 +18985,94 @@ so the 0x14a8 block is reached by a *jump*, and its `do { ... } while (*(int *)(
 
 A call therefore cannot reproduce it without passing agntIndex and recomputing agntRec; the faithful
 form is one function with `goto L_half4;`, the label placed at the block that sets [bp-4]/[bp-2].
+
+### step 6: ovc27_usesAgntCount returns a far pointer (grep 26,621 -> 26,617)
+step 6: `ovc27_usesAgntCount` returns a far pointer (grep 26,621 -> 26,617)
+
+While preparing the 5ded:14a8 merge I found the callee it depends on was declared with the wrong
+return type, which left the record pointer's segment uninitialised at the call site.
+
+## The image returns DX:AX
+
+    5ded:1c5c  les bx,ptr [bp+0xe] / mov ax,es:[bx] / inc word es:[bx]
+    5ded:1c65  mov dx,0x34 / imul dx / mov dx,0x50 / add ax,0
+    5ded:1c92  pop bp / retf                    -> DX:AX = 0x50 : foundIdx*0x34
+    5ded:1c8e  xor dx,dx / xor ax,ax            -> DX:AX = 0 when the search fails
+
+and the caller stores both halves of the result:
+
+    1ba5  call 0x1beb
+    1bab  mov word ptr [bp - 8], dx             ; the segment
+    1bae  mov word ptr [bp - 0xa], ax           ; the offset
+    1bb1  mov ax,[bp-0xa] / or ax,[bp-8] / je   ; NULL test on the pair
+
+The tree had `int __cdecl16far ovc27_usesAgntCount(...)` returning `foundIdx * 0x34`, i.e. only the
+offset, and the caller wrote `*(uint16_t *)(unaff_BP + -8) = in_DX;` - assigning an **uninitialised
+local** (`in_DX`, a register artefact) into the record's segment word.  Everything downstream that
+walked the record (`+0x17` entity, `+0x2b` flags, `+0x11`) therefore used a garbage segment.
+
+Now:
+
+    agnt_t far * __cdecl16far ovc27_usesAgntCount(agnt_t far *agnt,byte recIndex,
+                                                  byte maxLevel,int far *cursor)
+      ...
+      return (agnt_t far *)0;
+      return (agnt_t far *)MK_FP(SEG_OF(Agnts),foundIdx * 0x34);
+
+`SEG_OF(Agnts)` is the tree's equivalent of the original's fixed 0x50, and it is the expression the
+rest of the file already uses (`MK_FP(SEG_OF(Agnts), agntIndex * 0x34)`).  The `cursor` argument is
+also corrected to `int far *`: the image pushes `push ss / lea ax,[bp-2] / push ax` and the callee
+reads it with `les bx,ptr [bp+0xe]`.
+
+## The call site
+
+    1b92  push ss / lea ax,[bp-2] / push ax     ; cursor
+    1b97  al = [bp-4] / push ax                 ; maxLevel = the 0x1e countdown
+    1b9b  push 0xe                              ; recIndex
+    1b9d  push [bp+8] / push [bp+6]             ; agnt
+    1ba5  call 0x1beb
+    add sp,0xc                                  ; 6 words
+
+so the block now reads
+
+      agntRec = ovc27_usesAgntCount(agnt,0xe,(byte)half4Remaining,(int far *)&half4LoopIdx);
+      if (agntRec == (agnt_t far *)0) break;
+
+with `half4Remaining` = [bp-4] (set to 0x1e at `5ded:1ac6`) and `half4LoopIdx` = [bp-2] (the cursor,
+compared against `di`, which `5ded:10ea` loads once at `5ded:10f3` as `mov di,[bp+0xa]` and never
+changes - verified by scanning every write to `di` in `0x10ea..0x1be7`: there is exactly one).
+
+## Emitted and verified
+
+    ours:  00a6 mov ax,[bp-2] / 00a9 mov dx,0x34 / 00ac imul dx / 00ae mov dx,<seg> / leave
+    image: 1c65 mov dx,0x34 / imul dx / 1c6a mov dx,0x50 / 1c6d add ax,0
+
+same offset computation and the segment in DX (the image's `add ax,0` is the base-0 addition the C
+expresses through MK_FP).  Nothing else in the function changed.
+
+## Measured (HEAD 8f68bad1 -> this commit)
+
+    grep_checks      26,621 -> 26,617   (-4)
+    REBUILT.EXE      496,870 -> 496,854
+    build 65/65, LINK.LOG 65 bytes / 0 problems
+    compare_state    1,628/0/0 (unchanged)
+    diff_dgroup      1,639/1,805 matched, 5 runs, sum|delta| 18, mean 0, worst 12 (unchanged)
+    compare_runtime  1,692 matched, 1,683 identical / 9 different at all three sample points
+
+## Still open on this pair
+
+The `5ded:14a8` merge itself is not done.  Preparing it showed why it is not a mechanical rename: the
+block's calls are rendered with the wrong argument shape as well as the wrong types, because the far
+pointer was being reassembled by hand.  For example the image's
+
+    14df  push es:[0x8ff7]              ; GSavedBlitSeg
+    14e9  push ss / lea ax,[bp-0xd2] / push ax
+    14f2  push [bp-8] / push [bp-0xa]
+    14f5  lcall 0x148,0x2f / add sp,8   ; 4 words consumed here, 2 left for the stsprintf below
+
+is `ovr_agnt_statusText(MK_FP(_SS,&text2), agntRec)`, while the tree has
+`ovr_agnt_statusText(record, buf, (char)seg)` - three arguments in a different order.  So the block
+needs its calls re-derived from the image before it can be moved, not just its `unaff_BP`
+expressions renamed.  That is now the documented next step, with the offset map
+(`+6/+8` = agnt, `-0xa/-8` = agntRec, `-0x122/-0xd2/-0x82` = text1/text2/msg, `-4/-2` = the two
+locals, `di` = agntIndex) already established.

@@ -1059,7 +1059,12 @@ void ovc27_textTakesHalfDamage4(void)
   undefined1 uVar10;
   undefined1 uVar11;
   undefined1 savedSeg;
+  int half4Remaining;
+  int half4LoopIdx;
+  agnt_t far *agntRec;
+  uint16_t agntIndex;
   
+  agntIndex = *(uint16_t *)(unaff_BP + 0xa);
   if (((agnt_t far *)((unaff_BP + 6)))->variant == '\x04') {
     pan = ovr_audio_panFromX((agnt_t far *)*(uint16_t *)(unaff_BP + -10),
                                (char)*(uint16_t *)(unaff_BP + -8));
@@ -1366,8 +1371,8 @@ void ovc27_textTakesHalfDamage4(void)
   if (((agnt_t far *)((unaff_BP + 6)))->variant != '\x0f') {
     return;
   }
-  *(uint16_t *)(unaff_BP + -4) = 0x1e;
-  *(uint16_t *)(unaff_BP + -2) = 0;
+  half4Remaining = 0x1e;
+  half4LoopIdx = 0;
   do {
     if (((((agnt_t far *)((unaff_BP + -10)))->flags & 0x20) == 0) &&
        (uVar7 = ovc27_rollToHitEntity
@@ -1400,22 +1405,19 @@ void ovc27_textTakesHalfDamage4(void)
       ovr_play_sfxU(0x1b,0,pan,0,(char)pan);
     }
     do {
-      iVar5 = ovc27_usesAgntCount((agnt_t far *)
-                                  CONCAT22(*(uint16_t *)(unaff_BP + 8),
-                                           (agnt_t far *)*(uint16_t *)(unaff_BP + 6)),0xe,
-                                  *(byte *)(unaff_BP + -4),
-                                  (int *)CONCAT13((char)((uint)_SS >> 8),
-                                                  CONCAT12((char)_SS,unaff_BP + -2)));
-      *(uint16_t *)(unaff_BP + -8) = in_DX;
-      *(int *)(unaff_BP + -10) = iVar5;
-      if (*(int *)(unaff_BP + -10) == 0 && *(int *)(unaff_BP + -8) == 0) break;
-    } while (*(int *)(unaff_BP + -2) == unaff_DI);
+      agntRec = ovc27_usesAgntCount((agnt_t far *)
+                                   CONCAT22(*(uint16_t *)(unaff_BP + 8),
+                                            (agnt_t far *)*(uint16_t *)(unaff_BP + 6)),0xe,
+                                   (byte)half4Remaining,
+                                   (int far *)&half4LoopIdx);
+      if (agntRec == (agnt_t far *)0) break;
+    } while (half4LoopIdx == (int)agntIndex);
     if (*(int *)(unaff_BP + -10) != 0 || *(int *)(unaff_BP + -8) != 0) {
       uVar2 = ((agnt_t far *)((unaff_BP + -10)))->entity;
-      *(int *)(unaff_BP + -4) = *(int *)(unaff_BP + -4) - (uint)*(byte *)((int)uVar2 + 0xf);
+      half4Remaining = half4Remaining - (uint)*(byte *)((int)uVar2 + 0xf);
     }
     if ((*(int *)(unaff_BP + -10) == 0 && *(int *)(unaff_BP + -8) == 0) ||
-       (*(int *)(unaff_BP + -4) == 0)) {
+       (half4Remaining == 0)) {
       return;
     }
   } while( true );
@@ -1427,7 +1429,7 @@ void ovc27_textTakesHalfDamage4(void)
 
 /* [R6] touches AgntCount */
 
-int __cdecl16far ovc27_usesAgntCount(agnt_t far *agnt,byte recIndex,byte maxLevel,int *cursor)
+agnt_t far * __cdecl16far ovc27_usesAgntCount(agnt_t far *agnt,byte recIndex,byte maxLevel,int far *cursor)
 
 {
   int foundIdx;
@@ -1436,7 +1438,7 @@ int __cdecl16far ovc27_usesAgntCount(agnt_t far *agnt,byte recIndex,byte maxLeve
   
   while( true ) {
     if ((int)(uint)AgntCount <= *cursor) {
-      return 0;
+      return (agnt_t far *)0;
     }
     recPtr = *(uint32_t *)(*cursor * 0x34 + 0x17);
     if (((*(byte *)((int)recPtr + 0xf) <= maxLevel) &&
@@ -1447,7 +1449,7 @@ int __cdecl16far ovc27_usesAgntCount(agnt_t far *agnt,byte recIndex,byte maxLeve
   }
   foundIdx = *cursor;
   *cursor = *cursor + 1;
-  return foundIdx * 0x34;
+  return (agnt_t far *)MK_FP(SEG_OF(Agnts),foundIdx * 0x34);
 }
 
 

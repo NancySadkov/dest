@@ -789,7 +789,7 @@ uint __cdecl16far ovc27_breathHalfDamage(agnt_t far *agnt,uint16_t arg2);
 void __cdecl16far ovc27_textTakesHalfDamage3(agnt_t far *agnt,uint16_t agntIndex,uint16_t arg3,uint16_t arg4);
 uint16_t __cdecl16far ovc27_textCharmed();
 void ovc27_textTakesHalfDamage4(void);
-int __cdecl16far ovc27_usesAgntCount(agnt_t far *agnt,byte recIndex,byte maxLevel,int *cursor);
+agnt_t far * __cdecl16far ovc27_usesAgntCount(agnt_t far *agnt,byte recIndex,byte maxLevel,int far *cursor);
 int __cdecl16far ovc27_rollToHitEntity(uint32_t agnt,byte column);
 int __cdecl16far ovc27_rollToHitAgent(uint32_t agnt,byte column);
 uint16_t __cdecl16far ovc27_compute3(uint32_t view,char frames);
