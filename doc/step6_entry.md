@@ -15576,3 +15576,58 @@ remove.
 Default changed in scripts/link_standalone.py (both the overlay and non-overlay link paths) and in
 scripts/probe_dgroup_layout.py; the stale "C0M must match -mm" comment is corrected, since that is
 untrue once C0's startup is bypassed.  `C0OBJ` still overrides it if needed.
+
+### layout: the C0 header alias is possible but TLINK will not merge the segment
+layout: the C0 header alias is mechanically possible but TLINK will not merge the segment
+
+Attempted the plan from the previous entry: give `__C0_ASM_CopyRight` a zero-cost label at
+DGROUP:0x04 inside C0L's own `DATASEG`, so our 43-byte copy at 0x98 can be deleted.
+
+WHAT WORKS.  The label mechanism itself:
+
+    DATASEG segment public 'DATASEG'
+            org 4
+            public ___C0_ASM_COPYRIGHT
+    ___C0_ASM_COPYRIGHT:
+    DATASEG ends
+
+prepended to `ovr_thunks.asm` assembles (one warning: "Reserved word used as symbol: DATASEG") and
+links cleanly, allocates no bytes, and does remove the head surplus:
+
+    first game string  delta +70 -> +26      (i.e. the 43 bytes did leave _DATA)
+
+The placement matters: the first attempt appended the block at the *end* of the module and TASM
+rejected it with "CS unreachable from current segment" (the module then ended in a data segment),
+which cascaded into 386 undefined `_OVR_*` thunks because no .obj was produced.  Prepending fixes it.
+
+WHAT DOES NOT WORK.  TLINK puts the label in a **separate segment**:
+
+    7CF8:0004  ___C0_ASM_COPYRIGHT
+
+while DGROUP's startup piece is `6F6B:0000 DATASEG@ 91`.  So the attributes do not match and the
+segments are not merged.  `DATASEG@` is TLINK's notation for an *unnamed* segment whose class is
+`DATASEG`, and TASM cannot declare an unnamed segment, so this route is closed without patching
+C0L.OBJ itself.  A symbol in another segment is a runtime break (`crtl.c` would read and write
+malloc bookkeeping at the wrong address), so the change was reverted even though the layout
+improved.
+
+The alternative of moving the 43-byte declaration to the end of DGROUP is not a win either: it
+would align the game data (head +70 -> +26, worth ~44 x 1,600) but the symbol's own name-pair delta
+becomes ~44,650, so the sum rises rather than falls.
+
+NET: no change.  HEAD is unchanged at
+
+    diff_dgroup 1,627/1,805 matched, 19 runs, sum|delta| 44,867, mean 27, worst 148
+    compare_state 1,625/0/0; compare_runtime 1,684/1,675/9 at both sample points
+    grep_checks 35,568; build 65/65; LINK.LOG 65 bytes / 0 problems
+
+The remaining ~+26..+70 head surplus therefore needs either a patched C0L (to expose the copyright
+segment's members) or a replacement startup, and both are toolchain surgery rather than data
+recovery.  This is the point where the layout axis, the section-5 axis and the runtime axis all
+depend on decisions or work outside reverse-engineering:
+
+  * layout: a patched/replacement C0 (above);
+  * section 5: recovering register/stack provenance for 165 functions (11,180 occurrences), or
+    accepting the grep as a heuristic a Ghidra export cannot satisfy;
+  * runtime: deeper sample points need a resident hook (timer/keyboard ISR) because VROOMM
+    overlays are packed at load, so code patching cannot reach them.
