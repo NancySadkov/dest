@@ -555,19 +555,19 @@ void __cdecl16far stshInitAudioAssets(char grab)
   uint16_t file_id;
   cte_t *pcVar6;
   far_t far *pfVar7;
-  uint uVar8;
+  uint sumLo;
   uint uVar9;
   int in_DX;
   int iVar10;
   uint16_t *puVar11;
-  uint uVar12;
+  uint sumHi;
   uint16_t unaff_SI;
   uint16_t i;
   far_t far *unaff_DI;
-  uint16_t uVar13;
-  bool bVar14;
-  uint8_t uVar15;
-  undefined1 uVar16;
+  uint16_t entrySeg;
+  bool carry;
+  uint8_t blkSize;
+  undefined1 blkSizeHi;
   voc_t voc;
   uint uStack_a;
   uint uStack_8;
@@ -628,30 +628,30 @@ void __cdecl16far stshInitAudioAssets(char grab)
                     /* WARNING: Subroutine does not return */
           ovr_stExit(0x20);
         }
-        uVar16 = 0;
+        blkSizeHi = 0;
         iVar4 = 0;
         iVar10 = 0;
-        uVar15 = voc.blksz[0];
+        blkSize = voc.blksz[0];
         plVar2 = LXLSH_at_((long *)0x0,CONCAT22(unaff_DI,(uint)voc.blksz[0]),(byte)unaff_SI);
-        uVar8 = CONCAT11(uVar16,uVar15) + (int)plVar2;
-        uVar9 = uVar8 - 2;
-        uVar12 = (iVar4 + iVar10 + (uint)CARRY2(CONCAT11(uVar16,uVar15),(uint)plVar2) +
-                 (uint)voc.blksz[2]) - (uint)(uVar8 < 2);
-        iVar4 = uVar8 + 0xb;
-        iVar10 = uVar12 + (0xfff2 < uVar9);
+        sumLo = CONCAT11(blkSizeHi,blkSize) + (int)plVar2;
+        uVar9 = sumLo - 2;
+        sumHi = (iVar4 + iVar10 + (uint)CARRY2(CONCAT11(blkSizeHi,blkSize),(uint)plVar2) +
+                 (uint)voc.blksz[2]) - (uint)(sumLo < 2);
+        iVar4 = sumLo + 0xb;
+        iVar10 = sumHi + (0xfff2 < uVar9);
         pvVar5 = ovr_stshAlloc(CONCAT13((char)((uint)iVar10 >> 8),CONCAT12((char)iVar10,iVar4)));
         ((uint16_t *)(i * 4))[1] = iVar4;
         *(uint16_t *)(i * 4) =(uint16_t)( pvVar5);
         *(undefined1 *)*(uint32_t *)(i << 2) = 3;
-        uVar13 = (uint16_t)((ulong)*(uint32_t *)(i << 2) >> 0x10);
+        entrySeg = (uint16_t)((ulong)*(uint32_t *)(i << 2) >> 0x10);
         iVar10 = (int)*(uint32_t *)(i << 2);
         *(uint16_t *)(iVar10 + 3) = 0;
         *(uint16_t *)(iVar10 + 1) = 0;
         *(uint *)((int)*(uint32_t *)(i << 2) + 5) = uVar9;
-        if ((uStack_8 <= uVar12) && ((uVar12 != uStack_8 || (uStack_a <= uVar9)))) {
-          bVar14 = 0xfff2 < uVar9;
-          uVar9 = uVar8 + 0xb;
-          uStack_8 = uVar12 + bVar14;
+        if ((uStack_8 <= sumHi) && ((sumHi != uStack_8 || (uStack_a <= uVar9)))) {
+          carry = 0xfff2 < uVar9;
+          uVar9 = sumLo + 0xb;
+          uStack_8 = sumHi + carry;
           uStack_a = uVar9;
         }
         iVar10 = ovr_stshRead();

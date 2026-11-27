@@ -3227,10 +3227,10 @@ char * __cdecl16far manage_textTotalPopulation(byte charIndex,short arg6,char_sh
   uint16_t uVar5;
   uint uVar6;
   uint aligned;
-  uint uVar8;
+  uint alignedX;
   int iVar9;
   int iVar10;
-  int iVar11;
+  int product;
   undefined1 uVar12;
   byte *pbVar13;
   uint16_t in_DX;
@@ -3256,7 +3256,7 @@ char * __cdecl16far manage_textTotalPopulation(byte charIndex,short arg6,char_sh
   char cStack_18;
   uint8_t changedFlag;
   int iStack_16;
-  int iStack_14;
+  int ySign;
   int iStack_12;
   uint16_t fontSeg;
   char acStack_e [6];
@@ -3423,9 +3423,9 @@ char * __cdecl16far manage_textTotalPopulation(byte charIndex,short arg6,char_sh
       (&stk_bac4)[(int)count] = (&stk_bac4)[(int)count] + cVar4;
       iVar10 = 0x2410;
       do {
-        iVar11 = iVar10 * uVar5;
+        product = iVar10 * uVar5;
         iVar10 = iVar9;
-        if (Agnts[iVar9].strengthMax < *(byte *)(iVar11 + 0x21)) {
+        if (Agnts[iVar9].strengthMax < *(byte *)(product + 0x21)) {
           Agnts[iVar9].strength = Agnts[iVar9].strengthMax;
         }
         do {
@@ -3495,8 +3495,8 @@ L_attact_3f0b_1082_1477:
         if (bVar19) {
           for (uVar6 = 0; uVar6 < SquareRecCount; uVar6 = uVar6 + 1) {
             aligned = ovr_alignUp4(*(int *)(uVar6 * 0x13),0,0);
-            uVar8 = ovr_alignUp4((peStack_1e->base).x,0,0);
-            if ((aligned == uVar8) &&
+            alignedX = ovr_alignUp4((peStack_1e->base).x,0,0);
+            if ((aligned == alignedX) &&
                (*(uint16_t *)((uint8_t *)&SquareRecs[uVar6] + 2) == (((entity_t *)peStack_1e)->base).y)) {
               func_0x0004f930();
               if (*(uint16_t *)((uint8_t *)&SquareRecs[uVar6] + 2) == GfxRndSeed2) {
@@ -3636,11 +3636,11 @@ L_attact_3f0b_1082_1477:
   uVar18 = ovr_ovc07_signum((peVar15->base).destX - (peStack_1e->base).x);
   iStack_12 = CONCAT22(fontSeg,uVar18);
   uVar18 = (uint16_t)((ulong)peStack_1e >> 0x10);
-  iStack_14 = ovr_ovc07_signum((((entity_t *)peStack_1e)->base).destY -
+  ySign = ovr_ovc07_signum((((entity_t *)peStack_1e)->base).destY -
                                (((entity_t *)peStack_1e)->base).y);
   if (((iStack_12 == 0) || (uVar5 = ovr_randBelow(2,0), (char)uVar5 == '\0')) ||
      (cVar4 = sub_OVC21_manage_c_23C2(), cVar4 != '\0')) {
-    if ((iStack_14 == 0) || (cVar4 = sub_OVC21_manage_c_23C2(), cVar4 != '\0')) {
+    if ((ySign == 0) || (cVar4 = sub_OVC21_manage_c_23C2(), cVar4 != '\0')) {
       if ((iStack_12 == 0) || (cVar4 = sub_OVC21_manage_c_23C2(), cVar4 != '\0')) {
         uVar6 = ovr_ovc26_usesStExit((int)count);
         if ((char)uVar6 == '\0') {
@@ -3678,8 +3678,8 @@ L_attact_3f0b_1082_1477:
     else {
       uVar18 = (uint16_t)((ulong)peStack_1e >> 0x10);
       puVar1 = &(((entity_t *)peStack_1e)->base).y;
-      *puVar1 = *puVar1 + iStack_14;
-      (((entity_t *)peStack_1e)->base).target = (char)iStack_14 + 0x1;
+      *puVar1 = *puVar1 + ySign;
+      (((entity_t *)peStack_1e)->base).target = (char)ySign + 0x1;
     }
   }
   else {

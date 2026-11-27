@@ -16544,3 +16544,37 @@ single-symbol name-resolution artefacts.  `matched` (1,631 of 1,805) is now limi
 by the 174 originals we still have no declaration for: the startup's own error strings and saved-vector
 block (whose bytes are C0L's, under C0L's internal names), and game objects that are still only present
 as stmiss.c blob text.
+
+### section 5: batch 10 - three functions (34,871 -> 34,829)
+section 5: batch 10 - three functions (34,871 -> 34,829)
+
+stshInitAudioAssets (129 lines, 25 occurrences)
+    uVar15  voc.blksz[0]                       -> blkSize    (4)
+    uVar16  0, its high byte in CONCAT11()      -> blkSizeHi  (4)
+    uVar8   CONCAT11(uVar16,uVar15) + plVar2    -> sumLo      (6)
+    uVar12  iVar4 + iVar10 + CARRY2(...) + ...  -> sumHi      (6)
+    bVar14  0xfff2 < uVar9                      -> carry      (3)
+    uVar13  high word of *(uint32_t *)(i << 2)  -> entrySeg   (2)
+
+    sumLo/sumHi are the halves of a 32-bit running total over the asset blocks - the CARRY2 term in
+    sumHi is what makes that unambiguous.  The 5 multi-assignment names (50 occurrences) stay unnamed.
+
+manage_textTotalPopulation (476 lines)
+    iStack_14  ovr_ovc07_signum(destY - ...)    -> ySign     (5)
+    uVar8      ovr_alignUp4(x)                  -> alignedX  (3)
+    iVar11     iVar10 * uVar5                   -> product   (3)
+
+ovc25_usesAlignUp47 (117 lines)
+    uVar4  ovr_randBelow(4,0)                   -> randDir   (3)
+    uVar3  ovr_alignUp4(Entities[i].base.x)     -> alignedX  (3)
+
+    iVar5 and uVar1 read the caller's frame through `unaff_BP` and stay unnamed.
+
+Skipped on purpose: crtl.c's `__vprinter_1000_0e84`, whose four names are the mangled
+decimal-conversion arithmetic (`bVar4 = bVar3 + bVar1 * 6 + bVar2 * 0x60`, `9 < (bVar3 & 0xf) | in_AF`)
+- a name would restate the arithmetic rather than describe a role.
+
+  grep_checks 34,871 -> 34,829 (-42); build 65/65; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,628/0/0
+  diff_dgroup 1,631/1,805 matched, 5 runs, sum|delta| 18, mean 0, worst 12
+  compare_runtime 1,692 matched, 1,683 identical / 9 different (both sample points)

@@ -674,8 +674,8 @@ void ovc25_usesAlignUp47(void)
 {
   uint32_t uVar1;
   uint uVar2;
-  uint uVar3;
-  uint16_t uVar4;
+  uint alignedX;
+  uint16_t randDir;
   int iVar5;
   int unaff_BP;
   uint uVar6;
@@ -722,8 +722,8 @@ void ovc25_usesAlignUp47(void)
   *(uint16_t *)(unaff_BP + -0x10) = 1;
   uVar6 = *(uint *)(unaff_BP + -4);
   while (uVar6 = uVar6 + 1, uVar6 < EntityCount) {
-    uVar3 = ovr_alignUp4((Entities)[uVar6].base.x,0,0);
-    if (uVar3 == *(uint *)(unaff_BP + -6)) {
+    alignedX = ovr_alignUp4((Entities)[uVar6].base.x,0,0);
+    if (alignedX == *(uint *)(unaff_BP + -6)) {
       uVar7 = (uint16_t)((ulong)Entities >> 0x10);
       if (((entity_t far *)Entities)[uVar6].base.y == *(int *)(iVar5 + *(int *)(unaff_BP + -4) * 0x37 + 2)
          ) {
@@ -748,8 +748,8 @@ void ovc25_usesAlignUp47(void)
     OVC25_5b66_131f_entry();
     return;
   }
-  uVar4 = ovr_randBelow(4,0);
-  *(undefined1 *)(unaff_BP + -9) = (char)uVar4;
+  randDir = ovr_randBelow(4,0);
+  *(undefined1 *)(unaff_BP + -9) = (char)randDir;
   *(undefined1 *)(unaff_BP + -10) = *(undefined1 *)(unaff_BP + -9);
   uVar6 = ovr_alignUp4((Entities)[uVar2].base.x +
                        *(char *)(*(byte *)(unaff_BP + -9) + 0x885) * 4,0,0);
