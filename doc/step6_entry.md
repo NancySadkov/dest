@@ -16578,3 +16578,46 @@ decimal-conversion arithmetic (`bVar4 = bVar3 + bVar1 * 6 + bVar2 * 0x60`, `9 < 
   compare_state 1,628/0/0
   diff_dgroup 1,631/1,805 matched, 5 runs, sum|delta| 18, mean 0, worst 12
   compare_runtime 1,692 matched, 1,683 identical / 9 different (both sample points)
+
+### layout: delete the redundant stmiss blob (EXE -3,824 bytes)
+layout: delete stmiss.c's blob - it was duplicate data (EXE 536,276 -> 532,452)
+
+The objective's plan was to split the blob into named declarations in place.  Measuring first showed the
+blob should not be split but deleted, and the evidence is decisive:
+
+  * it sits at DGROUP:0xb0c0, while the original's initialised DGROUP image is 36,864 bytes and its last
+    symbol is at 0x88fe - the blob is past everything, so it cannot be supplying an original offset;
+  * of its 201 NUL-terminated entries, **all 201** are present verbatim in the original image
+    (tmp/blob_redundant.py), i.e. every string it holds already exists at its real place in our layout;
+  * nothing references `s_absentBlob`; it was written back when those strings were believed missing, and
+    each has since been declared at its own offset (that is what took diff_dgroup to sum|delta| 18).
+
+So the array was 3,823 bytes of duplicated text after the end of DGROUP.
+
+MEASURED (HEAD bef10dc3 -> this commit)
+
+  REBUILT.EXE               536,276 -> 532,452   (-3,824 bytes, exactly the blob)
+  diff_dgroup matched         1,631 -> 1,631
+  diff_dgroup sum|delta|         18 -> 18
+  diff_dgroup runs                5 -> 5
+  compare_state              1,628/0/0 (unchanged)
+  compare_runtime            1,692 matched, 1,683 identical / 9 different (both sample points)
+  grep_checks                34,829 (unchanged - the blob's declaration spans several source lines, so
+                              it never matched the `char [N] = "` pattern in the first place)
+  build 65/65, LINK.LOG 65 bytes / 0 problems
+
+The unchanged matched/sum figures are the point: had the blob been a source of bytes rather than a copy,
+deleting it would have broken the layout immediately (matched down, sum up).  It did not move, so the
+3,823 bytes were pure duplication.
+
+This also answers the question left open last turn about the `matched` gap: the 174 unmatched originals are
+*not* blob-resident text.  They are
+    90  names longer than 30 characters (Turbo C truncates publics at 31 significant characters)
+    30  duplicate names (the same name at two addresses, e.g. s_change_party four times)
+    17  C0 record-field labels (.seg/.ofs) - not variables
+     2  group/segment names (DATASEG, DGROUP)
+    35  individual cases: the startup's own error strings and saved-vector block (bytes are C0L's, under
+        C0L's internal names), struct-field labels such as `_video.windowy1` and `IdFORM.hi`, and
+        `stdout`/`stderr`
+so closing that gap needs per-symbol declarations that our current string declarations would have to be
+split to provide - not a blob transformation.
