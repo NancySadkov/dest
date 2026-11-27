@@ -21635,3 +21635,52 @@ count and 6 the sides.
     diff_dgroup      1,639/1,805 matched                       (unchanged)
     compare_runtime  1,692 matched / 1,683 identical / 9 different  (unchanged)
     screen_calls     5ded:10ea leaves the delta table (was C 105 / image 36)
+
+
+## `5ded:14a8` is not a function - it is the `else` arm of `5ded:10ea`
+
+The block at `5ded:14a8` has **no prologue**: it starts with `les bx, ptr [bp + 6]`, reads
+`[bp-8]`/`[bp-0xa]` (the victim far pointer that `5ded:10ea` sets up) and the three buffers at
+`bp-0x122`/`bp-0xd2`/`bp-0x82`, and its exits jump to the shared epilogue at `0x1be7` (`emptyFunction`).
+So it shares `10ea`'s frame and belongs to it - writing it as a separate function with its own
+parameters is impossible.
+
+I extended the `10ea` body with it (647 further instructions, 58 overlay calls). The continuation is a
+second `variant` chain, all reusing the same victim pointer:
+
+    4   play_sfxU(0x4c) then, unless `gdata->flags3 & 0x20`, `rollDice(level,6)+1` halved by
+        `rollToHitEntity`/`spellHalfDamage` and by `gdata->flags2 & 0x200` -> "%s takes half damage
+        from fire.", paralysis notice, `state = 0xa`; the 0x20 branch gives "%s is immune to fire."
+    6   guards `animVariant == 0`, `flags & 0x40`, `rollToHitEntity` -> "%s is held by %s.",
+        `6a8f_01e7_entry`, flag 0x40, `state = 0x10`, `play_sfxU(0x1b)`
+    7   same but `level < 5` and flag 0x80 -> "%s is put to sleep by %s.", `state = 0xc`
+    8   `flags & 0x100` -> "%s is entangled in a web...", copies `agnt` byte +0x32 into victim byte
+        +0x33, `state = 0x050d` (low 0xd, high 5), flag 0x100
+    9   like 6 (flag 0x40, `state = 0x10`, "held by")
+    0xb / 0xc / 0xd  `rollToHitEntity` then paralysis with `victim->strength`; 0xc also needs
+        `level < 8`; `state = 0xb`
+    0xe `flags |= 0x800`, `6a8f_01e7_entry`, `play_sfxU(0x1b)`
+    0xf a chained effect: budget 0x1e, `6a8f_01e7_entry` + charm + flag 0x20, then walk agents with
+        `ovc27_usesAgntCount(agnt,0xe,budget,&prev)`, skipping `prev == agntIndex`, subtracting each
+        target's level from the budget until the budget or the agent list is exhausted
+
+One call remains a gap: `lcall 0x1c8,0x48` with a single pushed word (`6`) inside the variant-4 arm -
+no same-module vote names it (`resolve_overlay_calls.py` reports NO SAME-MODULE VOTE).
+
+**A measurement artefact, recorded so it is not mistaken for a regression.** `audit/functions_real.tsv`
+splits this one routine into three entries - `5ded:10ea` (956 B), `5ded:1433` (117 B, named
+`ovc27_textCharmed`, no callers) and `5ded:14a8` (1855 B) - but `0x1433` lies **inside** the state-3/5
+arm (`0x140a..0x14a5`), so Ghidra split the instruction stream mid-arm. `screen_calls.py` measures a
+function by `next_start - ofs`, so it now reports `5ded:10ea` as C 104 / image 36: the C body covers the
+whole routine while the tool only counts the first 958 bytes. Removing the `14a8` row from the TSV made
+things worse (the `1433` row then swallowed the region), so the data was reverted and the artefact is
+documented instead.
+
+## Measured (HEAD b6d0e6e7 -> this commit)
+
+    grep_checks      11,791 (unchanged - the continuation block introduced no placeholder names)
+    REBUILT.EXE      458,548 -> 461,028 (+2,480: the real continuation code)
+    build 65/65, LINK.LOG 0 errors
+    compare_state    1,628 matched / 0 different / missing 2   (unchanged)
+    diff_dgroup      1,639/1,805 matched                       (unchanged)
+    compare_runtime  1,692 matched / 1,683 identical / 9 different  (unchanged)
