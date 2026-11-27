@@ -19222,3 +19222,62 @@ reuses the first - behaviourally equivalent, structurally not.  Moving the block
 and deleting the standalone function is now purely mechanical, and it would also remove the
 last self-reference in `textTakesHalfDamage3` (38 calls -> the image's 36).  The third entry
 point, `5ded:1433` (`ovc27_textCharmed`), shares the same frame and is still separate.
+
+### step 6: 5ded:14a8 merged into 5ded:10ea as one function
+step 6: `5ded:14a8` merged into `5ded:10ea` as one function (grep 26,543, EXE 495,798)
+
+The original is one function, not two.  `ovc27_textTakesHalfDamage4` began with no prologue
+
+    5ded:14a8  les bx, ptr [bp + 6]
+    5ded:14ab  cmp byte ptr es:[bx + 0x2e], 4
+
+and the whole overlay contained exactly one reference to it - a jump from inside `5ded:10ea`:
+
+    5ded:13e2  jmp 0x14a8
+
+with both halves ending at the shared epilogue `5ded:1be7` (`pop di / pop si / leave / retf`, the
+4 bytes the audit lists as `emptyFunction`).  So the block is a branch into the same frame, and
+the tree's call pushed a second frame the original never has.
+
+Now:
+
+  * the block lives behind `L_half4:` at the end of `ovc27_textTakesHalfDamage3`;
+  * `ovc27_textTakesHalfDamage4(agnt,agntIndex); return;` is `goto L_half4;` (the `return;` was
+    unreachable and is gone);
+  * the standalone function and its prototype are deleted - `_OVC27_TEXTTAKESHALFTAMAGE4` is no
+    longer in the map, only `_OVC27_TEXTTAKESHALFDAMAGE3` and its thunk;
+  * the 15 declarations it needs that the host did not already have were added to the host's
+    declaration block; `text1` / `text2` / `msg` / `agntRec` / `pan` are shared because they are
+    the same objects.
+
+## Verified: 104 call sites, which is the image's 36 + 68
+
+    merged function extent 0x100a, next symbol _OVC27_TEXTCHARMED
+    TOTAL call sites: 108
+
+    ours                          image
+    36 calls from the 10ea half   5ded:10ea        36
+    68 calls from the 0x14a8 half 5ded:14a8        68
+     4 extra                      3 x `lcall 0,0x470` (F_LXURSH@) + 1 x `lcall 0,0x337`
+                                  remaining in the 10ea half, which has not been re-derived
+
+The 0x14a8 half's 68 are unchanged from the previous commit (12 statusText at 8 bytes, 8
+rollToHitEntity at 6, 7 each of panFromX / play_sfxU / usesStshRealloc / uiNotify at 4/6/4/6,
+5 stsprintf at 0x10 and 2 at 0xc, 5 6a8f entry at 4, 4 textParalyzed at 0xa, and one each of
+usesBDADailyTimeCounter, rollDice, spellHalfDamage and usesAgntCount at the image's sizes).
+
+## Measured (HEAD 3d4f07f8 -> this commit)
+
+    grep_checks      26,543 (unchanged - the merge adds no generated names)
+    REBUILT.EXE      495,814 -> 495,798
+    build 65/65, LINK.LOG 65 bytes / 0 problems
+    compare_state    1,628/0/0 (unchanged)
+    diff_dgroup      1,639/1,805 matched, 5 runs, sum|delta| 18, mean 0, worst 12 (unchanged)
+    compare_runtime  1,692 matched, 1,683 identical / 9 different at all three sample points
+
+## What is left on this cluster
+
+The third entry point, `5ded:1433` (`ovc27_textCharmed`), still has the same problem: it is a
+branch into this frame (it reads [bp-0xa]/[bp-8] and [bp+6] the same way) and the tree keeps it
+as a separate function.  And the 10ea half itself has not been re-derived, which is where the
+four remaining spurious calls (`F_LXURSH@` from `SUB21`, and one more runtime helper) come from.

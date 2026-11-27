@@ -874,6 +874,21 @@ void __cdecl16far ovc27_textTakesHalfDamage3(agnt_t far *agnt,uint16_t agntIndex
   char *ptrSeg;
   int levelBonus;
   
+  uint *puVar1;
+  uint32_t uVar2;
+  byte bVar3;
+  uint16_t uVar4;
+  int iVar5;
+  uint16_t pan;
+  uint uVar7;
+  char far *pcVar8;
+  uint8_t far *bufPtr;
+  uint16_t in_DX;
+  int unaff_BP;
+  int unaff_DI;
+  int half4Remaining;
+  int half4LoopIdx;
+  char far *st1;
   agntSeg = (uint16_t)((ulong)((long)agntIndex * 0x34) >> 0x10);
   ptrSeg = (char *)((int)&AgntAnms[0x75].halfWidth + 1);
   /* 0016-001B: the original builds {seg: 0x50, ofs: agntIndex*0x34}. */
@@ -975,8 +990,7 @@ void __cdecl16far ovc27_textTakesHalfDamage3(agnt_t far *agnt,uint16_t agntIndex
     return;
   }
   if ((agnt->variant != 0x3) && (agnt->variant != 0x5)) {
-    ovc27_textTakesHalfDamage4(agnt,agntIndex);
-    return;
+    goto L_half4;
   }
   if ((agntRec->flags & 0x20) != 0) {
     return;
@@ -1000,70 +1014,7 @@ void __cdecl16far ovc27_textTakesHalfDamage3(agnt_t far *agnt,uint16_t agntIndex
     return;
   }
   return;
-}
-
-
-
-/* 5ded:1433 */
-
-/* [R2] string "%s is charmed by %s." */
-
-uint16_t __cdecl16far ovc27_textCharmed()
-
-{
-  uint *puVar1;
-  char *pcVar2;
-  uint8_t *puVar3;
-  uint16_t unk;
-  uint16_t in_DX;
-  int unaff_BP;
-  char *in_stack_00000000;
-  
-  pcVar2 = ovr_agnt_statusText((agnt_t far *)*(uint16_t *)(unaff_BP + -10),in_stack_00000000,0);
-  puVar3 = ovr_ovc15_usesStshRealloc(pcVar2,0,0,0,0,0,0,0);
-  pcVar2 = ovr_stsprintf((char *)(unaff_BP + -0x82),(char *)CONCAT22(0x5c2f,_SS),
-                         (char *)CONCAT22(puVar3,(char *)0x26510));
-  ovr_uiNotify(pcVar2,in_DX,0);
-  *(undefined1 *)((int)*(uint32_t *)(unaff_BP + -10) + 0x2f) =
-       *(undefined1 *)((int)*(uint32_t *)(unaff_BP + 6) + 0x2f);
-  ovr_OVC41_6a8f_01e7_entry((agnt_t far *)*(uint16_t *)(unaff_BP + -10),0);
-  puVar1 = (uint *)((int)*(uint32_t *)(unaff_BP + -10) + 0x2b);
-  *puVar1 = *puVar1 | 0x20;
-  unk = ovr_audio_panFromX((agnt_t far *)*(uint16_t *)(unaff_BP + -10),0);
-  ovr_play_sfxU(0x1b,0,unk,0,0);
-  return;
-}
-
-
-
-/* 5ded:14a8 */
-
-/* WARNING: Unknown calling convention -- yet parameter storage is locked */
-/* [R2] string "%s takes half damage from fire." */
-
-void __cdecl16far ovc27_textTakesHalfDamage4(agnt_t far *agnt,uint16_t agntIndex)
-
-{
-  uint *puVar1;
-  uint32_t uVar2;
-  byte bVar3;
-  uint16_t uVar4;
-  int iVar5;
-  uint16_t pan;
-  uint uVar7;
-  char far *pcVar8;
-  uint8_t far *bufPtr;
-  uint16_t in_DX;
-  int unaff_BP;
-  int unaff_DI;
-  int half4Remaining;
-  int half4LoopIdx;
-  char far *st1;
-  agnt_t far *agntRec;
-  uint8_t text1;
-  uint8_t text2;
-  uint8_t msg;
-  
+L_half4:
   if (((agnt_t far *)((unaff_BP + 6)))->variant == '\x04') {
   pan = ovr_audio_panFromX(agntRec);
   ovr_play_sfxU(0x4c,0,pan);
@@ -1318,6 +1269,38 @@ void __cdecl16far ovc27_textTakesHalfDamage4(agnt_t far *agnt,uint16_t agntIndex
       return;
     }
   } while( true );
+}
+
+
+
+/* 5ded:1433 */
+
+/* [R2] string "%s is charmed by %s." */
+
+uint16_t __cdecl16far ovc27_textCharmed()
+
+{
+  uint *puVar1;
+  char *pcVar2;
+  uint8_t *puVar3;
+  uint16_t unk;
+  uint16_t in_DX;
+  int unaff_BP;
+  char *in_stack_00000000;
+  
+  pcVar2 = ovr_agnt_statusText((agnt_t far *)*(uint16_t *)(unaff_BP + -10),in_stack_00000000,0);
+  puVar3 = ovr_ovc15_usesStshRealloc(pcVar2,0,0,0,0,0,0,0);
+  pcVar2 = ovr_stsprintf((char *)(unaff_BP + -0x82),(char *)CONCAT22(0x5c2f,_SS),
+                         (char *)CONCAT22(puVar3,(char *)0x26510));
+  ovr_uiNotify(pcVar2,in_DX,0);
+  *(undefined1 *)((int)*(uint32_t *)(unaff_BP + -10) + 0x2f) =
+       *(undefined1 *)((int)*(uint32_t *)(unaff_BP + 6) + 0x2f);
+  ovr_OVC41_6a8f_01e7_entry((agnt_t far *)*(uint16_t *)(unaff_BP + -10),0);
+  puVar1 = (uint *)((int)*(uint32_t *)(unaff_BP + -10) + 0x2b);
+  *puVar1 = *puVar1 | 0x20;
+  unk = ovr_audio_panFromX((agnt_t far *)*(uint16_t *)(unaff_BP + -10),0);
+  ovr_play_sfxU(0x1b,0,unk,0,0);
+  return;
 }
 
 
