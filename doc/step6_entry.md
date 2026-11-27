@@ -21170,3 +21170,66 @@ expresses as explicit field stores, plus the omitted overlay call.
     diff_dgroup      1,639/1,805 matched, 5 runs, sum|delta| 18 (unchanged)
     compare_runtime  1,692 matched, 1,683 identical / 9 different at all three sample points
     screen_calls     5087:056e  C 5 / image 11  (was C 140 / image 11)
+
+
+## Overlay selector resolution is authoritative now (`scripts/resolve_selector.py`)
+
+Deriving `3381:08dc` exposed a defect in how I had been resolving overlay calls. Scanning other
+modules' bodies for the same `(selector, offset)` pair reported **three** names for `0x170,0x5c`
+(`constr_usesGMapFlags`, `constr_usesGMapFlags2`, `init_getMapFlags`), while
+`audit/overlay_segments.csv` maps the selector to a single overlay segment and therefore a single
+target. The cross-reference shortcut can only ever be a heuristic, and here it was actively
+misleading.
+
+`scripts/resolve_selector.py` now resolves from the map first (selector -> overlay segment -> symbol at
+that offset), with selector 0 treated as the resident text segment. It is the tool to use before any
+`lcall` is named:
+
+    lcall 0000,2642 -> _fsetmem      (resident 1000:2642)
+    lcall 0000,2666 -> _fmemset      (resident 1000:2666)
+    lcall 0170,005C -> ovr_randBelow          (segment 2337)
+    lcall 0138,002A -> ovr_constr_usesGMapFlags   (segment 22EF)
+    lcall 0138,0061 -> ovr_constr_usesGMapFlags2  (segment 22EF)
+    lcall 0188,0025 -> ovr_stshStoreFile      (segment 234C)
+    lcall 0208,0020 -> unresolvable (selector absent from the map; single use in the image)
+
+So `3381:08dc`'s 60 image calls are: 43 x `ovr_randBelow`, 6 x `ovr_constr_usesGMapFlags`,
+2 x `ovr_constr_usesGMapFlags2`, 2 x `_fsetmem` (not `memset` - the image pushes
+`dst(2), 0x4560, 0`, which is `_fsetmem(dst,count,value)`), and 6 near in-module calls
+(`0x693`, `0x23b5`, `0x2883`, `0x2d36`).
+
+## `3381:08dc` structure decoded (body still to write)
+
+It is a **terrain generator**, not the `init_textFilename` the tree calls it. Decoded so far:
+
+* `for (i = 0; i < 0x94; i++)` builds a 148-byte height profile at `[bp-0xa2]` by a random walk:
+  `randBelow(10) == 0` -> `v = v + randBelow(2)*2 - 1`, clamped to `[-1, 1]`; `v[0] = v[0x93] = 0`;
+* `_fsetmem(GMapCells, 0x4560, 0)` and `_fsetmem(GMapFlags, 0x4560, 0)` (0x4560 = 60*148*2);
+* `for (di = 0; di < 60; di++)` with two **mirrored** column passes (`si` 0..0x93 for even rows,
+  0x93..0 for odd rows, at `0x0996` and `0x0bcb`), each computing a smoothed height
+  `(h[si-1] + h[di-1][si]) / 2`, applying a random left/right nudge (`randBelow(8)`/`randBelow(0x10)`),
+  then a five-step terrain ladder on the height (`0x55 / 0x40 / 0x2a / 0x15 / 0`) selecting a
+  `randBelow` spread of `9/0x13/0xf/5/0xb`, and writing the result into `GMapAreas` (`0x8a05`);
+* a cleanup pass (`0x0e04`) clamping negative heights to 0 and setting bit `4` in `GMapFlags[di][si]`
+  when the local slope changes direction: `|h[si+1]-h[di+1][si]| < |h[si]-h[di][si+1]|`;
+* two in-module calls at `0x0f06`/`0x0f0c` bracket a further pass from `0x0f13`.
+
+Globals: `GMapAreas` (0x8a05), `GMapFlags` (0x8a09), `GMapCells` (0x8a0d), all far pointers; the map is
+60 rows x 148 shorts (stride 0x94 bytes / 0x128 bytes).
+
+## Why this one cannot be gate-verified
+
+`3381:08dc` runs during initialisation, and the three runtime sample points are taken at the **entry**
+of `main`, `init_game` and the key handler - i.e. before init work has run. So a rewrite of an
+init-time generator is invisible to `compare_runtime`, exactly as `O22` is invisible to the link. Its
+only oracle is a listing comparison, which is why the body was not written this pass rather than
+half-written.
+
+## Measured (HEAD 925b77cc -> this commit)
+
+    grep_checks      12,680 (unchanged - tool and documentation only)
+    REBUILT.EXE      466,534 (unchanged)
+    build 65/65, LINK.LOG 0 errors
+    compare_state    1,628/0/0 (unchanged)
+    diff_dgroup      1,639/1,805 matched, 5 runs, sum|delta| 18 (unchanged)
+    compare_runtime  1,692 matched, 1,683 identical / 9 different at all three sample points
