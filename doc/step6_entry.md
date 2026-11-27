@@ -17270,3 +17270,88 @@ startup's own objects (27).
 Re-measured after both reverts: build 65/65, LINK.LOG 65 bytes / 0 problems, grep_checks 34,599,
 compare_state 1,628/0/0, diff_dgroup 1,639/1,805 matched, 5 runs, sum|delta| 18, mean 0, worst 12, and the
 three runtime sample points at 1,683 identical / 9 different.
+
+### step 6: the original printf ABI, recovered from the image
+step 6: the original printf's ABI, recovered from the image (capstone)
+
+The recovered export of `__vprinter_func_start` cannot be used (it treats `unaff_BP` as a value), so the
+first step towards rebuilding it is to read the original's own code.  `scripts/dis_orig.py` disassembles any
+1000-relative region with capstone (16-bit) - note the load image starts after the MZ header, so the file
+offset is `img + (seg-0x1000)*16 + ofs`; without that base the listing starts mid-instruction, which is how
+the first attempt at 0x2747 produced `rcl word ptr [bp-0x1c09],3`.
+
+## printf, 1000:2747 (27 bytes)
+
+    2747  push bp
+    2748  mov  bp,sp
+    274a  mov  ax,0x2925        ; __fputn  - the emitter
+    274d  push ax
+    274e  push ds              ;   (ds:0x2925, a far pointer)
+    274f  mov  ax,0x863a       ; &stdout  - the FILE * variable
+    2752  push ax
+    2753  push word ptr [bp+8] ; fmt.seg
+    2756  push word ptr [bp+6] ; fmt.ofs
+    2759  lea  ax,[bp+0xa]     ; address of the first variadic word
+    275c  push ax
+    275d  call 0xe8c           ; __vprinter
+    2760  pop  bp
+    2761  retf
+
+so the signature is
+
+    __vprinter(uint16_t *ap, char far *fmt, FILE **stream, void (*emit)())
+
+with `ap = &fmt` (one word past the format pointer), `stream = &stdout` (0x863a in the original's DGROUP,
+which `audit/symbols.tsv` labels `stdout`, followed by `_streams[1].flags`), and `emit = __fputn`.
+
+## __vprinter, 1000:0e8c (26 bytes) - frame setup only
+
+    0e8c  push bp
+    0e8d  mov  bp,sp
+    0e8f  sub  sp,0x96          ; 150-byte output buffer at [bp-0x96]
+    0e93  push si
+    0e94  push di
+    0e95  mov  word ptr [bp-0x12],0
+    0e9a  mov  word ptr [bp-0x14],0x50   ; 80 - characters left in the current line/buffer
+    0e9f  mov  word ptr [bp-0x16],0
+    0ea4  jmp  0xef0            ; into __vprinter_func_start, which is the format loop
+                                ; and jumps back into the helpers below
+
+## The helpers around it
+
+    0e74  mov al,dh / call 0e7b ...      hex-digit emitter, writes through DI with aam/daa/adc tricks
+    0ea6  push di / mov cx,-1 / repne scasb / not cx / dec cx   strlen
+    0eb3  mov ss:[di],al / inc di / dec [bp-0x14] / jne ...     append one char, 80-char budget
+    0ebc  push bx,cx,dx,es
+          lea ax,[bp-0x96] / sub di,ax            ; count = di - buffer
+          push ss / lea ax,[bp-0x96] / push ax    ; far pointer to the buffer
+          push di                                 ; count
+          push [bp+0xc] / push [bp+0xa]           ; the stream far pointer
+          call word ptr [bp+0xe]                  ; *** the emit callback ***
+          or ax,ax / jne ... / mov [bp-0x16],1    ; remember a write error
+          mov word ptr [bp-0x14],0x50 / add [bp-0x12],di / lea di,[bp-0x96]
+          pop es ...
+
+The indirect `call word ptr [bp+0xe]` is what makes the design clear: `__vprinter` is a formatter that
+knows nothing about streams.  It buffers 80 characters into its own 150-byte frame area and flushes them
+through the callback it was handed - `__fputn` for printf/fprintf, and `sprintf_strputn` (1000:2c3f) for
+sprintf.  Our `st_vsst_printf(buf, fmt, ap)` is the same function with a different emitter.
+
+## What is left
+
+`__vprinter_func_start` (1000:0ef0, 1110 bytes) is the format loop itself - the part Ghidra flattened into
+407 lines of `unaff_BP` arithmetic.  Translating it is now a bounded job with the frame layout above to
+anchor it:
+    [bp-0x96 .. bp-0x02]  150-byte output buffer (the flush uses [bp-0x96] as its base)
+    [bp-0x14]             characters left before a flush (starts at 80)
+    [bp-0x12]             running byte count
+    [bp-0x16]             write-error flag
+    [bp+0x06 .. bp+0x08]  fmt (far)
+    [bp+0x0a .. bp+0x0c]  stream (far pointer to the FILE *)
+    [bp+0x0e]             emit callback (near)
+    [bp+0x10]             &args, though printf passes it at +0x0a via the lea above
+
+No code changed this turn; the tree is at the same measured state
+(build 65/65, LINK.LOG 65 bytes / 0 problems, grep_checks 34,599, compare_state 1,628/0/0,
+diff_dgroup 1,639/1,805 matched with sum|delta| 18, runtime 1,683 identical / 9 different at all three
+sample points).  `scripts/dis_orig.py` is the reusable tool this produced.
