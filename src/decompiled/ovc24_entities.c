@@ -947,14 +947,14 @@ void __cdecl16far ovc24_intelUnitReport(int entityIndex)
 bool __cdecl16far ovc24_textArena(uint16_t x,uint y,char faction)
 
 {
-  uint uVar1;
-  uint uVar2;
+  uint xAligned;
+  uint seedAligned;
   int iVar3;
   
   if ((GOngoingBattle == '\0') && (GfxRndSeed2 == y)) {
-    uVar1 = alignUp4(x,0,0);
-    uVar2 = alignUp4(GfxRndSeed,0,0);
-    if (uVar1 == uVar2) {
+    xAligned = alignUp4(x,0,0);
+    seedAligned = alignUp4(GfxRndSeed,0,0);
+    if (xAligned == seedAligned) {
       iVar3 = 0;
       while( true ) {
         if ((int)(uint)AgntCount <= iVar3) {

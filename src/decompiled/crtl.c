@@ -2829,15 +2829,15 @@ uint __VRAM(int count,uint *src)
   uint *puVar4;
   int lastIdx;
   uint *puVar6;
-  bool bVar7;
+  bool forward;
   uint *in_stack_00000004;
   uint *in_stack_0000000a;
   
   puVar4 = (uint *)(uint)_video.snow;
   puVar6 = puVar4;
   if (count != 0) {
-    bVar7 = in_stack_00000004 < (*(uint16_t *)((uint8_t *)&(src) + 2));
-    if (bVar7) {
+    forward = in_stack_00000004 < (*(uint16_t *)((uint8_t *)&(src) + 2));
+    if (forward) {
       lastIdx = count + -1;
       puVar6 = (uint *)(lastIdx * 2);
       in_stack_00000004 = in_stack_00000004 + lastIdx;
@@ -2846,9 +2846,9 @@ uint __VRAM(int count,uint *src)
     if (puVar4 == (uint *)0x0) {
       for (; count != 0; count = count + -1) {
         puVar2 = (*(uint16_t *)((uint8_t *)&(src) + 2));
-        (*(uint16_t *)((uint8_t *)&(src) + 2)) = (*(uint16_t *)((uint8_t *)&(src) + 2)) + (uint)bVar7 * -2 + 1;
+        (*(uint16_t *)((uint8_t *)&(src) + 2)) = (*(uint16_t *)((uint8_t *)&(src) + 2)) + (uint)forward * -2 + 1;
         puVar1 = in_stack_00000004;
-        in_stack_00000004 = in_stack_00000004 + (uint)bVar7 * -2 + 1;
+        in_stack_00000004 = in_stack_00000004 + (uint)forward * -2 + 1;
         *puVar2 = *puVar1;
       }
     }
@@ -2863,7 +2863,7 @@ uint __VRAM(int count,uint *src)
             bVar3 = in(0x3da);
           } while (!(bool)(bVar3 & 1));
           puVar1 = in_stack_00000004;
-          in_stack_00000004 = in_stack_00000004 + (uint)bVar7 * -2 + 1;
+          in_stack_00000004 = in_stack_00000004 + (uint)forward * -2 + 1;
           puVar6 = (uint *)*puVar1;
           do {
             bVar3 = in(0x3da);
@@ -2872,7 +2872,7 @@ uint __VRAM(int count,uint *src)
             bVar3 = in(0x3da);
           } while (!(bool)(bVar3 & 1));
           puVar1 = (*(uint16_t *)((uint8_t *)&(src) + 2));
-          (*(uint16_t *)((uint8_t *)&(src) + 2)) = (*(uint16_t *)((uint8_t *)&(src) + 2)) + (uint)bVar7 * -2 + 1;
+          (*(uint16_t *)((uint8_t *)&(src) + 2)) = (*(uint16_t *)((uint8_t *)&(src) + 2)) + (uint)forward * -2 + 1;
           *puVar1 = (uint)puVar6;
           count = count + -1;
         } while (count != 0);
@@ -2888,9 +2888,9 @@ uint __VRAM(int count,uint *src)
             puVar6 = (uint *)CONCAT11((char)((uint)puVar6 >> 8),bVar3 >> 1 | bVar3 << 7);
           } while (!(bool)(bVar3 & 1));
           puVar2 = (*(uint16_t *)((uint8_t *)&(src) + 2));
-          (*(uint16_t *)((uint8_t *)&(src) + 2)) = (*(uint16_t *)((uint8_t *)&(src) + 2)) + (uint)bVar7 * -2 + 1;
+          (*(uint16_t *)((uint8_t *)&(src) + 2)) = (*(uint16_t *)((uint8_t *)&(src) + 2)) + (uint)forward * -2 + 1;
           puVar1 = in_stack_00000004;
-          in_stack_00000004 = in_stack_00000004 + (uint)bVar7 * -2 + 1;
+          in_stack_00000004 = in_stack_00000004 + (uint)forward * -2 + 1;
           *puVar2 = *puVar1;
           count = count + -1;
         } while (count != 0);

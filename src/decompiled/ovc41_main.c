@@ -108,9 +108,9 @@ void __cdecl16far ovc41_compute4(agnt_t far *agnt,byte flag,byte pad,agnt_t far 
 
 {
   uint *puVar1;
-  uint uVar2;
+  uint healthOld;
   agnt_t far *paVar3;
-  int iVar4;
+  int carryIn;
   uint16_t unaff_BP;
   uint16_t in_stack_00000000;
   long b;
@@ -122,14 +122,14 @@ void __cdecl16far ovc41_compute4(agnt_t far *agnt,byte flag,byte pad,agnt_t far 
     retStorage = (long *)CONCAT11(other->gindex,in_stack_0000fffc);
     if (AgntGs[(uint)other->gindex].shortName[3] != -1) {
       ovc41_growthForLevel(agnt,0);
-      iVar4 = 0;
+      carryIn = 0;
       paVar3 = (agnt_t far *)LXMUL_at_(retStorage,CONCAT22(in_stack_00000000,unaff_BP),b);
       paVar3 = ovr_ovc15_textError((agnt_t far *)CONCAT22(in_stack_0000000c,other),paVar3);
       puVar1 = (uint *)&other->health;
-      uVar2 = *puVar1;
+      healthOld = *puVar1;
       *puVar1 = (int)&paVar3->x + *puVar1;
       *(uint *)&other->frameIndex =
-           *(int *)&other->frameIndex + iVar4 + (uint)CARRY2(uVar2,(uint)paVar3);
+           *(int *)&other->frameIndex + carryIn + (uint)CARRY2(healthOld,(uint)paVar3);
       ovc41_compute3((uint32_t)CONCAT22(in_stack_0000000c,other),retStorage,unaff_BP);
     }
   }

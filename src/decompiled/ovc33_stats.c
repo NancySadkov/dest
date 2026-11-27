@@ -2284,16 +2284,16 @@ L_stats_6386_1c9f_22C8:
 bool __cdecl16far stats_selectAgentAt(uint16_t x,uint16_t y)
 
 {
-  int iVar1;
+  int agentIdx;
   int16_t unaff_BP;
   int16_t in_stack_00000000;
   brect_t *in_stack_00000002;
   
-  iVar1 = video_findAgentAt(x,y);
-  if (iVar1 != -1) {
-    stats_usesAlignUp42((byte)iVar1,(byte)iVar1,unaff_BP,in_stack_00000000,in_stack_00000002,x);
+  agentIdx = video_findAgentAt(x,y);
+  if (agentIdx != -1) {
+    stats_usesAlignUp42((byte)agentIdx,(byte)agentIdx,unaff_BP,in_stack_00000000,in_stack_00000002,x);
   }
-  return iVar1 != -1;
+  return agentIdx != -1;
 }
 
 

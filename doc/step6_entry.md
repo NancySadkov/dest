@@ -17663,3 +17663,32 @@ and then returned, so it is the function's result rather than a reused scratch s
   compare_state 1,628/0/0
   diff_dgroup 1,639/1,805 matched, 5 runs, sum|delta| 18, mean 0, worst 12
   compare_runtime 1,692 matched, 1,683 identical / 9 different at all three sample points
+
+### section 5: batch 27 - five functions (34,339 -> 34,306)
+section 5: batch 27 - five functions (34,339 -> 34,306)
+
+ovc41_compute4 (ovc41_main.c)
+    uVar2  *puVar1, the health value read before it is updated -> healthOld (3)
+    iVar4  0, added into frameIndex beside CARRY2(uVar2, ...)  -> carryIn   (3)
+
+bldng_compute2 (ovc35_bldng.c)
+    uVar2  bldng_usesGStrangeTable(buildType)                  -> tableVal  (3)
+    bVar1  ovr_manage_findFirstLeader()                        -> leaderIdx (3)
+
+stats_selectAgentAt (ovc33_stats.c)
+    iVar1  video_findAgentAt(x, y)                             -> agentIdx  (6)
+
+ovc24_textArena (ovc24_entities.c)
+    uVar2  alignUp4(GfxRndSeed, 0, 0)                          -> seedAligned (3)
+    uVar1  alignUp4(x, 0, 0)                                   -> xAligned    (3)
+
+__VRAM (crtl.c)
+    bVar7  in_stack_00000004 < word[&src + 1] - src start below src end, i.e. the copy
+           runs forward                                       -> forward (9)
+        the same flag is used as `in_stack + bVar7 * -2 + 1`, so it is exactly the +1/-1
+        step direction of the video copy loop.
+
+  grep_checks 34,339 -> 34,306 (-33); build 65/65; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,628/0/0
+  diff_dgroup 1,639/1,805 matched, 5 runs, sum|delta| 18, mean 0, worst 12
+  compare_runtime 1,692 matched, 1,683 identical / 9 different at all three sample points

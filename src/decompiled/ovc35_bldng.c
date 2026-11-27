@@ -161,16 +161,16 @@ setUnavailable:
 int __cdecl16far bldng_compute2(uint8_t buildType,char leader)
 
 {
-  byte bVar1;
-  uint uVar2;
+  byte leaderIdx;
+  uint tableVal;
   int iVar3;
   byte extraout_AH;
   
-  uVar2 = bldng_usesGStrangeTable(buildType);
-  iVar3 = (uVar2 & 0xff) * 0x27;
+  tableVal = bldng_usesGStrangeTable(buildType);
+  iVar3 = (tableVal & 0xff) * 0x27;
   if (*(char *)(iVar3 + 0x133) == '\x17') {
-    bVar1 = ovr_manage_findFirstLeader();
-    if (bVar1 == leader) {
+    leaderIdx = ovr_manage_findFirstLeader();
+    if (leaderIdx == leader) {
       iVar3 = CONCAT11(extraout_AH,1);
     }
     else {
