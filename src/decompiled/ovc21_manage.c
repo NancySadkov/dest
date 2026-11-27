@@ -1973,9 +1973,7 @@ L_menuTail:
   (*(uint8_t *)((uint8_t *)&(entries.seg))) = (char)_SS;
   entries.ofs = (uint16_t)apList;
   (*(uint8_t *)((uint8_t *)&(entries.seg) + 1)) = (char)((uint)_SS >> 8);
-  uVar7 = ovr_ovc28_usesUiInputText
-                    (entries,0x23,far_from_u32((uint32_t)(0x0)),(uint8_t *)((int)&apFlag),0,
-                     (char)(uint8_t *)((int)&apFlag));
+  uVar7 = ovr_ovc28_usesUiInputText(entries,0x23,(uint16_t)0,0,(uint8_t far *)&apFlag);
   *(undefined1 *)((int)&apSel) = (char)uVar7;
   keyboardInputMode = 0;
   if (((apSel != '\0') && (apSel != '\x01')) &&

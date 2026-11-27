@@ -19905,3 +19905,73 @@ call sites 38 -> 36 (image 30).
 
 All ten image call classes now match the image's add-sp values; what is left is call *count*, not
 argument shape.
+
+### step 6: 4d05:26f6..2bc3 matches the image call census (35 of 36, one is the memcpy I replaced)
+step 6: `4d05:26f6..2bc3` now matches the image's call census - 35 of 36 sites, and the one missing is the memcpy I replaced with loops
+
+The "30 versus 36" I have been reporting for several turns was my own measuring error: the image's
+`0x277a..0x2b08` range holds 30 calls, but the `0x26f6` head and the `0x2b09` tail add six more.
+Counted over the whole function the image has **36**:
+
+    0x26f6..0x2bc3 (whole function)     36 sites
+        0x4c6        sp,6    8          manage_blitLabelRight
+        0xf8,0x57    sp,0xc  4          blitLabel
+        0x519        sp,8    4          manage_usesBlitLabel2
+        0x217a       sp,8    4          litoa10
+        0x170,0x7a   sp,0xc  4          stsprintf (six words)
+        0x81                 3          manage_openTalkWindow
+        0x2bc4       sp,4    2          manage_highlightStructures
+        0,0x94f              1          fmemcpy
+        0x118,0x34   sp,0x10 1          blitGfxRect
+        0x250,0x39   sp,0x10 1          ovc45_compute9
+        0x3a4        sp,4    1          manage_playerTitle
+        0x170,0x7a   sp,0x10 1          stsprintf (eight words)
+        0x23fc       sp,0x20 1          manage_usesGUnitCount
+        0x1c8,0x3e   sp,0xe  1          ovc28_usesUiInputText
+
+and ours is the same list with the same `add sp` values, 35 sites.
+
+## The last two fixes
+
+`ovc28_usesUiInputText` was passing eight words - `(entries, 0x23, far_from_u32(0), &apFlag, 0,
+&apFlag)` - where the image pushes seven (`push ss,&[bp-0x16] ; push 0 ; push 0 ; push 0x23 ;
+push ss,&[bp-0x142]`).  It is now
+
+    ovr_ovc28_usesUiInputText(entries,0x23,(uint16_t)0,0,(uint8_t far *)&apFlag);
+
+so `add sp,0xe` matches.
+
+The two remaining `0xa92` near calls I was chasing are the `manage_highlightStructures` pair in the
+menu tail - `push 0xfe / push [bp+6]` and `push [bx+0x4a02] / push [bp+6]` - which the image also
+has, at `0x2b18` and `0x2b44`.  They were never extra.
+
+## Verified
+
+    ours                                  image
+    0x4c6        sp,6    8                0x4c6        sp,6    8
+    0xf8,0x57    sp,0xc  4                0xf8,0x57    sp,0xc  4
+    0x519        sp,8    4                0x519        sp,8    4
+    0x217a       sp,8    4                0x217a       sp,8    4
+    0x170,0x7a   sp,0xc  4                0x170,0x7a   sp,0xc  4
+    openTalkWindow        3               openTalkWindow        3
+    highlightStructures sp,4 2            highlightStructures sp,4 2
+    blitGfxRect  sp,0x10 1                blitGfxRect  sp,0x10 1
+    compute9     sp,0x10 1                compute9     sp,0x10 1
+    playerTitle  sp,4    1                playerTitle  sp,4    1
+    stsprintf    sp,0x10 1                stsprintf    sp,0x10 1
+    gUnitCount   sp,0x20 1                gUnitCount   sp,0x20 1
+    uiInputText  sp,0xe  1                uiInputText  sp,0xe  1
+    --                                    fmemcpy              1
+
+The single absent site is the head's `fmemcpy(ss:[bp-0x156], ds:0x4ada, 0x14)`, which I expressed as
+two explicit far-pointer copy loops when the head was re-derived - behaviourally identical, and the
+emitted loop bodies read the same `ds:0x4ada` / `ds:0x4a28` operands as the image.
+
+## Measured (HEAD 43034624 -> this commit)
+
+    grep_checks      26,353 (unchanged - the fix only removed two push words)
+    REBUILT.EXE      493,542 -> 493,526
+    build 65/65, LINK.LOG 65 bytes / 0 problems
+    compare_state    1,628/0/0 (unchanged)
+    diff_dgroup      1,639/1,805 matched, 5 runs, sum|delta| 18, mean 0, worst 12 (unchanged)
+    compare_runtime  1,692 matched, 1,683 identical / 9 different at all three sample points
