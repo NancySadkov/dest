@@ -13,6 +13,14 @@ other names are the ones to fix, not this one.
 
 Usage:
     python scripts/resolve_selector.py 170 5c 138 2a 138 61
+
+CAVEAT - a selector is NOT a reliable name by itself.  VROOMM loads different overlay segments into the
+same runtime segment at different times, so one (selector, offset) pair can mean different functions for
+different callers.  Measured example: `0x140,0x2f` resolves here to `ovr_stop_audio` (segment 22F8),
+whose prototype is `void(void)`, yet the image pushes **3 words at 39 of its 44 sites**, and the derived
+modules name those sites `ovr_play_sfxU` - a 3-argument call.  Always validate a resolved name against
+the pushed-word count before relying on it, and prefer the name used by already-derived code in the same
+module (see tmp/thunk_names.py).
 """
 
 import io
