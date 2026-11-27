@@ -16771,3 +16771,57 @@ ovc41_textOnlyPlaceSingle (545 lines)
   compare_state 1,628/0/0
   diff_dgroup 1,639/1,805 matched, 5 runs, sum|delta| 18, mean 0, worst 12
   compare_runtime 1,692 matched, 1,683 identical / 9 different (both sample points)
+
+### step 6: a third runtime sample point (INT 16h TSR) and the divergence it found
+step 6: a third runtime sample point, and the first divergence it found
+
+## The harness
+
+`tmp/dump_at.py` patches a function's entry, which only reaches resident code - the original's interactive
+paths go through VROOMM thunks that are packed and relocated at load, so a file patch cannot reach them.
+The new harness patches nothing: `scripts/make_dump_tsr.py` builds an INT 16h TSR (same installer and
+residency as the auto-answer KEY.COM) whose AH=00 path counts its own calls and, on the Nth one, writes the
+*caller's* 64 KB at DS:0 to handle 1:
+
+    cmp ah,0 / jne not00
+    mov al,cs:[counter] / test al,al / jz nodump
+    dec byte ptr cs:[counter] / jnz nodump
+    push ds,ax,bx,cx,dx
+    mov bx,1 / mov cx,0FFFFh / xor dx,dx / mov ah,40h / int 21h    ; DS:0 -> stdout
+    pop dx,cx,bx,ax,ds
+  nodump: mov ax,0D0Dh / iret
+
+The counter lives in the TSR's own segment (CS override), the dump uses the game's DS unchanged, and
+`scripts/dump_at_key.py` runs both images with stdout redirected to DGR.BIN exactly as the other harnesses
+do, so `scripts/compare_runtime.py` is unchanged.
+
+MEASURED, both images, 61,440 bytes written each (DOS caps a single AH=40h at that):
+
+    N=1  (first key read, inside init_base's config prompt)   identical 1,682 / DIFFERENT 10
+    N=2  (menu)                                              identical 1,682 / DIFFERENT 10
+    N=3                                                      identical 1,682 / DIFFERENT 10
+    N=5                                                      identical 1,682 / DIFFERENT 10
+
+so step-6 parity now has a sample point past `_INIT_CFG`, and it is stable across depth.
+
+## The new divergence: DGROUP:0x0200
+
+Nine of the ten differences are the CRT/timestamp set already known from the `main`-entry sample
+(`_StartTime`, `_brklvl`, `_exitbuf`, `_exitfopen`, `_exitopen`, `_streams`, `_video`,
+`brk_normalize_xsize`, `__setargv_SavedReturn`).  The tenth is new, and it is a real state difference:
+
+    0x01fa  s_fighter_unit_2410_01fa  len=13
+      original  66 69 67 68 74 65 72 20 75 6e 69 74   "fighter unit"
+      rebuild   66 69 67 68 74 65 00 27 00 13 00 1d   "fighte" + 00 27 00 13 00 1d
+
+The string itself is declared correctly (`st_globals4.c: char s_fighter_unit_2410_01fa[] = "fighter unit";`)
+and the static images agree - `compare_state` reports 1,628/0/0 - so 6 bytes are *written at runtime* into
+the middle of that string, as three words 0x2700, 0x1300, 0x1d00 at 0x0200, 0x0202, 0x0204.  Everything
+around them matches byte for byte, so it is a 6-byte stray write through a computed pointer, not a shifted
+layout or a wrong declaration.
+
+It is present at N=1, i.e. already during `init_base`'s configuration prompt, so the writer runs before the
+first menu frame.  Three word writes with a zero low byte (`0x27`, `0x13`, `0x1d` in the high byte) look like
+configuration/geometry values rather than text.  This is the first evidence of a *behavioural* mismatch
+identified by the third sample point, and diagnosing it is the next step: bracket the write by sampling at
+`init_cfg` and `init_game` (`tmp/dump_at.py` can do both), then follow the value.
