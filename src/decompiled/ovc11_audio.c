@@ -356,8 +356,8 @@ void __cdecl16far audio_textMidiError(byte track,int status)
 {
   char cVar1;
   uint uVar2;
-  uint16_t uVar3;
-  bool bVar4;
+  uint16_t musSeg;
+  bool wasPlaying;
   far_t entry;
   
   if (((MusRunning != '\0') && (AudioAssetsReady2 != '\0')) &&
@@ -366,9 +366,9 @@ void __cdecl16far audio_textMidiError(byte track,int status)
     do {
       if (status != 2) break;
       ovr_midGetSequenceStatus();
-      bVar4 = uVar2 == 1;
+      wasPlaying = uVar2 == 1;
       uVar2 = 1;
-    } while (bVar4);
+    } while (wasPlaying);
     ovr_midMidiStop();
     audioBusy = 1;
     MUS_2410_07a9 = 1;
@@ -377,13 +377,13 @@ void __cdecl16far audio_textMidiError(byte track,int status)
     }
     MUSHandle.ofs = 0;
     MUSHandle.seg = 0;
-    uVar3 = 0x1703;
+    musSeg = 0x1703;
     entry.seg = ((uint16_t *)((uint)track * 4))[1];
     entry.ofs = *(uint16_t *)((uint)track * 4);
     MUSHandle.ofs = (uint16_t)ovr_stash_loadFromStrongDat(entry);
-    MUSHandle.seg = uVar3;
+    MUSHandle.seg = musSeg;
     audioBusy = 0;
-    if ((undefined1 *)MUSHandle.ofs != (undefined1 *)0x0 || uVar3 != 0) {
+    if ((undefined1 *)MUSHandle.ofs != (undefined1 *)0x0 || musSeg != 0) {
       MUS_2410_07a9 = 0;
       cVar1 = (char)MUSHandle.ofs + '\r';
       ovr_midRegisterXMIDI();

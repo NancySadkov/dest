@@ -15819,3 +15819,26 @@ name.
   compare_runtime 1,684 matched, 1,675 identical / 9 different (both sample points)
 
 DGROUP 0x6f6a -> 0x6f63 (seven bytes smaller) from the removed declarations; no layout delta changed.
+
+### section 5: batch 6 - ovc27_usesAgntCount and audio_textMidiError (35,386 -> 35,370)
+section 5: batch 6 - ovc27_usesAgntCount and audio_textMidiError (35,386 -> 35,370)
+
+    ovc27_usesAgntCount (22 lines)
+        iVar1  *cursor, the index of the record that passed the test -> foundIdx  (3)
+        uVar2  *(uint32_t *)(*cursor * 0x34 + 0x17), its pointer      -> recPtr    (3)
+        uVar3  ovc27_usesRandBelow3(...)                              -> roll      (3)
+
+    audio_textMidiError (48 lines)
+        uVar3  0x1703, the driver segment stored into MUSHandle.seg   -> musSeg    (4)
+        bVar4  uVar2 == 1, the previous "still playing" state         -> wasPlaying (3)
+
+Left unnamed on purpose: `cVar1 = (char)MUSHandle.ofs + '\\r'` is a length/status value whose meaning
+the consuming test (`== '\\0'` -> "Midi error") does not pin down, and `uVar2` is written in three
+places inside the condition chain.
+
+  grep_checks 35,386 -> 35,370; build 65/65; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,625/0/0
+  diff_dgroup 1,627/1,805 matched, 19 runs, sum|delta| 44,867, mean 27, worst 148
+  compare_runtime 1,684 matched, 1,675 identical / 9 different (both sample points)
+
+Turn total: 35,429 -> 35,370 (-59), of which -43 is the write-only near-pointer sweep.

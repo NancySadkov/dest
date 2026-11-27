@@ -1479,24 +1479,24 @@ void __cdecl16far emptyFunction(void)
 int __cdecl16far ovc27_usesAgntCount(agnt_t far *agnt,byte recIndex,byte maxLevel,int *cursor)
 
 {
-  int iVar1;
-  uint32_t uVar2;
-  uint16_t uVar3;
+  int foundIdx;
+  uint32_t recPtr;
+  uint16_t roll;
   
   while( true ) {
     if ((int)(uint)AgntCount <= *cursor) {
       return 0;
     }
-    uVar2 = *(uint32_t *)(*cursor * 0x34 + 0x17);
-    if (((*(byte *)((int)uVar2 + 0xf) <= maxLevel) &&
+    recPtr = *(uint32_t *)(*cursor * 0x34 + 0x17);
+    if (((*(byte *)((int)recPtr + 0xf) <= maxLevel) &&
         (*(uint8_t *)*(uint32_t *)(*cursor * 0x34 + 0x1d) != ((agnt_t far *)agnt)->faction)) &&
-       (uVar3 = ovc27_usesRandBelow3(agnt,CONCAT22(0x90,(uint)recIndex * 0x21),*cursor),
-       (char)uVar3 != '\0')) break;
+       (roll = ovc27_usesRandBelow3(agnt,CONCAT22(0x90,(uint)recIndex * 0x21),*cursor),
+       (char)roll != '\0')) break;
     *cursor = *cursor + 1;
   }
-  iVar1 = *cursor;
+  foundIdx = *cursor;
   *cursor = *cursor + 1;
-  return iVar1 * 0x34;
+  return foundIdx * 0x34;
 }
 
 
