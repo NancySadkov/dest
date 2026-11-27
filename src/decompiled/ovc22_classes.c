@@ -252,30 +252,84 @@ uint __cdecl16far ovc22_seasonalIncome(byte bldType,uint8_t partyIndex,uint16_t 
    Frame: `sub sp,0x46`, si/di saved, one byte parameter at [bp+6], no return value (the image's
    epilogue is `pop di / pop si / leave / retf` with DX:AX untouched).
 
-   Decoded so far (tmp/o22_056e.txt, 1,349 instructions):
-     - `if (partyIndex == 0xff) return;`
-     - six memset calls (6, 6, 3 at GLeaderSheets[partyIndex]+0x9a, 6, 8 bytes), then
-       `ovr_alignUp4(GUnits[i].x+4)` and near calls at 0x234, 0x411, 0x1470;
-     - the party bit `0x1000 << GLeaderSheets[partyIndex]->faction` (+0x3f);
-     - per-unit pass over GUnits[0xf8..GUnitCount]: bldType (+0), x (+4), y (+6),
-       accumulating the 0x3000 bits of the four surrounding GMapFlags words;
-     - a 22-way switch `jmp word ptr cs:[bx+0x1444]` over `GBuildingTypes[..]+0x133 - 7`
-       (type = index + 7): 7 -> sheet->+0xad++, 14 -> budget[2*bldtp->+0x131] += 5,
-       15 -> sheet->+0x99[val] += 3, 17 -> sheet->+0xa6++ and sheet->+0x5d |= 8,
-       18/22 -> sheet->+0xa0 += the map word at +0x128, 20 -> sheet->+0x5d &= ~4,
-       21 -> sheet->+0xa5++, 23 -> if (sheet->+0x3f == 0) g_90e8 = 1, 26 -> sheet->+0xa9++,
-       28 -> sheet->+0xa9 += 3*bldtp->+0x131 then clamp to 100; types 8-13, 16, 19, 24-25, 27
-       have no case;
+   Decoded from tmp/o22_056e.txt (1,349 instructions).  Offsets 0x056e..0x1443 plus the 22-entry
+   switch table at cs:0x1444; `bldtp_t` base is segment 0x60 offset 0x10e, `GLeaderSheets` segment
+   0x70, `GUnits` stride 9, `entity_t` stride 0x37.
 
-     - tail: dirBudget words (+0x94/+0x96/+0x98), levelLimit (+0x53 = 0xff/0xc/8/4 by
-       [bp-0x3c]/[bp-0x3e]/[bp-0x40]), +0x82, the +0x7e/+0x80 pair (0xffff/0 when negative),
-       +0x5b/+0x4d/+0x4f/+0x54, the +0x8a/+0x8c long, dirBudget[3] at +0x64/+0x66/+0x68,
-       ringBudget[3] at +0x70/+0x72/+0x74, +0x52 = min([bp-0x22],0xff), +0x84 = overlay result;
-     - thresholds from Difficulty (0x909d): 1 -> 0xfa0, 2 -> 0xbb8, else 0x7d0;
-     - tail: `GLeaderSheets[partyIndex]->+0x52 = min(levelLimit,0xff)`, then
-       `+0x84 = (overlay result)`, then the 0x1470 helper.
-   Globals: GUnits, GUnitCount, GMapFlags, Entities, EntityCount, Difficulty, AgntGs (segment 0x60),
-   GLeaderSheets (segment 0x70).  Body not derived yet; see doc/step6_entry.md. */
+   Prologue / per-call setup:
+     - `if (partyIndex == 0xff) return;`
+     - popular = 0xa; housing = income = rows = ringTotal = 0; cap = 0;
+     - memset(&dir[1], 0, 6); memset(&ring[1], 0, 6);      (bp-0x28 / bp-0x2e, the two 4-word arrays)
+     - memset(sheet + 0x9a, 0, 3); memset(&resCount, 0, 8); memset(sheet + 0xaa, 0, 3);
+     - partyMask = 0x1000 << sheet->faction;               (0x1000 or 0x2000, the two GMapFlags bits)
+     - sheet->tailAD = 0;
+     - if (sheet->faction != 0) sheet->flags5d &= 0xf9; else sheet->flags5d |= 4;
+     - sheet->flags5d &= 0xf7; sheet->maxTrade = 0;
+     - sheet->tailA6 = sheet->tailA5 = sheet->tailA9 = 0;
+     - for (i = 0xf8; i < GUnitCount; i++) GUnits[i].flags &= 0xfd;
+
+   Per-unit pass, `for (si = 0xf8; si < GUnitCount; si++)`, skipping units whose `unitType`
+   (+2) differs from partyIndex:
+     - bldType = GUnits[si].bldType (+0); alignX = ovr_alignUp4(GUnits[si].x (+4));
+       y = GUnits[si].y (+6);
+     - bitsA = OR over k = 0..3 of word[ GMapFlags + y*0x128 + 2*(alignX+k) - 4 ] & 0x3000;
+     - bitsB = 0; if ((bt->flags & 3) == 1) bitsB = OR over k = 0..3 of
+       word[ map2 + y*0x128 + 2*(alignX+k) + 0x124 ] & 0x3000;   (map2 = the far pair at 8a09/8a0b)
+     - if (!(bitsA & partyMask) && !(bitsB & partyMask)) continue;
+     - GUnits[si].flags |= 3;
+     - switch (bt->unitType) - 7, 22 cases (bt = BuildingTypes[bldType], stride 0x27):
+         14: ((uint16_t *)((uint8_t *)&partyMask))[bt->resource] += 5;   (local 4-word array whose
+             element 0 is partyMask itself)
+         15: ((uint8_t *)sheet)[0x99 + bt->resource] += 3;
+         17: sheet->tailA6++; sheet->flags5d |= 8;
+         18: sheet->tailA8++;
+         20: sheet->flags5d &= ~4;
+         21: sheet->tailA5++;
+         22: sheet->maxTrade += bt->production;            (byte at +0x1a, zero-extended)
+         23: if (sheet->faction == 0) g_90e8 = 1;
+         26: ((uint8_t *)sheet)[0xa9 + bt->resource]++;
+         28: sheet->tailA9 += 3 * bt->resource; if (sheet->tailA9 > 100) sheet->tailA9 = 100;
+          7: sheet->tailAD++;
+         types 8,9,10,11,12,13,16,19,24,25,27 have no case body and fall straight through;
+     - shared switch tail (0x0c40), reached by every case:
+         if (bt->unitType == 0x13) totalA += bt->storage;  else totalB += bt->storage;
+         if (bt->unitType == 0x1d)      { if ([bp-2] != 0) goto unitDone;
+                                          ring[bt->resource] += bt->output; }
+         else if (bt->unitType == 0x10) { if ([bp-2] == 0) goto unitDone;
+                                          ring[bt->resource] += bt->output; }
+         else if (bt->output != 0) {
+             if (bt->unitType == 0x0d) { if ([bp-1] != 0) dir2[bt->resource] += bt->output; }
+             else dir2[bt->resource] += bt->output; }
+         (storage = +0x1c word, output = +0x1b byte; ring[] at bp-0x30, dir2[] at bp-0x2a, both
+          4-word arrays whose element 0 doubles as the high/low half of a 32-bit total)
+     - unitDone (0x0e2a): housing += bt->housing (+0x19);
+         population += ovc22_textPOPULATION(bldType, partyIndex, GUnits[si].x, GUnits[si].y);
+         income     += ovc22_seasonalIncome(bldType, partyIndex, GUnits[si].x, GUnits[si].y);
+         if (bt->flags2 & 1) {
+             if (sheet->cls == 0xff || ((1 << sheet->cls) & bt->type))
+                 if (bt->resource <= 3) resCount[bt->resource]++; }
+         if (bt->flags2 & 0x200) ringTotal += bt->resource;
+       (both textPOPULATION and seasonalIncome push four words: bldType, partyIndex, x, y)
+
+   Post-loop:
+     - for (e = 0; e < EntityCount; e++)
+         if (Entities[e].+0x1a == partyIndex) sum1c += Entities[e].+0x0e;
+     - spare = sheet->tailAD;
+       for (di = 2; di >= 0; di--)
+           if (sheet->tailAA[di] > spare) { sheet->tailAA[di] = spare; spare = 0; }
+           else spare -= sheet->tailAA[di];
+     - sum = 0; for (di = 0; di <= 2; di++) sum += sheet->tailAA[di] * (di + 1) * 3;
+       sheet->tailAA[0] = (sum >= 0x32) ? 0x32 : sum;
+     - sheet->tail94 = [bp-0xa]; sheet->tail96 = [bp-8]; sheet->tail98 = [bp-6];
+     - cap = [bp-0x40]; if (cap > 5) cap = 5;
+       if ([bp-0x3e] + cap > 0xa) cap = 0xa; else cap += [bp-0x3e];
+       cap += [bp-0x3c];
+     - sheet->levelLimit = [bp-0x3c] > 0 ? 0xff : [bp-0x3e] > 0 ? 0xc : [bp-0x40] > 0 ? 8 : 4;
+
+   Still to transcribe: the tail stores 0x1220..0x1443 (the +0x82/+0x64/+0x70/+0x7e/+0x8a/+0x52
+   family and the 0x1413 overlay call), and the Difficulty thresholds at 0x06xx were noted as
+   0xfa0/0xbb8/0x7d0 from 0x909d.  Body not derived yet; see doc/step6_entry.md. */
+
 void __cdecl16far ovc22_textRingProt(byte partyIndex)
 
 {

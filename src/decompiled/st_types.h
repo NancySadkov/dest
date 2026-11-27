@@ -222,9 +222,8 @@ struct char_sheet_t {
     byte tailA7; /* GUESS: 0xa7.  Not touched; padding by position. */
     byte tailA8; /* GUESS: 0xa8.  Byte counter: cleared at 5087:084a and 5087:06b7 region, `inc byte` at 5087:0a46. */
     byte tailA9; /* GUESS: 0xa9.  Base of a per-building-type byte array: `inc byte es:[bx+0xa9]` with bx = sheet + bldtp_t+0x131 at 5087:0c3b, and the scalar view (`cmp byte es:[bx+0xa9],0x64`, `mov byte ...,0x64`) at 5087:0ab8/0ad7 is element 0 of that same array, so the array is `&tailA9`. */
-    byte tailAA; /* GUESS: 0xaa.  Byte: set to 0x32 at 5087:10ef, then overwritten from [bp-0x46] at 5087:110e. */
-    byte pad_ab[2]; /* 0xab..0xac */
-    byte tailAD; /* GUESS: 0xad.  Byte counter: cleared at 5087:06bc, `inc byte` at 5087:0c02, read at 5087:102f. */
+    byte tailAA[3]; /* GUESS: 0xaa..0xac.  Three-element per-resource byte array: 5087:1050/106e read and write `es:[bx+di+0xaa]` for di = 2,1,0.  The routine then folds it into one clamped byte: walking di = 2..0 it demotes an entry to the spare level count when it exceeds it (5087:103c-1098), accumulates `sum += tailAA[di] * (di+1) * 3` (5087:10a6-10d3), and stores `min(sum,0x32)` into tailAA[0] (5087:10d5-110e). */
+    byte tailAD; /* GUESS: 0xad.  Byte counter: cleared at 5087:06bc, `inc byte` at 5087:0c02, read at 5087:102f as the starting spare-level count. */
 };
 
 typedef struct unit_t unit_t, *Punit_t;

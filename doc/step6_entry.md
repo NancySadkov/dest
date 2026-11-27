@@ -21013,3 +21013,69 @@ has nothing to match against.  So a body for `5087:056e` needs either
 
 Either way it is one call out of eleven, and both the argument (partyIndex) and the destination
 (sheet +0x84) are known.
+
+
+## `5087:056e` decode completed for 0x056e-0x0fc6 and most of the tail
+
+The body is still not written, but the routine is now decoded instruction by instruction over the
+whole per-unit pass, and two of my earlier recordings were wrong and have been corrected.
+
+**Corrections to the earlier note**
+
+* `0xaa` is a **three-byte array** (`es:[bx+di+0xaa]` for di = 2,1,0), not a scalar plus `pad_ab[2]`.
+  `char_sheet_t` now declares `byte tailAA[3]` with the fold-in logic recorded; size still 0xae.
+* The switch cases 18/22 were mis-stated: `0x09fe` is `maxTrade += bt->production` (byte 0x1a), not a
+  map word, and `0x0a32` is `tailA8++`. The correct 22-entry map, read off the jump table and each
+  case body, is
+
+      7 tailAD++   14  localWordArray[resource] += 5   15  sheet[0x99+resource] += 3
+      17 tailA6++, flags5d |= 8   18 tailA8++   20 flags5d &= ~4   21 tailA5++
+      22 maxTrade += production   23 if (faction == 0) g_90e8 = 1
+      26 sheet[0xa9+resource]++   28 tailA9 += 3*resource, clamp 100
+      types 8-13, 16, 19, 24-25, 27 have no case body
+
+* The entire **shared switch tail at 0x0c40** was missing from the earlier note. Every case falls into
+  it, and it is where the per-resource budgets are actually built:
+
+      if (unitType == 0x13) totalA += storage; else totalB += storage;
+      unitType 0x1d: g1 != 0 -> skip; else ring[resource] += output
+      unitType 0x10: g1 == 0 -> skip; else ring[resource] += output
+      else if (output != 0) { unitType 0x0d ? (g2 != 0) : always -> dir2[resource] += output }
+
+* The 4-square map accumulation is two different bases, not one: `GMapFlags` with a `-4` bias, and a
+  second map (`8a09`/`8a0b` far pair) with a `+0x124` bias, the second only when
+  `(bt->flags & 3) == 1`. Both mask `0x3000` and both are ANDed against `partyMask`.
+
+* `ovr_alignUp4` is called on `GUnits[si].x`, not `x+4`.
+
+**Newly decoded and recorded**
+
+* unitDone block: `housing += bt->housing`; `population += ovc22_textPOPULATION(bldType,partyIndex,x,y)`;
+  `income += ovc22_seasonalIncome(...)`; then a `flags2 & 1` gate comparing `1 << sheet->cls` against
+  `bt->type` before `resCount[resource]++`; and `flags2 & 0x200 -> ringTotal += resource`.
+* post-loop entity scan (`Entities[e].+0x1a == partyIndex -> sum1c += Entities[e].+0x0e`).
+* the spare-level demotion walk over `tailAA[2..0]`, the `sum += tailAA[di]*(di+1)*3` fold with the
+  0x32 clamp into `tailAA[0]`, the three `tail94/96/98` stores, the level-cap arithmetic and the
+  0xff/0xc/8/4 `levelLimit` ladder.
+
+**What still blocks the body**
+
+Two things, both recorded in the source comment:
+
+1. The tail stores `0x1220..0x1443` are not yet walked (the `+0x82`/`+0x64`/`+0x70`/`+0x7e`/`+0x8a`/
+   `+0x52` family and the `0x1413` overlay call).
+2. Several locals are **aliased on the stack** in the image in a way C cannot express directly: the
+   4-word arrays `ring[]` (bp-0x30) and `dir2[]` (bp-0x2a) have their element 0 occupying the high/low
+   half of the adjacent 32-bit totals (`bp-0x32/-0x30` and `bp-0x36/-0x34`), and the element-0 slot of
+   the case-14 word array *is* `partyMask` (bp-0xc). Writing the body needs a decision on how to model
+   that: either reproduce the layout with an explicit byte-addressed block, or keep the arrays and
+   totals separate (behaviour differs only when `resource == 0` reaches those adds).
+
+## Measured (HEAD 1ead2f98 -> this commit)
+
+    grep_checks      13,412 (unchanged - the decode is a comment; char_sheet_t is data-only)
+    REBUILT.EXE      474,208 (unchanged)
+    build 65/65, LINK.LOG 0 errors
+    compare_state    1,628/0/0 (unchanged)
+    diff_dgroup      1,639/1,805 matched, 5 runs, sum|delta| 18 (unchanged)
+    compare_runtime  1,692 matched, 1,683 identical / 9 different at all three sample points
