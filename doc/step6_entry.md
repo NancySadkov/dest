@@ -18881,3 +18881,85 @@ zeroes the two out-parameters, which previously went through two never-initialis
     compare_state    1,628/0/0 (unchanged)
     diff_dgroup      1,639/1,805 matched, 5 runs, sum|delta| 18, mean 0, worst 12 (unchanged)
     compare_runtime  1,692 matched, 1,683 identical / 9 different at all three sample points
+
+### step 6: 37 spurious emptyFunction() calls removed; 5ded:10ea/14a8 are one function
+step 6: 37 spurious `emptyFunction()` calls removed; 5ded:10ea/14a8 are one function
+
+## `emptyFunction` is an epilogue, not a function
+
+`5ded:1be7` — the address the audit lists as `emptyFunction` (4 bytes) — disassembles to
+
+    5ded:1be7  pop di
+    5ded:1be8  pop si
+    5ded:1be9  leave
+    5ded:1bea  retf
+
+i.e. the shared exit of the frame opened at `5ded:10ea` (`push bp / mov bp,sp / sub sp,0x122 /
+push si / push di`).  Every branch in that function that ends with `jmp 0x1be7` had been rendered by
+Ghidra as
+
+    emptyFunction();
+    return;
+
+and `ovc27_combat.c` therefore contained 37 calls to a `{ return; }` placeholder, each emitting a far
+call in the rebuilt image that the original does not make.  All 37 were followed immediately by
+`return;`, so the calls were deleted and the placeholder (definition + declaration) removed:
+
+    grep -r emptyFunction src/decompiled   ->  no hits
+    REBUILT.EXE 497,062 -> 496,870 (-192)
+    build 65/65, LINK.LOG 65 bytes / 0 problems
+
+That is what the earlier note "emptyFunction() calls are intra-function calls" meant, now confirmed and
+fixed rather than left in place.
+
+## `5ded:14a8` is not a separate function
+
+The objective's target turned out to be structurally different from the screen's description.
+`ovc27_textTakesHalfDamage4` (5ded:14a8, 1,855 bytes) starts with **no prologue**:
+
+    5ded:14a8  les bx, ptr [bp + 6]
+    5ded:14ab  cmp byte ptr es:[bx + 0x2e], 4
+
+and the whole overlay contains exactly one reference to it:
+
+    5ded:13e2  jmp 0x14a8
+
+which lies inside `5ded:10ea` (`ovc27_textTakesHalfDamage3`, whose frame is `sub sp,0x122`).  The
+locals the 0x14a8 block uses are all inside that frame:
+
+    offset      uses   is
+    [bp-0x122]   10    &text1     (0x50-byte buffer)
+    [bp-0xd2]     9    &text2     (0x50-byte buffer)
+    [bp-0x82]     7    &msg       (0x50-byte buffer)
+    [bp-0xa]/[bp-8]  81/51   agntRec  (the Agnts entry far pointer, built from agntIndex)
+    [bp+6]/[bp+8]    23/19   the `agnt` far-pointer parameter
+    [bp-4], [bp-2]   5/3     two word locals of this block
+
+So `5ded:10ea` + `5ded:14a8` is **one 2,811-byte function with two entry points**, and the tree's
+`ovc27_textTakesHalfDamage4()` call site is the image's `jmp 0x14a8` - a call that pushes a second
+frame where the original reuses the first.  That, not a missing body, is why the screen reports
+68 vs 96.
+
+After the `emptyFunction` removal the two bodies' call multisets match the image exactly except for one
+spurious self-reference each:
+
+    ovc27_textTakesHalfDamage3   38 calls, image 36   excess: self-call x1, textTakesHalfDamage4 x1
+    ovc27_textTakesHalfDamage4   69 calls, image 68   excess: self-call x1
+
+and those two are the internal jumps Ghidra turned into recursive calls (`call 0x1135` inside
+`0x10ea..0x14a6`, and `jmp 0x14a8`).
+
+Merging them is therefore a mechanical transformation - move the 0x14a8 statements behind a
+`L_half4:` label inside `ovc27_textTakesHalfDamage3`, map the nine `unaff_BP` offsets above to
+`agnt`, `agntRec`, `&text1`, `&text2`, `&msg`, and replace the call with `goto L_half4;` - but it
+rewrites 191 of the block's 384 lines that carry `unaff_BP`, so it is the next turn's work rather than
+a fragment here.
+
+## Measured (HEAD 03bebe84 -> this commit)
+
+    grep_checks 26,621 (unchanged - the deleted lines carried no generated names)
+    REBUILT.EXE 497,062 -> 496,870
+    build 65/65, LINK.LOG 65 bytes / 0 problems
+    compare_state    1,628/0/0 (unchanged)
+    diff_dgroup      1,639/1,805 matched, 5 runs, sum|delta| 18, mean 0, worst 12 (unchanged)
+    compare_runtime  1,692 matched, 1,683 identical / 9 different at all three sample points

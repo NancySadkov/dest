@@ -911,7 +911,6 @@ void __cdecl16far ovc27_textTakesHalfDamage3(agnt_t far *agnt,uint16_t agntIndex
                  (char)agntRec,(char)ptrSeg,(char)damage);
       *(undefined1 *)&agntRec->state = 0xb;
       *(undefined1 *)((int)&agntRec->state + 1) = 0;
-      emptyFunction();
       return;
     }
     ptrLo = (undefined1)GSavedBlitSeg;
@@ -919,7 +918,6 @@ void __cdecl16far ovc27_textTakesHalfDamage3(agnt_t far *agnt,uint16_t agntIndex
     stashPtr = ovr_ovc15_usesStshRealloc(statusText);
     statusText = ovr_stsprintf((char far *)MK_FP(_SS,&msg),(char far *)MK_FP(_DS,0x5c0a),stashPtr);
     ovr_uiNotify(statusText,agntSeg,(char)agntSeg);
-    emptyFunction();
     return;
   }
   if (agnt->variant == 0x2) {
@@ -938,12 +936,10 @@ void __cdecl16far ovc27_textTakesHalfDamage3(agnt_t far *agnt,uint16_t agntIndex
                damage,(char)agntRec,(char)ptrSeg,(char)damage);
     *(undefined1 *)&agntRec->state = 0xb;
     *(undefined1 *)((int)&agntRec->state + 1) = 0;
-    emptyFunction();
     return;
   }
   if (agnt->variant == 0xa) {
     if ((agntRec->flags & 0x420) != 0) {
-      emptyFunction();
       return;
     }
     randRoll = ovr_randBelow(3,0);
@@ -965,7 +961,6 @@ void __cdecl16far ovc27_textTakesHalfDamage3(agnt_t far *agnt,uint16_t agntIndex
       agntRec->flags = agntRec->flags | 0x20;
       agntSeg = ovr_audio_panFromX(agntRec);
       ovr_play_sfxU(0x1b,0,agntSeg);
-      emptyFunction();
       return;
     }
     blitSegLo = (undefined1)GSavedBlitSeg;
@@ -977,7 +972,6 @@ void __cdecl16far ovc27_textTakesHalfDamage3(agnt_t far *agnt,uint16_t agntIndex
     statusText = ovr_stsprintf((char far *)MK_FP(_SS,&msg),(char far *)MK_FP(_DS,0x5c44),stashPtr);
     ovr_uiNotify(statusText,agntSeg,(char)agntSeg);
     agntRec->flags = agntRec->flags | 0x400;
-    emptyFunction();
     return;
   }
   if ((agnt->variant != 0x3) && (agnt->variant != 0x5)) {
@@ -985,7 +979,6 @@ void __cdecl16far ovc27_textTakesHalfDamage3(agnt_t far *agnt,uint16_t agntIndex
     return;
   }
   if ((agntRec->flags & 0x20) != 0) {
-    emptyFunction();
     return;
   }
   hitRoll = ovc27_rollToHitEntity((uint32_t)MK_FP(SEG_OF(Agnts), agntRec),3);
@@ -1004,10 +997,8 @@ void __cdecl16far ovc27_textTakesHalfDamage3(agnt_t far *agnt,uint16_t agntIndex
     agntRec->flags = agntRec->flags | 0x20;
     agntSeg = ovr_audio_panFromX(agntRec);
     ovr_play_sfxU(0x1b,0,agntSeg);
-    emptyFunction();
     return;
   }
-  emptyFunction();
   return;
 }
 
@@ -1040,7 +1031,6 @@ uint16_t __cdecl16far ovc27_textCharmed()
   *puVar1 = *puVar1 | 0x20;
   unk = ovr_audio_panFromX((agnt_t far *)*(uint16_t *)(unaff_BP + -10),0);
   ovr_play_sfxU(0x1b,0,unk,0,0);
-  emptyFunction();
   return;
 }
 
@@ -1123,7 +1113,6 @@ void ovc27_textTakesHalfDamage4(void)
                  (char)*(uint16_t *)(unaff_BP + -10),uVar10,(char)uVar7);
       ((char_sheet_t *)((unaff_BP + -10)))->race = 10;
       ((char_sheet_t *)((unaff_BP + -10)))->hp[0] = 0;
-      emptyFunction();
       return;
     }
     uVar10 = (undefined1)GSavedBlitSeg;
@@ -1137,12 +1126,10 @@ void ovc27_textTakesHalfDamage4(void)
                            (char *)CONCAT13((char)((uint)bufPtr >> 8),CONCAT12((char)bufPtr,0x2410))
                            ,0x10,(char)bufPtr,(char)in_DX);
     ovr_uiNotify(pcVar8,in_DX,(char)in_DX);
-    emptyFunction();
     return;
   }
   if (((agnt_t far *)((unaff_BP + 6)))->variant == '\x06') {
     if (*(char *)((int)*(uint32_t *)(unaff_BP + -10) + 0x11) != '\0') {
-      emptyFunction();
       return;
     }
     if ((((agnt_t far *)((unaff_BP + -10)))->flags & 0x40) == 0) {
@@ -1174,19 +1161,15 @@ void ovc27_textTakesHalfDamage4(void)
         pan = ovr_audio_panFromX((agnt_t far *)*(uint16_t *)(unaff_BP + -10),
                                    (char)*(uint16_t *)(unaff_BP + -8));
         ovr_play_sfxU(0x1b,0,pan,0,(char)pan);
-        emptyFunction();
         return;
       }
-      emptyFunction();
       return;
     }
-    emptyFunction();
     return;
   }
   uVar10 = (undefined1)GSavedBlitSeg;
   if (((agnt_t far *)((unaff_BP + 6)))->variant == '\a') {
     if (*(char *)((int)*(uint32_t *)(unaff_BP + -10) + 0x11) != '\0') {
-      emptyFunction();
       return;
     }
     if ((((agnt_t far *)((unaff_BP + -10)))->flags & 0x80) == 0) {
@@ -1214,18 +1197,14 @@ void ovc27_textTakesHalfDamage4(void)
         ovr_play_sfxU(0x1b,0,pan,0,(char)pan);
         ((char_sheet_t *)((unaff_BP + -10)))->race = 0xc;
         ((char_sheet_t *)((unaff_BP + -10)))->hp[0] = 0;
-        emptyFunction();
         return;
       }
-      emptyFunction();
       return;
     }
-    emptyFunction();
     return;
   }
   if (((agnt_t far *)((unaff_BP + 6)))->variant == '\b') {
     if (*(char *)((int)*(uint32_t *)(unaff_BP + -10) + 0x11) != '\0') {
-      emptyFunction();
       return;
     }
     if ((((agnt_t far *)((unaff_BP + -10)))->flags & 0x100) == 0) {
@@ -1251,15 +1230,12 @@ void ovc27_textTakesHalfDamage4(void)
       pan = ovr_audio_panFromX((agnt_t far *)*(uint16_t *)(unaff_BP + -10),
                                  (char)*(uint16_t *)(unaff_BP + -8));
       ovr_play_sfxU(0x1b,0,pan,0,(char)pan);
-      emptyFunction();
       return;
     }
-    emptyFunction();
     return;
   }
   if (((agnt_t far *)((unaff_BP + 6)))->variant == '\t') {
     if ((((agnt_t far *)((unaff_BP + -10)))->flags & 0x40) != 0) {
-      emptyFunction();
       return;
     }
     iVar5 = ovc27_rollToHitEntity
@@ -1290,10 +1266,8 @@ void ovc27_textTakesHalfDamage4(void)
       pan = ovr_audio_panFromX((agnt_t far *)*(uint16_t *)(unaff_BP + -10),
                                  (char)*(uint16_t *)(unaff_BP + -8));
       ovr_play_sfxU(0x1b,0,pan,0,(char)pan);
-      emptyFunction();
       return;
     }
-    emptyFunction();
     return;
   }
   if (((agnt_t far *)((unaff_BP + 6)))->variant == '\v') {
@@ -1315,16 +1289,13 @@ void ovc27_textTakesHalfDamage4(void)
                  (char)*(uint16_t *)(unaff_BP + -10),uVar10,bVar3);
       ((char_sheet_t *)((unaff_BP + -10)))->race = 0xb;
       ((char_sheet_t *)((unaff_BP + -10)))->hp[0] = 0;
-      emptyFunction();
       return;
     }
-    emptyFunction();
     return;
   }
   if (((agnt_t far *)((unaff_BP + 6)))->variant == '\f') {
     uVar2 = ((agnt_t far *)((unaff_BP + -10)))->entity;
     if (7 < *(byte *)((int)uVar2 + 0xf)) {
-      emptyFunction();
       return;
     }
     iVar5 = ovc27_rollToHitEntity
@@ -1345,10 +1316,8 @@ void ovc27_textTakesHalfDamage4(void)
                  (char)*(uint16_t *)(unaff_BP + -10),uVar10,bVar3);
       ((char_sheet_t *)((unaff_BP + -10)))->race = 0xb;
       ((char_sheet_t *)((unaff_BP + -10)))->hp[0] = 0;
-      emptyFunction();
       return;
     }
-    emptyFunction();
     return;
   }
   if (((agnt_t far *)((unaff_BP + 6)))->variant == '\r') {
@@ -1370,15 +1339,12 @@ void ovc27_textTakesHalfDamage4(void)
                  (char)*(uint16_t *)(unaff_BP + -10),uVar10,bVar3);
       ((char_sheet_t *)((unaff_BP + -10)))->race = 0xb;
       ((char_sheet_t *)((unaff_BP + -10)))->hp[0] = 0;
-      emptyFunction();
       return;
     }
-    emptyFunction();
     return;
   }
   if (((agnt_t far *)((unaff_BP + 6)))->variant == '\x0e') {
     if (*(char *)((int)*(uint32_t *)(unaff_BP + -10) + 0x11) != '\0') {
-      emptyFunction();
       return;
     }
     iVar5 = ovc27_rollToHitEntity
@@ -1393,14 +1359,11 @@ void ovc27_textTakesHalfDamage4(void)
       pan = ovr_audio_panFromX((agnt_t far *)*(uint16_t *)(unaff_BP + -10),
                                  (char)*(uint16_t *)(unaff_BP + -8));
       ovr_play_sfxU(0x1b,0,pan,0,(char)pan);
-      emptyFunction();
       return;
     }
-    emptyFunction();
     return;
   }
   if (((agnt_t far *)((unaff_BP + 6)))->variant != '\x0f') {
-    emptyFunction();
     return;
   }
   *(uint16_t *)(unaff_BP + -4) = 0x1e;
@@ -1456,18 +1419,6 @@ void ovc27_textTakesHalfDamage4(void)
       return;
     }
   } while( true );
-}
-
-
-
-/* 5ded:1be7 */
-
-/* placeholder with no body */
-
-void __cdecl16far emptyFunction(void)
-
-{
-  return;
 }
 
 
