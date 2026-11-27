@@ -312,7 +312,7 @@ uint __cdecl16far manage_usesGLeaderCount(void)
 
 /* Right-aligns text at x (TextBlitX = x - text width) and blits it with Font02. */
 
-void __cdecl16far manage_blitLabelRight(char *text,int x)
+void __cdecl16far manage_blitLabelRight(char far *text,int x)
 
 {
   int iVar1;
@@ -329,7 +329,7 @@ void __cdecl16far manage_blitLabelRight(char *text,int x)
 
 /* [R4] calls ovr_blitLabel */
 
-void __cdecl16far manage_usesBlitLabel2(char *text,int x,uint16_t colour)
+void __cdecl16far manage_usesBlitLabel2(char far *text,int x,uint16_t colour)
 
 {
   int iVar1;
@@ -1874,12 +1874,8 @@ L_menuLoop:
     uVar11 = (undefined1)Font02.seg;
     fontSegHi = (undefined1)(Font02.seg >> 8);
     fontOfs = Font02.ofs;
-    iVar9 = ovr_ovc45_compute9((char *)((int)&apNum),
-                               (char *)CONCAT22(apNameOfs,_SS),
-                               (char *)CONCAT22(Font02.ofs,(char *)apNameSeg),
-                               Font02.seg,'i',0x69,3);
-    pvVar3 = manage_playerTitle((char_sheet_t *)apNameOfs,
-                                apNameSeg,(char)iVar9,puVar6);
+  iVar9 = ovr_ovc45_compute9((char far *)MK_FP(_SS,apNum),(char far *)MK_FP(apNameSeg,apNameOfs),(char far *)MK_FP(Font02.seg,Font02.ofs),0x69,3);
+  pvVar3 = manage_playerTitle((char_sheet_t far *)MK_FP(apNameSeg,apNameOfs));
     numText = ovr_stsprintf((char *)((int)&apMsg),(char *)CONCAT22(0x52a1,_SS),
                            (char *)CONCAT22(pvVar3,(char *)0x26510),puVar6);
   ovr_blitLabel((char far *)numText,(byte far *)MK_FP(Font02.seg,Font02.ofs),0xde,0x50);

@@ -19720,3 +19720,59 @@ The remaining differences, per class:
 
 That list is the next pass: each entry is a `(char *)CONCAT22(...)`/`(int *)((int)&local)` argument
 that needs the image's `push ss / lea ax,[bp-…]` shape, exactly like the four classes fixed here.
+
+### step 6: three more argument shapes in 4d05:277a from the image (grep 26,384 -> 26,381)
+step 6: three more argument shapes in `4d05:277a` from the image (grep 26,384 -> 26,381)
+
+    near 0x4c6  manage_blitLabelRight   29d8 etc.  add sp,6
+        the text is pushed as a far pointer (the two words of the litoa10 / stsprintf result),
+        so its prototype and definition now take `char far *text`.        eight sites
+
+    near 0x3a4  manage_playerTitle      286c       add sp,4
+        one far argument, the selected structure's name pointer {seg=[bp-2], ofs=[bp-4]};
+        the tree passed four.                                                 one site
+
+    0x250,0x39  ovc45_compute9          285b       add sp,0x10   (eight words)
+        push ss,lea ax,[bp-0x66] ; push [bp-4] ; push [bp-2] ; push Font02 seg/ofs ;
+        push 0x69 ; push 3
+        -> (far &apNum, far name, far Font02, 0x69, 3)                        one site
+
+    near 0x519  manage_usesBlitLabel2   28d2..     add sp,8      (four words)
+        far text + x + colour, so its `text` is `char far *` as well.      four sites
+
+## Verified in the emitted code
+
+    before                              after                        image
+    blitLabelRight  add sp,4   x8       add sp,6   x8                add sp,6   x8
+    playerTitle     add sp,0xa x1       add sp,4   x1                add sp,4   x1
+    compute9        add sp,0xe x1       add sp,0x10 x1               add sp,0x10 x1
+    usesBlitLabel2  add sp,6   x4       add sp,8   x4                add sp,8   x4
+
+so four call classes now have the image's argument sizes, joining the `blitLabel` (x4) already
+corrected.
+
+## Measured (HEAD 690973db -> this commit)
+
+    grep_checks      26,384 -> 26,381   (-3)
+    REBUILT.EXE      493,782 -> 493,814
+    build 65/65, LINK.LOG 65 bytes / 0 problems
+    compare_state    1,628/0/0 (unchanged)
+    diff_dgroup      1,639/1,805 matched, 5 runs, sum|delta| 18, mean 0, worst 12 (unchanged)
+    compare_runtime  1,692 matched, 1,683 identical / 9 different at all three sample points
+
+## Still mismatched (38 call sites against the image's 30)
+
+    image                          ours                          needed
+    0x81     openTalkWindow   x1   near x3                       one extra call
+    0x118,0x34 blitGfxRect  x1   0x2a7,0x1a1 add sp,0x1a        13 words vs 8; window decoded:
+                                  (img) push gfx far ; 0 ; 0 ; far rect(0x280:0x44a) ; 0x10 ; 0
+    0x170,0x7a stsprintf    x5   0x2a7,0x4cb  add sp,2 x4         1 word vs 6 - the varargs were
+                                  add sp,8   x1                 lost entirely in the tree
+    0x217a     litoa10      x4   near        add sp,0xa         5 words vs 4
+    0x23fc     gUnitCount   x1   near        add sp,0xc         6 words vs 16; window decoded:
+                                  (img) 9 args - partyArg, GStructures[i].type and seven far
+                                  pointers to [bp-6],[-8],[-a],[-c],[-e],[-10],[-12]
+    -                            2 x lcall 0,0x337              F_LXMUL@ from the (long) casts
+
+The `stsprintf` sites are the largest remaining defect: the tree emits them with a single
+argument, so the format string and every vararg are missing.
