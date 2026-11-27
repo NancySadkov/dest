@@ -20249,7 +20249,41 @@ The body read its first stack word 48 times as `in_stack_00000004` while the dec
 and the 48 reads use `updateFile`. The duplicate `bool in_stack_00000004;` local that Ghidra had put
 in the declaration block was removed (it is the parameter now).
 
-## Measured (HEAD 7bdb85fd -> this commit)
+## `55fe:0000` decoded; only two anonymous arrays block it
+
+`ovc23_textAdlibNone` is another mis-attributed body (672 lines, 70 C calls against the image's 7).
+The image is `0x0000..0x0487` (1,159 bytes) and only calls
+
+    55fe:0017  0x1a8,0x43   ovr_alignUp4(GfxRndSeed)
+    55fe:0069  0,0x2666     memset(0x280:0x91d7,0xff,8)
+    55fe:0079  0,0x2666     memset(ds:0x90ea,0,4)
+    55fe:01f7  0x250,0x20   ovr_ovc45_getUnitIndex(GfxRndSeed+si,GfxRndSeed2)   si = -2..1
+    55fe:0218  0x250,0x25   ovr_ovc45_getUnitType(same)
+    55fe:035f  0x170,0x5c   ovr_randBelow(2)
+    55fe:03e5  0x138,0x61   a two-argument map predicate (selector shared with other modules)
+
+plus a five-way jump table at cs:0x47d (0x400/0x40d/0x41a/0x441/0x443).
+
+The body: accumulate `GMapFlags[y=GfxRndSeed2][x=alignUp4(GfxRndSeed)+si] & 0x3000` for four squares
+into `[bp-0xe]`; clear `cursorRecordFound` (0x91d6); fill the two anonymous arrays; walk
+`GRecordCount` (0x91df) records of stride 0x12 in segment 0x88, matching record word +4 against
+`GfxRndSeed2` and testing bit 0 of +0xd, deriving a span from `+7` and `+2`, and writing the record
+index into the word array and a 1 into the byte array for the covered squares; set
+`cursorRecordFound`; then walk the two unit squares through `getUnitIndex`/`getUnitType`, reading
+`GUnits[idx].unitType/level` (stride 9), `GLeaderSheets[kind].faction` (segment 0x70), and
+`BuildingTypes[type].size/sfxType` (stride 0x27, image 0x60:0x11b/0x132); finally choose
+`CurSfxType3` (0x7a7) from 0x70/0x61/0x5e/0x80/0x83/0x7a/0x76/0x7d via `ovr_randBelow(2)` and
+`GSeason` (0x693a, compared with 2), returning early when `GOngoingBattle` (0x899c) is set or when
+`[bp-0xe]` is 0x3000 / 0x1000 as the predicates dictate.
+
+What blocks it: the two cleared arrays have no symbol anywhere - not in audit/dgroup_data.csv
+(0x91d7 and 0x90ea are unlisted) and not in the tree (our offsets 0x91dd and 0x90f0 are absent from
+REBUILT.MAP). They are a four-word record-index array (filled with 0xffff, then one record index per
+covered square) and a four-byte "covered" flag array. Inventing their names would violate the naming
+rule, so the body stays a documented gap.
+
+## Measured (HEAD ac3d744d -> this commit)
+
 
     grep_checks      23,898 -> 23,850   (-48: the `in_stack_` reads)
     REBUILT.EXE      487,694 (unchanged - O44 is link-excluded)
