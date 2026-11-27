@@ -19975,3 +19975,86 @@ emitted loop bodies read the same `ds:0x4ada` / `ds:0x4a28` operands as the imag
     compare_state    1,628/0/0 (unchanged)
     diff_dgroup      1,639/1,805 matched, 5 runs, sum|delta| 18, mean 0, worst 12 (unchanged)
     compare_runtime  1,692 matched, 1,683 identical / 9 different at all three sample points
+
+### step 6: 77eb:0d61 decoded, two O45 leaves re-derived (grep 26,353 -> 26,346)
+step 6: `77eb:0d61` decoded, two O45 leaves re-derived from the image (grep 26,353 -> 26,346)
+
+## The screen's top entry is another mis-attributed body
+
+`ovc45_buildPlacementMessage` is 2,385 bytes / 58 calls in the image.  The tree has 3,202 lines /
+816 calls whose classes are
+
+    ovr_stshRleType2 201 | stsh_store 190 | func_0x0007ffe0 138 | ovr_stgFreeTmp 59 |
+    ovr_grabLbmTR 57 | ovr_stshStoreFile 38
+
+- the asset stubify/RLE loader.  None of those is called by the image function, so the body is
+another function's, like `ovc22_textRingProt` and `ovc23_textAdlibNone` were.
+
+## What it really is, from the strings it pushes
+
+    0x74f0  "%s:"
+    0x74f4  " You can only place a single arena."
+    0x7518  " Bridges must be near water's edge."
+    0x753c  " Next outpost available at rank %s."
+    0x7560  " No more outposts are available."
+    0x7581  " Requires a rank of %s."
+    0x7599  " Requires a unit of level %d."
+    0x75b7  " Location is too narrow for %s."
+    0x75d7  " Location is too narrow for a %s."
+    0x75f9  " Walls must be near land."
+    0x7613  "Buildings cannot be placed over water."
+    0x763a  "This location is unsuitable for buildings."
+    0x7665  " It will cost %s the %s %d gp. "
+    0x76ad  "Party member %s doesn't have enough gold to construct a %s."
+    0x76e9  "Too many construction sites."
+
+the building-placement rejection ladder, with the cost line and the gold line at the end.
+
+Census (58): `strcat` (0,0x2cc2) 10, `ovc45_compute4` 8, `stsprintf` 9, `ovc15_usesStshRealloc` 2,
+`ovc45_compute5` 2, `strcpy` 2, `say` (0xf8,0x3e) 2, `play_sfx` 2, and one each of
+`ovc45_textArena2`, `ovc45_compute1`, `ovc45_usesGMapFlags5`, `ovc45_compute9`, `ovc45_compute3`,
+`ovc45_textChoosePartyBuild`.  Nine of the near targets resolve to named in-module helpers.
+
+**A finding worth recording:** `build_standalone.py --only o45 --asm` now fails with
+`Error o45.c 3851: Compiler table limit exceeded in function ovc45_buildPlacementMessage` - the
+existing 3,202-line body is so large that Borland cannot even emit a listing for that module.  So
+this function can only be verified by compiling it in isolation (`tmp/chk_o45.py` does that), which
+is another reason the wrong body is worth replacing beyond its correctness.
+
+## Two O45 leaves re-derived and verified
+
+`77eb:21d3` **ovc45_compute7**, 30 bytes: `al=[bp+6]; ah=0; bx=ax; al=[bp+8]; ah=0; push ax; ax=bx;
+pop dx; imul dx; shr ax,3; al=bl; retf`.  The tree declared a `uint16_t` return and built
+`CONCAT11((byte)(a*b >> 0xb),(char)(a*b >> 3))` - a word whose high byte the image never computes -
+plus three unused parameters.  Now
+
+    uint8_t __cdecl16far ovc45_compute7(byte a,byte b) { return (uint8_t)(((uint)a * (uint)b) >> 3); }
+
+`77eb:2226` **ovc45_compute8**, 49 bytes: 0 for index 0xff, else 1 when the leader's byte at
+`+0x3f` is zero.  The tree returned `in_AX & 0xff00` for the 0xff case (an uninitialised register)
+and `CONCAT11(partySeg,1)` / `partySeg << 8` for the other two.  Now a plain `uint8_t` ladder.
+
+Verified from a one-function listing (`tmp/chk_o45.py`, since the module cannot be listed whole):
+
+    _ovc45_compute7          _ovc45_compute8
+    mov al,[bp+6]            mov dl,[bp+6]
+    mov ah,0                 cmp dl,255 / jne
+    mov dl,[bp+8] / mov dh,0 mov al,0 / ret
+    imul dx                  shl ax,2 / les bx,DGROUP:_GLeaderSheets[bx]
+    shr ax,3                 cmp byte ptr es:[bx+63],0     ; 0x3f
+    ret                      mov al,1 / ret
+
+both matching the image's arithmetic and its `es:[bx+0x3f]` test.
+
+## Measured (HEAD 78157e00 -> this commit)
+
+    grep_checks      26,353 -> 26,346   (-7)
+    REBUILT.EXE      493,526 (unchanged - O45 is link-excluded)
+    build 65/65, LINK.LOG 65 bytes / 0 problems
+    compare_state    1,628/0/0 (unchanged)
+    diff_dgroup      1,639/1,805 matched, 5 runs, sum|delta| 18, mean 0, worst 12 (unchanged)
+    compare_runtime  1,692 matched, 1,683 identical / 9 different at all three sample points
+
+Note for the next `--asm` run: it re-stages the tree, so a full `build_standalone.py` must follow it
+before `link_standalone.py`, or the link runs against the listing-mode objects (I hit exactly that:
+LINK.LOG 28,081 bytes and a 7,930-byte EXE until the full rebuild).

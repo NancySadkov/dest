@@ -4361,10 +4361,11 @@ int __cdecl16far ovc45_usesGMapFlags4(int x,int y)
 
 /* 77eb:21d3 */
 
-uint16_t __cdecl16far ovc45_compute7(byte a,byte b,uint16_t arg3,uint16_t arg4,uint16_t arg5)
+uint8_t __cdecl16far ovc45_compute7(byte a,byte b)
 
 {
-  return CONCAT11((byte)((uint)a * (uint)b >> 0xb),(char)((uint)a * (uint)b >> 3));
+  /* Re-derived from image 77eb:21d3: the image returns AL only, `imul` then `shr ax,3`. */
+  return (uint8_t)(((uint)a * (uint)b) >> 3);
 }
 
 
@@ -4398,28 +4399,18 @@ bool __cdecl16far ovc45_showLandInfo(int screenX,uint16_t y)
 
 /* 77eb:2226 */
 
-uint __cdecl16far ovc45_compute8(byte partyIndex)
+uint8_t __cdecl16far ovc45_compute8(byte partyIndex)
 
 {
-  uint32_t sheetPtr;
-  uint in_AX;
-  uint uVar2;
-  byte partySeg;
-  
+  /* Re-derived from image 77eb:2226: 0 for index 0xff, else 1 when the leader's byte at
+     +0x3f is zero. */
   if (partyIndex == 0xff) {
-    uVar2 = in_AX & 0xff00;
+    return 0;
   }
-  else {
-    sheetPtr = (uint32_t)GLeaderSheets[partyIndex];
-    partySeg = (byte)(((uint)partyIndex << 2) >> 8);
-    if (*(char *)((int)sheetPtr + 0x3f) == '\0') {
-      uVar2 = CONCAT11(partySeg,1);
-    }
-    else {
-      uVar2 = (uint)partySeg << 8;
-    }
+  if (*(uint8_t far *)((uint8_t far *)GLeaderSheets[partyIndex] + 0x3f) == 0) {
+    return 1;
   }
-  return uVar2;
+  return 0;
 }
 
 
