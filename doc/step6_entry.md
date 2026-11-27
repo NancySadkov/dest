@@ -18963,3 +18963,25 @@ a fragment here.
     compare_state    1,628/0/0 (unchanged)
     diff_dgroup      1,639/1,805 matched, 5 runs, sum|delta| 18, mean 0, worst 12 (unchanged)
     compare_runtime  1,692 matched, 1,683 identical / 9 different at all three sample points
+
+### follow-up detail: the 0x14a8 block also depends on `di`
+
+Two more facts, read from the image, that pin the merge down:
+
+    5ded:13ce  les bx,[bp+6] / cmp byte es:[bx+0x2e],3 / je 13e5
+    5ded:13d8  les bx,[bp+6] / cmp byte es:[bx+0x2e],5 / je 13e5
+    5ded:13e2  jmp 0x14a8                       <- the tree's `ovc27_textTakesHalfDamage4()`
+
+    5ded:1ac6  mov word ptr [bp-4],0x1e         <- branch target of the 0x14a8 block
+    5ded:1acb  mov word ptr [bp-2],0
+    5ded:1ad0  les bx,[bp-0xa] / test word es:[bx+0x2b],0x20 / je 1ade
+    5ded:1be4  jmp 0x1ad0                       <- the loop back edge
+
+so the 0x14a8 block is reached by a *jump*, and its `do { ... } while (*(int *)(bp-2) == unaff_DI)` test
+(line 1412) compares against `di`, which `5ded:10ea`'s prologue loaded with `agntIndex`
+(`push si / push di / mov di,[bp+0xa]`).  So the block consumes three things the caller set up -
+`bp`, `agntRec` at [bp-0xa]/[bp-8] and `di` = agntIndex - and two word locals of its own
+([bp-4] the 0x1e countdown, [bp-2] the loop index).
+
+A call therefore cannot reproduce it without passing agntIndex and recomputing agntRec; the faithful
+form is one function with `goto L_half4;`, the label placed at the block that sets [bp-4]/[bp-2].
