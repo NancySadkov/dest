@@ -16921,3 +16921,55 @@ size, the buffer-allocated flag set, `istemp` zeroed, and buffers obtained the w
 (farmalloc'ed far blocks, not DGROUP statics) - and re-measure with `scripts/dump_at_key.py`; or (b) finish
 recovering `__vprinter`'s parameter chain so the game uses the original's printf and CM.LIB's PRINTF member
 is no longer linked at all, which removes the mixed-implementation problem at its root.
+
+### step 6: the +6 on _streams[1].bsize is added after setvbuf
+step 6: the +6 on `_streams[1].bsize` is added after setvbuf writes it
+
+Two controlled experiments on the stdio record, both reverted afterwards, pin the anomaly down further.
+
+## 1. The store itself writes the right value; something adds 6 afterwards
+
+`setvbuf` was changed to write a literal instead of its `size` parameter:
+
+    stream->bsize = 0x1234;      /* experiment */
+
+and the record decoded from the runtime dump at the first key read:
+
+    FILE[0]  bsize = 0x1234         <- exactly what the store wrote
+    FILE[1]  bsize = 0x123A         <- 0x1234 + 6
+
+Both calls execute the same statement, and the second call's `stream` is definitely `&_streams[1]` (its
+`buffer` lands in `streamBuf1` at DGROUP:0xb768, the first in `streamBuf0` at 0xb968), so the store wrote
+0x1234 at 0x8640 and **0x1234 was replaced by 0x123A later in the run** - i.e. by the library's printf,
+which is the only code that runs between then and the sample.
+
+That is the same +6 as the baseline (0x0200 -> 0x0206), so it is not a size-argument problem at all: the
+record is correct when `setvbuf` returns and is modified afterwards.
+
+## 2. With a non-buffered size in place, the 0x0200 write disappears
+
+In the same run the damaged window was intact:
+
+    0x1fa..0x206 = 66 69 67 68 74 65 72 20 75 6e 69 74   "fighter unit"
+
+so the stray write is a direct consequence of the record's final `bsize` value (0x0206 = 518 against a
+512-byte buffer), not an independent bug.  A 518-byte buffer limit is exactly 6 bytes longer than
+`streamBuf1`, which is the same 6 that `bsize` gained - the two facts are one fact.
+
+## Where that leaves the fix
+
+The remaining question is narrow: **who writes `bsize` after `setvbuf`, and why +6**.  Candidates, in
+order of likelihood:
+
+  * CM.LIB's printf adjusting the record as it fills the buffer (`stream->bsize` is its own field in the
+    library's `FILE`; if the library's layout differs from `st_types.h`'s 20-byte one by a field, the
+    "adjust" lands on our `bsize` instead of `level`);
+  * our recovered `_fputc`/`fflush` (also live in this image, from crtl.c) touching the same record with
+    our layout while printf uses the library's.
+
+Both are testable with the tooling now in place: `scripts/probe_patch.py _fputc 1` (or `fflush`) shows
+whether the +6 and the damage survive with our fputc disabled, which separates the two.
+
+Re-measured after reverting: build 65/65, LINK.LOG 65 bytes / 0 problems, grep_checks 34,700,
+compare_state 1,628/0/0, diff_dgroup 1,639/1,805 matched with sum|delta| 18, and the three runtime samples
+unchanged (1,683 identical at main and init_game, 1,682 / 10 at the key read).
