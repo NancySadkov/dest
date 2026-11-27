@@ -686,7 +686,7 @@ uint __cdecl16far ovc22_compute1(byte partyIndex,uint value);
 int __cdecl16far ovc22_applyRankBonus(byte partyIndex,int cost);
 char * __cdecl16far ovc22_textPOPULATION(byte bldType,byte partyIndex,agnt_t far *agnt,uint16_t arg4,uint16_t arg5);
 uint __cdecl16far ovc22_seasonalIncome(byte bldType,uint8_t partyIndex,uint16_t arg3,uint16_t arg4,uint16_t arg5);
-far_t * __cdecl16far ovc22_textRingProt(byte partyIndex);
+void __cdecl16far ovc22_textRingProt(byte partyIndex);
 uint16_t __cdecl16far ovc22_usesPlayerCount(byte partyIndex);
 uint __cdecl16far ovc22_usesEntities(int entityIndex);
 void __cdecl16far ovc22_usesGUnits(int unitIndex,uint8_t *outFlag);

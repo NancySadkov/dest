@@ -20698,6 +20698,28 @@ with `B` (the decompiler's `pixels` pseudo-argument) and `H,I,J` never pushed an
 second slot. Verified on several sites, e.g. `(src,pixels,130,99,194,26,-1,unaff,0,0)` pairs with
 pushes `-1,0x1a,0xc2,0x63,0x82,0` after the source, i.e. `(src,0,130,99,194,26,-1)`.
 
+## `5087:056e` mis-attributed body removed (grep -3,279)
+
+`ovc22_textRingProt` is 3,842 bytes in the image (`0x056e..0x1443` plus the 22-entry switch jump
+table at `cs:0x1444`) with eleven calls; the tree carried a 2,294-line body whose call census was 140 -
+another function's code, like `77eb:0d61` and `2e25:025a`. It is now a documented stub with the decode
+recorded in place (frame, early exit on `partyIndex == 0xff`, the six memsets, the
+`alignUp4` + three near calls, the party bit `0x1000 << GLeaderSheets[partyIndex]->faction`, the
+per-unit `GUnits[0xf8..GUnitCount]` pass accumulating the four neighbouring `GMapFlags` 0x3000 bits,
+the 22-way switch over `GBuildingTypes[..]+0x133 - 7`, the Difficulty thresholds 0xfa0/0xbb8/0x7d0,
+and the tail `+0x52`/`+0x84` stores).
+
+`O22.OBJ` is link-excluded, so the binary is unchanged and the stub has no runtime effect.
+
+## Measured (HEAD b2ae629c -> this commit)
+
+    grep_checks      20,716 -> 17,437   (-3,279: the mis-attributed body)
+    REBUILT.EXE      474,208 (unchanged - O22 is link-excluded)
+    build 65/65, LINK.LOG 0 errors
+    compare_state    1,628/0/0 (unchanged)
+    diff_dgroup      1,639/1,805 matched, 5 runs, sum|delta| 18 (unchanged)
+    compare_runtime  1,692 matched, 1,683 identical / 9 different at all three sample points
+
 ## Measured (HEAD 4e98f767 -> d967fb0f + this commit)
 
     grep_checks      21,016 -> 20,716   (-300)
