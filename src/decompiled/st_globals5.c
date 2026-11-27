@@ -405,6 +405,8 @@ char s_message_delay_is_now_d[] = "Message delay is now %d.";
 char s_decrease_message_delay[] = "Decrease message delay";
 char s_increase_message_delay[] = "Increase message delay";
 char s_test[] = "Test";
+/* the original carries "Done" at 0x2798 as well as at 0x6ab4 */
+char s_done_2410_2798[5] = "Done";
 char s_change_message_delay[] = "Change message delay:";
 char s_this_message_appears_at__ec7e[] = "This message appears at the message delay of %d.";
 char s_cancel[] = "Cancel";
@@ -1164,6 +1166,8 @@ char s_to_promote_2410_4d90[] = "to promote";
 char s_Accept_2410_4d9b[] = "Accept";
 char s_You_may_raise_a_pri_2410_4da2[] = "You may raise a primary ability by trading two points of another ability. Select ability to increase.";
 char s_Select_ability_to_a_2410_4e08[] = "Select ability to adjust downwards by two points.";
+/* the original carries "Cancel" twice; the other copy is at 0x27e4 */
+char s_cancel_2410_4e3a[7] = "Cancel";
 char s_A_LAWFUL_leader_mus_2410_4e41[] = "A LAWFUL leader must achieve the rank of EMPEROR.";
 char s_A_NEUTRAL_leader_mu_2410_4e73[] = "A NEUTRAL leader must destroy all enemies and achieve the rank of EMPEROR.";
 char s_A_CHAOTIC_leader_mu_2410_4ebe[] = "A CHAOTIC leader must destroy all enemies.";
@@ -1692,6 +1696,8 @@ char s_you_will_truly_be_master_74a8[] = "You will truly be master of your...";
 char s_empty_2410_747d[] = "";
 char StshFileName[] = "strong.dat";
 uint32_t StshFileSizeVar = 0x0;
+/* the original's StshFileSize symbol spans five zero bytes; the long is written as four */
+undefined1 s_stshFileSizeTail[1] = { 0x00 };   /* GUESS: trailing byte of the span */
 char s_getcache__d_SIZESTA_2410_748e[30] = "getcache %d  SIZESTASH %d  \r";
 undefined1 selectedPartyIndex = 0xFF;
 far_t PersonWordPtrs[2] = { { 0x77E2, 0x2410 }, { 0x77E9, 0x2410 } };

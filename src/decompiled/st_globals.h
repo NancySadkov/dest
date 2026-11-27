@@ -2399,3 +2399,10 @@ extern char s_no_2410_7a02[3];
 extern brect_t menuBarRect;
 extern char s_Enemy_2410_6f33[10];
 extern char s_d_2410_6f3d[5];
+
+/* 0x4e3a / 0x7489 */
+extern char s_cancel_2410_4e3a[7];
+extern undefined1 s_stshFileSizeTail[1];
+
+/* 0x2798 */
+extern char s_done_2410_2798[5];

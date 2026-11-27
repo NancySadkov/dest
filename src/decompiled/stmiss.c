@@ -225,3 +225,14 @@ char s_absentBlob[] =
   "\0";
 
 /* s_absentOfs removed: unreferenced, and its indices shift as entries migrate. */
+
+/* Moved out of GLOB.OBJ's head so that DGROUP:0x94 is the original's s__2410_0094.
+   The audit puts GMiceDS/GMiceSS/GMiceSP in the mouse module's code segment
+   (138e:0102/0104/0106), not in DGROUP, and `__DATA` here is the one-byte symbol that
+   mangles to ___DATA - not the DGROUP pointer `_DATA`, which lives at 0x00.  They are
+   ordinary globals only this tree addresses, so their position is functionally neutral and
+   stmiss.c is the last object on the link line. */
+undefined GMiceDS = 0x00;
+undefined GMiceSS = 0x00;
+undefined GMiceSP = 0x00;
+undefined __DATA = 0x10;

@@ -16442,3 +16442,59 @@ The profile is now
 
 so every remaining delta is a small local step (the largest is 17 bytes) rather than a region-wide
 offset, and `worst` is 17.
+
+### layout: close the last head steps (sum -> 3,322, game data at delta 0)
+layout: close the 0x4e3a/0x2798/0x7489 steps and move the four stray head bytes (sum 10,137 -> 3,322)
+
+Four more shortfalls, all found by tmp/band2.py at the exact span before each delta step:
+
+    0x4e3a   7  s_cancel          the original carries "Cancel" TWICE (0x27e4 and 0x4e3a); our single
+                                   declaration covered 0x27e4, so the copy in front of
+                                   "A LAWFUL leader must achieve..." was missing
+    0x7489   5  StshFileSize      five zero bytes; ours is `uint32_t StshFileSizeVar` (4) and
+                                   ovc44_strong_dat.c writes exactly four, so the declaration stays a
+                                   long and the fifth byte is a separate object
+    0x2798   5  s_done            "Done" again, before "Change message delay" (the other copy is at
+                                   0x6ab4)
+
+and then the last region-wide item.  DGROUP:0x94 should be the original's `s__2410_0094`, but GLOB.OBJ's
+first four declarations landed there:
+
+    GMiceDS, GMiceSS, GMiceSP   the audit places these at 138e:0102/0104/0106 - inside the mouse
+                                module's CODE segment, not in DGROUP at all
+    __DATA                      a one-byte symbol that mangles to ___DATA; NOT the DGROUP pointer
+                                `_DATA` (which is `__DATA` and now lives at 0x00)
+
+They are ordinary globals that only this tree addresses, so their position is functionally neutral;
+they moved to the end of stmiss.c, the last object on the link line, where they cost no offsets.
+
+MEASURED (HEAD a78b644b -> this commit)
+
+  diff_dgroup sum|delta|   10,137 -> 3,322
+  diff_dgroup mean              6 ->     2
+  diff_dgroup worst            17 ->     8
+  diff_dgroup runs             10 ->     6
+  diff_dgroup matched        1,631 -> 1,631
+  compare_state              1,628/0/0 (unchanged)
+  compare_runtime matched    1,689 -> 1,691, identical 1,680 -> 1,682 / 9 different (both points)
+  grep_checks               34,868 -> 34,870  (+2 declarations)
+  build 65/65, LINK.LOG 65 bytes / 0 problems
+
+## The profile is now six entries, and the game data is exact
+
+    delta +0 from _DATA (0000), 2 symbols
+    delta -6 from _brklvl (008b), 1 symbols
+    delta +0 from _heaptop (008f), 1,213 symbols     <- the whole game data area, offset 0
+    delta -8 from s_mindark_s_keep_destroyed_d_d (576a), 262 symbols
+    delta +4 from s_and_grow (7394), 1 symbols       (duplicate label in the original's table)
+    delta -8 from s_empty_2410_747d (747d), 152 symbols
+
+Our DGROUP now matches the original's offsets symbol for symbol from 0x0094 through 0x576a - 1,213
+symbols, including everything between the game strings and the CRTs - which is what the head work since
+`ed8bd913` was for: C0L's own header (0x00..0x94) with our three objects aliased into it as zero-cost
+labels, and nothing of ours at the game data's start.
+
+The three remaining steps are small and local: 6 bytes at `_brklvl`, 8 bytes in the 0x4e41..0x576a
+range, 8 bytes before 0x747d.  The +/-12 around 0x7394 is not a layout error at all: the original's
+symbol table contains the name `s_and_grow` twice (0x7394 "and grow..." and 0x73a0 a 33-byte run of
+spaces), and a name-pairing tool necessarily maps both to our one declaration.

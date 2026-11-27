@@ -8,11 +8,7 @@
 /* __brklvl: supplied by the C runtime startup. */
 /* segh: owned by OVERLAY.LIB (VROOMM manager). */
 /* segh2: owned by OVERLAY.LIB (VROOMM manager). */
-undefined GMiceDS = 0x00;
-undefined GMiceSS = 0x00;
-undefined GMiceSP = 0x00;
 /* __OVRDATA: owned by OVERLAY.LIB (VROOMM manager). */
-undefined __DATA = 0x10;
 /* 256 words: one record index per tile, -1 = none.  Uninitialised in the original image
    (DGROUP+0x91d7 is all zeros), so a BSS array reproduces it. */
 uint16_t GTileRecords[256];
