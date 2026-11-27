@@ -20469,6 +20469,35 @@ while the tree emulated it with `*(uint32_t *)((uint)puVar5[uVar6].unitType << 2
 `char_sheet_t far *GLeaderSheets[80]`, so it is now
 `GLeaderSheets[puVar5[uVar6].unitType]->faction == '\0'` and the `uVar3` temporary is gone.
 
+## The BldGfx segment stores were landing in DGROUP (163 sites -> 139 rewritten)
+
+`BldGfxNormal` and `BldGfxRuin` are `far_t far far` arrays (744 elements). The tree wrote their
+segment halves as
+
+    *(uint16_t *)((int)&BldGfxNormal[0x13].seg + index * 0xc) = (int)((ulong)res >> 0x10);
+
+`&BldGfxNormal[...].seg` is a *far* address, but the `int` cast keeps only the offset, so Borland
+emits a NEAR store into DGROUP (`mov word ptr _BldGfxNormal[bx+2],dx`) while the image stores through
+ES (`mov es:[bx+2],dx` - the same defect already fixed in `stshTR_S_stubify0`). Every tail in the
+tree is one of three shapes, so all were rewritten mechanically:
+
+    [BASE] + <expr> * 0xc          -> BldGfxX[BASE + 3*<expr>].seg
+    [BASE] + <expr> * 0xc + J * 4  -> BldGfxX[BASE + 3*<expr> + J].seg
+    [BASE] + <expr> * 0x48         -> BldGfxX[BASE + 18*<expr>].seg
+
+(0xc bytes = 3 far_t, 4 bytes = 1, 0x48 = 18). `tmp/fix_far_seg_stores.py` did the rewrite:
+ovc20_stash.c 54, ovc44_strong_dat.c 48, ovc48_assets2.c 37. The `ofs` halves already used
+`((far_t *)(BldGfxX + BASE) + ...)->ofs`, which is ES-based, so they were left alone.
+
+## Measured (HEAD 474b2f56 -> this commit)
+
+    grep_checks      21,250 (unchanged - these forms are not grep patterns)
+    REBUILT.EXE      479,328 -> 480,400 (+1,072: each ES-based store needs the segment in ES)
+    build 65/65, LINK.LOG 0 problems
+    compare_state    1,628/0/0 (unchanged)
+    diff_dgroup      1,639/1,805 matched, 5 runs, sum|delta| 18 (unchanged)
+    compare_runtime  1,692 matched, 1,683 identical / 9 different at all three sample points
+
 ## Measured (HEAD 8d686abd -> this commit)
 
     grep_checks      21,253 -> 21,250
