@@ -3684,8 +3684,8 @@ void bios(int width,uint16_t *vramOfs)
   uint16_t *puVar1;
   uint16_t *puVar2;
   uint16_t uVar3;
-  bool bVar4;
-  bool bVar5;
+  bool argSegMatch;
+  bool vramSegMatch;
   uint16_t *in_stack_00000004;
   int in_stack_0000000a;
   uint8_t cursorPos;
@@ -3693,20 +3693,20 @@ void bios(int width,uint16_t *vramOfs)
   uint8_t srcScreenOfs;
   
   cursorPos = _wherexy();
-  bVar4 = in_stack_0000000a == (*(uint16_t *)((uint8_t *)&(_video.displayptr) + 1));
-  if (bVar4) {
+  argSegMatch = in_stack_0000000a == (*(uint16_t *)((uint8_t *)&(_video.displayptr) + 1));
+  if (argSegMatch) {
     srcScreenOfs = screenpos((uint)(*(uint16_t *)((uint8_t *)&(vramOfs) + 2)));
   }
-  bVar5 = (uint16_t *)vramOfs == (uint16_t *)(*(uint16_t *)((uint8_t *)&(_video.displayptr) + 1));
+  vramSegMatch = (uint16_t *)vramOfs == (uint16_t *)(*(uint16_t *)((uint8_t *)&(_video.displayptr) + 1));
   puVar1 = vramOfs;
-  if (bVar5) {
+  if (vramSegMatch) {
     vramScreenOfs = screenpos((uint)in_stack_00000004);
   }
   while( true ) {
     (*(uint16_t *)((uint8_t *)&(vramOfs) + 2)) = (uint16_t)(uint16_t *)((ulong)puVar1 >> 0x10);
     (*(uint16_t *)((uint8_t *)&(vramOfs))) = (uint16_t)(uint16_t *)puVar1;
     if (width == 0) break;
-    if (bVar5) {
+    if (vramSegMatch) {
       puVar2 = (uint16_t *)&cursorPos;
       moveto((uint16_t *)CONCAT22(_SS,puVar2),(uint16_t *)CONCAT22(_SS,&vramScreenOfs));
       uVar3 = CONCAT11(8,(char)puVar2);
@@ -3716,7 +3716,7 @@ void bios(int width,uint16_t *vramOfs)
       uVar3 = *(uint16_t *)CONCAT22((uint16_t *)vramOfs,in_stack_00000004);
       in_stack_00000004 = in_stack_00000004 + 1;
     }
-    if (bVar4) {
+    if (argSegMatch) {
       moveto((uint16_t *)CONCAT22(_SS,&cursorPos),(uint16_t *)CONCAT22(_SS,&srcScreenOfs))
       ;
       _VideoInt(0x0200);

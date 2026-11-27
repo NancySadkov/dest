@@ -412,14 +412,14 @@ void __cdecl16far constrct_usesLDIV_at_(byte partyIndex,int entityIndex)
   uint16_t uVar7;
   uint costRemainder;
   int iVar9;
-  int iVar10;
-  int iVar11;
+  int entPtr;
+  int entPtrB;
   uint16_t unaff_SI;
   uint uVar12;
   long *unaff_DI;
   int iVar13;
   uint16_t uVar14;
-  uint16_t uVar15;
+  uint16_t entSeg;
   long lVar16;
   long lVar17;
   uint32_t in_stack_0000ff5e;
@@ -465,17 +465,17 @@ void __cdecl16far constrct_usesLDIV_at_(byte partyIndex,int entityIndex)
     GPopulationLo = (uint16_t)lVar17;
     GPopulationHi = (uint16_t)((ulong)lVar17 >> 0x10);
     uVar14 = (uint16_t)((ulong)*(uint32_t *)((uint)entityIdx << 2) >> 0x10);
-    iVar10 = (int)*(uint32_t *)((uint)entityIdx << 2);
-    iVar9 = *(int *)(iVar10 + 0x58);
+    entPtr = (int)*(uint32_t *)((uint)entityIdx << 2);
+    iVar9 = *(int *)(entPtr + 0x58);
     uVar7 = (uint16_t)((ulong)*(uint32_t *)((uint)entityIdx << 2) >> 0x10);
-    iVar11 = (int)*(uint32_t *)((uint)entityIdx << 2);
-    iVar13 = *(int *)(iVar11 + 0x8c);
+    entPtrB = (int)*(uint32_t *)((uint)entityIdx << 2);
+    iVar13 = *(int *)(entPtrB + 0x8c);
     if ((iVar13 <= iVar9) &&
-       ((iVar13 < iVar9 || (*(uint *)(iVar11 + 0x8a) < *(uint *)(iVar10 + 0x56))))) {
+       ((iVar13 < iVar9 || (*(uint *)(entPtrB + 0x8a) < *(uint *)(entPtr + 0x56))))) {
       uVar7 = (uint16_t)((ulong)*(uint32_t *)((uint)entityIdx << 2) >> 0x10);
       iVar9 = (int)*(uint32_t *)((uint)entityIdx << 2);
       uVar14 = *(uint16_t *)(iVar9 + 0x8a);
-      uVar15 = (uint16_t)((ulong)*(uint32_t *)((uint)entityIdx << 2) >> 0x10);
+      entSeg = (uint16_t)((ulong)*(uint32_t *)((uint)entityIdx << 2) >> 0x10);
       iVar13 = (int)*(uint32_t *)((uint)entityIdx << 2);
       *(uint16_t *)(iVar13 + 0x58) = *(uint16_t *)(iVar9 + 0x8c);
       *(uint16_t *)(iVar13 + 0x56) = uVar14;

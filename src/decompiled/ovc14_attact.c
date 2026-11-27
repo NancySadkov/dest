@@ -1694,7 +1694,7 @@ void __cdecl16far attact_usesLDIV_at_2(void)
   undefined1 stk_ffe0;   /* stack slot ffe0 */
   far_t dst;
   far_t dst_00;
-  bool bVar1;
+  bool arenaResult;
   long *plVar2;
   long *plVar3;
   uint16_t uVar4;
@@ -1707,7 +1707,7 @@ void __cdecl16far attact_usesLDIV_at_2(void)
   far_t gfx;
   far_t gfx_00;
   uint32_t in_stack_0000ffde;
-  uint uVar9;
+  uint longHi;
   int iStack_1e;
   uint32_t sum;
   char miceIdle;
@@ -1723,8 +1723,8 @@ void __cdecl16far attact_usesLDIV_at_2(void)
   F_SCOPY(far_from_u32((uint32_t)(0x24100897)),dst_00,10);
   if (GameRunning == false) {
     miceIdle = MiceNeedsUpdate == '\0';
-    bVar1 = ovr_draw_textArena();
-    if (bVar1) {
+    arenaResult = ovr_draw_textArena();
+    if (arenaResult) {
       attact_usesEntityCount2
                 ((uint16_t *)CONCAT22(_SS,&sum),(uint16_t *)CONCAT22(_SS,&stk_ffe0));
       if (((uint)sum == 0 && (*(uint16_t *)((uint8_t *)&(sum) + 2)) == 0) ||
@@ -1775,14 +1775,14 @@ void __cdecl16far attact_usesLDIV_at_2(void)
           attact_usesAgntCount2
                     ((uint16_t *)CONCAT22(_SS,&sum),(uint16_t *)CONCAT22(_SS,&stk_ffe0)
                     );
-          uVar9 = (uint)((ulong)lVar8 >> 0x10);
-          if (((uint)sum != 0 || (*(uint16_t *)((uint8_t *)&(sum) + 2)) != 0) || (uVar9 != 0 || iStack_1e != 0)) {
-            if (((uint)sum == 0 && (*(uint16_t *)((uint8_t *)&(sum) + 2)) == 0) && (uVar9 != 0 || iStack_1e != 0)) {
+          longHi = (uint)((ulong)lVar8 >> 0x10);
+          if (((uint)sum != 0 || (*(uint16_t *)((uint8_t *)&(sum) + 2)) != 0) || (longHi != 0 || iStack_1e != 0)) {
+            if (((uint)sum == 0 && (*(uint16_t *)((uint8_t *)&(sum) + 2)) == 0) && (longHi != 0 || iStack_1e != 0)) {
               iVar6 = 0;
             }
-            else if (((uint)sum == 0 && (*(uint16_t *)((uint8_t *)&(sum) + 2)) == 0) || (uVar9 != 0 || iStack_1e != 0)) {
-              plVar3 = (long *)(uVar9 + (uint)sum);
-              iVar6 = iStack_1e + (*(uint16_t *)((uint8_t *)&(sum) + 2)) + (uint)CARRY2(uVar9,(uint)sum);
+            else if (((uint)sum == 0 && (*(uint16_t *)((uint8_t *)&(sum) + 2)) == 0) || (longHi != 0 || iStack_1e != 0)) {
+              plVar3 = (long *)(longHi + (uint)sum);
+              iVar6 = iStack_1e + (*(uint16_t *)((uint8_t *)&(sum) + 2)) + (uint)CARRY2(longHi,(uint)sum);
               uVar4 = 0;
               plVar2 = LXMUL_at_(plVar3,CONCAT22(unaff_DI,iVar6),lVar8);
               lVar8 = LDIV_at_((long)CONCAT22(uVar4,plVar2),(long)CONCAT22(iVar6,plVar3));

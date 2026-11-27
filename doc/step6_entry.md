@@ -17539,3 +17539,27 @@ stash_loadFromStrongDat: two words read from fixed offsets of the record `entry`
   compare_state 1,628/0/0
   diff_dgroup 1,639/1,805 matched, 5 runs, sum|delta| 18, mean 0, worst 12
   compare_runtime 1,692 matched, 1,683 identical / 9 different at all three sample points
+
+### section 5: batch 22 - three functions (34,543 -> 34,515)
+section 5: batch 22 - three functions (34,543 -> 34,515)
+
+bios (crtl.c, 53 lines) - both names are segment comparisons against the video display pointer
+    bVar4  in_stack_0000000a == word[&_video.displayptr + 1]       -> argSegMatch  (4)
+    bVar5  vramOfs == (uint16_t *)word[&_video.displayptr + 1]     -> vramSegMatch (4)
+
+attact_usesLDIV_at_2 (129 lines)
+    uVar9  (uint)((ulong)lVar8 >> 0x10), the high word of a long   -> longHi      (7)
+    bVar1  ovr_draw_textArena()                                    -> arenaResult (3)
+
+constrct_usesLDIV_at_ (91 lines) - the entity pointer is loaded twice from the same table
+    iVar10  (int)*(uint32_t *)((uint)entityIdx << 2)               -> entPtr   (4)
+    iVar11  the same expression again, later                       -> entPtrB  (4)
+    uVar15  (uint16_t)((ulong)*(uint32_t *)(entityIdx << 2) >> 0x10) -> entSeg (2)
+
+`entPtr`/`entPtrB` are two distinct locals loaded at different points, so the letter marks the second copy
+without claiming a different meaning.
+
+  grep_checks 34,543 -> 34,515 (-28); build 65/65; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,628/0/0
+  diff_dgroup 1,639/1,805 matched, 5 runs, sum|delta| 18, mean 0, worst 12
+  compare_runtime 1,692 matched, 1,683 identical / 9 different at all three sample points
