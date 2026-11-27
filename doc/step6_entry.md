@@ -15429,3 +15429,40 @@ and the band inherits the +16 that the head of DGROUP still carries.  The head s
 DATASEG-before-_DATA arrangement from the earlier analysis (C0M's 116-byte DATASEG plus the
 25-byte null-check string), so it cannot be removed by right-sizing an object; it needs the C0
 startup replaced.  The two 1-byte steps there remain to be found.
+
+### layout: complete two objects one byte short (runs 21 -> 19)
+layout: complete two objects that were one byte short (runs 21 -> 19)
+
+tmp/delta_pair.py over 0x5cef..0x6601 showed the two remaining -1 steps were exactly these:
+
+    0x6488  s_Help_2410_6488    image: 48 65 6c 70 00 00  ("Help" + two NULs, 6 bytes)
+                                ours:  char s_Help_2410_6488[] = "Help";   (5)
+    0x6592  strangeTableData    111 bytes (0x6592..0x6601 = 55 words + one byte 0xD7)
+                                ours:  uint16_t strangeTableData[55];      (110)
+
+`strangeTableData` keeps its 55-word declaration so code that indexes it is unaffected; the
+trailing byte is a separate one-byte object, because a 56th word would claim a byte that
+`GStrangeTable` owns.  Its 0xD7 comes from the image, and the 55 words were already byte-exact
+(0x0401, 0x1601, ... matches the declaration).
+
+MEASURED (HEAD f8827475 -> this commit)
+
+  diff_dgroup runs              21 -> 19      (two fewer distinct error regions)
+  diff_dgroup sum|delta|    71,519 -> 72,064  (+545)
+  diff_dgroup mean              43 -> 44
+  diff_dgroup matched        1,627 -> 1,627
+  compare_state              1,625/0/0 and 1,684/1,675 at both sample points (unchanged)
+  grep_checks               35,568 (unchanged)
+  build 65/65, LINK.LOG 65 bytes / 0 problems
+
+WHY sum|delta| ROSE, and why this is still the right change.  Our head carries ~+16-18 of surplus
+(a constant offset from C0M's `DATASEG` sitting before `_DATA`).  The two missing bytes were
+cancelling one unit of it: the band 0x5cef..0x6601 was +18 and the tail from 0x748e was exactly
++0.  Completing the data moves the whole tail to +2, so every symbol gains 2 on |delta| - about
++545 in total - while the number of *distinct* local misalignments falls from 21 to 19 and the
+data is now byte-complete.
+
+In other words `runs` improved and `sum|delta|` worsened because the previous arrangement was
+locally exact only by leaving two objects short.  I am keeping the complete data: a single uniform
+offset is a cleaner residual than a compensating error, and the eight bytes of head surplus that
+remain are the C0 startup, not a data omission.

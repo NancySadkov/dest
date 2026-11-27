@@ -1475,7 +1475,7 @@ char s_s_can_now_be_cal_2410_644e[] = "%s can now be called away from home.";
 char s_Previous_2410_6473[] = "Previous";
 char s_Next_2410_647c[] = "Next";
 char s_Leader_2410_6481[] = "Leader";
-char s_Help_2410_6488[] = "Help";
+char s_Help_2410_6488[6] = "Help";
 undefined1 mapDirty = 0x00;
 undefined s_Define_region_to_command__s_loya_2410_648f[] = "Define region to command %s loyal to %s.";
 undefined s__d__s_s_loyal_to__s_found__Left_c_2410_64b8[106] = "%d %s%s loyal to %s found. Left click: set triangles. R: ready. U: unassign. H: home. Right click: abort.";
@@ -1489,6 +1489,8 @@ uint16_t strangeTableData[55] = { 0x401, 0x1601, 0x701, 0x2501, 0x2201, 0x3401, 
      0x5D5C, 0x9701, 0x9801, 0xA001, 0xA101, 0x2E06, 0x302F, 0x3231, 0x133, 0x1A2, 0x1A3, 0x1AB, 0x1AE,
      0x1B1, 0x1B4, 0x1B7, 0x1B8, 0x1B9, 0x1BA, 0x1BB, 0x1BC, 0x1BD, 0x1BE, 0x1BF, 0x1C2, 0x1C3, 0x1C4,
      0x1C7, 0x1C8, 0x1CB, 0x1CE, 0x1D1, 0x1D4 };
+/* the original's strangeTableData spans 111 bytes: 55 words plus this one trailing byte */
+undefined1 s_strangeTableTail[1] = { 0xD7 };
 far_t GStrangeTable[98] = { { 0x6594, 0x2410 }, { 0x6596, 0x2410 }, { 0x6598, 0x2410 }, { 0x659A, 0x2410 },
      { 0x659C, 0x2410 }, { 0x659E, 0x2410 }, { 0x65A0, 0x2410 }, { 0x65A2, 0x2410 }, { 0x6592, 0x2410 },
      { 0x65A4, 0x2410 }, { 0x65A6, 0x2410 }, { 0x65A8, 0x2410 }, { 0x65AE, 0x2410 }, { 0x65B0, 0x2410 },
