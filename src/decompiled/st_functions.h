@@ -662,7 +662,7 @@ uint16_t __cdecl16far alignmentDlg(char_sheet_t *sheet);
 bool __cdecl16far uiPickGender(char_sheet_t *sheet);
 undefined1 __cdecl16far manage_abilityModifier(byte abilityScore);
 void __cdecl16far manage_rollHitPoints(char_sheet_t *sheet);
-char * __cdecl16far chargen_switch(uint16_t index);
+byte __cdecl16far chargen_switch(uint16_t index);
 char_sheet_t * __cdecl16far chargen(void);
 void __cdecl16far manage_showSettlementScreen(uint8_t partySlot);
 void __cdecl16far manage_textHalflingCastle(void);

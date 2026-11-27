@@ -18036,3 +18036,79 @@ segment constant and the offsets shift), plus the tree-wide `ovr_randBelow(n,0)`
 `ovr_season_usesGPromotable_e11a` was called only from the deleted text code, so its GUESS stub was
 removed as well - the second stub that turned out to be an artifact of a structuring defect rather
 than a lost function.  Both removals are in `st_stubs.c` and leave no references behind.
+
+### step 6: call-count screen, and chargen_switch re-derived (grep 33,573 -> 32,803)
+step 6: a call-count screen for every module, and `chargen_switch` re-derived (grep 33,573 -> 32,803)
+
+## The screen
+
+`tmp/screen_calls.py` compares, for every `/* seg:ofs */`-marked function in the tree, the number of
+calls its C body makes against the number of `call`/`lcall` instructions in the original between that
+offset and the next function's.  Names are filtered against `audit/functions_real.tsv` (plus `ovr_`
+thunks) so `far(`/`near(`/`sizeof(` do not inflate the C side, and duplicate markers for one address
+are grouped.
+
+    922 functions screened, 44 with |delta| >= 3
+
+The top of the list:
+
+    file               address     bytes     C  image delta
+    ovc49_agents.c     8699:18c4    1349   637      3 +634
+    ovc45_unitinfo.c   77eb:0d61    2385   481     58 +423
+    ovc44_strong_dat.c 6ffe:02f7   28741   457    796 -339
+    ovc47_constrct.c   7e7c:0b9c    8112     1    187 -186
+    ovc22_classes.c    5087:056e    3842   140     11 +129
+    ovc21_manage.c     4d05:125c      58   105      0 +105
+    ...
+
+That is the same signature as the two functions fixed earlier: a small image function whose exported
+body makes far more calls than the address range can contain.
+
+## Chargen switch (4d05:125c, 44 bytes, image 0 calls, C 105 calls)
+
+`tmp/dis_seg.py 4d05 125c 2c` settles it - a seven-entry jump table over a class index:
+
+    125c  push bp / mov bp,sp
+    125f  dl = [bp+6]; al = dl; ah = 0; bx = ax
+    1268  cmp bx,6 / ja 0x1284            index > 6 -> return 0
+    126d  shl bx,1 / jmp cs:[bx+0x1288]   table = 0x1274 x4, 0x1278, 0x127c, 0x1280
+    1274  mov al,dl                       cases 0..3 -> the index itself
+    1278  mov al,0xa                      case 4
+    127c  mov al,8                        case 5
+    1280  mov al,0xb                      case 6
+    1284  mov al,0                        default
+
+The 723-line export had merged a screen's text code into the case bodies ("Place %s here.",
+"UNITS"/"POPULATION", `ovr_font_textWidth`, `ovc45_compute9`).  That content is duplicated elsewhere
+in the tree (`"Place %s here."` also at ovc21_manage.c:2004; the UNITS/POPULATION block at
+ovc21_manage.c:1335, :3381, ovc22_classes.c:912, ovc23_bldrec.c:224), so dropping it loses nothing.
+
+The return type is corrected too: the image sets only AL (`mov al,dl` / `mov al,imm`), so the function
+returns a byte, not a `char *` as the export had declared.
+
+## The rebuilt code matches
+
+`tmp/dis_ours.py _CHARGEN_SWITCH`:
+
+    0000 push bp / mov bp,sp            125c push bp / mov bp,sp
+    0003 mov dx,[bp+6]                  125f mov dl,[bp+6]
+    0008 and bx,0xff / cmp bx,6         1268 cmp bx,6
+    0011 shl bx,1 / jmp cs:[bx+0x18ce]  126d shl bx,1 / jmp cs:[bx+0x1288]
+    0018 mov al,dl                      1274 mov al,dl
+    001c mov al,0xa                     1278
+    0020 mov al,8                       127c
+    0024 mov al,0xb                     1280
+    0028 mov al,0                       1284
+
+## Measured (HEAD 1782fdf8 -> this commit)
+
+    grep_checks      33,573 -> 32,803    (-770; the 723-line merged body is gone)
+    REBUILT.EXE      526,550 -> 520,204  (-6,346 bytes)
+    build 65/65, LINK.LOG 65 bytes / 0 problems
+    compare_state    1,628/0/0 (unchanged)
+    diff_dgroup      1,639/1,805 matched, 5 runs, sum|delta| 18, mean 0, worst 12 (unchanged)
+    compare_runtime  1,692 matched, 1,683 identical / 9 different at all three sample points
+
+The screen's remaining candidates are listed in the doc; the largest is `ovc49_body1` (8699:18c4,
+1,349 bytes, image 3 calls, C 637) and the largest *missing* body is `ovc47_constrct.c` 7e7c:0b9c
+(8,112 bytes, image 187 calls, C 1 - a stub), both queued for the same treatment.
