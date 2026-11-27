@@ -942,7 +942,7 @@ char * __cdecl16far chargen_switch(uint16_t index)
   uint *puVar3;
   int *piVar4;
   byte *pbVar5;
-  uint16_t uVar6;
+  uint16_t placeOfs;
   uint32_t uVar7;
   far_t entries;
   far_t entries_00;
@@ -983,8 +983,6 @@ char * __cdecl16far chargen_switch(uint16_t index)
   uint16_t auStack_96 [24];
   undefined1 auStack_66 [16];
   char acStack_56 [52];
-  uint16_t uStack_22;
-  uint16_t uStack_20;
   entity_t *in_stack_0000ffe2;
   uint16_t in_stack_0000ffe4;
   char cVar30;
@@ -997,7 +995,7 @@ char * __cdecl16far chargen_switch(uint16_t index)
   undefined1 *puVar36;
   undefined1 uVar37;
   byte bVar38;
-  undefined1 uVar39;
+  undefined1 destXHi;
   
   uVar13 = CONCAT11((char)((uint)in_DX >> 8),(byte)index);
   uVar14 = index & 0xff;
@@ -1169,12 +1167,12 @@ char * __cdecl16far chargen_switch(uint16_t index)
     else {
       manage_openTalkWindow();
       uVar12 = *(uint16_t *)((uint)PartyCount * 4 + -2);
-      uVar6 = *(uint16_t *)((uint)PartyCount * 4 + -4);
+      placeOfs = *(uint16_t *)((uint)PartyCount * 4 + -4);
       uVar33 = (undefined1)uVar12;
       uVar34 = (undefined1)((uint)uVar12 >> 8);
-      uVar25 = (undefined1)uVar6;
-      uVar32 = (undefined1)((uint)uVar6 >> 8);
-      manage_usesLitoa10((char_sheet_t *)CONCAT13(uVar34,CONCAT12(uVar33,uVar6)));
+      uVar25 = (undefined1)placeOfs;
+      uVar32 = (undefined1)((uint)placeOfs >> 8);
+      manage_usesLitoa10((char_sheet_t *)CONCAT13(uVar34,CONCAT12(uVar33,placeOfs)));
     }
     pcVar16 = ovr_fmVsprintf("Place %s here.",
                              (char *)CONCAT13(uVar34,CONCAT12(uVar33,CONCAT11(uVar32,uVar25))));
@@ -1331,8 +1329,6 @@ char * __cdecl16far chargen_switch(uint16_t index)
     }
     ovr_ovc45_compute9(acStack_1b6);
     SUB_5b66_1d94();
-    uStack_20 = 0x23f1;
-    uStack_22 = 0x44;
     pcVar16 = ovr_stsprintf(acStack_13e,(char *)CONCAT13(0x55,CONCAT12(10,_SS)));
     ovr_blitLabel(pcVar16);
     TextBlitY = TextBlitY + 0xc;
@@ -1436,7 +1432,7 @@ L_attact_3f0b_1082_1477:
     uVar31 = 0x1;
     uVar14 = ovr_alignUp4((in_stack_0000ffe2->base).destX,0,0);
     uVar37 = (undefined1)uVar14;
-    uVar39 = (undefined1)(uVar14 >> 8);
+    destXHi = (undefined1)(uVar14 >> 8);
     uVar13 = (((entity_t *)CONCAT22(in_stack_0000ffe4,in_stack_0000ffe2))->base).x;
     uVar33 = (undefined1)uVar13;
     uVar34 = (undefined1)(uVar13 >> 8);
@@ -1444,7 +1440,7 @@ L_attact_3f0b_1082_1477:
     uVar32 = 0x23;
     uVar15 = ovr_alignUp4(uVar13,0,0);
     uVar14 = CONCAT11(uVar34,uVar33);
-    if ((CONCAT11(uVar39,uVar37) == uVar15) &&
+    if ((CONCAT11(destXHi,uVar37) == uVar15) &&
        (uVar14 = CONCAT11(uVar34,uVar33),
        (in_stack_0000ffe2->base).destY == (in_stack_0000ffe2->base).y)) {
       (in_stack_0000ffe2->base).destX = 0;

@@ -15984,3 +15984,28 @@ so a name would restate the arithmetic instead of describing a role.  The 21 mul
   compare_state 1,625/0/0
   diff_dgroup 1,627/1,805 matched, 19 runs, sum|delta| 44,867, mean 27, worst 148
   compare_runtime 1,684 matched, 1,675 identical / 9 different (both sample points)
+
+### section 5: chargen_switch - two names and two dead stores (35,222 -> 35,210)
+section 5: chargen_switch - two names and two dead stores (35,222 -> 35,210)
+
+726 lines, 443 section-5 occurrences, but only 4 single-assignment names (12 occurrences):
+
+    uVar6   *(uint16_t *)((uint)PartyCount * 4 - 4)          -> placeOfs (5)
+        the offset word of the last party entry; `uVar12` reads the segment word at -2 and the two
+        are packed into a far pointer for manage_usesLitoa10 and ovr_fmVsprintf("Place %s here.")
+    uVar39  (undefined1)(uVar14 >> 8)                        -> destXHi (3)
+        the high byte of an ovr_alignUp4(destX) result, compared via CONCAT11(uVar39,uVar37)
+
+    uStack_22  0x44      two occurrences each - the declaration and the assignment, never read.
+    uStack_20  0x23f1    The pair is the far pointer 0x23f1:0x44 that a decompilation step stored
+                         and nothing consumed                    -> both deleted
+
+The other 22 names (431 occurrences) are multi-assignment scratch and stay unnamed.
+
+This is the smallest yield of any body so far, and it is the honest ceiling for this one: the screen
+lists 4 names and two of them are dead.
+
+  grep_checks 35,222 -> 35,210 (-12); build 65/65; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,625/0/0
+  diff_dgroup 1,627/1,805 matched, 19 runs, sum|delta| 44,867, mean 27, worst 148
+  compare_runtime 1,684 matched, 1,675 identical / 9 different (both sample points)
