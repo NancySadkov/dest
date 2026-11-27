@@ -16621,3 +16621,51 @@ This also answers the question left open last turn about the `matched` gap: the 
         `stdout`/`stderr`
 so closing that gap needs per-symbol declarations that our current string declarations would have to be
 split to provide - not a blob transformation.
+
+### diff_dgroup: variant_key bug (matched 1,631 -> 1,639)
+diff_dgroup: variant_key was derived from key(), so no `_2410_` symbol could ever pair
+
+`variant_key()` exists so that our generated names pair with the original's plain ones:
+
+    ours    s_cleric_2410_01da      -> S_CLERIC
+    audit   s_cleric                -> S_CLERIC
+
+It was implemented as
+
+    return re.sub(r"_2410_[0-9A-F]{4}$", "", key(name))
+
+but `key()` has already replaced the whole `_2410_XXXX` tail with `OFS_XXXX`, so the substitution never
+matched and `variant_key(name) == key(name)`.  The caller only fills its table
+
+    if variant_key(name) != key(name):
+        ours_by_variant.setdefault(variant_key(name), []).append(...)
+
+so that table was empty for every offset-suffixed symbol, and each one was reported as "no name with this
+key".  Deriving the key from the raw name fixes it:
+
+    return re.sub(r"_2410_[0-9A-F]{4}$", "", name.upper().lstrip("_"))
+
+MEASURED (HEAD 6ea6195d -> this commit)
+
+  diff_dgroup matched        1,631 -> 1,639
+  diff_dgroup unmatched        174 ->   166
+  diff_dgroup sum|delta|        18 ->    18   (unchanged - the pairs it recovers are exact)
+  diff_dgroup runs               5 ->     5
+  compare_state              1,628/0/0
+  compare_runtime            1,692 matched, 1,683 identical / 9 different (both points)
+  grep_checks                34,829
+  build 65/65, LINK.LOG 65 bytes / 0 problems
+
+The generated-name tag preference then picks the *offset-matching* twin, which is what makes this safe:
+for an original `s_change_party` at 0x769b the candidates are `_S_CHANGE_PARTY_2410_769B`,
+`..._2410_7716`, and so on, and `cands.sort(key=lambda c: not c[1].upper().endswith(tag))` puts the one
+whose suffix equals the original's offset first.
+
+The remaining 166 unmatched are unchanged in character:
+
+    90  names longer than 30 characters (Turbo C truncates publics at 31 significant characters)
+    30  duplicate original names where only one of the copies is declared separately here
+    17  C0 record-field labels (.seg/.ofs)
+     2  group/segment names
+    27  the startup's error strings and saved-vector block (bytes are C0L's, under C0L's own names),
+        struct-field labels (`_video.windowy1`, `IdFORM.hi`) and `stdout`/`stderr`

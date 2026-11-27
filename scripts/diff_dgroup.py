@@ -87,12 +87,17 @@ def variant_key(name):
     """`key()` of our names with the generated `_2410_XXXX` offset suffix removed.
 
     Most of our string symbols are declared as `s_<text>_2410_<orig-offset>`, so the key
-    of our `s_cleric_2410_01da` is `S_CLERIC_2410_01DA` while the original's name for the
-    same object is `s_cleric`.  Without this the pair could only be found by the
+    of our `s_cleric_2410_01da` is `OFS_01DA` while the original's name for the same
+    object is `s_cleric`.  Without this the pair could only be found by the
     content-matching report, which then attributed it to whatever symbol happened to own
     the address in our layout (`s_cleric -> _S_FRMLND_LBM_2410_2E31`).
+
+    This derives from the *raw* name: it used to strip the suffix from `key(name)`, which
+    has already replaced it with `OFS_XXXX`, so the substitution never matched and every
+    `_2410_`-suffixed symbol was invisible to this table.  That cost eight pairs
+    (`s_change_party`, `s_done`, ... are all declared with offset suffixes here).
     """
-    return re.sub(r"_2410_[0-9A-F]{4}$", "", key(name))
+    return re.sub(r"_2410_[0-9A-F]{4}$", "", name.upper().lstrip("_"))
 
 
 def loose_key(name):
