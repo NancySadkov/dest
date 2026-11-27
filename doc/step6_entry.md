@@ -19281,3 +19281,84 @@ The third entry point, `5ded:1433` (`ovc27_textCharmed`), still has the same pro
 branch into this frame (it reads [bp-0xa]/[bp-8] and [bp+6] the same way) and the tree keeps it
 as a separate function.  And the 10ea half itself has not been re-derived, which is where the
 four remaining spurious calls (`F_LXURSH@` from `SUB21`, and one more runtime helper) come from.
+
+### step 6: the merged function now emits the image 104 calls with the image argument sizes
+step 6: the merged 5ded:10ea/14a8 function now emits the image's 104 calls with the image's argument sizes (EXE 495,798 -> 495,590)
+
+The `5ded:10ea` half had never been read from the image, so seven of its call classes still
+carried the wrong argument lists.  Image windows for `0x10ea..0x14a6`:
+
+    1136 0x105e          push [bp-8] ; push [bp-0xa]                    add sp,4
+                         -> breathHalfDamage(agntRec)        tree: (agntRec,0x26)
+    119a 0x148,0x2f      push [GSavedBlitSeg] ; push ss ; lea ax,[bp-0xd2] ;
+                         push ax ; push [bp-8] ; push [bp-0xa]          add sp,8
+                         -> statusText(&text2, agntRec)      tree: 5 words
+    11c2 0xf8,0x39       push dx ; push ax                             add sp,6
+                         -> uiNotify(text, GSavedBlitSeg)    tree: (text,agntSeg,(char)agntSeg)
+    11f0 0x230,0xa2      push si ; push rec ; push agnt                 add sp,0xa
+                         -> textParalyzed(agnt, agntRec, damage)   tree: 8 words
+    129b 0x170,0x5c      push 3                                        add sp,2
+                         -> randBelow(3)                     tree: (3,0)
+    1327 0x230,0xc5      push [bp-8] ; push [bp-0xa]                    add sp,4
+                         -> 6a8f_01e7_entry(agntRec)         tree: 3 words
+    130f/13ad/1454 0x170,0x7a                                           add sp,0x10
+                         -> stsprintf(dest,fmt,text1,stash)  tree: 3 arguments
+
+The seven `statusText` sites, in file order, take
+
+    119a (&text2, agntRec)   12db (&text1, agnt)      12f1 (&text2, agntRec)
+    1379 (&text1, agntRec)   138f (&text2, agnt)      1420 (&text1, agnt)
+    1436 (&text2, agntRec)
+
+- note that the record is `agnt` at three sites and `agntRec` at four, which is why this is not
+a single substitution.
+
+## The four spurious calls were the same dead-local pattern
+
+`ptrLo`, `segLo`, `blitSegLo` were only ever *assigned* (`ptrLo = SUB21(statusText,0)` and
+friends), and `agntSeg`'s initialiser `(uint16_t)((ulong)((long)agntIndex * 0x34) >> 0x10)` was
+only read by the old `uiNotify` calls.  `SUB21(x,0)` compiles to `F_LXURSH@` (`lcall 0,0x470`)
+and the long multiply to `F_LXMUL@` (`lcall 0,0x337`); with the consumers gone, all four lines
+were deleted and both helpers disappeared from the function.
+
+## Verified: 104 call sites, every class and argument size matching
+
+    ours                          size   image class                        count
+    0x2a7,0x2ff  (statusText)       8     agnt_statusText                     19
+    0x1098       (rollToHitEntity)   6     rollToHitEntity                     11
+    0x2a7,0x408  (usesStshRealloc)  4     ovc15_usesStshRealloc               11
+    0x2a7,0x15b  (uiNotify)         6     uiNotify                            11
+    0x2a7,0x2e6  (panFromX)         4     audio_panFromX                       9
+    0x2a7,0x2cd  (play_sfxU)        6     play_sfxU                            9
+    0x2a7,0x4cb  (stsprintf)      0x10    stsprintf, four arguments             8
+    0x2a7,0x82c  (6a8f entry)       4     6a8f_01e7_entry                      7
+    0x2a7,0x818  (textParalyzed)  0xa     ovc41_textParalyzed                  6
+    0x2a7,0x5b1  (rollDice)         4     manage_rollDice                      3
+    0xfffffe75   (spellHalfDamage)  4     spellHalfDamage                      3
+    0x2a7,0x4cb  (stsprintf)       0xc    stsprintf, three arguments            3
+    0xffffff3c   (breathHalfDamage) 4     breathHalfDamage                     1
+    0x2a7,0x4b2  (randBelow)        2     randBelow(3)                         1
+    0x2a7,0x6c4                     2     ovc28_usesBDADailyTimeCounter        1
+    0xfe5                           0xc    usesAgntCount                        1
+                                  total 104                                 total 104
+
+`0xfe5` is the self-... no: `usesAgntCount` is at the end of the merged function, so the near
+call target is the function's own tail offset.
+
+## Measured (HEAD abbf8135 -> this commit)
+
+    grep_checks      26,543 (unchanged - the corrections carry no generated names)
+    REBUILT.EXE      495,798 -> 495,590
+    build 65/65, LINK.LOG 65 bytes / 0 problems
+    compare_state    1,628/0/0 (unchanged)
+    diff_dgroup      1,639/1,805 matched, 5 runs, sum|delta| 18, mean 0, worst 12 (unchanged)
+    compare_runtime  1,692 matched, 1,683 identical / 9 different at all three sample points
+
+Two prototypes were corrected to the image: `ovc27_breathHalfDamage` takes one far argument
+(the image pushes `[bp-8]`/`[bp-0xa]` and removes 4 bytes, not 6).
+
+## What is left on this cluster
+
+`5ded:1433` (`ovc27_textCharmed`) is the third entry point into the same frame - it reads
+`[bp-0xa]`/`[bp-8]` for the record and `[bp+6]` for the agent, exactly like the other two - and
+the tree still keeps it as a separate function.

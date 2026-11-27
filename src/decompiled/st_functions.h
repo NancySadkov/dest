@@ -785,7 +785,7 @@ uint __cdecl16far ovc27_usesRandBelow5(agnt_t far *agnt);
 uint __cdecl16far ovc27_spellNotice(int agntIndex);
 void __cdecl16far ovc27_usesBlitGfxRect(int agntIndex,brect_t *rect,uint16_t type);
 uint __cdecl16far ovc27_spellHalfDamage(agnt_t far *agnt);
-uint __cdecl16far ovc27_breathHalfDamage(agnt_t far *agnt,uint16_t arg2);
+uint __cdecl16far ovc27_breathHalfDamage(agnt_t far *agnt);
 void __cdecl16far ovc27_textTakesHalfDamage3(agnt_t far *agnt,uint16_t agntIndex,uint16_t arg3,uint16_t arg4);
 uint16_t __cdecl16far ovc27_textCharmed();
 agnt_t far * __cdecl16far ovc27_usesAgntCount(agnt_t far *agnt,byte recIndex,byte maxLevel,int far *cursor);
