@@ -21596,3 +21596,42 @@ first (one whose body contains few or no overlay calls).
     build 65/65 · LINK.LOG 0 errors · REBUILT.EXE 461,908
     grep_checks 11,960 · compare_state 1,628/0/0 · diff_dgroup 1,639/1,805
     compare_runtime 1,692 matched / 1,683 identical / 9 different
+
+
+## `5ded:10ea` body written - the first function resolved through co-residency votes
+
+The 401-line body (105 call sites) was another function's. It is now ~150 lines derived from
+`tmp/o27_10ea.txt` (346 instructions, 30 overlay + 6 near calls), and it is the first body written
+using `scripts/resolve_overlay_calls.py` rather than the static selector map - which matters, because
+the static map would have named `0x140,0x2f` `ovr_stop_audio` (`void(void)`) against the 3 words the
+image pushes there. The module's own derived siblings vote for `ovr_play_sfxU`.
+
+Every field used exists in `agnt_t`, so nothing was invented: `variant` (+0x2e), `faction` (+0x2f),
+`state` (+0x30), `flags` (+0x2b), `strength` (+0x21), `gdata->flags3`, `entity->base.level`.
+
+The body is a damage/charm message dispatcher keyed on `variant`:
+
+    1     parrot/breath halving - `strength` or `rollDice(level,6)`, halved again when the victim's
+          gdata flags3 bit 0 is set; then either the "%s takes half damage from lightning." notice
+          (statusText -> usesStshRealloc -> stsprintf -> uiNotify) or the paralysis notice with
+          `state = 0xb`
+    2     `rollDice(level/5*2+1,6) + that`, halved by `spellHalfDamage`, paralysis notice
+    0xa   charm: `randBelow(3)==0` -> "%s is charmed by %s." (flag 0x20, faction copied,
+          `6a8f_01e7_entry`, `play_sfxU(0x1b,0,panFromX)`), else "%s fails to charm %s." (flag 0x400)
+    3, 5  the charmed notice again, gated on flag 0x20
+    other image tail-jumps to 5ded:14a8 (`ovc27_textTakesHalfDamage4`), which has no recovered body,
+          so that arm is a documented gap
+
+Two details worth recording: the string symbols are Turbo-C-truncated (`s_s_takes_half_dam_2410_5c0a`,
+not the full text name), and `rollDice`'s first parameter is the *count*, so `level/5*2+1` is the
+count and 6 the sides.
+
+## Measured (HEAD d2025a43 -> this commit)
+
+    grep_checks      11,960 -> 11,791   (-169: the 401-line wrong body)
+    REBUILT.EXE      461,908 -> 458,548 (-3,360)
+    build 65/65, LINK.LOG 0 errors
+    compare_state    1,628 matched / 0 different / missing 2   (unchanged)
+    diff_dgroup      1,639/1,805 matched                       (unchanged)
+    compare_runtime  1,692 matched / 1,683 identical / 9 different  (unchanged)
+    screen_calls     5ded:10ea leaves the delta table (was C 105 / image 36)
