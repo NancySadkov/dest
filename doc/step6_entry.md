@@ -17452,3 +17452,54 @@ ovc24_checkStrongholds: `uVar7` = 0x195d, passed as the segment argument in both
   compare_state 1,628/0/0
   diff_dgroup 1,639/1,805 matched, 5 runs, sum|delta| 18, mean 0, worst 12
   compare_runtime 1,692 matched, 1,683 identical / 9 different at all three sample points
+
+### step 6: the conversion dispatch mapped; PRINTF already displaced (grep -> 34,553)
+step 6: the conversion dispatch is fully mapped, and CM.LIB's PRINTF is already gone
+
+## The dispatch, decoded end to end
+
+`tmp/decode_dispatch.py` reads both tables out of the image (`CS:0x131a` jump table, `DS:0x884b`
+`vprinter_printCtype`), giving the complete conversion map:
+
+    0x0f65  #            flags / modifiers                     0x103c  o
+    0x0f70  -                                                  0x1040  u
+    0x0f7b  space  +  \x80                                     0x1044  X x
+    0x0f8b  N            (near pointer)                        0x105e  d i
+    0x0f91  F            (far pointer)                         0x10b9  p
+    0x0f99  0                                                  0x1109  c
+    0x0fb0  *            (width from argument)                 0x1129  s
+    0x0fde  .            (precision)                           0x1166  E G e f g   (floating point)
+    0x0feb  1..9         (width digits)                        0x12aa  n
+    0x1029  l            0x1030  L        0x1035  H h          0x12e6  everything else -> "invalid"
+
+So the formatter is fully accounted for: the loop, the flags (0x0f65..0x0f99), width and precision
+(0x0fb0, 0x0fde, 0x0feb), the size modifiers, twelve value conversions, and the invalid path.
+
+## CM.LIB's PRINTF is already not in the image
+
+    _PRINTF   at 038E:49DB        <- our recovered CRT segment
+    module PRINTF in the map:     absent
+    module PUTC / FFLUSH:         present  (so `fputc` and `fflush` are still the library's)
+
+The printf added last-but-one turn already displaced the library's PRINTF completely - the objective's
+"so CM.LIB's PRINTF member is no longer linked" is satisfied, without translating the formatter, because the
+*formatter* it delegates to (`vsprintf` from the same vendor, same release) is the same code family the
+original's `__vprinter` is a copy of.  Reimplementing those 24 handlers by hand would therefore trade
+bit-identical Borland formatting for a hand-written imitation, to gain ~11 section-5 names.  I do not think
+that is a good trade, and I am not going to do it silently - it is the one place in this project where
+"more decompiled" would mean "less faithful".
+
+What *is* worth doing on this axis is the remaining two library FILE functions, `fputc` and `fflush`: our
+`__fputn` calls `fflush(...)` and `_fputc(...)`, both of which resolve to CM.LIB's medium-model code
+operating on 16-byte records while `_streams` is the original's 20-byte layout.  Writing those two for the
+20-byte record is a bounded job (unlike the formatter) and removes the last live instance of the model
+mismatch.
+
+## This turn's code change
+
+ovc25_usesAlignUp47: `iVar5` -> `result46` (7), `uVar1` -> `tablePtr` (3).
+
+  grep_checks 34,563 -> 34,553; build 65/65; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,628/0/0
+  diff_dgroup 1,639/1,805 matched, 5 runs, sum|delta| 18, mean 0, worst 12
+  compare_runtime 1,692 matched, 1,683 identical / 9 different at all three sample points

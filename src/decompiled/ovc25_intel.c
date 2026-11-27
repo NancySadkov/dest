@@ -672,11 +672,11 @@ void __cdecl16far ovc25_clearEntityFlags(void)
 void ovc25_usesAlignUp47(void)
 
 {
-  uint32_t uVar1;
+  uint32_t tablePtr;
   uint uVar2;
   uint alignedX;
   uint16_t randDir;
-  int iVar5;
+  int result46;
   int unaff_BP;
   uint uVar6;
   uint16_t uVar7;
@@ -702,8 +702,8 @@ void ovc25_usesAlignUp47(void)
       OVC25_5b66_131f_entry();
       return;
     }
-    uVar1 = *(uint32_t *)((uint)*(byte *)(unaff_BP + -0xc) << 2);
-    if (*(char *)((int)uVar1 + 0x4a) != '\0') {
+    tablePtr = *(uint32_t *)((uint)*(byte *)(unaff_BP + -0xc) << 2);
+    if (*(char *)((int)tablePtr + 0x4a) != '\0') {
       OVC25_5b66_131f_entry();
       return;
     }
@@ -711,9 +711,9 @@ void ovc25_usesAlignUp47(void)
   uVar2 = ovr_alignUp4(*(int *)((int)Entities + *(int *)(unaff_BP + -4) * 0x37),0,0);
   *(uint *)(unaff_BP + -6) = uVar2;
   uVar7 = (uint16_t)((ulong)Entities >> 0x10);
-  if (((*(int *)(iVar5 + *(int *)(unaff_BP + -4) * 0x37 + 8) == 0) &&
-      (*(int *)(iVar5 + *(int *)(unaff_BP + -4) * 0x37 + 10) == 0)) &&
-     ((*(byte *)(iVar5 + *(int *)(unaff_BP + -4) * 0x37 + 0x33) & 3) == 0)) {
+  if (((*(int *)(result46 + *(int *)(unaff_BP + -4) * 0x37 + 8) == 0) &&
+      (*(int *)(result46 + *(int *)(unaff_BP + -4) * 0x37 + 10) == 0)) &&
+     ((*(byte *)(result46 + *(int *)(unaff_BP + -4) * 0x37 + 0x33) & 3) == 0)) {
     uVar2 = *(uint *)(unaff_BP + -4);
   }
   else {
@@ -725,7 +725,7 @@ void ovc25_usesAlignUp47(void)
     alignedX = ovr_alignUp4((Entities)[uVar6].base.x,0,0);
     if (alignedX == *(uint *)(unaff_BP + -6)) {
       uVar7 = (uint16_t)((ulong)Entities >> 0x10);
-      if (((entity_t far *)Entities)[uVar6].base.y == *(int *)(iVar5 + *(int *)(unaff_BP + -4) * 0x37 + 2)
+      if (((entity_t far *)Entities)[uVar6].base.y == *(int *)(result46 + *(int *)(unaff_BP + -4) * 0x37 + 2)
          ) {
         AGNT_FIELD(&(Entities)[uVar6], base.entity, 2) = 1;
         uVar7 = (uint16_t)((ulong)Entities >> 0x10);
@@ -759,10 +759,10 @@ void ovc25_usesAlignUp47(void)
        (int)*(char *)(*(byte *)(unaff_BP + -9) + 0x889);
   uVar7 = ovr_attact_usesGUnits(*(int *)(unaff_BP + -6),*(int *)(unaff_BP + -8));
   if ((char)uVar7 != '\0') {
-    iVar5 = ovc25_usesAlignUp46(*(uint16_t *)(unaff_BP + -6),*(uint16_t *)(unaff_BP + -8),
+    result46 = ovc25_usesAlignUp46(*(uint16_t *)(unaff_BP + -6),*(uint16_t *)(unaff_BP + -8),
                                 *(char *)(unaff_BP + -0xd),
                                 (uint8_t *)CONCAT22(in_stack_00000000,curSeg));
-    *(int *)(unaff_BP + -2) = iVar5;
+    *(int *)(unaff_BP + -2) = result46;
     if (*(uint *)(unaff_BP + -0x10) <= *(uint *)(unaff_BP + -2)) {
       OVC25_5b66_131f_entry();
       return;
