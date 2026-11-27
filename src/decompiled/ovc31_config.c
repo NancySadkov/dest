@@ -608,7 +608,7 @@ void __cdecl16far init_check_mem(void)
   if (avail < 0x8ED28UL) {
     /* litoa10's first argument is a far pointer here: the original pushes ss and the
        buffer offset separately. */
-    litoa10((char *)(char far *)buf, (long)avail, 0, 0);
+    litoa10((char *)(char far *)buf,(long)avail);
     printf("Largest executable program size is only %s bytes.\n");
     printf("Stronghold requires 585,000 bytes.\n");
                     /* WARNING: Subroutine does not return */

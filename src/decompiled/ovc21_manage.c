@@ -461,7 +461,7 @@ void __cdecl16far manage_usesLitoa10(char_sheet_t *sheet)
                   Font02.seg,0xde,0xde,0xe0);
     loByte = 0xdc;
     hiByte = 0;
-    textPtr = litoa10(textBuf,(long)CONCAT22(sheet_00->foodProd,_SS),0,0);
+    textPtr = litoa10(textBuf,(long)CONCAT22(sheet_00->foodProd,_SS));
     manage_blitLabelRight
               ((char *)CONCAT13((char)((uint)in_DX >> 8),CONCAT12((char)in_DX,textPtr)),
                CONCAT11(hiByte,loByte));
@@ -471,7 +471,7 @@ void __cdecl16far manage_usesLitoa10(char_sheet_t *sheet)
                   Font02.seg,0xde,0xde,0xe0);
     loByte = 0xdc;
     hiByte = 0;
-    textPtr = litoa10(textBuf,(long)CONCAT22((int)sheet_00->foodStored,_SS),(char)*(uint16_t *)((int)&sheet_00->foodStored + 2),0);
+    textPtr = litoa10(textBuf,(long)CONCAT22((int)sheet_00->foodStored,_SS));
     manage_blitLabelRight
               ((char *)CONCAT13((char)((uint)in_DX >> 8),CONCAT12((char)in_DX,textPtr)),
                CONCAT11(hiByte,loByte));
@@ -492,7 +492,7 @@ void __cdecl16far manage_usesLitoa10(char_sheet_t *sheet)
                   Font02.seg,0xde,0xde,0xe0);
     loByte = 0xdc;
     hiByte = 0;
-    textPtr = litoa10(textBuf,(long)CONCAT22((int)sheet_00->foodStorage,_SS),(char)*(uint16_t *)((int)&sheet_00->foodStorage + 2),0);
+    textPtr = litoa10(textBuf,(long)CONCAT22((int)sheet_00->foodStorage,_SS));
     manage_blitLabelRight
               ((char *)CONCAT13((char)((uint)in_DX >> 8),CONCAT12((char)in_DX,textPtr)),
                CONCAT11(hiByte,loByte));
@@ -506,7 +506,7 @@ void __cdecl16far manage_usesLitoa10(char_sheet_t *sheet)
         hiByte = 0;
         statValue = -sheet_00->foodSold;
         signWord = statValue >> 0xf;
-        textPtr = litoa10(textBuf,(long)CONCAT22(statValue,_SS),(char)(statValue >> 0xf),0);
+        textPtr = litoa10(textBuf,(long)CONCAT22(statValue,_SS));
         manage_blitLabelRight
                   ((char *)CONCAT13((char)((uint)signWord >> 8),CONCAT12((char)signWord,textPtr)),
                    CONCAT11(hiByte,loByte));
@@ -519,7 +519,7 @@ void __cdecl16far manage_usesLitoa10(char_sheet_t *sheet)
         hiByte = 0;
         statValue = sheet_00->foodSold;
         signWord = statValue >> 0xf;
-        textPtr = litoa10(textBuf,(long)CONCAT22(statValue,_SS),(char)(statValue >> 0xf),0);
+        textPtr = litoa10(textBuf,(long)CONCAT22(statValue,_SS));
         manage_blitLabelRight
                   ((char *)CONCAT13((char)((uint)signWord >> 8),CONCAT12((char)signWord,textPtr)),
                    CONCAT11(hiByte,loByte));
@@ -529,7 +529,7 @@ void __cdecl16far manage_usesLitoa10(char_sheet_t *sheet)
                     Font02.seg,0xde,0xde,0xe0);
       loByte = 0xdc;
       hiByte = 0;
-      textPtr = litoa10(textBuf,(long)CONCAT22(sheet_00->maxTrade,_SS),0,0);
+      textPtr = litoa10(textBuf,(long)CONCAT22(sheet_00->maxTrade,_SS));
       manage_blitLabelRight
                 ((char *)CONCAT13((char)((uint)signWord >> 8),CONCAT12((char)signWord,textPtr)),
                  CONCAT11(hiByte,loByte));
@@ -542,7 +542,7 @@ void __cdecl16far manage_usesLitoa10(char_sheet_t *sheet)
     hiByte = 0;
     statValue = sheet_00->income;
     signWord = statValue >> 0xf;
-    textPtr = litoa10((char *)&msg,(long)CONCAT22(statValue,_SS),(char)(statValue >> 0xf),0);
+    textPtr = litoa10((char *)&msg,(long)CONCAT22(statValue,_SS));
     manage_blitLabelRight
               ((char *)CONCAT13((char)((uint)signWord >> 8),CONCAT12((char)signWord,textPtr)),
                CONCAT11(hiByte,loByte));
@@ -552,7 +552,7 @@ void __cdecl16far manage_usesLitoa10(char_sheet_t *sheet)
                   Font02.seg,0xde,0xde,0xe0);
     loByte = 0xdc;
     hiByte = 0;
-    textPtr = litoa10((char *)&msg,(long)CONCAT22((int)sheet_00->gold,_SS),(char)*(uint16_t *)((int)&sheet_00->gold + 2),0);
+    textPtr = litoa10((char *)&msg,(long)CONCAT22((int)sheet_00->gold,_SS));
     manage_blitLabelRight
               ((char *)CONCAT13((char)((uint)signWord >> 8),CONCAT12((char)signWord,textPtr)),
                CONCAT11(hiByte,loByte));
@@ -562,7 +562,7 @@ void __cdecl16far manage_usesLitoa10(char_sheet_t *sheet)
                   Font02.seg,0xde,0xde,0xe0);
     loByte = 0xdc;
     hiByte = 0;
-    textPtr = litoa10((char *)&msg,(long)CONCAT22((int)sheet_00->vaultStorage,_SS),(char)*(uint16_t *)((int)&sheet_00->vaultStorage + 2),0);
+    textPtr = litoa10((char *)&msg,(long)CONCAT22((int)sheet_00->vaultStorage,_SS));
     manage_blitLabelRight
               ((char *)CONCAT13((char)((uint)signWord >> 8),CONCAT12((char)signWord,textPtr)),
                CONCAT11(hiByte,loByte));
@@ -573,7 +573,7 @@ void __cdecl16far manage_usesLitoa10(char_sheet_t *sheet)
     loByte = 0xdc;
     hiByte = 0;
     diffValue = ovr_ovc45_usesLDIV_at_(sheet_00->charIndex,0,0);
-    textPtr = litoa10(textBuf,(long)CONCAT22(diffValue,_SS),(char)signWord,0);
+    textPtr = litoa10(textBuf,(long)CONCAT22(diffValue,_SS));
     manage_blitLabelRight
               ((char *)CONCAT13((char)((uint)signWord >> 8),CONCAT12((char)signWord,textPtr)),
                CONCAT11(hiByte,loByte));
@@ -583,7 +583,7 @@ void __cdecl16far manage_usesLitoa10(char_sheet_t *sheet)
                   Font02.seg,0xde,0xde,0xe0);
     loByte = 0xdc;
     hiByte = 0;
-    textPtr = litoa10(textBuf,(long)CONCAT22(GPopulationLo,_SS),(char)GPopulationHi,0);
+    textPtr = litoa10(textBuf,(long)CONCAT22(GPopulationLo,_SS));
     manage_blitLabelRight
               ((char *)CONCAT13((char)((uint)signWord >> 8),CONCAT12((char)signWord,textPtr)),
                CONCAT11(hiByte,loByte));
@@ -1398,7 +1398,7 @@ undefined manage_settlementScreen() { return 0; }
 
 /* Long itoa in base 10 */
 
-char * __cdecl16far litoa10(char *buf,long n,uint16_t arg3,uint16_t arg4)
+char far * __cdecl16far litoa10(char far *buf,long n)
 
 {
   bool bVar1;
@@ -1811,7 +1811,7 @@ void __cdecl16near manage_textAllProperty2(uint16_t partyArg)
   uint16_t *puVar2;
   void *pvVar3;
   int iVar4;
-  char *numText;
+  char far *numText;
   uint8_t *puVar6;
   uint16_t uVar7;
   char apMsg[80];
@@ -1905,65 +1905,54 @@ L_menuLoop:
       TextBlitX = 0x11;
       iVar4 = (iVar8 + iVar9) * 6;
   ovr_blitLabel((char far *)MK_FP(GStructures[iVar8 + iVar9].name.seg,GStructures[iVar8 + iVar9].name.ofs),(byte far *)MK_FP(Font02.seg,Font02.ofs),0xde,0xe0);
-      lVar1 = (long)(iVar8 + iVar9) * 6;
-      uVar7 = (uint16_t)((ulong)lVar1 >> 0x10);
   iVar4 = manage_usesGUnitCount(partyArg,GStructures[iVar8 + iVar9].type,(int far *)&apLvl1Value,(int far *)&apLvl2Value,(int far *)&apUnitTotal,(int far *)&apLvl3Value,(int far *)&apLvl1Shown,(int far *)&apLvl2Shown,(int far *)&apLvl3Shown);
       apUnitCount = (uint16_t)iVar4;
       apUnitTotal = iVar4;
       if (apLvl3Value == 0) {
         iVar4 = 100;
         uVar11 = (undefined1)apUnitTotal;
-  numText = litoa10((char *)&apNum,(long)apUnitTotal,0,0);
-        manage_blitLabelRight
-                  ((char *)CONCAT13((char)((uint)uVar7 >> 8),CONCAT12((char)uVar7,numText)),iVar4);
+  numText = litoa10((char *)&apNum,(long)apUnitTotal);
+        manage_blitLabelRight(numText,iVar4);
       }
       else {
         iVar4 = 100;
   numText = ovr_stsprintf((char far *)MK_FP(_SS,apMsg),(char far *)MK_FP(_DS,0x52e5),apUnitCount,(uint16_t)apUnitCount);
-        manage_blitLabelRight
-                  ((char *)CONCAT13((char)((uint)uVar7 >> 8),CONCAT12((char)uVar7,numText)),iVar4);
+        manage_blitLabelRight(numText,iVar4);
       }
-      lVar1 = (long)(iVar8 + iVar9) * 6;
-      uVar7 = (uint16_t)((ulong)lVar1 >> 0x10);
+      lVar1 = (long)((iVar8 + iVar9) * 6);
       if (*(char *)((int)&GStructures[0].pad + (int)lVar1) != '\0') {
         if (apLvl1Shown == 0) {
           iVar4 = 0x8c;
           uVar11 = (undefined1)apLvl1Value;
-  numText = litoa10((char *)&apNum,(long)apLvl1Value,0,0);
-          manage_blitLabelRight
-                    ((char *)CONCAT13((char)((uint)uVar7 >> 8),CONCAT12((char)uVar7,numText)),iVar4);
+  numText = litoa10((char *)&apNum,(long)apLvl1Value);
+          manage_blitLabelRight(numText,iVar4);
         }
         else {
           iVar4 = 0x8c;
   numText = ovr_stsprintf((char far *)MK_FP(_SS,apMsg),(char far *)MK_FP(_DS,0x52e5),apUnitCount,(uint16_t)apUnitCount);
-          manage_blitLabelRight
-                    ((char *)CONCAT13((char)((uint)uVar7 >> 8),CONCAT12((char)uVar7,numText)),iVar4);
+          manage_blitLabelRight(numText,iVar4);
         }
         if (apLvl2Shown == 0) {
           iVar4 = 0xb4;
           uVar11 = (undefined1)apLvl2Value;
-  numText = litoa10((char *)&apNum,(long)apLvl2Value,0,0);
-          manage_blitLabelRight
-                    ((char *)CONCAT13((char)((uint)uVar7 >> 8),CONCAT12((char)uVar7,numText)),iVar4);
+  numText = litoa10((char *)&apNum,(long)apLvl2Value);
+          manage_blitLabelRight(numText,iVar4);
         }
         else {
           iVar4 = 0xb4;
   numText = ovr_stsprintf((char far *)MK_FP(_SS,apMsg),(char far *)MK_FP(_DS,0x52e5),apUnitCount,(uint16_t)apUnitCount);
-          manage_blitLabelRight
-                    ((char *)CONCAT13((char)((uint)uVar7 >> 8),CONCAT12((char)uVar7,numText)),iVar4);
+          manage_blitLabelRight(numText,iVar4);
         }
         if (apLvl3Shown == 0) {
           iVar4 = 0xdc;
           uVar11 = (undefined1)apUnitTotal;
-  numText = litoa10((char *)&apNum,(long)apUnitTotal,0,0);
-          manage_blitLabelRight
-                    ((char *)CONCAT13((char)((uint)uVar7 >> 8),CONCAT12((char)uVar7,numText)),iVar4);
+  numText = litoa10((char *)&apNum,(long)apUnitTotal);
+          manage_blitLabelRight(numText,iVar4);
         }
         else {
           iVar4 = 0xdc;
   numText = ovr_stsprintf((char far *)MK_FP(_SS,apMsg),(char far *)MK_FP(_DS,0x52e5),apUnitCount,(uint16_t)apUnitCount);
-          manage_blitLabelRight
-                    ((char *)CONCAT13((char)((uint)uVar7 >> 8),CONCAT12((char)uVar7,numText)),iVar4);
+          manage_blitLabelRight(numText,iVar4);
         }
       }
       TextBlitY = TextBlitY + 0xc;
@@ -2057,7 +2046,7 @@ int owner;
       *(int *)((char *)init_textFilename + unaff_BP) = iVar2;
       if (*(int *)(unaff_BP + -0xc) == 0) {
         pcVar3 = litoa10((char *)(unaff_BP + -0x66),(long)CONCAT22(*(uint16_t *)((char *)init_textFilename + unaff_BP),
-                                        _SS),0,0);
+                                        _SS));
         uStack0006 = (undefined1)uVar4;
         uStack0007 = (undefined1)((uint)uVar4 >> 8);
         manage_blitLabelRight((char *)CONCAT13(uStack0007,CONCAT12(uStack0006,pcVar3)),100);
@@ -2075,7 +2064,7 @@ int owner;
       uVar4 = (uint16_t)((ulong)lVar1 >> 0x10);
       if (*(char *)((int)&GStructures[0].pad + (int)lVar1) != '\0') {
         if (*(int *)(unaff_BP + -0xe) == 0) {
-          pcVar3 = litoa10((char *)(unaff_BP + -0x66),(long)CONCAT22(*(uint16_t *)(unaff_BP + -6),_SS),0,0);
+          pcVar3 = litoa10((char *)(unaff_BP + -0x66),(long)CONCAT22(*(uint16_t *)(unaff_BP + -6),_SS));
           uStack0006 = (undefined1)uVar4;
           uStack0007 = (undefined1)((uint)uVar4 >> 8);
           manage_blitLabelRight((char *)CONCAT13(uStack0007,CONCAT12(uStack0006,pcVar3)),0x8c);
@@ -2089,7 +2078,7 @@ int owner;
           manage_blitLabelRight((char *)CONCAT13(uStack0007,CONCAT12(uStack0006,pcVar3)),0x8c);
         }
         if (*(int *)(unaff_BP + -0x10) == 0) {
-          pcVar3 = litoa10((char *)(unaff_BP + -0x66),(long)CONCAT22(*(uint16_t *)(unaff_BP + -8),_SS),0,0);
+          pcVar3 = litoa10((char *)(unaff_BP + -0x66),(long)CONCAT22(*(uint16_t *)(unaff_BP + -8),_SS));
           uStack0006 = (undefined1)uVar4;
           uStack0007 = (undefined1)((uint)uVar4 >> 8);
           manage_blitLabelRight((char *)CONCAT13(uStack0007,CONCAT12(uStack0006,pcVar3)),0xb4);
@@ -2103,7 +2092,7 @@ int owner;
           manage_blitLabelRight((char *)CONCAT13(uStack0007,CONCAT12(uStack0006,pcVar3)),0xb4);
         }
         if (*(int *)(unaff_BP + -0x12) == 0) {
-          pcVar3 = litoa10((char *)(unaff_BP + -0x66),(long)CONCAT22(*(uint16_t *)(unaff_BP + -10),_SS),0,0);
+          pcVar3 = litoa10((char *)(unaff_BP + -0x66),(long)CONCAT22(*(uint16_t *)(unaff_BP + -10),_SS));
           uStack0006 = (undefined1)uVar4;
           uStack0007 = (undefined1)((uint)uVar4 >> 8);
           manage_blitLabelRight((char *)CONCAT13(uStack0007,CONCAT12(uStack0006,pcVar3)),0xdc);

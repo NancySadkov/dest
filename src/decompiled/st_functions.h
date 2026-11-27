@@ -668,7 +668,7 @@ void __cdecl16far manage_showSettlementScreen(uint8_t partySlot);
 void __cdecl16far manage_textHalflingCastle(void);
 byte __cdecl16far manage_findFirstLeader(void);
 byte __cdecl16far manage_usesGLeaderCount3(byte partyIndex);
-char * __cdecl16far litoa10(char *buf,long n,uint16_t arg3,uint16_t arg4);
+char far * __cdecl16far litoa10(char far *buf,long n);
 void __cdecl16far manage_4d05_22cf_entry(byte charIndex,uint16_t minLevel,uint16_t maxLevel,uint16_t far *units,uint16_t far *population);
 void manage_usesEntities(void);
 void __cdecl16far manage_usesEntities2(void);

@@ -19843,3 +19843,65 @@ plus `litoa10` at five words against the image's four - `char *buf` is still a n
 `(far apNum, (long)n)` pushes 1+2 words where the image pushes 2+2.  Narrowing `litoa10` to two
 parameters would fix it, but it has fifteen other call sites whose third and fourth arguments
 encode sign information the tree invented, so that is a separate pass.
+
+### step 6: litoa10 narrowed to (char far *, long) and the two F_LXMUL@ calls removed (grep 26,373 -> 26,353)
+step 6: `litoa10` narrowed to `(char far *, long)` and the two `F_LXMUL@` calls removed (grep 26,373 -> 26,353)
+
+## litoa10
+
+The image pushes four words at every site - `push ss / lea ax,[bp-0x66] ; push 0 ; push <value>` -
+i.e. a far buffer and one long.  The tree declared
+
+    char * __cdecl16far litoa10(char *buf,long n,uint16_t arg3,uint16_t arg4)
+
+and passed a sign byte plus `0` at twenty call sites, which made every call five words (near
+buffer) instead of four.  It is now
+
+    char far * __cdecl16far litoa10(char far *buf,long n)
+
+(return type far too - the image returns DX:AX), and all twenty call sites lost their two invented
+arguments: 19 in `ovc21_manage.c` and 1 in `ovc31_config.c`, rewritten by paren matching so nothing
+else on those lines changed.
+
+    before   litoa10((char *)&apNum,(long)apUnitTotal,0,0)      5 words
+    after    litoa10((char *)&apNum,(long)apUnitTotal)          4 words   (image 4)
+
+## The two `F_LXMUL@` calls
+
+    lVar1 = (long)(iVar8 + iVar9) * 6;      -> `imul dx` on a 32-bit value -> lcall 0,0x337
+    uVar7 = (uint16_t)((ulong)lVar1 >> 0x10);
+    manage_blitLabelRight((char *)CONCAT13((char)((uint)uVar7 >> 8),
+                                           CONCAT12((char)uVar7,numText)),iVar4);
+
+The image does `mov ax,si / add ax,di / mov dx,6 / imul dx` at `299e..29a5` - a 16-bit multiply -
+and hands the `litoa10` result straight to `manage_blitLabelRight`.  So the multiply is now
+`(long)((iVar8 + iVar9) * 6)` (widen after, not before), the `uVar7` high/low split is gone, and
+all eight `manage_blitLabelRight` calls are `manage_blitLabelRight(numText,iVar4);`.  `numText` is
+a `char far *` because `litoa10` returns one.
+
+## Verified
+
+    0,0x337  (F_LXMUL@)            2 -> 0
+    litoa10  add sp,8              x4     image add sp,8 x4
+    blitLabelRight add sp,6        x8     image add sp,6 x8
+
+call sites 38 -> 36 (image 30).
+
+## Measured (HEAD 639bd65e -> this commit)
+
+    grep_checks      26,373 -> 26,353   (-20)
+    REBUILT.EXE      493,814 -> 493,542
+    build 65/65, LINK.LOG 65 bytes / 0 problems
+    compare_state    1,628/0/0 (unchanged)
+    diff_dgroup      1,639/1,805 matched, 5 runs, sum|delta| 18, mean 0, worst 12 (unchanged)
+    compare_runtime  1,692 matched, 1,683 identical / 9 different at all three sample points
+
+## Remaining six extra call sites
+
+    near 0x81 openTalkWindow   x3  vs x2   (the image has one at 279f and one in the tail at 2b9f)
+    0xa92 near call add sp,4   x2  vs 0    target inside this function's own body
+    0x217,0x29 add sp,4        x1  vs 0
+    uiInputText add sp,0x10    x1  vs 0xe  one word too many
+
+All ten image call classes now match the image's add-sp values; what is left is call *count*, not
+argument shape.
