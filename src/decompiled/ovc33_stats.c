@@ -1120,7 +1120,7 @@ char * __cdecl16far stats_formatThousands(char *text,uint32_t value)
 void __cdecl16far drawAgntStats(agnt_t far *agnt,far_t cmap,uint16_t arg3)
 
 {
-  uint32_t uVar1;
+  uint32_t entPtr;
   far_t gfx;
   far_t fVar2;
   far_t gfx_00;
@@ -1155,7 +1155,7 @@ void __cdecl16far drawAgntStats(agnt_t far *agnt,far_t cmap,uint16_t arg3)
   uint8_t uVar23;
   uint8_t attr;
   uint16_t uVar25;
-  uint16_t uVar26;
+  uint16_t blitColour;
   char palbuf [768];
   char buf [80];
   static char text[64];   /* DGROUP-backed formatting buffer */
@@ -1371,9 +1371,9 @@ void __cdecl16far drawAgntStats(agnt_t far *agnt,far_t cmap,uint16_t arg3)
                   Font02.seg,0xde,(char)Font02.seg,0xde,0xe0);
   }
   else {
-    uVar1 = *(uint32_t *)
+    entPtr = *(uint32_t *)
              ((uint)*(byte *)((int)&(((entity_t *)agnt->entity)->base).entity + 3) << 2);
-    uVar7 = (uint)*(byte *)((int)uVar1 + 0x33);
+    uVar7 = (uint)*(byte *)((int)entPtr + 0x33);
     nameOfs = (uint8_t *)((char *)0x26510);
     ovr_blitLabel((char *)((far_t *)GAlignmentsNames + uVar7)->ofs,
                   (uint8_t *)
@@ -1407,7 +1407,7 @@ void __cdecl16far drawAgntStats(agnt_t far *agnt,far_t cmap,uint16_t arg3)
                     uVar23,uVar25);
     }
     else {
-      uVar26 = 0xe0;
+      blitColour = 0xe0;
       uVar23 = 0xde;
       strRef = (uint16_t *)
                ((uint)(byte)((agntG_t far *)agnt->gdata)->shortName[3] * 0x94 +
@@ -1431,7 +1431,7 @@ void __cdecl16far drawAgntStats(agnt_t far *agnt,far_t cmap,uint16_t arg3)
                                               CONCAT12((char)textPtr,0x2410)),(char)textPtr,
                              (char)nameOfs,byteLo,puVar18);
       ovr_blitLabel(textPtr,(uint8_t *)CONCAT22(fontOfs,nameOfs),CONCAT11(segHi,uVar5),uVar23,uVar5,
-                    uVar23,uVar26);
+                    uVar23,blitColour);
     }
   }
   if (agnt->gdata->ai != 0) {

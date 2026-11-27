@@ -1069,18 +1069,18 @@ uint __cdecl16far ovc18_usesRandBelow(int x,int y,byte bldType,byte unitType,uin
 bool __cdecl16far ovc18_textArena(uint16_t x,uint16_t y)
 
 {
-  uint uVar1;
-  uint uVar2;
+  uint xAligned;
+  uint entX;
   uint uVar3;
   
-  uVar1 = ovr_alignUp4(x,0,0);
+  xAligned = ovr_alignUp4(x,0,0);
   uVar3 = 0;
   while( true ) {
     if (EntityCount <= uVar3) {
       return false;
     }
-    uVar2 = ovr_alignUp4((Entities)[uVar3].base.x,0,0);
-    if ((uVar2 == uVar1) && ((Entities)[uVar3].base.y == y)) break;
+    entX = ovr_alignUp4((Entities)[uVar3].base.x,0,0);
+    if ((entX == xAligned) && ((Entities)[uVar3].base.y == y)) break;
     uVar3 = uVar3 + 1;
   }
   return true;

@@ -400,9 +400,9 @@ void * __cdecl16far stshAlloc(uint32_t nbytes)
 uint8_t * __cdecl16far stshRealloc(uint32_t oldblock,uint32_t nbytes)
 
 {
-  uint8_t uVar1;
+  uint8_t newBlock;
   undefined1 extraout_AH;
-  uint uVar2;
+  uint oomFlag;
   int in_DX;
   int iVar3;
   uint32_t r;
@@ -418,8 +418,8 @@ uint8_t * __cdecl16far stshRealloc(uint32_t oldblock,uint32_t nbytes)
     }
     do {
       if (HeapReady == '\0') {
-        uVar1 = farrealloc(oldblock,nbytes);
-        (*(uint16_t *)((uint8_t *)&(r))) =(uint16_t) (long *)CONCAT11(extraout_AH,uVar1);
+        newBlock = farrealloc(oldblock,nbytes);
+        (*(uint16_t *)((uint8_t *)&(r))) =(uint16_t) (long *)CONCAT11(extraout_AH,newBlock);
         iVar3 = in_DX;
       }
       else {
@@ -429,7 +429,7 @@ uint8_t * __cdecl16far stshRealloc(uint32_t oldblock,uint32_t nbytes)
       }
       in_DX = iVar3;
       if (((long *)r == (long *)0x0 && iVar3 == 0) &&
-         (uVar2 = fmOutOfMemory(nbytes), (uVar2 & 0xff) == 0)) {
+         (oomFlag = fmOutOfMemory(nbytes), (oomFlag & 0xff) == 0)) {
         return (uint8_t *)0x0;
       }
     } while ((long *)r == (long *)0x0 && iVar3 == 0);

@@ -119,14 +119,14 @@ char __cdecl16far manage_rollDice(char count,char sides)
 void __cdecl16far manage_rollStats(char_sheet_t *sheet,uint16_t arg2)
 
 {
-  char cVar1;
-  uint16_t uVar2;
+  char diceRoll;
+  uint16_t randIdx;
   byte bStack_3;
   
   for (bStack_3 = 0; bStack_3 < 6; bStack_3 = bStack_3 + 1) {
-    cVar1 = manage_rollDice('\x03','\x06');
-    uVar2 = ovr_randBelow(4,0);
-    sheet->stats[bStack_3] = cVar1 + (char)uVar2;
+    diceRoll = manage_rollDice('\x03','\x06');
+    randIdx = ovr_randBelow(4,0);
+    sheet->stats[bStack_3] = diceRoll + (char)randIdx;
     if (0x11 < sheet->stats[bStack_3]) {
       sheet->stats[bStack_3] = 0x12;
     }
@@ -2734,9 +2734,9 @@ void manage_textAllProperty2(void)
   int unaff_BP;
   int iVar8;
   int iVar9;
-  uint16_t uVar10;
+  uint16_t fontOfs;
   undefined1 uVar11;
-  undefined1 uVar12;
+  undefined1 fontSegHi;
   uint8_t term;
   
   if (((*(char *)(unaff_BP + -0x15) != '\x02') && (*(char *)(unaff_BP + -0x15) != '\x03')) &&
@@ -2766,8 +2766,8 @@ void manage_textAllProperty2(void)
     uVar7 = 0x50;
     term = 0xde;
     uVar11 = (undefined1)Font02.seg;
-    uVar12 = (undefined1)(Font02.seg >> 8);
-    uVar10 = Font02.ofs;
+    fontSegHi = (undefined1)(Font02.seg >> 8);
+    fontOfs = Font02.ofs;
     iVar9 = ovr_ovc45_compute9((char *)(unaff_BP + -0x66),
                                (char *)CONCAT22(*(uint16_t *)(unaff_BP + -4),_SS),
                                (char *)CONCAT22(Font02.ofs,(char *)*(uint16_t *)(unaff_BP + -2)),
@@ -2776,7 +2776,7 @@ void manage_textAllProperty2(void)
                                 *(uint16_t *)(unaff_BP + -2),(char)iVar9,puVar6);
     numText = ovr_stsprintf((char *)(unaff_BP + -0xb6),(char *)CONCAT22(0x52a1,_SS),
                            (char *)CONCAT22(pvVar3,(char *)0x26510),puVar6);
-    ovr_blitLabel(numText,(uint8_t *)CONCAT22(uVar10,puVar6),CONCAT11(uVar12,uVar11),term,uVar11,term
+    ovr_blitLabel(numText,(uint8_t *)CONCAT22(fontOfs,puVar6),CONCAT11(fontSegHi,uVar11),term,uVar11,term
                   ,uVar7);
   }
   TextBlitY = TextBlitY + 0xc;

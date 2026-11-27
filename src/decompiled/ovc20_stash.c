@@ -872,7 +872,7 @@ void __cdecl16far init_ui_gfxes(void)
   far_t far *pfVar2;
   void *pvVar3;
   uint16_t in_DX;
-  uint16_t uVar4;
+  uint16_t fontSeg;
   uint16_t i;
   uint16_t unaff_DI;
   uint8_t palette;
@@ -899,7 +899,7 @@ void __cdecl16far init_ui_gfxes(void)
   ptr.ofs = (uint16_t)pvStack_6;
   gfxSeg = in_DX;
   ovr_alignToSeg(ptr);
-  uVar4 = in_DX;
+  fontSeg = in_DX;
   ovr_driver_fillRect(0,0,0x13f,199,0x0,in_DX,0,0,0,0,0);
   gfx.seg = gamfont1Cut1Seg;
   gfx.ofs = (uint16_t)gamfont1Cut1Ofs;
@@ -908,7 +908,7 @@ void __cdecl16far init_ui_gfxes(void)
   hndl.seg = unaff_DI;
   hndl.ofs = in_DX;
   Font03.ofs = (uint16_t)ovr_stshProcessFontSub((far_t far *)0x0,hndl,0);
-  Font03.seg = uVar4;
+  Font03.seg = fontSeg;
   ovr_driver_fillRect(0,0,0x13f,199,0x0,in_DX,0,0,0,0,0);
   gfx_00.seg = davfontCut1Seg;
   gfx_00.ofs = (uint16_t)davfontCut1Ofs;
@@ -917,7 +917,7 @@ void __cdecl16far init_ui_gfxes(void)
   hndl_00.seg = unaff_DI;
   hndl_00.ofs = in_DX;
   Font02.ofs = (uint16_t)ovr_stshProcessFontSub((far_t far *)0x0,hndl_00,0);
-  Font02.seg = uVar4;
+  Font02.seg = fontSeg;
   ovr_driver_fillRect(0,0,0x13f,199,0x0,in_DX,0,0,0,0,0);
   gfx_01.seg = davfont2Cut1Seg;
   gfx_01.ofs = (uint16_t)davfont2Cut1Ofs;
@@ -927,9 +927,9 @@ void __cdecl16far init_ui_gfxes(void)
   hndl_01.ofs = in_DX;
   pfVar2 = ovr_stshProcessFontSub((far_t far *)0x0,hndl_01,0);
   FontMain.ofs = (uint16_t)pfVar2;
-  FontMain.seg = uVar4;
+  FontMain.seg = fontSeg;
   Font01.ofs = (uint16_t)pfVar2;
-  Font01.seg = uVar4;
+  Font01.seg = fontSeg;
   for (i = 0; (int)i < 4; i = i + 1) {
     ovr_driver_fillRect(0,0,0x11,0x11,0x0,in_DX,0,0,0,0,0);
     gfx_02.seg = *(uint16_t *)((int)&MiceCursors[0].seg + i * 4);

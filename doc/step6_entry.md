@@ -17692,3 +17692,35 @@ __VRAM (crtl.c)
   compare_state 1,628/0/0
   diff_dgroup 1,639/1,805 matched, 5 runs, sum|delta| 18, mean 0, worst 12
   compare_runtime 1,692 matched, 1,683 identical / 9 different at all three sample points
+
+### section 5: batch 28 - six functions (34,306 -> 34,270)
+section 5: batch 28 - six functions (34,306 -> 34,270)
+
+manage_rollStats (ovc21_manage.c)
+    uVar2  ovr_randBelow(4, 0)                    -> randIdx  (3)
+    cVar1  manage_rollDice('\x03', '\x06')        -> diceRoll (3)
+
+ovc18_textArena (ovc18_leaderview.c)
+    uVar2  ovr_alignUp4(Entities[i].base.x, ...)  -> entX     (3)
+    uVar1  ovr_alignUp4(x, 0, 0)                  -> xAligned (3)
+
+stshRealloc (ovc17_stash.c)
+    uVar1  farrealloc(oldblock, nbytes)           -> newBlock (3)
+    uVar2  fmOutOfMemory(nbytes), tested & 0xff   -> oomFlag  (3)
+
+init_ui_gfxes (ovc20_stash.c)
+    uVar4  in_DX, saved before the font subjects are processed and then stored into
+           Font03.seg / Font02.seg / FontMain.seg / Font01.seg   -> fontSeg (6)
+
+manage_textAllProperty2 (ovc21_manage.c)
+    uVar10  Font02.ofs                            -> fontOfs   (3)
+    uVar12  (undefined1)(Font02.seg >> 8)         -> fontSegHi (3)
+
+drawAgntStats (ovc33_stats.c)
+    uVar1  *(uint32_t *)(entity[...] << 2), then read at +0x33  -> entPtr     (3)
+    uVar26  0xe0, the last argument of ovr_blitLabel            -> blitColour (3)
+
+  grep_checks 34,306 -> 34,270 (-36); build 65/65; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,628/0/0
+  diff_dgroup 1,639/1,805 matched, 5 runs, sum|delta| 18, mean 0, worst 12
+  compare_runtime 1,692 matched, 1,683 identical / 9 different at all three sample points
