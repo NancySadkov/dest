@@ -206,10 +206,25 @@ struct char_sheet_t {
     short rank;
     byte partySlot;
     long vaultStorage;
-    byte pad_8e[18];
+    byte pad_8e[6]; /* 0x8e..0x93: no recovered code touches this range */
+    uint16_t tail94; /* GUESS: 0x94.  5087:112a stores a word from [bp-0xa] here as the last act of ovc22_textRingProt; the value is accumulated earlier in the same routine and nothing else in the tree reads 0x94, and audit/symbols.tsv has no name for the address, so the address is the name. */
+    uint16_t tail96; /* GUESS: 0x96, same pattern - stored from [bp-8] at 5087:1146, no other reader. */
+    uint16_t tail98; /* GUESS: 0x98, same pattern - stored from [bp-6] at 5087:1162.  Note the image also indexes a byte array from 0x99 (`mov al,es:[bx+0x99]` with bx = sheet + bldtp_t+0x131 at 5087:0baa/0be7), i.e. element 0 of that array shares the high byte of this word; C cannot express the overlap, so the array is reached through a byte pointer in the routine. */
+    byte pad_9a[6]; /* 0x9a..0x9f */
     short maxTrade;
     short foodSold;
-    byte pad_a4[10];
+    /* 0xa4..0xad: per-leader counters and two per-building-type byte arrays, all GUESS: named
+       because ovc22_textRingProt is their only recoverder writer/reader and no audit symbol names
+       them.  Each comment is the image site that establishes the type. */
+    byte tailA4; /* GUESS: 0xa4.  Not touched by the recovered routine; kept as padding by position. */
+    byte tailA5; /* GUESS: 0xa5.  Byte counter: cleared at 5087:079c, `inc byte` at 5087:0af7 (switch type 21). */
+    byte tailA6; /* GUESS: 0xa6.  Byte counter: cleared at 5087:0782, `inc byte` at 5087:0b13 (switch type 17). */
+    byte tailA7; /* GUESS: 0xa7.  Not touched; padding by position. */
+    byte tailA8; /* GUESS: 0xa8.  Byte counter: cleared at 5087:084a and 5087:06b7 region, `inc byte` at 5087:0a46. */
+    byte tailA9; /* GUESS: 0xa9.  Base of a per-building-type byte array: `inc byte es:[bx+0xa9]` with bx = sheet + bldtp_t+0x131 at 5087:0c3b, and the scalar view (`cmp byte es:[bx+0xa9],0x64`, `mov byte ...,0x64`) at 5087:0ab8/0ad7 is element 0 of that same array, so the array is `&tailA9`. */
+    byte tailAA; /* GUESS: 0xaa.  Byte: set to 0x32 at 5087:10ef, then overwritten from [bp-0x46] at 5087:110e. */
+    byte pad_ab[2]; /* 0xab..0xac */
+    byte tailAD; /* GUESS: 0xad.  Byte counter: cleared at 5087:06bc, `inc byte` at 5087:0c02, read at 5087:102f. */
 };
 
 typedef struct unit_t unit_t, *Punit_t;

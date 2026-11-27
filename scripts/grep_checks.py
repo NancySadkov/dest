@@ -48,25 +48,46 @@ CHECKS = [
 ]
 
 
+# AGENTS.md's IMPORTANT section: "Overlays VROOM runtime gets supplied by the compiler - it is none
+# of our business ... Same applies to the C runtime - Turbo C we use has CRt matching to the
+# original."  ovl.c is the VROOMM overlay manager and crtl.c is the C runtime startup/heap code, so
+# their decompiler residue is not game code and is reported separately instead of in TOTAL.
+SUPPLIED = {"crtl.c", "ovl.c"}
+
+
 def main():
     files = sorted(glob.glob(os.path.join(TREE, "*.c")))
     print("tree:", TREE, " files:", len(files))
     total = 0
+    supplied_total = 0
     for label, pat in CHECKS:
         rx = re.compile(pat)
         n = 0
+        supplied = 0
         worst = []
+        worst_supplied = []
         for p in files:
             t = io.open(p, encoding="utf-8", errors="ignore").read()
             c = len(rx.findall(t))
-            if c:
+            if not c:
+                continue
+            if os.path.basename(p) in SUPPLIED:
+                supplied += c
+                worst_supplied.append((c, os.path.basename(p)))
+            else:
                 n += c
                 worst.append((c, os.path.basename(p)))
         worst.sort(reverse=True)
         total += n
-        print("%-22s %7d   %s" % (label, n,
-              ", ".join("%s=%d" % (f, c) for c, f in worst[:3])))
-    print("TOTAL %d" % total)
+        supplied_total += supplied
+        line = "%-22s %7d   %s" % (label, n,
+                                   ", ".join("%s=%d" % (f, c) for c, f in worst[:3]))
+        if supplied:
+            line += "   [supplied: %s]" % ", ".join(
+                "%s=%d" % (f, c) for c, f in sorted(worst_supplied, reverse=True))
+        print(line)
+    print("TOTAL %d   (game code; %d more in the compiler-supplied crtl.c/ovl.c)"
+          % (total, supplied_total))
 
 
 main()

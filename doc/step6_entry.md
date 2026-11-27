@@ -20943,3 +20943,54 @@ and the tail `+0x52`/`+0x84` stores).
     compare_state    1,628/0/0 (unchanged)
     diff_dgroup      1,639/1,805 matched, 5 runs, sum|delta| 18 (unchanged)
     compare_runtime  1,692 matched, 1,683 identical / 9 different at all three sample points
+
+## The grep gate now measures game code (user decision); char_sheet_t tail named
+
+Two decisions were put to the user and both taken as recommended.
+
+**1. grep_checks excludes the compiler-supplied runtime.** AGENTS.md's IMPORTANT section says the
+VROOMM overlay runtime and the Turbo C runtime are supplied and that reversing them is a waste of
+time, but the gate was counting ovl.c and crtl.c in TOTAL. scripts/grep_checks.py now reports
+them on a bracketed suffix per row plus a second figure in the total line:
+
+    TOTAL 13412   (game code; 4025 more in the compiler-supplied crtl.c/ovl.c)
+
+so 4,025 of the 17,437 were runtime scaffolding, and the game-code remainder is dominated by
+ovc23_bldrec.c (804), ovc09_init.c (544) and ovc02_draw.c.
+
+**2. char_sheet_t's padded tail now carries GUESS: fields.** 5087:056e writes eleven offsets that
+sat inside pad_8e[18] and pad_a4[10]. The pads were split, with each field recording the image site
+that fixes its type:
+
+    0x8e..0x93  pad_8e[6]        untouched
+    0x94  word  tail94           5087:112a stores [bp-0xa]
+    0x96  word  tail96           5087:1146 stores [bp-8]
+    0x98  word  tail98           5087:1162 stores [bp-6]
+    0x9a..0x9f  pad_9a[6]
+    0xa0  word  maxTrade         cleared 5087:0767, dd word at 5087:0a2a
+    0xa2  word  foodSold         (existing field)
+    0xa4  byte  tailA4           untouched
+    0xa5  byte  tailA5           cleared 5087:079c, inc 5087:0af7
+    0xa6  byte  tailA6           cleared 5087:0782, inc 5087:0b13
+    0xa7  byte  tailA7           untouched
+    0xa8  byte  tailA8           cleared 5087:084a, inc 5087:0a46
+    0xa9  byte  tailA9           per-type array base (5087:0c3b inc with bx+0x131); the scalar
+                                 view at 5087:0ab8/0ad7 (cmp ...,0x64) is element 0
+    0xaa  byte  tailAA           0x32 at 5087:10ef, then from [bp-0x46] at 5087:110e
+    0xab..0xac  pad_ab[2]
+    0xad  byte  tailAD           cleared 5087:06bc, inc 5087:0c02, read 5087:102f
+
+sizeof(char_sheet_t) is still 0xae, so no existing field moved (verified by walking the declaration).
+One genuine overlap is documented rather than hidden: the image also indexes a byte array from 0x99
+(mov al,es:[bx+0x99] with x = sheet + bldtp_t+0x131, 5087:0baa/0be7), i.e. its element 0 shares
+the high byte of 	ail98. C cannot express that, so the routine must reach it through a byte pointer;
+the field comment says so.
+
+## Measured (HEAD 104a9509 -> this commit)
+
+    grep_checks      17,437 -> 13,412   (game code; 4,025 reported separately as supplied runtime)
+    REBUILT.EXE      474,208 (unchanged)
+    build 65/65, LINK.LOG 0 errors
+    compare_state    1,628/0/0 (unchanged)
+    diff_dgroup      1,639/1,805 matched, 5 runs, sum|delta| 18 (unchanged)
+    compare_runtime  1,692 matched, 1,683 identical / 9 different at all three sample points
