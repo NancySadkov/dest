@@ -928,7 +928,7 @@ void __cdecl16far ovc41_buildingNotice(char delta);
 void __cdecl16far dbgPromoteEnemy(void);
 void __cdecl16far ovc41_usesAgnt_clear(char playSound);
 void __cdecl16far ovc41_enterLeaderView(void);
-char * __cdecl16far ovc41_usesBiosKeyAvail(char backdropIndex,uint16_t arg2);
+void __cdecl16far ovc41_usesBiosKeyAvail(uint8_t dir,uint16_t coarse);
 void __cdecl16far ovc41_cannotSeeTerrainNotice(void);
 void __cdecl16far ovc41_usesGMenuItem(void);
 void __cdecl16far uiMainMenu(void);

@@ -20207,6 +20207,44 @@ cs:0x2168 (codes 2..0xa). Recorded here so the body can be written directly:
   (audit/overlay_segments.csv lists several candidate segments each), which is what blocks writing
   the body - the same reason the 77eb:0d61 rewrite is on hold.
 
+## `ovc41_usesBiosKeyAvail` re-derived (6a8f:15a0)
+
+The tree held a 766-line body belonging to another function (96 calls - ovc39_loadArchiveEntry,
+ovc39_lordOrLady, drawString, stsprintf - against the image's 21). The real body scrolls the
+leader-view backdrop at two speeds:
+
+* coarse, only when the second argument is nonzero: eight pixels left/right, sixteen up/down, then
+  `dir = 0xff` so the fine switch cannot match;
+* fine: one pixel left/right, four up/down; a step that would leave the valid range returns at once
+  (skipping the tail);
+* each step sets `bigcompFrame` (0xd8) to 0/2/4/6 and calls the toolbar redraw plus the agent-flag
+  view; the tail emits the pending text, clears `TextBlitFlag`/`AgntFlag1`, sets `GGameState = 0x33`,
+  traces it, calls `ovc41_usesAgnt_clear(1)`, sets `GGameState = 0x35` and traces it.
+
+Thunk names resolved by cross-reference with `tmp/thunk_names.py` (a new helper: it locates every
+image occurrence of the 5-byte `lcall` pattern, maps the offset to its containing function by file
+range, counts the call's index inside that function, and prints that index-th `ovr_*` call of the
+derived C function found by its marker):
+
+    0x118,0x2a -> ovr_blitLoadRleGfx          64 of 64 image sites agree
+    0xf0,0x5c  -> ovr_draw_toolbarLabels      the other two sites are in the same module (6a8f)
+    0x158,0x20 -> ovr_attact_usesAgntFlag1    four of the six modules that use it agree
+
+Globals: 0x899d `GfxRndSeed2`, 0x899f `GfxRndSeed`, 0xd8 `bigcompFrame`, 0xd9 `TextBlitFlag`,
+0x9096 `AgntFlag1`, 0x8a01 `FontHandle`, 0x898e `GGameState`, 0x438 `DebugVerbose`. The prototype is
+now `void ovc41_usesBiosKeyAvail(uint8_t dir,uint16_t coarse)` (the image writes no return value).
+
+## Measured (HEAD 45b67fff -> this commit)
+
+    grep_checks      24,431 -> 23,898   (-533: the mis-attributed 766-line body)
+    REBUILT.EXE      493,734 -> 487,694 (-6,040: the module is linked, and the junk body's 96 calls
+                                       collapse to the image's 21)
+    build 65/65, LINK.LOG 0 problems
+    compare_state    1,628/0/0 (unchanged)
+    diff_dgroup      1,639/1,805 matched, 5 runs, sum|delta| 18 (unchanged)
+    compare_runtime  1,692 matched, 1,683 identical / 9 different at all three sample points
+    screen_calls     `6a8f:15a0` leaves the delta table (C 96 vs image 21 -> 21 vs 21)
+
 ## Measured (HEAD ac32b3b5 -> this commit)
 
     grep_checks      24,431 (unchanged)
