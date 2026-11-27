@@ -961,7 +961,7 @@ char __cdecl16far ovc43_playFli(uint16_t fileId,uint16_t paletteOfs,uint16_t pal
 far_t __cdecl16far stshAllocStub(void);
 void __cdecl16far stshTR_S_stubify0(int index);
 void __cdecl16far stshStubifyBld(uint16_t index);
-void __cdecl16far init_assets(void);
+void __cdecl16far getcache(bool updateFile);
 void __cdecl16far stshInitPtrs(void);
 byte __cdecl16far ovc45_getUnitType(int x,int y);
 short __cdecl16far ovc45_getUnitIndex(int x,int y);

@@ -20234,6 +20234,30 @@ Globals: 0x899d `GfxRndSeed2`, 0x899f `GfxRndSeed`, 0xd8 `bigcompFrame`, 0xd9 `T
 0x9096 `AgntFlag1`, 0x8a01 `FontHandle`, 0x898e `GGameState`, 0x438 `DebugVerbose`. The prototype is
 now `void ovc41_usesBiosKeyAvail(uint8_t dir,uint16_t coarse)` (the image writes no return value).
 
+## `init_assets` (6ffe:02f7) renamed to `getcache`, and it takes the argument it reads
+
+The diagnostic names the routine: `6ffe:7326` prints `"getcache %d  SIZESTASH %d  \r"`. The tree's
+name was also a collision - the real overlay entry `init_assets` is `23ed:0025` (see the
+`/* 23ed:0025 -> init_assets */` record in ovr_stubs.c, whose link stand-in is stexcl.c), a different
+function.
+
+The body read its first stack word 48 times as `in_stack_00000004` while the declaration said
+`void`, so the signature is now
+
+    void __cdecl16far getcache(bool updateFile)
+
+and the 48 reads use `updateFile`. The duplicate `bool in_stack_00000004;` local that Ghidra had put
+in the declaration block was removed (it is the parameter now).
+
+## Measured (HEAD 7bdb85fd -> this commit)
+
+    grep_checks      23,898 -> 23,850   (-48: the `in_stack_` reads)
+    REBUILT.EXE      487,694 (unchanged - O44 is link-excluded)
+    build 65/65, LINK.LOG 0 problems
+    compare_state    1,628/0/0 (unchanged)
+    diff_dgroup      1,639/1,805 matched, 5 runs, sum|delta| 18 (unchanged)
+    compare_runtime  1,692 matched, 1,683 identical / 9 different at all three sample points
+
 ## Measured (HEAD 45b67fff -> this commit)
 
     grep_checks      24,431 -> 23,898   (-533: the mis-attributed 766-line body)

@@ -647,7 +647,7 @@ bool __cdecl16far ovc45_textArena2(byte bldType)
    The 3,202-line body that used to live here was NOT this function: it was the asset
    stubify/RLE loader (201 ovr_stshRleType2, 190 stsh_store, 138 func_0x0007ffe0, 59
    ovr_stgFreeTmp, 57 ovr_grabLbmTR, 38 ovr_stshStoreFile).  That body lives, byte for byte, in
-   ovc44's init_assets (6ffe:02f7) in ovc44_strong_dat.c; it also overflowed Borland's compiler
+   ovc44's getcache (6ffe:02f7) in ovc44_strong_dat.c; it also overflowed Borland's compiler
    table limit, which is why this module could not be listed at all (`--only o45 --asm`).
 
    What the image does (tmp/o45_d61.txt + tmp/o45_d61b.txt):
