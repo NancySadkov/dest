@@ -19142,3 +19142,83 @@ remaining `CONCAT22`/pointer expressions and are the next thing to remove.
     compare_state    1,628/0/0 (unchanged)
     diff_dgroup      1,639/1,805 matched, 5 runs, sum|delta| 18, mean 0, worst 12 (unchanged)
     compare_runtime  1,692 matched, 1,683 identical / 9 different at all three sample points
+
+### step 6: the 0x14a8 block now emits the image 68 calls with the image argument sizes (grep 26,584 -> 26,543)
+step 6: the 0x14a8 block now emits the image's 68 calls with the image's argument sizes (grep 26,584 -> 26,543)
+
+## The seven `stsprintf` calls
+
+Image windows:
+
+    1513 / 15b9   push dx ; push ax ; push ds ; push 0xNNNN ; push ss ; lea ax,[bp-0x82] ; push ax
+                  add sp,0xc        -> (dest, fmt, stash)
+    167e / 1757 / 1820 / 18f3 / 195x
+                  the text1 result pre-staged by the previous statusText call, plus the same
+                  add sp,0x10       -> (dest, fmt, text1, stash)
+
+The tree built the destination from a raw frame integer (`(char *)(unaff_BP + -0x82)`), passed
+the stash as `CONCAT22(bufPtr,0x26510)` - a far pointer whose *segment* was 0x26510 - and then
+appended `0x10,(char)bufPtr,(char)in_DX`; the text1 result was recovered as two byte halves
+(`uVar10 = SUB21(pcVar8,0)`, `uVar11 = (undefined1)in_DX`) and then thrown away.  Now
+`pcVar8`/`bufPtr` are far pointers, a `st1` variable holds the first statusText result, and the
+calls are
+
+    pcVar8 = ovr_stsprintf((char far *)MK_FP(_SS,&msg),(char far *)MK_FP(_DS,0x5c5a),bufPtr);
+    pcVar8 = ovr_stsprintf((char far *)MK_FP(_SS,&msg),(char far *)MK_FP(_DS,0x5c90),st1,bufPtr);
+
+## The two `textParalyzed` / `6a8f_01e7_entry` classes
+
+    0x230,0xa2   push si ; push [bp-8] ; push [bp-0xa] ; push [bp+8] ; push [bp+6]   add sp,0xa
+                 -> (agnt, agntRec, damage)             tree passed eight words
+    0x230,0xc5   push [bp-8] ; push [bp-0xa]                                       add sp,4
+                 -> (agntRec)                           tree added a `(char)` segment word
+
+## The five calls the original does not make were `F_LXURSH@`
+
+`lcall 0,0x470` is Borland's unsigned-long right-shift helper, reached through the dead locals:
+`SUB21(pcVar8,0)` is `(uint16_t)((uint32_t)pcVar8 >> 0*8)`, and BC emits the runtime helper for
+the 32-bit shift rather than folding it.  Once the `stsprintf` arguments stopped using those
+locals, every `uVar10` / `uVar11` / `savedSeg` occurrence was a write with no reader, so the
+declarations and all 20 assignments were deleted (23 lines).  The check before deleting was
+mechanical: each remaining occurrence had to be either `undefined1 <name>;` or a whole-statement
+`<name> = ...;`, and every one was.
+
+## Verified: 68 call sites, every argument size matching
+
+    ours                          size    image class                     count
+    0x2a7,0x2ff  (statusText)      8        agnt_statusText                 12
+    0xb40        (rollToHit)        6        rollToHitEntity                  8
+    0x2a7,0x2e6  (panFromX)         4        audio_panFromX                   7
+    0x2a7,0x2cd  (play_sfxU)        6        play_sfxU                        7
+    0x2a7,0x408  (usesStshRealloc)  4        ovc15_usesStshRealloc            7
+    0x2a7,0x15b  (uiNotify)         6        uiNotify                         7
+    0x2a7,0x4cb  (stsprintf)      0x10       stsprintf, four arguments        5
+    0x2a7,0x82c  (6a8f entry)       4        6a8f_01e7_entry                  5
+    0x2a7,0x818  (textParalyzed)  0xa       ovc41_textParalyzed              4
+    0x2a7,0x4cb  (stsprintf)       0xc       stsprintf, three arguments       2
+    0x2a7,0x6c4                     2        ovc28_usesBDADailyTimeCounter    1
+    0x2a7,0x5b1                     4        manage_rollDice                  1
+    0xfffff840                      4        spellHalfDamage                  1
+    0xa8d                           0xc       usesAgntCount                    1
+                                  total 68                                  total 68
+
+and the five spurious `F_LXURSH@` calls are gone (73 -> 68).
+
+## Measured (HEAD 26f25e1b -> this commit)
+
+    grep_checks      26,584 -> 26,543   (-41)
+    REBUILT.EXE      496,118 -> 495,814
+    build 65/65, LINK.LOG 65 bytes / 0 problems
+    compare_state    1,628/0/0 (unchanged)
+    diff_dgroup      1,639/1,805 matched, 5 runs, sum|delta| 18, mean 0, worst 12 (unchanged)
+    compare_runtime  1,692 matched, 1,683 identical / 9 different at all three sample points
+
+## What is left on this cluster
+
+The merge itself: `ovc27_textTakesHalfDamage3` still *calls* the block instead of jumping to it.
+Both now take the same `(agnt, agntIndex)`, so a call builds a second frame where the original
+reuses the first - behaviourally equivalent, structurally not.  Moving the block behind
+`L_half4:` at the `[bp-4] = 0x1e` code (`5ded:1ac6`), replacing the call with `goto L_half4;`
+and deleting the standalone function is now purely mechanical, and it would also remove the
+last self-reference in `textTakesHalfDamage3` (38 calls -> the image's 36).  The third entry
+point, `5ded:1433` (`ovc27_textCharmed`), shares the same frame and is still separate.

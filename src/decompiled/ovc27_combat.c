@@ -1051,16 +1051,14 @@ void __cdecl16far ovc27_textTakesHalfDamage4(agnt_t far *agnt,uint16_t agntIndex
   int iVar5;
   uint16_t pan;
   uint uVar7;
-  char *pcVar8;
-  uint8_t *bufPtr;
+  char far *pcVar8;
+  uint8_t far *bufPtr;
   uint16_t in_DX;
   int unaff_BP;
   int unaff_DI;
-  undefined1 uVar10;
-  undefined1 uVar11;
-  undefined1 savedSeg;
   int half4Remaining;
   int half4LoopIdx;
+  char far *st1;
   agnt_t far *agntRec;
   uint8_t text1;
   uint8_t text2;
@@ -1092,36 +1090,20 @@ void __cdecl16far ovc27_textTakesHalfDamage4(agnt_t far *agnt,uint16_t agntIndex
       }
       uVar2 = ((agnt_t far *)((unaff_BP + -10)))->gdata;
       if ((*(uint *)((int)uVar2 + 0x3e) & 0x200) != 0) {
-        uVar10 = (undefined1)GSavedBlitSeg;
   pcVar8 = ovr_agnt_statusText((char far *)MK_FP(_SS,&text2),agntRec);
   bufPtr = ovr_ovc15_usesStshRealloc(pcVar8);
-        pcVar8 = ovr_stsprintf((char *)(unaff_BP + -0x82),(char *)CONCAT22(0x5c70,_SS),
-                               (char *)CONCAT13((char)((uint)bufPtr >> 8),
-                                                CONCAT12((char)bufPtr,0x2410)),0x10,(char)bufPtr,
-                               (char)in_DX);
+  pcVar8 = ovr_stsprintf((char far *)MK_FP(_SS,&msg),(char far *)MK_FP(_DS,0x5c70),bufPtr);
   ovr_uiNotify(pcVar8,(uint16_t)GSavedBlitSeg);
         uVar7 = (int)uVar7 >> 1;
       }
-      uVar10 = (undefined1)*(uint16_t *)(unaff_BP + -8);
-      ovr_ovc41_textParalyzed
-                ((agnt_t far *)
-                 CONCAT13((char)((uint)*(uint16_t *)(unaff_BP + 8) >> 8),
-                          CONCAT12((char)*(uint16_t *)(unaff_BP + 8),*(uint16_t *)(unaff_BP + 6)
-                                  )),
-                 (agnt_t far *)
-                 CONCAT13((char)((uint)*(uint16_t *)(unaff_BP + -8) >> 8),
-                          CONCAT12(uVar10,*(uint16_t *)(unaff_BP + -10))),uVar7,
-                 (char)*(uint16_t *)(unaff_BP + -10),uVar10,(char)uVar7);
+  ovr_ovc41_textParalyzed(agnt,agntRec,uVar7);
       ((char_sheet_t *)((unaff_BP + -10)))->race = 10;
       ((char_sheet_t *)((unaff_BP + -10)))->hp[0] = 0;
       return;
     }
-    uVar10 = (undefined1)GSavedBlitSeg;
   pcVar8 = ovr_agnt_statusText((char far *)MK_FP(_SS,&text2),agntRec);
   bufPtr = ovr_ovc15_usesStshRealloc(pcVar8);
-    pcVar8 = ovr_stsprintf((char *)(unaff_BP + -0x82),(char *)CONCAT22(0x5c5a,_SS),
-                           (char *)CONCAT13((char)((uint)bufPtr >> 8),CONCAT12((char)bufPtr,0x2410))
-                           ,0x10,(char)bufPtr,(char)in_DX);
+  pcVar8 = ovr_stsprintf((char far *)MK_FP(_SS,&msg),(char far *)MK_FP(_DS,0x5c5a),bufPtr);
   ovr_uiNotify(pcVar8,(uint16_t)GSavedBlitSeg);
     return;
   }
@@ -1135,17 +1117,13 @@ void __cdecl16far ovc27_textTakesHalfDamage4(agnt_t far *agnt,uint16_t agntIndex
                                   CONCAT12((char)*(uint16_t *)(unaff_BP + -8),
                                            *(uint16_t *)(unaff_BP + -10))),3);
       if ((char)iVar5 == '\0') {
-        savedSeg = (undefined1)GSavedBlitSeg;
   pcVar8 = ovr_agnt_statusText((char far *)MK_FP(_SS,&text1),agnt);
-        uVar11 = (undefined1)in_DX;
-        uVar10 = SUB21(pcVar8,0);
+  st1 = pcVar8;
   pcVar8 = ovr_agnt_statusText((char far *)MK_FP(_SS,&text2),agntRec);
   bufPtr = ovr_ovc15_usesStshRealloc(pcVar8);
-        pcVar8 = ovr_stsprintf((char *)(unaff_BP + -0x82),(char *)CONCAT22(0x5c90,_SS),
-                               (char *)CONCAT22(bufPtr,(char *)0x26510),(char)in_DX);
+  pcVar8 = ovr_stsprintf((char far *)MK_FP(_SS,&msg),(char far *)MK_FP(_DS,0x5c90),st1,bufPtr);
   ovr_uiNotify(pcVar8,(uint16_t)GSavedBlitSeg);
-        ovr_OVC41_6a8f_01e7_entry
-                  ((agnt_t far *)*(uint16_t *)(unaff_BP + -10),(char)*(uint16_t *)(unaff_BP + -8));
+  ovr_OVC41_6a8f_01e7_entry(agntRec);
         puVar1 = (uint *)((int)*(uint32_t *)(unaff_BP + -10) + 0x2b);
         *puVar1 = *puVar1 | 0x40;
         ((char_sheet_t *)((unaff_BP + -10)))->race = 0x10;
@@ -1158,7 +1136,6 @@ void __cdecl16far ovc27_textTakesHalfDamage4(agnt_t far *agnt,uint16_t agntIndex
     }
     return;
   }
-  uVar10 = (undefined1)GSavedBlitSeg;
   if (((agnt_t far *)((unaff_BP + 6)))->variant == '\a') {
     if (*(char *)((int)*(uint32_t *)(unaff_BP + -10) + 0x11) != '\0') {
       return;
@@ -1167,15 +1144,12 @@ void __cdecl16far ovc27_textTakesHalfDamage4(agnt_t far *agnt,uint16_t agntIndex
       uVar2 = ((agnt_t far *)((unaff_BP + -10)))->entity;
       if (*(byte *)((int)uVar2 + 0xf) < 5) {
   pcVar8 = ovr_agnt_statusText((char far *)MK_FP(_SS,&text1),agnt);
-        savedSeg = (undefined1)in_DX;
-        uVar11 = SUB21(pcVar8,0);
+  st1 = pcVar8;
   pcVar8 = ovr_agnt_statusText((char far *)MK_FP(_SS,&text2),agntRec);
   bufPtr = ovr_ovc15_usesStshRealloc(pcVar8);
-        pcVar8 = ovr_stsprintf((char *)(unaff_BP + -0x82),(char *)CONCAT22(0x5ca2,_SS),
-                               (char *)CONCAT22(bufPtr,(char *)0x26510),(char)in_DX);
+  pcVar8 = ovr_stsprintf((char far *)MK_FP(_SS,&msg),(char far *)MK_FP(_DS,0x5ca2),st1,bufPtr);
   ovr_uiNotify(pcVar8,(uint16_t)GSavedBlitSeg);
-        ovr_OVC41_6a8f_01e7_entry
-                  ((agnt_t far *)*(uint16_t *)(unaff_BP + -10),(char)*(uint16_t *)(unaff_BP + -8));
+  ovr_OVC41_6a8f_01e7_entry(agntRec);
         puVar1 = (uint *)((int)*(uint32_t *)(unaff_BP + -10) + 0x2b);
         *puVar1 = *puVar1 | 0x80;
   pan = ovr_audio_panFromX(agntRec);
@@ -1194,12 +1168,10 @@ void __cdecl16far ovc27_textTakesHalfDamage4(agnt_t far *agnt,uint16_t agntIndex
     }
     if ((((agnt_t far *)((unaff_BP + -10)))->flags & 0x100) == 0) {
   pcVar8 = ovr_agnt_statusText((char far *)MK_FP(_SS,&text1),agnt);
-      savedSeg = (undefined1)in_DX;
-      uVar11 = SUB21(pcVar8,0);
+  st1 = pcVar8;
   pcVar8 = ovr_agnt_statusText((char far *)MK_FP(_SS,&text2),agntRec);
   bufPtr = ovr_ovc15_usesStshRealloc(pcVar8);
-      pcVar8 = ovr_stsprintf((char *)(unaff_BP + -0x82),(char *)CONCAT22(0x5cbc,_SS),
-                             (char *)CONCAT22(bufPtr,(char *)0x26510),(char)in_DX);
+  pcVar8 = ovr_stsprintf((char far *)MK_FP(_SS,&msg),(char far *)MK_FP(_DS,0x5cbc),st1,bufPtr);
   ovr_uiNotify(pcVar8,(uint16_t)GSavedBlitSeg);
       ((char_sheet_t *)((unaff_BP + -10)))->alignment =
            *(undefined1 *)((int)*(uint32_t *)(unaff_BP + 6) + 0x32);
@@ -1222,17 +1194,13 @@ void __cdecl16far ovc27_textTakesHalfDamage4(agnt_t far *agnt,uint16_t agntIndex
                                 CONCAT12((char)*(uint16_t *)(unaff_BP + -8),
                                          *(uint16_t *)(unaff_BP + -10))),3);
     if ((char)iVar5 == '\0') {
-      savedSeg = (undefined1)GSavedBlitSeg;
   pcVar8 = ovr_agnt_statusText((char far *)MK_FP(_SS,&text1),agnt);
-      uVar11 = (undefined1)in_DX;
-      uVar10 = SUB21(pcVar8,0);
+  st1 = pcVar8;
   pcVar8 = ovr_agnt_statusText((char far *)MK_FP(_SS,&text2),agntRec);
   bufPtr = ovr_ovc15_usesStshRealloc(pcVar8);
-      pcVar8 = ovr_stsprintf((char *)(unaff_BP + -0x82),(char *)CONCAT22(0x5c90,_SS),
-                             (char *)CONCAT22(bufPtr,(char *)0x26510),(char)in_DX);
+  pcVar8 = ovr_stsprintf((char far *)MK_FP(_SS,&msg),(char far *)MK_FP(_DS,0x5c90),st1,bufPtr);
   ovr_uiNotify(pcVar8,(uint16_t)GSavedBlitSeg);
-      ovr_OVC41_6a8f_01e7_entry
-                ((agnt_t far *)*(uint16_t *)(unaff_BP + -10),(char)*(uint16_t *)(unaff_BP + -8));
+  ovr_OVC41_6a8f_01e7_entry(agntRec);
       puVar1 = (uint *)((int)*(uint32_t *)(unaff_BP + -10) + 0x2b);
       *puVar1 = *puVar1 | 0x40;
       ((char_sheet_t *)((unaff_BP + -10)))->race = 0x10;
@@ -1250,16 +1218,7 @@ void __cdecl16far ovc27_textTakesHalfDamage4(agnt_t far *agnt,uint16_t agntIndex
                                          *(uint16_t *)(unaff_BP + -10))),3);
     if ((char)iVar5 == '\0') {
       bVar3 = ((agnt_t far *)((unaff_BP + -10)))->strength;
-      uVar10 = (undefined1)*(uint16_t *)(unaff_BP + -8);
-      ovr_ovc41_textParalyzed
-                ((agnt_t far *)
-                 CONCAT13((char)((uint)*(uint16_t *)(unaff_BP + 8) >> 8),
-                          CONCAT12((char)*(uint16_t *)(unaff_BP + 8),*(uint16_t *)(unaff_BP + 6)
-                                  )),
-                 (agnt_t far *)
-                 CONCAT13((char)((uint)*(uint16_t *)(unaff_BP + -8) >> 8),
-                          CONCAT12(uVar10,*(uint16_t *)(unaff_BP + -10))),(uint)bVar3,
-                 (char)*(uint16_t *)(unaff_BP + -10),uVar10,bVar3);
+  ovr_ovc41_textParalyzed(agnt,agntRec,(uint)bVar3);
       ((char_sheet_t *)((unaff_BP + -10)))->race = 0xb;
       ((char_sheet_t *)((unaff_BP + -10)))->hp[0] = 0;
       return;
@@ -1277,16 +1236,7 @@ void __cdecl16far ovc27_textTakesHalfDamage4(agnt_t far *agnt,uint16_t agntIndex
                                          *(uint16_t *)(unaff_BP + -10))),3);
     if ((char)iVar5 == '\0') {
       bVar3 = ((agnt_t far *)((unaff_BP + -10)))->strength;
-      uVar10 = (undefined1)*(uint16_t *)(unaff_BP + -8);
-      ovr_ovc41_textParalyzed
-                ((agnt_t far *)
-                 CONCAT13((char)((uint)*(uint16_t *)(unaff_BP + 8) >> 8),
-                          CONCAT12((char)*(uint16_t *)(unaff_BP + 8),*(uint16_t *)(unaff_BP + 6)
-                                  )),
-                 (agnt_t far *)
-                 CONCAT13((char)((uint)*(uint16_t *)(unaff_BP + -8) >> 8),
-                          CONCAT12(uVar10,*(uint16_t *)(unaff_BP + -10))),(uint)bVar3,
-                 (char)*(uint16_t *)(unaff_BP + -10),uVar10,bVar3);
+  ovr_ovc41_textParalyzed(agnt,agntRec,(uint)bVar3);
       ((char_sheet_t *)((unaff_BP + -10)))->race = 0xb;
       ((char_sheet_t *)((unaff_BP + -10)))->hp[0] = 0;
       return;
@@ -1300,16 +1250,7 @@ void __cdecl16far ovc27_textTakesHalfDamage4(agnt_t far *agnt,uint16_t agntIndex
                                          *(uint16_t *)(unaff_BP + -10))),3);
     if ((char)iVar5 == '\0') {
       bVar3 = ((agnt_t far *)((unaff_BP + -10)))->strength;
-      uVar10 = (undefined1)*(uint16_t *)(unaff_BP + -8);
-      ovr_ovc41_textParalyzed
-                ((agnt_t far *)
-                 CONCAT13((char)((uint)*(uint16_t *)(unaff_BP + 8) >> 8),
-                          CONCAT12((char)*(uint16_t *)(unaff_BP + 8),*(uint16_t *)(unaff_BP + 6)
-                                  )),
-                 (agnt_t far *)
-                 CONCAT13((char)((uint)*(uint16_t *)(unaff_BP + -8) >> 8),
-                          CONCAT12(uVar10,*(uint16_t *)(unaff_BP + -10))),(uint)bVar3,
-                 (char)*(uint16_t *)(unaff_BP + -10),uVar10,bVar3);
+  ovr_ovc41_textParalyzed(agnt,agntRec,(uint)bVar3);
       ((char_sheet_t *)((unaff_BP + -10)))->race = 0xb;
       ((char_sheet_t *)((unaff_BP + -10)))->hp[0] = 0;
       return;
@@ -1325,8 +1266,7 @@ void __cdecl16far ovc27_textTakesHalfDamage4(agnt_t far *agnt,uint16_t agntIndex
                                 CONCAT12((char)*(uint16_t *)(unaff_BP + -8),
                                          *(uint16_t *)(unaff_BP + -10))),3);
     if ((char)iVar5 == '\0') {
-      ovr_OVC41_6a8f_01e7_entry
-                ((agnt_t far *)*(uint16_t *)(unaff_BP + -10),(char)*(uint16_t *)(unaff_BP + -8));
+  ovr_OVC41_6a8f_01e7_entry(agntRec);
       puVar1 = (uint *)((int)*(uint32_t *)(unaff_BP + -10) + 0x2b);
       *puVar1 = *puVar1 | 0x800;
   pan = ovr_audio_panFromX(agntRec);
@@ -1347,17 +1287,13 @@ void __cdecl16far ovc27_textTakesHalfDamage4(agnt_t far *agnt,uint16_t agntIndex
                                     CONCAT12((char)*(uint16_t *)(unaff_BP + -8),
                                              *(uint16_t *)(unaff_BP + -10))),3),
        (uVar7 & 0xff) == 0)) {
-      savedSeg = (undefined1)GSavedBlitSeg;
   pcVar8 = ovr_agnt_statusText((char far *)MK_FP(_SS,&text1),agnt);
-      uVar11 = (undefined1)in_DX;
-      uVar10 = SUB21(pcVar8,0);
+  st1 = pcVar8;
   pcVar8 = ovr_agnt_statusText((char far *)MK_FP(_SS,&text2),agntRec);
   bufPtr = ovr_ovc15_usesStshRealloc(pcVar8);
-      pcVar8 = ovr_stsprintf((char *)(unaff_BP + -0x82),(char *)CONCAT22(0x5c2f,_SS),
-                             (char *)CONCAT22(bufPtr,(char *)0x26510),(char)in_DX);
+  pcVar8 = ovr_stsprintf((char far *)MK_FP(_SS,&msg),(char far *)MK_FP(_DS,0x5c2f),st1,bufPtr);
   ovr_uiNotify(pcVar8,(uint16_t)GSavedBlitSeg);
-      ovr_OVC41_6a8f_01e7_entry
-                ((agnt_t far *)*(uint16_t *)(unaff_BP + -10),(char)*(uint16_t *)(unaff_BP + -8));
+  ovr_OVC41_6a8f_01e7_entry(agntRec);
       *(undefined1 *)((int)*(uint32_t *)(unaff_BP + -10) + 0x2f) =
            *(undefined1 *)((int)*(uint32_t *)(unaff_BP + 6) + 0x2f);
       puVar1 = (uint *)((int)*(uint32_t *)(unaff_BP + -10) + 0x2b);
