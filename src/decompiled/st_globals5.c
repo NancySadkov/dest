@@ -1359,6 +1359,9 @@ char s_s_is_held_by_s[] = "%s is held by %s.";
 char s_s_is_put_to_sleep_by_s[] = "%s is put to sleep by %s.";
 char s_s_is_entangled_i_2410_5cbc[] = "%s is entangled in a web created by %s.";
 undefined1 menuBarShown = 0x00;
+/* GUESS: the original's menuBarShown symbol spans 11 bytes - the flag plus this rect, which
+   the symbol table does not label separately.  Bytes are the image's. */
+brect_t menuBarRect = { 0x00E6, 0x0039, 0x013F, 0x00C7, 0xA000 };
 undefined1 goldPartyIndex = 0xFF;
 undefined1 keyboardInputMode = 0x00;
 undefined1 SfxPending = 0x00;
@@ -1635,6 +1638,8 @@ char s_s_cannot_turn[] = "%s cannot turn.";
 char s_s_destroys_d_undead[] = "%s destroys %d undead.";
 char s_s_turns_d_undead[] = "%s turns %d undead.";
 char s_building_d_s[] = "Building %d %s.";
+char s_Enemy_2410_6f33[10] = "Enemy %s.";
+char s_d_2410_6f3d[5] = "%d \r";
 char s_you_cannot_see_the_terra_85dc[] = "You cannot see the terrain here.";
 char s_s_is_paralyzed_by_s[] = "%s is paralyzed by %s.";
 char s_s_is_stoned_by_s[] = "%s is stoned by %s.";

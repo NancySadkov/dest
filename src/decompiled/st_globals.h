@@ -2394,3 +2394,8 @@ extern char s_The_season_has_2410_6a50[30];
 /* 0x74b5 / 0x7a02 */
 extern undefined1 s_personWordPtrs_tail[3];
 extern char s_no_2410_7a02[3];
+
+/* 0x5ce5 / 0x6f33 / 0x6f3d */
+extern brect_t menuBarRect;
+extern char s_Enemy_2410_6f33[10];
+extern char s_d_2410_6f3d[5];

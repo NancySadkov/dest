@@ -16405,3 +16405,40 @@ and what remains are the small local shortfalls: -5 at 0x279d, -7 at 0x4e41, -8 
 0x5cef, -15 at 0x6f63, +12 at 0x7394, -12 at 0x747d, -1 at 0x748e, plus -6 at _brklvl.  The +4 at the
 start of the game data is our `GMiceDS/GMiceSS/GMiceSP` (3 bytes) plus a 2-byte `__DATA` that precede
 `s__2410_0094`; the original starts that area with the 1-byte `s__2410_0094` itself.
+
+### layout: three more shortfalls (sum -> 10,137)
+layout: three more shortfalls - the menuBarShown rect, s_Enemy_%s. and s_d (sum 16,526 -> 10,137)
+
+tmp/band2.py over the spans just before each remaining step found three objects:
+
+    0x5ce4  11  menuBarShown   the original's symbol is ELEVEN bytes, not one: `00` (the flag)
+                               followed by a 10-byte rect  e6 00 39 00 3f 01 c7 00 00 a0.
+                               That rect has no label of its own, so it is declared as
+                               `brect_t menuBarRect` and marked GUESS; the bytes are the image's.
+    0x6f33  10  s_Enemy_%s._2410_6f33     "Enemy %s."   (absent from our layout)
+    0x6f3d   5  s_d                       "%d \r"       (absent at that position)
+
+which are exactly the -10 at 0x5cef and the -15 at 0x6f63 that diff_dgroup reported.
+
+MEASURED (HEAD f3f9b4f7 -> this commit)
+
+  diff_dgroup sum|delta|   16,526 -> 10,137
+  diff_dgroup mean             10 ->      6
+  diff_dgroup worst            42 ->     17
+  diff_dgroup runs             12 ->     10
+  diff_dgroup matched        1,630 ->  1,631
+  compare_state              1,628/0/0 (unchanged)
+  compare_runtime matched    1,687 ->  1,689, identical 1,678 -> 1,680 / 9 different (both points)
+  grep_checks               34,866 -> 34,868  (+2 declarations)
+  build 65/65, LINK.LOG 65 bytes / 0 problems
+
+The profile is now
+
+  +0 _DATA (0000), 2 symbols        -8  at 0x4e41      +12 at 0x7394
+  -6 _brklvl (008b)                 -16 at 0x576a      -16 at 0x747d  (12 of it here)
+  +0 _heaptop (008f)                -4  at 0x7394      -17 at 0x748e
+  +4 s__2410_0094 (0094), 457
+  -1 s_change_message_delay (279d), 645
+
+so every remaining delta is a small local step (the largest is 17 bytes) rather than a region-wide
+offset, and `worst` is 17.
