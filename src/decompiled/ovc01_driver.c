@@ -326,91 +326,46 @@ uint8_t __cdecl16far vgaSetPalette8bit(uint8_t far *pal, uint16_t arg2)
 
 /* 2d63:0203 */
 
-/* Again PCX formal RLE
-   void process_data_rle(uint8_t *src, uint16_t src_seg, uint8_t *dest, uint16_t dest_seg, uint16_t
-   length) {
-       uint8_t *SI = src;
-       uint8_t *DI = dest;
-       uint8_t *end = src + length;
-       uint8_t *BX = SI;
-       uint8_t AL;
-   
-       while (SI < end) {
-           uint8_t *BP = SI;
-           uint16_t run_length = end - SI;
-           if (run_length > 128) run_length = 128;
-   
-           uint8_t *run_end = SI + run_length;
-           AL = *SI++;
-           while (SI < run_end && *SI == AL) SI++;
-   
-           uint16_t run_size = SI - BP;
-           if (run_size >= 3) {
-               *DI++ = 0xFF - (run_size - 2); // Store run-length
-               *DI++ = AL;                   // Store the byte
-           } else {
-               while (BP < SI) {
-                   *DI++ = *BP++;
-               }
-           }
-   
-           if (SI >= end) break;
-   
-           BX = SI;
-       }
-       
-       // Adjust DI pointer based on the destination offset and original DI
-       uint16_t adjusted_length = DI - dest;
-   } */
-
-int __cdecl16far unrle(far_t src,far_t dst,uint16_t len,uint16_t arg4,uint16_t arg5)
+/* PCX-style RLE decoder.  A control byte below 0x80 is a literal run of ctrl+1 bytes; 0x80 is a
+   no-op; anything above is a repeat of the next byte, ~ctrl+2 times.  The loop stops as soon as the
+   destination reaches dst+len, and the return value is the number of source bytes consumed (the
+   image subtracts only the source offset, so the low word of the far difference). */
+uint16_t __cdecl16far unrle(far_t src,far_t dst,uint16_t len)
 
 {
-  undefined1 *srcByte;
-  byte ctrl;
-  undefined1 runVal;
-  undefined1 *dstByte;
-  undefined1 *srcCursor;
-  uint litCount;
+  uint8_t far *s;
+  uint8_t far *d;
+  uint8_t far *end;
+  uint8_t ctrl;
+  uint16_t count;
   uint16_t i;
-  uint16_t end;
-  uint16_t pps;
-  uint16_t s;
-  uint16_t d;
-  
-  d = dst.ofs;
-  end = len + d;
-  srcCursor = (undefined1 *)src.ofs;
-  do {
-    do {
-      pps = (uint16_t)srcCursor;
-      s = pps + 1;
-      ctrl = *(byte *)pps;
-      srcCursor = (undefined1 *)s;
-    } while (ctrl == 0x80);
+
+  s = (uint8_t far *)MK_FP(src.seg,src.ofs);
+  d = (uint8_t far *)MK_FP(dst.seg,dst.ofs);
+  end = (uint8_t far *)MK_FP(dst.seg,dst.ofs + len);
+  for (;;) {
+    ctrl = *s++;
+    if (ctrl == 0x80) {
+      continue;
+    }
     if (ctrl < 0x80) {
-      for (litCount = (uint)(byte)(ctrl + 1); litCount != 0; litCount = litCount - 1) {
-        dstByte = (undefined1 *)d;
-        d = d + 1;
-        srcByte = (undefined1 *)s;
-        s = s + 1;
-        *dstByte = *srcByte;
+      count = (uint16_t)ctrl + 1;
+      for (i = 0; i < count; i++) {
+        *d++ = *s++;
       }
     }
     else {
-      (*(uint8_t *)((uint8_t *)&(i))) = (ctrl ^ 0xff) + 2;
-      srcByte = (undefined1 *)s;
-      s = pps + 2;
-      runVal = *srcByte;
-      for (i = (uint16_t)(byte)i; i != 0; i = i - 1) {
-        srcByte = (undefined1 *)d;
-        d = d + 1;
-        *srcByte = runVal;
+      count = (uint16_t)(uint8_t)(~ctrl) + 2;
+      ctrl = *s++;
+      for (i = 0; i < count; i++) {
+        *d++ = ctrl;
       }
     }
-    srcCursor = (undefined1 *)s;
-  } while (d < end);
-  return s - src.ofs;
+    if (end <= d) {
+      break;
+    }
+  }
+  return (uint16_t)(s - (uint8_t far *)MK_FP(src.seg,src.ofs));
 }
 
 

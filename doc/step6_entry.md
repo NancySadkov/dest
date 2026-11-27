@@ -20428,6 +20428,30 @@ The node pointer is printed as `(uint32_t)node`, i.e. seg<<16|ofs, which is exac
 image pushes. Verified in the rebuilt listing: the nine argument pushes are identical (the format is
 one word shorter because the tree's `printf` takes a near `char *`, a model-wide convention).
 
+## `unrle` re-derived (2d63:0203) - decoder, not encoder
+
+The tree had the matching *encoder* (88 lines that wrote `0xFF - (run_size - 2)`) for a 62-byte
+decoder, and a prototype with two parameters the image never reads. The image is:
+
+* control byte < 0x80 -> literal run of ctrl+1 bytes (`rep movsb`);
+* control byte == 0x80 -> consumed, no output;
+* control byte > 0x80 -> repeat the next byte `~ctrl + 2` times (`rep stosb`);
+* loop until `dst >= dst.ofs + len`, then return `si - src.ofs` (the low word of the far difference).
+
+Now `uint16_t unrle(far_t src,far_t dst,uint16_t len)` with one literal copy loop and one fill loop.
+The rebuilt listing reproduces the image: `les bx,[bp-4]; mov al,es:[bx]; inc word [bp-4]` (the
+`lodsb`), `cmp al,0x80 / je` (the no-op byte), `jae` to the fill path.
+
+## Measured (HEAD d93eefb4 -> this commit)
+
+    grep_checks      21,263 (unchanged)
+    REBUILT.EXE      479,328 (unchanged at paragraph granularity; the body shrank ~40 bytes and the
+                                 two dead parameters went away)
+    build 65/65, LINK.LOG 0 problems
+    compare_state    1,628/0/0 (unchanged)
+    diff_dgroup      1,639/1,805 matched, 5 runs, sum|delta| 18 (unchanged)
+    compare_runtime  1,692 matched, 1,683 identical / 9 different at all three sample points
+
 ## Measured (HEAD 10dd3662 -> this commit)
 
     grep_checks      21,263 (unchanged)

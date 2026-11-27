@@ -255,7 +255,7 @@ uint16_t __cdecl16far miceButton0PressStates(void);
 void __cdecl16far miceSetPosition(uint16_t col,uint16_t row);
 uint8_t __cdecl16far vgaSetPalette(uint8_t *paletteOfs,uint8_t paletteSeg,int startIndex,uint16_t arg4);
 uint8_t __cdecl16far vgaSetPalette8bit(uint8_t far *pal, uint16_t arg2);
-int __cdecl16far unrle(far_t src,far_t dst,uint16_t len,uint16_t arg4,uint16_t arg5);
+uint16_t __cdecl16far unrle(far_t src,far_t dst,uint16_t len);
 int __cdecl16far rle_blit_decode(byte far *src, byte far *dst, uint16_t sz);
 void __cdecl16far grabRemap(far_t pixels,uint8_t scolor,uint8_t dcolor,uint16_t arg4);
 void __cdecl16far masked_memcpy(char *dst,char *src,int skip,int src_sz,int dst_sz,uint mask,uint16_t arg7);
