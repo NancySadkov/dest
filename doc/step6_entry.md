@@ -19362,3 +19362,72 @@ Two prototypes were corrected to the image: `ovc27_breathHalfDamage` takes one f
 `5ded:1433` (`ovc27_textCharmed`) is the third entry point into the same frame - it reads
 `[bp-0xa]`/`[bp-8]` for the record and `[bp+6]` for the agent, exactly like the other two - and
 the tree still keeps it as a separate function.
+
+### step 6: 5ded:1433 is a Label, not a function; breathHalfDamage caller fixed
+step 6: `5ded:1433` is a Label, not a function; and `breathHalfDamage`'s caller fixed to one far argument
+
+## `5ded:1433` is not a function entry
+
+The original's own symbol table says so:
+
+    audit/symbols.tsv:  5ded:1433 | OVC27 | ovc27_textCharmed | Label
+
+and the address falls **inside a statement**, not between two:
+
+    5ded:1420  lcall  0x148, 0x2f        ; agnt_statusText
+    5ded:1425  add    sp, 8
+    5ded:1428  push   dx
+    5ded:1429  push   ax
+    5ded:142a  push   ss
+    5ded:142b  lea    ax, [bp - 0xd2]
+    5ded:142f  push   ax
+    5ded:1430  push   [bp - 8]
+    5ded:1433  push   [bp - 0xa]         <- the "function entry"
+    5ded:1436  lcall  0x148, 0x2f
+    5ded:143b  add    sp, 8
+
+so a call arriving there would begin by pushing one word of another call's argument list and then
+remove eight.  That is why the tree's `ovc27_textCharmed` body starts with
+
+    pcVar2 = ovr_agnt_statusText((agnt_t far *)*(uint16_t *)(unaff_BP + -10),
+                                 in_stack_00000000, 0);
+
+- `in_stack_00000000` is Ghidra's name for the argument it could not account for.  The body is a
+*fragment* of the merged `5ded:10ea` function (the sequence at 1420..14a2), decoded from a label.
+
+`scripts/model/unresolved.tsv` shows this is the normal shape here - one entry reads
+"VROOMM funref target: resolves inside OVC_27_5DED / ovc27_intelAttackingNotice +0xA; a call into
+the interior of another overlay function, patched by the overlay manager".  So a `Label` in the
+middle of an overlay function is a funref target: the original's VROOMM patches a far call to land
+on that interior address, in the *caller's* frame convention.
+
+Our flat rebuild has no VROOMM, so those two call sites (`ovc22_classes.c:737`,
+`ovc23_bldrec.c:239`) must resolve to something.  Making `ovc27_textCharmed` a real function with
+explicit `(agnt, agntRec)` parameters that reproduces the 1420..14a2 sequence is the faithful
+choice for a flat build - but that means also giving its two callers the arguments, and neither has
+been re-derived, so I did not invent those arguments this turn.
+
+## `ovc41_main.c:2237`: the callee takes one far argument, and the image agrees
+
+    5ded:105e  prologue; the only frame argument it reads is [bp+6]/[bp+8]
+    5ded:10ad  push [bp+8] ; push [bp+6]          ; as the far `agnt` of its own statusText
+    5ded:10e2  mov al,1 / 10e6 mov al,0 / leave / retf
+
+and the caller in the image passes exactly one far pointer:
+
+    6a8f:238f  push word ptr [bp - 4]
+    6a8f:2392  push word ptr [bp - 6]
+    6a8f:2395  lcall 0x1c0, 0x4d
+    6a8f:239a  add sp, 4                          ; four bytes = one far argument
+
+so `ovr_ovc27_breathHalfDamage(targetAgnt,0x26)` is now `ovr_ovc27_breathHalfDamage(targetAgnt)`.
+The extra `0x26` was leaving two bytes on the stack at every execution of that branch.
+
+## Measured (HEAD 7f71b590 -> this commit)
+
+    grep_checks 26,543 (unchanged - no generated names involved)
+    REBUILT.EXE 495,590
+    build 65/65, LINK.LOG 65 bytes / 0 problems
+    compare_state    1,628/0/0 (unchanged)
+    diff_dgroup      1,639/1,805 matched, 5 runs, sum|delta| 18, mean 0, worst 12 (unchanged)
+    compare_runtime  1,692 matched, 1,683 identical / 9 different at all three sample points

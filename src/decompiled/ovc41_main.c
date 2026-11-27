@@ -2234,7 +2234,7 @@ void __cdecl16far ovc41_specialAttack(agnt_t far *agnt,int targetIndex,uint16_t 
       if (agnt->variant == 0x0) {
         if ((agnt->gindex == 0x4) && ((((agntG_t far *)agnt->gdata)->flags2 & 0x200) != 0)) {
           bVar4 = agnt->strength;
-          uVar5 = ovr_ovc27_breathHalfDamage(targetAgnt,0x26);
+          uVar5 = ovr_ovc27_breathHalfDamage(targetAgnt);
           damage = (uint)bVar4;
           if ((char)uVar5 != '\0') {
             damage = (int)(uint)bVar4 >> 1;
