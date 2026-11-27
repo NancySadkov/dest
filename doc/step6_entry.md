@@ -20489,6 +20489,38 @@ tree is one of three shapes, so all were rewritten mechanically:
 ovc20_stash.c 54, ovc44_strong_dat.c 48, ovc48_assets2.c 37. The `ofs` halves already used
 `((far_t *)(BldGfxX + BASE) + ...)->ofs`, which is ES-based, so they were left alone.
 
+## `dbgPromoteEnemy`'s garbled stsprintf (6a8f:108a)
+
+Image 6a8f:117a pushes three far arguments and cleans six words:
+
+    push word ptr es:[bx+0x26fc]   ; AgntGs[gindex].name segment
+    push word ptr es:[bx+0x26fa]   ; offset
+    push ds / push 0x6f33          ; "Enemy %s."
+    push ss / lea ax,[bp-0x50] / push ax
+    lcall 0x170,0x7a               ; stsprintf(buf, fmt, name)
+
+The table base 0x26d6 plus `agntG_t.name` (+0x24) is exactly 0x26fa, so the argument is
+`AgntGs[gindex].name`; the format is the DGROUP array `s_Enemy_2410_6f33`. The tree had built the
+pointer from near reads (`*(uint16_t *)((int)&AgntGs[0].name + iVar2)`) and used
+`&BuildingTypes[0xe5].halfWidth + 1` as its segment. Now:
+
+    msg = ovr_stsprintf((char far *)buf,(char far *)s_Enemy_2410_6f33,
+                        AgntGs[(Entities)[i].base.gindex].name);
+
+and the rebuilt listing reproduces the image's six pushes (`push es:[bx+0x25ee]`,
+`push es:[bx+0x25ec]`, `push ds; push 0x6f33`, `push ss; lea ax,[bp-0x54]; push ax`, `add sp,0xc`).
+(Our `AgntGs` sits at a different _FARDATA offset - 0x25ec instead of 0x26fa - which is the
+not-yet-matched far-data layout, not a code difference.)
+
+## Measured (HEAD 14b1c959 -> this commit)
+
+    grep_checks      21,250 -> 21,247
+    REBUILT.EXE      480,400 (unchanged)
+    build 65/65, LINK.LOG 0 problems
+    compare_state    1,628/0/0 (unchanged)
+    diff_dgroup      1,639/1,805 matched, 5 runs, sum|delta| 18 (unchanged)
+    compare_runtime  1,692 matched, 1,683 identical / 9 different at all three sample points
+
 ## Measured (HEAD 474b2f56 -> this commit)
 
     grep_checks      21,250 (unchanged - these forms are not grep patterns)

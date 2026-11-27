@@ -440,7 +440,7 @@ void __cdecl16far ovc41_usesPlay_sfxU(void)
   uint *puVar1;
   uint16_t unk;
   int iVar2;
-  
+
   if (AgntFlag1) {
     for (iVar2 = 0; iVar2 < (int)(uint)AgntCount; iVar2 = iVar2 + 1) {
       if ((Agnts[iVar2].flags & 0x800) == 0) {
@@ -836,11 +836,8 @@ void __cdecl16far dbgPromoteEnemy(void)
       if (0x29 < (Entities)[i].base.gindex) {
         (Entities)[i].base.gindex = 0;
       }
-      iVar2 = (uint)(Entities)[i].base.gindex * 0x95;
-      msg = ovr_stsprintf(buf,(char *)CONCAT22(0x6f33,_SS),
-                          (char *)CONCAT22(*(uint16_t *)((int)&AgntGs[0].name + iVar2),
-                                           (char *)((int)&BuildingTypes[0xe5].halfWidth + 1)),
-                          *(uint16_t *)((int)&AgntGs[0].name + 2 + iVar2));
+      msg = ovr_stsprintf((char far *)buf,(char far *)s_Enemy_2410_6f33,
+                          AgntGs[(Entities)[i].base.gindex].name);
       asm { mov uVar3,dx };
       ovr_say(msg,uVar3);
     }
