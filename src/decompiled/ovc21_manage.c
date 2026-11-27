@@ -248,7 +248,7 @@ byte __cdecl16far manage_compute4(char_sheet_t far *sheet)
 /* Returns the player title for a character sheet from GPlayerTitles (indexed by gender and class).
     */
 
-void * __cdecl16far manage_playerTitle(char_sheet_t *sheet,...)
+void * __cdecl16far manage_playerTitle(char_sheet_t far *sheet,...)
 
 {
   char *pcVar1;
@@ -1453,17 +1453,17 @@ char * __cdecl16far litoa10(char *buf,long n,uint16_t arg3,uint16_t arg4)
 
 /* [R1] forwards to manage_4d05_22cf */
 
-void __cdecl16far manage_4d05_22cf_entry(void)
+void __cdecl16far manage_4d05_22cf_entry(byte charIndex,uint16_t minLevel,uint16_t maxLevel,
+                                          uint16_t far *units,uint16_t far *population)
 
 {
-  uint16_t *in_stack_0000000a;
-  uint16_t *in_stack_0000000e;
-  
-  *in_stack_0000000a = 0;
-  *in_stack_0000000e = 0;
+  (void)charIndex;
+  (void)minLevel;
+  (void)maxLevel;
+  *units = 0;
+  *population = 0;
   if (EntityCount != 0) {
     manage_usesEntities();
-    return;
   }
   return;
 }
@@ -2514,481 +2514,164 @@ void __cdecl16far manage_highlightStructures(uint8_t partyIndex,int structType)
 
 
 /* 4d05:2d79 */
+
+/* "Total population" panel for one leader: a filtered list of level bands (Done /
+   Summary / All levels plus one entry per band), a header line naming the leader, a
+   UNITS and a POPULATION column per band, and a menu returning the chosen entry.
+   Re-derived from the image; the former body carried another screen's text code. */
+
 char * __cdecl16far manage_textTotalPopulation(byte charIndex,short arg6,char_sheet_t *sheet)
 
 {
-  undefined1 stk_bac4;   /* stack slot bac4 */
-  undefined1 stk_fe3a;   /* stack slot fe3a */
-  uint16_t *puVar1;
-  uint8_t *puVar2;
-  uint32_t uVar3;
-  far_t dst;
-  far_t dst_00;
-  far_t dst_01;
-  char cVar4;
-  uint16_t uVar5;
-  uint uVar6;
-  uint aligned;
-  uint alignedX;
-  int iVar9;
-  int iVar10;
-  int product;
-  undefined1 uVar12;
-  byte *pbVar13;
-  uint16_t in_DX;
-  uint8_t *puVar14;
-  entity_t *peVar15;
-  entity_t *peVar16;
-  char *pcVar17;
-  char *count;
-  uint16_t uVar18;
-  uint16_t unaff_ES;
-  bool bVar19;
-  far_t entries;
-  char acStack_1b6 [120];
-  char acStack_13e [36];
-  uint16_t auStack_11a [42];
-  uint8_t bandLabels2;
-  uint8_t bandLabels;
-  uint16_t auStack_94 [23];
-  undefined1 auStack_66 [10];
-  entity_t *peStack_1e;
-  char cStack_1a;
-  char cStack_19;
-  char cStack_18;
-  uint8_t changedFlag;
-  int iStack_16;
-  int ySign;
-  int iStack_12;
-  uint16_t fontSeg;
-  char acStack_e [6];
-  uint16_t entY;
-  uint32_t auStack_6;   /* hand fix: CONCAT12/13/22 target, read as uint3 */
-  uint16_t packedByte;
-  
-  dst.seg = (uint16_t)_SS;
-  dst.ofs = (uint16_t)&bandLabels;
-  F_SCOPY(far_from_u32((uint32_t)(0x24104b06)),dst,48);
-  dst_00.seg = (uint16_t)_SS;
-  dst_00.ofs = (uint16_t)&bandLabels2;
-  F_SCOPY(far_from_u32((uint32_t)(0x24104b36)),dst_00,48);
-  pbVar13 = (byte *)__C0_ASM_CopyRight + 3;
-  dst_01.seg = (uint16_t)_SS;
-  dst_01.ofs = (uint16_t)(acStack_e + 4);
-  F_SCOPY(far_from_u32((uint32_t)(0x24104b66)),dst_01,7);
-  acStack_e[2] = '\0';
+  far_t bands[24];
+  far_t items[16];
+  uint8_t bandCounts[7];
+  uint8_t count;
+  uint8_t extraBands;
+  uint8_t sel;
+  uint8_t result;
+  uint8_t cls;
+  char_sheet_t far *sheetPtr;
+  char bandBuf[120];
+  char textBuf[56];
+  far_t list;
+  uint16_t units;
+  uint16_t population;
+  uint16_t retVal;
+  int itemCount;
+  int bandIdx;
+  int n;
+
+  (void)arg6;
+  (void)sheet;
+  /* bands[12..23] are the twelve level labels; bands[0..11] the per-class continua
+     (class 4, class 5, class 6 - four entries each, the last of 5 and 6 null). */
+  memcpy(&bands[12],LevelBandLabels,0x30);
+  memcpy(&bands[0],&LevelBandLabels[12],8 * 4);
+  memcpy(&bands[8],LevelRangeLabels,4 * 4);
+  memcpy(bandCounts,levelRangeTails,7);
+  extraBands = 0;
+  cls = 0;
   if (charIndex == 0xff) {
-    acStack_e[3] = 0xc;
+    count = 0xc;
   }
   else {
-    in_DX = _DS;
-    unaff_ES = (uint16_t)((ulong)*(uint32_t *)((uint)charIndex << 2) >> 0x10);
-    if (*(char *)((int)*(uint32_t *)((uint)charIndex << 2) + 0x2f) == -1) {
-      acStack_e[3] = 0xc;
-    }
-    else {
-      acStack_e[3] = acStack_e[*(byte *)((int)*(uint32_t *)((uint)charIndex << 2) + 0x2f) + 4];
-      in_DX = _DS;
-      unaff_ES = (uint16_t)((ulong)*(uint32_t *)((uint)charIndex << 2) >> 0x10);
-      if (3 < *(byte *)((int)*(uint32_t *)((uint)charIndex << 2) + 0x2f)) {
-        acStack_e[2] = '\x01';
-      }
+    cls = GLeaderSheets[charIndex]->cls;
+    count = bandCounts[cls];
+    if (cls >= 4) {
+      extraBands = 1;
     }
   }
-  (*(uint16_t *)((uint8_t *)&(auStack_66) + 2)) = 0x2410;
-  (*(uint16_t *)((uint8_t *)&(auStack_66))) = 0x50fb;
-  (*(uint16_t *)((uint8_t *)&(auStack_66) + 6)) = 0x2410;
-  (*(uint16_t *)((uint8_t *)&(auStack_66) + 4)) = 0x54e5;
-  peVar15 = (entity_t *)(auStack_66 + 8);
-  (*(uint16_t *)((uint8_t *)&(auStack_66) + 8)) = 0x54ed;
-  count = (char *)((int)(uint32_t *)&_DATA + 3);
-  for (pcVar17 = (char *)0x0; (int)pcVar17 < (int)(uint)(byte)acStack_e[3]; pcVar17 = pcVar17 + 1) {
-    if (((int)pcVar17 < 5) || (acStack_e[2] == '\0')) {
-      in_DX = *(uint16_t *)(&bandLabels + (int)pcVar17 * 4);
-      peVar15 = (entity_t *)(auStack_66 + (int)count * 4);
-      *(uint16_t *)(auStack_66 + (int)count * 4 + 2) = auStack_94[(int)pcVar17 * 2];
-      (peVar15->base).x = in_DX;
+  items[0].ofs = (uint16_t)s_Done_2410_50fb;
+  items[0].seg = _DS;
+  items[1].ofs = (uint16_t)s_summary;
+  items[1].seg = _DS;
+  items[2].ofs = (uint16_t)s_all_levels;
+  items[2].seg = _DS;
+  itemCount = 3;
+  for (n = 0; n < count; n++) {
+    if (n >= 5 && extraBands) {
+      items[itemCount] = bands[(cls - 4) * 4 + (n - 5)];
     }
     else {
-      unaff_ES = (uint16_t)((ulong)*(uint32_t *)((uint)charIndex << 2) >> 0x10);
-      uVar6 = (uint)*(byte *)((int)*(uint32_t *)((uint)charIndex << 2) + 0x2f);
-      in_DX = auStack_11a[(int)pcVar17 * 2 + uVar6 * 8];
-      peVar15 = (entity_t *)(auStack_66 + (int)count * 4);
-      *(uint16_t *)(auStack_66 + (int)count * 4 + 2) = auStack_11a[(int)pcVar17 * 2 + uVar6 * 8 + 1]
-      ;
-      (peVar15->base).x = in_DX;
+      items[itemCount] = bands[12 + n];
     }
-    pbVar13 = auStack_66;
-    count = count + 1;
+    itemCount = itemCount + 1;
   }
-  acStack_e[1] = '\x02';
+  sel = 2;
   manage_openTalkWindow();
-  acStack_e[0] = '\0';
-  if (acStack_e[1] == '\x02') {
-    if (ScreenMode == '\0') {
-      manage_openTalkWindow();
-    }
-    TextBlitY = 0xc;
-    TextBlitX = 0x11;
-    if (charIndex == 0xff) {
-      uVar6 = ovr_blitLabel((char *)"Total population.",
-                            (uint8_t *)CONCAT22(Font02.ofs,(char *)0x26510));
-      *pcVar17 = *pcVar17 + (char)(uVar6 >> 8) + ((undefined1 *)0xfff3 < &stk_fe3a);
-      ((dos_psp_t *)((entity_t **)&Entities + uVar6))->jft[0] = 0;
-      uVar18 = (uint16_t)((ulong)Entities >> 0x10);
-      *(undefined1 *)((int)&(Entities)[(int)pcVar17].base.state + 1) =
-           (char)(Entities)[(int)pcVar17].base.flags32;
-      if (EntityCount <= pcVar17 + 1) {
-        if ((acStack_e[0] != '\0') || (acStack_e[1] != '\0')) {
-          if ((*(uint8_t *)((uint8_t *)&(packedByte) + 1)) == '\0') {
-            ovr_stop_audio();
-            CurSfxType3 = 0xff;
-            ovr_play_sfx(90,0,0);
-          }
-          else if (acStack_e[1] == '\0') {
-            if (acStack_e[0] != '\0') {
-              ovr_play_sfx(37,0,0);
-            }
-          }
-          else {
-            ovr_play_sfx(35,0,0);
-          }
-        }
-        GGameState = 0x3d;
-        pcVar17 = (char *)0x26510;
-        if (DebugVerbose != false) {
-          pcVar17 = (char *)0x26510;
-          printf("%d \r");
-        }
-        ovr_OVC23_55fe_29a2_entry();
-        return pcVar17;
+  result = 0;
+  for (;;) {
+    if (sel == 2) {
+      if (ScreenMode == 0) {
+        manage_openTalkWindow();
       }
-      pcVar17 = (char *)0x1e6;
-      ovr_say((char *)"The damaged structures belonging to all leaders are highlighted in red.",0);
-      return pcVar17;
-    }
-    fontSeg = (uint16_t)SEG_OF(GLeaderSheets[charIndex]);
-    iStack_12 = (int)far_ofs_u32(GLeaderSheets[charIndex]);
-    uVar5 = Font02.ofs;
-    ovr_ovc45_compute9(acStack_1b6,(char *)CONCAT22(iStack_12,_SS),
-                       (char *)CONCAT22(Font02.ofs,fontSeg),Font02.seg,'K');
-    SUB_5b66_1d94();
-    puVar14 = (uint8_t *)((char *)0x26510);
-    pcVar17 = ovr_stsprintf(acStack_13e,(char *)CONCAT22(0x550a,_SS),
-                            (char *)CONCAT22(*(uint16_t *)
-                                              ((uint)*(byte *)(iStack_12 + 0x2f) * 4 + 0xeb),
-                                             (char *)0x26510));
-    ovr_blitLabel(pcVar17,(uint8_t *)CONCAT22(uVar5,puVar14));
-    TextBlitY = TextBlitY + 0xc;
-    iVar9 = ovr_font_textWidth((char *)"UNITS",0,0,0,0);
-    TextBlitX = 0x89 - iVar9;
-    ovr_blitLabel((char *)"UNITS",(uint8_t *)CONCAT22(Font02.ofs,(char *)0x26510));
-    iVar9 = ovr_font_textWidth((char *)"POPULATION",0,0,0,0);
-    uVar5 = 0xd4 - iVar9;
-    TextBlitX = uVar5;
-    ovr_blitLabel((char *)"POPULATION",(uint8_t *)CONCAT22(Font02.ofs,(char *)0x26510));
-    iVar9 = 0;
-    while( true ) {
-      TextBlitY = TextBlitY + 0xc;
-      cVar4 = (char)pbVar13;
-      if ((int)(uint)(byte)acStack_e[3] <= iVar9) break;
+      TextBlitY = 0xc;
       TextBlitX = 0x11;
-      if ((iVar9 < 5) || (acStack_e[2] == '\0')) {
-        ovr_blitLabel(*(char **)(&bandLabels + iVar9 * 4),
-                      (uint8_t *)CONCAT22(Font02.ofs,(uint8_t *)auStack_94[iVar9 * 2]));
+      if (charIndex == 0xff) {
+        ovr_blitLabel((char far *)MK_FP(_DS,(uint16_t)s_total_population),
+                      (byte far *)MK_FP(Font02.seg,Font02.ofs),0xde,0x50);
       }
       else {
-        uVar6 = (uint)*(byte *)((int)*(uint32_t *)((uint)charIndex << 2) + 0x2f);
-        ovr_blitLabel((char *)auStack_11a[iVar9 * 2 + uVar6 * 8],
-                      (uint8_t *)
-                      CONCAT22(Font02.ofs,(uint8_t *)auStack_11a[iVar9 * 2 + uVar6 * 8 + 1]));
+        sheetPtr = GLeaderSheets[charIndex];
+        ovr_stsprintf((char far *)MK_FP(_SS,textBuf),
+                      (char far *)MK_FP(_DS,(uint16_t)s_s_population_loyal_to_s_s),
+                      (char far *)MK_FP(GUnitDescriptions[cls].seg,GUnitDescriptions[cls].ofs),
+                      (char far *)MK_FP(_DS,(uint16_t)manage_playerTitle(sheetPtr)),
+                      (char far *)ovr_ovc45_compute9((char far *)MK_FP(_SS,bandBuf),
+                                                    (char far *)sheetPtr,
+                                                    (char far *)MK_FP(Font02.seg,Font02.ofs),
+                                                    0x4b,3));
+        ovr_blitLabel((char far *)MK_FP(_SS,textBuf),
+                      (byte far *)MK_FP(Font02.seg,Font02.ofs),0xde,0x50);
       }
-      ovc27_textCharmed();
-      ovr_stsprintf(acStack_13e,(char *)CONCAT13(0x4c,CONCAT12(0xd1,_SS)));
-      iVar10 = ovr_font_textWidth(acStack_13e,0,0,0,0);
-      TextBlitX = 0x89 - iVar10;
-      ovr_blitLabel(acStack_13e,(uint8_t *)CONCAT22(Font02.ofs,_SS));
-      ovr_stsprintf(acStack_13e,(char *)CONCAT13(0x4c,CONCAT12(0xd1,_SS)));
-      iVar10 = ovr_font_textWidth(acStack_13e,0,0,0,0);
-      uVar5 = 0xd4 - iVar10;
-      TextBlitX = uVar5;
-      ovr_blitLabel(acStack_13e,(uint8_t *)CONCAT22(Font02.ofs,_SS));
-      iVar9 = iVar9 + 1;
+      TextBlitY = TextBlitY + 0xc;
+      TextBlitX = (uint16_t)(0x89 -
+                  (int)ovr_font_textWidth((char far *)MK_FP(_DS,(uint16_t)s_units),
+                                          (char far *)MK_FP(Font02.seg,Font02.ofs)));
+      ovr_blitLabel((char far *)MK_FP(_DS,(uint16_t)s_units),
+                    (byte far *)MK_FP(Font02.seg,Font02.ofs),0xde,0xe0);
+      TextBlitX = (uint16_t)(0xd4 -
+                  (int)ovr_font_textWidth((char far *)MK_FP(_DS,(uint16_t)s_population),
+                                          (char far *)MK_FP(Font02.seg,Font02.ofs)));
+      ovr_blitLabel((char far *)MK_FP(_DS,(uint16_t)s_population),
+                    (byte far *)MK_FP(Font02.seg,Font02.ofs),0xde,0xe0);
+      TextBlitY = TextBlitY + 0xc;
+      for (n = 0; n < count; n++) {
+        TextBlitX = 0x11;
+        if (n >= 5 && extraBands) {
+          bandIdx = (cls - 4) * 4 + (n - 5);
+        }
+        else {
+          bandIdx = 12 + n;
+        }
+        ovr_blitLabel((char far *)MK_FP(bands[bandIdx].seg,bands[bandIdx].ofs),
+                      (byte far *)MK_FP(Font02.seg,Font02.ofs),0x13f,0xe0);
+        manage_4d05_22cf_entry(charIndex,LevelRangeMin[n],LevelRangeMax[n],
+                               &units,&population);
+        ovr_stsprintf((char far *)MK_FP(_SS,textBuf),
+                      (char far *)MK_FP(_DS,(uint16_t)s__d_2410_4cd1),(uint16_t)units);
+        TextBlitX = (uint16_t)(0x89 -
+                    (int)ovr_font_textWidth((char far *)MK_FP(_SS,textBuf),
+                                            (char far *)MK_FP(Font02.seg,Font02.ofs)));
+        ovr_blitLabel((char far *)MK_FP(_SS,textBuf),
+                      (byte far *)MK_FP(Font02.seg,Font02.ofs),0xde,0x50);
+        ovr_stsprintf((char far *)MK_FP(_SS,textBuf),
+                      (char far *)MK_FP(_DS,(uint16_t)s__d_2410_4cd1),(uint16_t)population);
+        TextBlitX = (uint16_t)(0xd4 -
+                    (int)ovr_font_textWidth((char far *)MK_FP(_SS,textBuf),
+                                            (char far *)MK_FP(Font02.seg,Font02.ofs)));
+        ovr_blitLabel((char far *)MK_FP(_SS,textBuf),
+                      (byte far *)MK_FP(Font02.seg,Font02.ofs),0xde,0x50);
+        TextBlitY = TextBlitY + 0xc;
+      }
+    }
+    else {
+      keyboardInputMode = 1;
+      if (sel == 3) {
+        manage_applyUnitFilter(charIndex,0xfe,
+                               (char far *)MK_FP(items[sel - 1].seg,items[sel - 1].ofs));
+      }
+      else {
+        manage_applyUnitFilter(charIndex,(uint16_t)(sel - 4),
+                               (char far *)MK_FP(items[sel - 1].seg,items[sel - 1].ofs));
+      }
     }
     CurSfxType3 = 0x3c;
-    entries.seg = (uint16_t)_SS;
-    entries.ofs = (uint16_t)auStack_66;
-    uVar18 = ovr_ovc28_usesUiInputText(entries,(uint16_t)count,far_from_u32((uint32_t)(0x0)),0,0,0);
-    acStack_e[1] = (char)uVar18;
+    list.ofs = (uint16_t)items;
+    list.seg = _SS;
+    retVal = (uint16_t)ovr_ovc28_usesUiInputText(list,(uint16_t)itemCount,0,0,
+                                                (uint8_t far *)&result);
+    sel = (uint8_t)retVal;
     keyboardInputMode = 0;
-    if (((acStack_e[1] != '\0') && (acStack_e[1] != '\x01')) && (acStack_e[1] != -2)) {
-      (&stk_bac4)[(int)count] = (&stk_bac4)[(int)count] + cVar4;
-      iVar10 = 0x2410;
-      do {
-        product = iVar10 * uVar5;
-        iVar10 = iVar9;
-        if (Agnts[iVar9].strengthMax < *(byte *)(product + 0x21)) {
-          Agnts[iVar9].strength = Agnts[iVar9].strengthMax;
-        }
-        do {
-          iVar10 = iVar10 + 1;
-          if ((int)(uint)AgntCount <= iVar10) {
-            iVar9 = ovr_audio_panFromX((agnt_t far *)sheet,0);
-            uVar12 = (undefined1)((uint)iVar9 >> 8);
-            ovr_play_sfxU(0x1c,0,0,0,0);
-            return (char *)CONCAT11(uVar12,1);
-          }
-        } while (Agnts[iVar10].owner != *(int *)(sheet->nameText + 0x1b));
-        uVar18 = (uint16_t)((ulong)auStack_6 >> 0x10);
-        if (*(byte *)((int)auStack_6 + 0x32) < Agnts[iVar10].strengthMax) {
-          Agnts[iVar10].strengthMax = *(undefined1 *)((int)auStack_6 + 0x32);
-        }
-        uVar5 = 0x34;
-        iVar9 = iVar10;
-      } while( true );
-    }
-    if (acStack_e[1] == -2) {
-      Cancelled = 1;
-    }
-    return (char *)0x26510;
-  }
-  do {
-    uVar18 = (uint16_t)((ulong)peStack_1e >> 0x10);
-    peVar16 = (entity_t *)peStack_1e;
-    (peVar16->base).target =
-         (byte)((int)(uint)*(byte *)((int)&(peVar16->base).owner +
-                                    ((int)(uint)(peVar15->base).faction >> 2)) >>
-               (((peVar16->base).faction & 3) << 1)) & 3;
-    cVar4 = func_0x0004f32d();
-    peVar15 = (entity_t *)peStack_1e;
-    uVar18 = (uint16_t)((ulong)peStack_1e >> 0x10);
-    if (cVar4 == '\0') {
-      (peStack_1e->base).x = (peStack_1e->base).x + (int)*(char *)((peVar15->base).target + 0x885);
-      puVar1 = &(peVar15->base).y;
-      *puVar1 = *puVar1 + (int)*(char *)((peVar15->base).target + 0x889);
-      puVar2 = &(peVar15->base).faction;
-      *puVar2 = *puVar2 + 0x1;
-    }
-    else {
-      (peVar15->base).faction = 0x0;
-      *(undefined1 *)&(peVar15->base).state = 0;
-    }
-L_attact_3f0b_1082_1477:
-    changedFlag = 0x1;
-    uVar6 = ovr_alignUp4((((entity_t *)peStack_1e)->base).destX,0,0);
-    aligned = ovr_alignUp4((peStack_1e->base).x,0,0);
-    if (uVar6 == aligned) {
-      uVar18 = (uint16_t)((ulong)peStack_1e >> 0x10);
-      peVar15 = (entity_t *)peStack_1e;
-      if ((peVar15->base).destY == (peVar15->base).y) {
-        (peVar15->base).destX = 0;
-        (peVar15->base).destY = 0;
-        if (*(char *)((int)&(peVar15->base).entity + 3) == -1) {
-          auStack_6 = CONCAT12(0xff,auStack_6);
-        }
-        else {
-          uVar3 = *(uint32_t *)((uint)*(byte *)((int)&(peVar15->base).entity + 3) << 2);
-          auStack_6 = CONCAT12(*(undefined1 *)((int)uVar3 + 0x89),auStack_6);
-        }
-        uVar3 = auStack_6;
-        (*(uint8_t *)((uint8_t *)&(packedByte))) = (byte)((uint3)auStack_6 >> 0x10);
-        bVar19 = (byte)packedByte != -1;
-        auStack_6 = uVar3;
-        if (bVar19) {
-          for (uVar6 = 0; uVar6 < SquareRecCount; uVar6 = uVar6 + 1) {
-            aligned = ovr_alignUp4(*(int *)(uVar6 * 0x13),0,0);
-            alignedX = ovr_alignUp4((peStack_1e->base).x,0,0);
-            if ((aligned == alignedX) &&
-               (*(uint16_t *)((uint8_t *)&SquareRecs[uVar6] + 2) == (((entity_t *)peStack_1e)->base).y)) {
-              func_0x0004f930();
-              if (*(uint16_t *)((uint8_t *)&SquareRecs[uVar6] + 2) == GfxRndSeed2) {
-                uVar6 = ovr_alignUp4(*(int *)(uVar6 * 0x13),0,0);
-                aligned = ovr_alignUp4(GfxRndSeed,0,0);
-                if (uVar6 == aligned) {
-                  acStack_e[(byte)packedByte] = '\x01';
-                }
-              }
-              break;
-            }
-          }
-        }
-      }
-    }
-    if (AgntFlag1 != false) {
-      uVar18 = (uint16_t)((ulong)peStack_1e >> 0x10);
-      if ((((peStack_1e->base).x < GfxRndSeed - 2U) || (GfxRndSeed + 1U < (peStack_1e->base).x)) ||
-         ((((entity_t *)peStack_1e)->base).y != GfxRndSeed2)) {
-        cStack_19 = '\0';
-      }
-      else {
-        cStack_19 = '\x01';
-      }
-      if ((((uint)auStack_6 < GfxRndSeed - 2U) || (GfxRndSeed + 1U < (uint)auStack_6)) ||
-         (GfxRndSeed2 != entY)) {
-        cStack_18 = '\0';
-      }
-      else {
-        cStack_18 = '\x01';
-      }
-      if (cStack_18 != '\0' || cStack_19 != '\0') {
-        if (cStack_18 == '\0') {
-          ovr_ovc15_clearVisited();
-          uVar18 = (uint16_t)((ulong)peStack_1e >> 0x10);
-          peVar15 = (entity_t *)peStack_1e;
-          cStack_1a = (char)((ulong)((peVar15->base).animFrame + 0xf) / 0x10);
-          if (((peVar15->base).target & 1) == 0) {
-            iStack_16 = 0;
-          }
-          else {
-            iStack_16 = (peVar15->base).target - 2;
-          }
-          while (cStack_1a != '\0') {
-            cStack_1a = cStack_1a + -1;
-            ovr_ovc15_textArena((int)count,0,0);
-          }
-          cStack_1a = -1;
-        }
-        else if (cStack_19 == '\0') {
-          cStack_1a = (char)((ulong)((((entity_t *)peStack_1e)->base).animFrame + 0xf) / 0x10);
-          while (cStack_1a != '\0') {
-            cStack_1a = cStack_1a + -1;
-            ovr_agnt_usesAgntCount6(Entities + (int)count,0);
-          }
-          cStack_1a = -1;
-        }
-        else if ((cStack_18 != '\0') && (cStack_19 != '\0')) {
-          for (cStack_1a = manage_usesLitoa103(); cStack_1a != '\0'; cStack_1a = cStack_1a + -1) {
-            uVar18 = (uint16_t)((ulong)peStack_1e >> 0x10);
-            if (((((entity_t *)peStack_1e)->base).target & 1) == 0) {
-              iStack_16 = 0;
-            }
-            else {
-              iStack_16 = (((entity_t *)peStack_1e)->base).target - 2;
-            }
-            pcVar17 = ovr_ovc15_textArena((int)count,0,0);
-            if (((uint)pcVar17 & 0xff) == 0) break;
-          }
-        }
-      }
-    }
-    do {
-      count = count + 1;
-      if (EntityCount <= count) {
-        GGameState = 0x3c;
-        if (DebugVerbose != false) {
-          printf("%d %d %d  \r");
-        }
-        func_0x0004fcda();
-        GGameState = 0x3d;
-        if (DebugVerbose != false) {
-          printf("%d %d %d  \r");
-        }
-        ovr_OVC23_55fe_29a2_entry();
-        GGameState = 0xc;
-        if (DebugVerbose != false) {
-          printf("%d %d %d  \r");
-        }
-        ovr_ovc24_removeOtherEntities(&changedFlag);
-        GGameState = 0x1f;
-        if (changedFlag != 0x0) {
-          ovr_constr_usesBlitRect();
-          GGameState = 0x13;
-        }
-        func_0x0004f68f();
-        GGameState = 0x1d;
-        for (uVar6 = 0; (int)uVar6 < 5; uVar6 = uVar6 + 1) {
-          if (acStack_e[uVar6] != '\0') {
-            ovr_ovc41_usesMiceBlitRect(uVar6);
-          }
-        }
-        GGameState = 0xd;
-        if (DebugVerbose != false) {
-          printf("%d %d %d  \r");
-        }
-        ovr_ovc24_checkStrongholds();
-        GGameState = 0xe;
-        mapDirty = 1;
-        return (char *)0x26510;
-      }
-      uVar18 = (uint16_t)((ulong)Entities >> 0x10);
-      peStack_1e = (entity_t *)CONCAT22(uVar18,Entities + (int)count);
-      uVar6 = ovr_alignUp4(Entities[(int)count].base.destX,0,0);
-      aligned = ovr_alignUp4((peStack_1e->base).x,0,0);
-      if ((uVar6 == aligned) &&
-         (uVar18 = (uint16_t)((ulong)peStack_1e >> 0x10),
-         (((entity_t *)peStack_1e)->base).destY == (((entity_t *)peStack_1e)->base).y)) {
-        manage_usesCurSfxType32();
-      }
-      unaff_ES = (uint16_t)((ulong)peStack_1e >> 0x10);
-      peVar15 = (entity_t *)peStack_1e;
-    } while (((peVar15->base).destX == 0 && (peVar15->base).destY == 0) ||
-            (*(char *)((int)&(peVar15->base).entity + 1) != '\0'));
-    if ((AgntGs[(uint)(peVar15->base).gindex].flags2 & 0x4000)
-        == 0) {
-      packedByte = (uint)((ulong)auStack_6 >> 0x10) & 0xff;
-    }
-    else {
-      auStack_6 = CONCAT13(1,auStack_6);
-    }
-    auStack_6 = CONCAT22(packedByte,(peStack_1e->base).x);
-    entY = (peVar15->base).y;
-    iStack_12 = CONCAT13(AgntGs[(uint)(peVar15->base).gindex].ai
-                          ,iStack_12);
-  } while ((peVar15->base).faction < (byte)(peVar15->base).state);
-  uVar18 = ovr_ovc07_signum((peVar15->base).destX - (peStack_1e->base).x);
-  iStack_12 = CONCAT22(fontSeg,uVar18);
-  uVar18 = (uint16_t)((ulong)peStack_1e >> 0x10);
-  ySign = ovr_ovc07_signum((((entity_t *)peStack_1e)->base).destY -
-                               (((entity_t *)peStack_1e)->base).y);
-  if (((iStack_12 == 0) || (uVar5 = ovr_randBelow(2,0), (char)uVar5 == '\0')) ||
-     (cVar4 = sub_OVC21_manage_c_23C2(), cVar4 != '\0')) {
-    if ((ySign == 0) || (cVar4 = sub_OVC21_manage_c_23C2(), cVar4 != '\0')) {
-      if ((iStack_12 == 0) || (cVar4 = sub_OVC21_manage_c_23C2(), cVar4 != '\0')) {
-        uVar6 = ovr_ovc26_usesStExit((int)count);
-        if ((char)uVar6 == '\0') {
-          uVar6 = ovr_ovc26_usesRandBelow((int)count,(uint16_t)&changedFlag);
-          if (((uVar6 & 0xff) == 0) &&
-             (AgntGs[(uint)(((entity_t *)peStack_1e)->base).gindex].ai == '\0')) {
-            manage_usesCurSfxType32();
-          }
-        }
-        else {
-          uVar18 = (uint16_t)((ulong)peStack_1e >> 0x10);
-          peVar15 = (entity_t *)peStack_1e;
-          (peVar15->base).target =
-               (byte)((int)(uint)*(byte *)((int)&(peVar15->base).owner +
-                                          ((int)(uint)(peVar15->base).faction >> 2)) >>
-                     (((peVar15->base).faction & 3) << 1)) & 3;
-          cVar4 = func_0x0004f32d();
-          if (cVar4 == '\0') {
-            uVar18 = (uint16_t)((ulong)peStack_1e >> 0x10);
-            peVar15 = (entity_t *)peStack_1e;
-            (peStack_1e->base).x =
-                 (peStack_1e->base).x + (int)*(char *)((peVar15->base).target + 0x885);
-            puVar1 = &(peVar15->base).y;
-            *puVar1 = *puVar1 + (int)*(char *)((peVar15->base).target + 0x889);
-            puVar2 = &(peVar15->base).faction;
-            *puVar2 = *puVar2 + 0x1;
-          }
-        }
-      }
-      else {
-        (peStack_1e->base).x = (peStack_1e->base).x + iStack_12;
-        (((entity_t *)peStack_1e)->base).target = 0x2 - (char)iStack_12;
-      }
-    }
-    else {
-      uVar18 = (uint16_t)((ulong)peStack_1e >> 0x10);
-      puVar1 = &(((entity_t *)peStack_1e)->base).y;
-      *puVar1 = *puVar1 + ySign;
-      (((entity_t *)peStack_1e)->base).target = (char)ySign + 0x1;
+    if (sel == 0 || sel == 1 || sel == 0xfe) {
+      break;
     }
   }
-  else {
-    (peStack_1e->base).x = (peStack_1e->base).x + iStack_12;
-    (((entity_t *)peStack_1e)->base).target = 0x2 - (char)iStack_12;
+  if (sel == 0xfe) {
+    Cancelled = 1;
   }
-  goto L_attact_3f0b_1082_1477;
+  return (char *)(uint)retVal;
 }
 
 
@@ -2996,7 +2679,7 @@ L_attact_3f0b_1082_1477:
 
 /* Applies a party/type display filter to the unit list and reports which filter is active. */
 
-void __cdecl16far manage_applyUnitFilter(uint8_t partyIndex,uint16_t unitType,char *unitName)
+void __cdecl16far manage_applyUnitFilter(uint8_t partyIndex,uint16_t unitType,char far *unitName)
 
 {
   char *className;

@@ -18779,3 +18779,105 @@ than a fragment at the end of this one.
 Gates unchanged (no `src` change this turn): grep_checks 26,977; build 65/65; LINK.LOG 65 bytes / 0
 problems; compare_state 1,628/0/0; diff_dgroup 1,639/1,805 with sum|delta| 18; compare_runtime 1,692
 matched, 1,683 identical / 9 different.
+
+### step 6: manage_textTotalPopulation re-decompiled (grep 26,977 -> 26,621)
+step 6: `manage_textTotalPopulation` re-decompiled from the image (grep 26,977 -> 26,621)
+
+The queued panel renderer: 1,427 bytes / 26 calls in the image, 477 lines / 58 calls in the
+export, which carried another screen's text code.
+
+## The image, decoded end to end (498 instructions)
+
+    2d82  fmemcpy(bands[12], LevelBandLabels,       0x30)   the twelve level labels
+    2d94  fmemcpy(bands[0],  &LevelBandLabels[12],  0x30)   the per-class continua (3 x 4)
+    2da6  fmemcpy(bandCounts, levelRangeTails,      7)
+    2db7  extraBands = 0
+    2dbb  charIndex == 0xff ? count = 0xc
+                             : { cls = sheet->cls; count = bandCounts[cls];
+                                 if (cls >= 4) extraBands = 1; }
+    2e2e  items[0..2] = "Done" / "Summary" / "All levels", itemCount = 3
+    2e6c  for (n = 0; n < count; n++)
+            items[k++] = (n >= 5 && extraBands) ? bands[(cls-4)*4 + (n-5)] : bands[12 + n]
+    2ef4  sel = 2; manage_openTalkWindow()
+    2f00  loop:
+            sel == 2 ? { draw } : { keyboardInputMode = 1;
+                                    manage_applyUnitFilter(charIndex,
+                                      sel == 3 ? 0xfe : sel - 4, items[sel-1]) }
+            CurSfxType3 = 0x3c
+            sel = ovc28_usesUiInputText(items, itemCount, 0, 0, &result)
+            keyboardInputMode = 0
+          while (sel != 0 && sel != 1 && sel != 0xfe)
+    32fd  if (sel == 0xfe) Cancelled = 1
+
+The draw branch: `TextBlitY = 0xc; TextBlitX = 0x11`, then either
+`blitLabel("Total population.", Font02, 0xde, 0x50)` (charIndex == 0xff) or
+`stsprintf(buf, "%s population, loyal to %s%s", GUnitDescriptions[cls],
+ manage_playerTitle(sheet), ovc45_compute9(buf2, sheet, Font02, 0x4b, 3))` and the same blit;
+then `TextBlitY += 0xc`, `TextBlitX = 0x89 - font_textWidth("UNITS", Font02)`, the UNITS blit,
+`TextBlitX = 0xd4 - font_textWidth("POPULATION", Font02)`, the POPULATION blit,
+`TextBlitY += 0xc`; then per band: `TextBlitX = 0x11`, the band label at (0x13f, 0xe0),
+`manage_4d05_22cf_entry(charIndex, LevelRangeMin[n], LevelRangeMax[n], &units, &population)`,
+`stsprintf(buf, "%d", units)` right-aligned at 0x89 and `"%d"` of population at 0xd4, then
+`TextBlitY += 0xc`.
+
+## The two tables were already in the tree, as separate symbols
+
+`ds:0x4b06` is `LevelBandLabels` and `ds:0x4b66` is `levelRangeTails`; the middle block
+(`ds:0x4b36`) starts at `LevelBandLabels[12]` and crosses into `LevelRangeLabels` at 0x4b56,
+so the anon `0x30` copy is expressed as the two declared arrays (8 entries + 4 entries) and
+touches exactly the same 48 bytes:
+
+    ours: memcpy(&bands[12], LevelBandLabels, 0x30)     lcall 0,0x1981 / add sp,6
+          memcpy(&bands[0], &LevelBandLabels[12], 0x20)  src 0x4b36
+          memcpy(&bands[8], LevelRangeLabels, 0x10)      src 0x4b56
+          memcpy(bandCounts, levelRangeTails, 7)         src 0x4b66
+
+so the copy is four calls where the image has three - the only call-count difference left.
+
+## The two still-anonymous thunks, resolved by cross-reference
+
+    0x250,0x39 -> ovc45_compute9        ovc28_drawButton makes six for its six such calls
+    0x1c8,0x3e -> ovc28_usesUiInputText manage_usesCurSfxType3 makes the identical seven-word
+                                        call (far entries, count, 0, 0, far out) and stores AL
+    0xf8,0x34  -> font_textWidth        returns the width that is subtracted from 0x89 / 0xd4
+    0xf8,0x57  -> blitLabel             (text, widths, term, colour) = 6 words
+
+`widths` is the far pointer stored in `Font02`: `init_ui_gfxes` writes `ds:0x8a21/0x8a23` at
+4b0a:12a8/12ac as the **second** of its four `stshProcessFontSub` results, i.e. Font02 - which
+is why `es:[0x8a21]` had no symbol of its own (our tree aliases it `_CSITE4SEG`, an unrelated
+neighbour, so the numeric offset could not be used).
+
+## Verification (O21 is linked)
+
+`tmp/dis_ours.py _MANAGE_TEXTTOTALPOPULATION` - every call and its argument size match:
+
+    image                          ours
+    0x250,0x39      add sp,0x10     0x2a7,0x877  add sp,0x10
+    near 0x3a4      add sp,4        near call    add sp,4
+    0xf8,0x34  x2   add sp,8        0x2a7,0x156 x2  add sp,8
+    0x170,0x7a x3   add sp,0x14/0xa 0x2a7,0x4cb x3 add sp,0x14/0xa/0xa
+    0xf8,0x57  x8   add sp,0xc      0x2a7,0x174 x8 add sp,0xc
+    0x1c8,0x3e      add sp,0xe      0x2a7,0x6bf  add sp,0xe
+    near 0x22b3     add sp,0xe      near call    add sp,0xe
+    near 0x330c x2  add sp,8        near call x2 add sp,8
+
+and the pushed constants match the image one for one: `0x550a` x1, `0x5527` x2, `0x552d` x2,
+`0x54f8` x1, `0x4cd1` x2, `0xde` x6, `0x50` x4, `0xfe` x1.  The band-label blit is emitted
+once where the image inlines it in both branches (0x13f x1 vs x2, 0xe0 x3 vs x4) because the
+C sets `bandIdx` and then blits - same behaviour, one fewer instruction pair.
+
+Three prototypes were corrected to the pointers the image actually passes: `manage_playerTitle`
+takes a `char_sheet_t far *` (the call pushes four bytes), `manage_applyUnitFilter`'s unit name
+is `char far *`, and `manage_4d05_22cf_entry` now carries its real parameters
+`(charIndex, minLevel, maxLevel, uint16_t far *units, uint16_t far *population)` - its body
+zeroes the two out-parameters, which previously went through two never-initialised
+`in_stack_` artefacts.
+
+## Measured (HEAD 6aba483a -> this commit)
+
+    grep_checks      26,977 -> 26,621   (-356)
+    REBUILT.EXE      500,282 -> 497,062
+    build 65/65, LINK.LOG 65 bytes / 0 problems
+    compare_state    1,628/0/0 (unchanged)
+    diff_dgroup      1,639/1,805 matched, 5 runs, sum|delta| 18, mean 0, worst 12 (unchanged)
+    compare_runtime  1,692 matched, 1,683 identical / 9 different at all three sample points
