@@ -16973,3 +16973,74 @@ whether the +6 and the damage survive with our fputc disabled, which separates t
 Re-measured after reverting: build 65/65, LINK.LOG 65 bytes / 0 problems, grep_checks 34,700,
 compare_state 1,628/0/0, diff_dgroup 1,639/1,805 matched with sum|delta| 18, and the three runtime samples
 unchanged (1,683 identical at main and init_game, 1,682 / 10 at the key read).
+
+### step 6: the FILE layout matches; the library printf rewrites bsize
+step 6: the FILE layout is not the mismatch - the library's printf rewrites bsize
+
+Two checks this turn, both decisive, and neither needs the other.
+
+## Borland's own stdio.h settles the layout question
+
+`tools/BC30/INCLUDE/STDIO.H` carries the compiler's real definition:
+
+    typedef struct {
+            int             level;      /* fill/empty level of buffer */
+            unsigned        flags;      /* File status flags          */
+            char            fd;         /* File descriptor            */
+            unsigned char   hold;       /* Ungetc char if no buffer   */
+            int             bsize;      /* Buffer size                */
+            unsigned char _FAR *buffer; /* Data transfer buffer       */
+            unsigned char _FAR *curp;   /* Current active pointer     */
+            unsigned        istemp;     /* Temporary file indicator   */
+            short           token;      /* Used for validity checking */
+    } FILE;
+
+which is field for field what `st_types.h` declares (20 bytes, `bsize` at offset 6, `buffer` at 8,
+`curp` at 12, `istemp` at 16).  So the hypothesis that our record is laid out differently from the
+library's is **wrong** - the sizes, offsets and types all agree.  The `+6` is not an offset error.
+
+## The library's printf is what changes bsize
+
+`scripts/probe_patch.py printf 1`, with the record decoded from the same run:
+
+    unpatched          FILE[1] flags=0006 bsize=0206 buffer=77f5:b768   and 0x1fa..0x206 damaged
+    printf -> retf     FILE[1] flags=0006 bsize=0200 buffer=77f5:b768   and 0x1fa..0x206 clean
+
+So with printf's body disabled the record keeps exactly the size `setvbuf` wrote, and the stray write
+does not happen.  Together with the previous turn's literal experiment (`bsize = 0x1234` ended at
+0x123A), the sequence is now unambiguous:
+
+  1. our `setvbuf` writes `bsize = 0x200` (correct, verified by the stub run);
+  2. CM.LIB's printf adds 6 to it, and the same 6 bytes appear at DGROUP:0x0200.
+
+Both facts come from one event inside the library's printf, which then walks the record and stores three
+segment-like words 0x2700, 0x1300, 0x1d00 at a computed address that lands on DGROUP:0x0200.
+
+## Why this cannot be fixed from our side alone
+
+`st_printf` (the original's printf at 1000:2747) and `st_vsst_printf` (the formatter) are both thin stubs
+around `__vprinter()`:
+
+    void __cdecl16far st_printf(char *fmt,...)   { __vprinter(); return; }
+    int16_t __cdecl16far st_vsst_printf(char *buf,char *fmt,uint16_t ap) { *buf='\0'; ppcVar1=&buf; __vprinter(); ... }
+
+and `__vprinter()` is `__vprinter_func_start()` - 407 lines of `unaff_DI`/`in_AL`/`in_AF` register
+fragments with no recovered parameters.  There is therefore no recovered printf to substitute, which is why
+the build links CM.LIB's PRINTF member, and why a library routine is modifying a record our code created.
+
+I deliberately did **not** ship a compensating hack (setting `bsize` to `size - 6` so the arithmetic
+cancels, or dropping stderr's buffering): either would hide the symptom while leaving the game running a
+printf the original never had, and the record would still not match the original's at any sample point.
+
+## Next, in order of cost
+
+  1. Disassemble the linked PRINTF member (CM.LIB, module `PRINTF` at `0000:19ED`; it is a thin wrapper)
+     and follow which of its callees touches offset +6 of the FILE - the map lists `FFLUSH`, `FLUSHALL`,
+     `CREATA`, `FMEMSET`, `FMOVMEM` as library members, and `FMEMSET`/`FMOVMEM` are the ones most likely
+     to be handed a pointer plus a count.
+  2. Or rebuild `__vprinter`'s parameter chain so `st_printf` works and CM.LIB's PRINTF is no longer
+     linked - the root fix, and the one that makes the printf path byte-faithful.
+
+Gates re-measured after the probes (no source change): build 65/65, LINK.LOG 65 bytes / 0 problems,
+grep_checks 34,700, compare_state 1,628/0/0, diff_dgroup 1,639/1,805 matched, sum|delta| 18, runtime
+1,683 identical at main and init_game and 1,682 / 10 at the key read.
