@@ -1572,7 +1572,6 @@ manage_usesGUnitCount
 {
   byte bVar1;
   int iVar2;
-  uint32_t uVar3;
   int iVar4;
   unit_t *puVar5;
   uint uVar6;
@@ -1617,8 +1616,7 @@ manage_usesGUnitCount
     if (partyIndex != -1) break;
     puVar5 = GUnits;
     if (((puVar5[uVar6].unitType != 0xff) &&
-        (uVar3 = *(uint32_t *)((uint)puVar5[uVar6].unitType << 2),
-        *(char *)((int)uVar3 + 0x3f) == '\0')) &&
+        (GLeaderSheets[puVar5[uVar6].unitType]->faction == '\0')) &&
        (bVar1 = (puVar5 + uVar6)->bldType, BuildingTypes[bVar1].unitType == unitType)) {
       iStack_4 = iStack_4 + 1;
       if (BuildingTypes[bVar1].resource == '\x01') {

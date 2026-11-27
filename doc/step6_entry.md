@@ -20454,6 +20454,30 @@ the loop is `cmp di,dx / jae next` - i.e. continue while the destination offset 
 Now a 16-bit offset `dofs` is tracked (the image's DI wraps at 0) and indexed through a
 segment-zero far pointer; the return is `si - src.ofs`.
 
+## `manage_usesGUnitCount`: GLeaderSheets instead of raw pointer arithmetic (4d05:23fc)
+
+The image reads the leader sheet through the far table:
+
+    4d05:2480  mov al,es:[bx+2]      ; GUnits[si].unitType
+    4d05:2486  shl ax,2
+    4d05:2488  mov dx,0x70 / les bx,es:[bx]     ; GLeaderSheets[unitType]
+    4d05:2495  mov al,es:[bx+0x3f]   ; ->faction
+    4d05:249d  je  ...
+
+while the tree emulated it with `*(uint32_t *)((uint)puVar5[uVar6].unitType << 2)` and
+`*(char *)((int)uVar3 + 0x3f)` - a near dereference of a far sheet pointer. `GLeaderSheets` is
+`char_sheet_t far *GLeaderSheets[80]`, so it is now
+`GLeaderSheets[puVar5[uVar6].unitType]->faction == '\0'` and the `uVar3` temporary is gone.
+
+## Measured (HEAD 8d686abd -> this commit)
+
+    grep_checks      21,253 -> 21,250
+    REBUILT.EXE      479,344 -> 479,328 (-16)
+    build 65/65, LINK.LOG 0 problems
+    compare_state    1,628/0/0 (unchanged)
+    diff_dgroup      1,639/1,805 matched, 5 runs, sum|delta| 18 (unchanged)
+    compare_runtime  1,692 matched, 1,683 identical / 9 different at all three sample points
+
 ## Measured (HEAD 5c4d0941 -> this commit)
 
     grep_checks      21,263 -> 21,253   (-10: the stale comment block's names)
