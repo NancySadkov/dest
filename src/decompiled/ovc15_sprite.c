@@ -244,7 +244,7 @@ void __cdecl16far stshInitSprites(bool grab)
         asm { mov segArg,dx };
         AgntGs[i].prts[j] = stsh_store(MK_FP(segArg,pfVar1));
         sz = ZEXT24(unaff_DI) << 0x10;
-        puVar5 = ovr_stshWrite((uint32_t *)gfx,(uint8_t *)CONCAT22(0x300,puVar7),sz,0);
+        puVar5 = ovr_stshWrite((uint32_t *)gfx,sz);
         unaff_DI = (far_t far *)((ulong)sz >> 0x10);
         AgntGs[i].prtpals[j].seg = uVar6;
         AgntGs[i].prtpals[j].ofs = (uint16_t)( puVar5);
