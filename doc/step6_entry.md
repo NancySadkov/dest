@@ -20147,6 +20147,40 @@ image `0x60:0x121` = record base `0x10e` + 0x13 = `flags2`. Verified against the
 
 base + 19 = 0x13. Prototype in st_functions.h narrowed to `uint8_t`.
 
+## `stshTR_S_stubify0` / `stshStubifyBld` re-derived (6ffe:009b, 6ffe:01c5)
+
+Both functions allocate asset stubs and store the returned far pointers into the _FARDATA tables. The
+image is fully unrolled:
+
+* `6ffe:009b`: ten blocks, each `push cs; call 0` (this segment's allocator at offset 0), storing dx:ax
+  at `0060:4dd0 + index*0xc + i*4`, segment half first;
+* `6ffe:01c5`: calls the first, then nine identical blocks at `0060:4230 + index*0xc + i*4`.
+
+`0xc` bytes per index is three `far_t` slots, so the source indexes `BldGfxNormal[3*index + i]`
+(rows overlap for nonzero index, exactly as the image arithmetic does). Two defects fixed:
+
+* the segment half was written through `*(uint16_t *)((int)&BldGfxNormal[i].seg + index*0xc)`, which
+  the compiler emits as a **near** store (`mov word ptr _BldGfxNormal[bx+2],dx`) while the image
+  stores with `ES` = the far data segment - the value was landing in DGROUP;
+* the BldGfxNormal pass had nine blocks instead of ten.
+
+Verified from a two-function listing (`tmp/chk_o44.py`, since O44 cannot be listed whole either - its
+`init_assets` hits the same compiler table limit):
+
+    mov word ptr es:_BldGfxNormal[bx+2],dx
+    mov word ptr es:_BldGfxNormal[bx],ax
+
+with `bx = (3*index + i) * 4`, matching the image's `bx = index*0xc + i*4`.
+
+## Measured (HEAD ac32b3b5 -> this commit)
+
+    grep_checks      24,431 (unchanged)
+    REBUILT.EXE      493,734 (unchanged - O44 is link-excluded)
+    build 65/65, LINK.LOG 0 problems
+    compare_state    1,628/0/0 (unchanged)
+    diff_dgroup      1,639/1,805 matched, 5 runs, sum|delta| 18 (unchanged)
+    compare_runtime  1,692 matched, 1,683 identical / 9 different at all three sample points
+
 ## Measured (HEAD 298feaa6 -> this commit)
 
     grep_checks      24,431 (unchanged - the removed locals were not `?Var` names)

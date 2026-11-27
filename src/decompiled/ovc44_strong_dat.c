@@ -38,38 +38,22 @@ far_t __cdecl16far stshAllocStub(void)
 
 /* 6ffe:009b */
 
+/* Fill one row of BldGfxNormal with ten freshly allocated asset stubs.  The image is fully
+   unrolled: every block does `push cs; call 0` (the allocator at this segment's offset 0) and stores
+   the returned far pointer at 0060:4dd0 + index*0xc + i*4, segment half first.  0xc bytes per index
+   is three far_t slots, so the source indexes BldGfxNormal[3*index + i]; rows overlap when index is
+   nonzero, exactly as the image's arithmetic does. */
 void __cdecl16far stshTR_S_stubify0(int index)
 
 {
+  uint8_t i;
   uint32_t res;
-  
-  res = func_0x0007ffe0(0x6ffe);
-  *(uint16_t *)((int)&BldGfxNormal[0].seg + index * 0xc) = (int)((ulong)res >> 0x10);
-  ((far_t far *)BldGfxNormal + index * 3)->ofs = (uint16_t)res;
-  res = func_0x0007ffe0(0x6ffe);
-  *(uint16_t *)((int)&BldGfxNormal[1].seg + index * 0xc) = (int)((ulong)res >> 0x10);
-  ((far_t *)(BldGfxNormal + 1) + index * 3)->ofs = (uint16_t)res;
-  res = func_0x0007ffe0(0x6ffe);
-  *(uint16_t *)((int)&BldGfxNormal[2].seg + index * 0xc) = (int)((ulong)res >> 0x10);
-  ((far_t *)(BldGfxNormal + 2) + index * 3)->ofs = (uint16_t)res;
-  res = func_0x0007ffe0(0x6ffe);
-  *(uint16_t *)((int)&BldGfxNormal[3].seg + index * 0xc) = (int)((ulong)res >> 0x10);
-  ((far_t *)(BldGfxNormal + 3) + index * 3)->ofs = (uint16_t)res;
-  res = func_0x0007ffe0(0x6ffe);
-  *(uint16_t *)((int)&BldGfxNormal[4].seg + index * 0xc) = (int)((ulong)res >> 0x10);
-  ((far_t *)(BldGfxNormal + 4) + index * 3)->ofs = (uint16_t)res;
-  res = func_0x0007ffe0(0x6ffe);
-  *(uint16_t *)((int)&BldGfxNormal[5].seg + index * 0xc) = (int)((ulong)res >> 0x10);
-  ((far_t *)(BldGfxNormal + 5) + index * 3)->ofs = (uint16_t)res;
-  res = func_0x0007ffe0(0x6ffe);
-  *(uint16_t *)((int)&BldGfxNormal[6].seg + index * 0xc) = (int)((ulong)res >> 0x10);
-  ((far_t *)(BldGfxNormal + 6) + index * 3)->ofs = (uint16_t)res;
-  res = func_0x0007ffe0(0x6ffe);
-  *(uint16_t *)((int)&BldGfxNormal[7].seg + index * 0xc) = (int)((ulong)res >> 0x10);
-  ((far_t *)(BldGfxNormal + 7) + index * 3)->ofs = (uint16_t)res;
-  res = func_0x0007ffe0(0x6ffe);
-  *(uint16_t *)((int)&BldGfxNormal[8].seg + index * 0xc) = (int)((ulong)res >> 0x10);
-  ((far_t *)(BldGfxNormal + 8) + index * 3)->ofs = (uint16_t)res;
+
+  for (i = 0; i < 10; i++) {
+    res = func_0x0007ffe0(0x6ffe);
+    BldGfxNormal[index * 3 + i].seg = (uint16_t)(res >> 0x10);
+    BldGfxNormal[index * 3 + i].ofs = (uint16_t)res;
+  }
   return;
 }
 
@@ -77,41 +61,23 @@ void __cdecl16far stshTR_S_stubify0(int index)
 
 /* 6ffe:01c5 */
 
+/* The same row for BldGfxRuin, nine slots in the image (0060:4230 + index*0xc + i*4, i = 0..8),
+   preceded by the BldGfxNormal pass. */
 void __cdecl16far stshStubifyBld(uint16_t index)
 
 {
+  uint8_t i;
   uint32_t res;
-  
+
   stshTR_S_stubify0(index);
-  res = func_0x0007ffe0(0x6ffe);
-  *(uint16_t *)((int)&BldGfxRuin[0].seg + index * 0xc) = (int)((ulong)res >> 0x10);
-  ((far_t far *)BldGfxRuin + index * 3)->ofs = (uint16_t)res;
-  res = func_0x0007ffe0(0x6ffe);
-  *(uint16_t *)((int)&BldGfxRuin[1].seg + index * 0xc) = (int)((ulong)res >> 0x10);
-  ((far_t *)(BldGfxRuin + 1) + index * 3)->ofs = (uint16_t)res;
-  res = func_0x0007ffe0(0x6ffe);
-  *(uint16_t *)((int)&BldGfxRuin[2].seg + index * 0xc) = (int)((ulong)res >> 0x10);
-  ((far_t *)(BldGfxRuin + 2) + index * 3)->ofs = (uint16_t)res;
-  res = func_0x0007ffe0(0x6ffe);
-  *(uint16_t *)((int)&BldGfxRuin[3].seg + index * 0xc) = (int)((ulong)res >> 0x10);
-  ((far_t *)(BldGfxRuin + 3) + index * 3)->ofs = (uint16_t)res;
-  res = func_0x0007ffe0(0x6ffe);
-  *(uint16_t *)((int)&BldGfxRuin[4].seg + index * 0xc) = (int)((ulong)res >> 0x10);
-  ((far_t *)(BldGfxRuin + 4) + index * 3)->ofs = (uint16_t)res;
-  res = func_0x0007ffe0(0x6ffe);
-  *(uint16_t *)((int)&BldGfxRuin[5].seg + index * 0xc) = (int)((ulong)res >> 0x10);
-  ((far_t *)(BldGfxRuin + 5) + index * 3)->ofs = (uint16_t)res;
-  res = func_0x0007ffe0(0x6ffe);
-  *(uint16_t *)((int)&BldGfxRuin[6].seg + index * 0xc) = (int)((ulong)res >> 0x10);
-  ((far_t *)(BldGfxRuin + 6) + index * 3)->ofs = (uint16_t)res;
-  res = func_0x0007ffe0(0x6ffe);
-  *(uint16_t *)((int)&BldGfxRuin[7].seg + index * 0xc) = (int)((ulong)res >> 0x10);
-  ((far_t *)(BldGfxRuin + 7) + index * 3)->ofs = (uint16_t)res;
-  res = func_0x0007ffe0(0x6ffe);
-  *(uint16_t *)((int)&BldGfxRuin[8].seg + index * 0xc) = (int)((ulong)res >> 0x10);
-  ((far_t *)(BldGfxRuin + 8) + index * 3)->ofs = (uint16_t)res;
+  for (i = 0; i < 9; i++) {
+    res = func_0x0007ffe0(0x6ffe);
+    BldGfxRuin[index * 3 + i].seg = (uint16_t)(res >> 0x10);
+    BldGfxRuin[index * 3 + i].ofs = (uint16_t)res;
+  }
   return;
 }
+
 
 
 
