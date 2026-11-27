@@ -2345,11 +2345,11 @@ manage_usesGUnitCount
 uint16_t __cdecl16far sub_OVC21_manage_c_24B1()
 
 {
-  byte bVar1;
-  uint32_t uVar2;
+  byte bldTypeVal;
+  uint32_t unitPtr;
   uint16_t uVar3;
   uint in_AX;
-  uint uVar4;
+  uint tallyPtr;
   unit_t *puVar5;
   uint unaff_BP;
   uint unaff_SI;
@@ -2357,59 +2357,59 @@ uint16_t __cdecl16far sub_OVC21_manage_c_24B1()
   uint uVar6;
   
   do {
-    uVar4 = in_AX;
-    *(uint *)(uVar4 + unaff_DI) = unaff_BP;
-    if (BuildingTypes[(unaff_BP & 0xff)].unitType == *(char *)(uVar4 + 8)) {
-      *(int *)(uVar4 - 2) = *(int *)(uVar4 - 2) + 1;
+    tallyPtr = in_AX;
+    *(uint *)(tallyPtr + unaff_DI) = unaff_BP;
+    if (BuildingTypes[(unaff_BP & 0xff)].unitType == *(char *)(tallyPtr + 8)) {
+      *(int *)(tallyPtr - 2) = *(int *)(tallyPtr - 2) + 1;
       if (BuildingTypes[(unaff_BP & 0xff)].resource == '\x01') {
-        *(int *)*(uint32_t *)(uVar4 + 10) = *(int *)*(uint32_t *)(uVar4 + 10) + 1;
+        *(int *)*(uint32_t *)(tallyPtr + 10) = *(int *)*(uint32_t *)(tallyPtr + 10) + 1;
       }
       else if (BuildingTypes[(unaff_BP & 0xff)].resource == '\x02') {
-        *(int *)*(uint32_t *)(uVar4 + 0xe) = *(int *)*(uint32_t *)(uVar4 + 0xe) + 1;
+        *(int *)*(uint32_t *)(tallyPtr + 0xe) = *(int *)*(uint32_t *)(tallyPtr + 0xe) + 1;
       }
       else if (BuildingTypes[(unaff_BP & 0xff)].resource == '\x03') {
-        *(int *)*(uint32_t *)(uVar4 + 0x12) = *(int *)*(uint32_t *)(uVar4 + 0x12) + 1;
+        *(int *)*(uint32_t *)(tallyPtr + 0x12) = *(int *)*(uint32_t *)(tallyPtr + 0x12) + 1;
       }
     }
     do {
       unaff_SI = unaff_SI + 1;
       if (GUnitCount <= unaff_SI) {
         for (uVar6 = 0; uVar6 < GRecordCount; uVar6 = uVar6 + 1) {
-          if ((GRecords[uVar6].party == *(char *)(uVar4 + 6)) &&
-             (bVar1 = GRecords[uVar6].reserved08,
-             BuildingTypes[bVar1].unitType == *(char *)(uVar4 + 8))) {
-            *(int *)*(uint32_t *)(uVar4 + 0x16) = *(int *)*(uint32_t *)(uVar4 + 0x16) + 1;
-            if (BuildingTypes[bVar1].resource == '\x01') {
-              *(int *)*(uint32_t *)(uVar4 + 0x1a) = *(int *)*(uint32_t *)(uVar4 + 0x1a) + 1;
+          if ((GRecords[uVar6].party == *(char *)(tallyPtr + 6)) &&
+             (bldTypeVal = GRecords[uVar6].reserved08,
+             BuildingTypes[bldTypeVal].unitType == *(char *)(tallyPtr + 8))) {
+            *(int *)*(uint32_t *)(tallyPtr + 0x16) = *(int *)*(uint32_t *)(tallyPtr + 0x16) + 1;
+            if (BuildingTypes[bldTypeVal].resource == '\x01') {
+              *(int *)*(uint32_t *)(tallyPtr + 0x1a) = *(int *)*(uint32_t *)(tallyPtr + 0x1a) + 1;
             }
-            else if (BuildingTypes[bVar1].resource == '\x02') {
-              *(int *)*(uint32_t *)(uVar4 + 0x1e) = *(int *)*(uint32_t *)(uVar4 + 0x1e) + 1;
+            else if (BuildingTypes[bldTypeVal].resource == '\x02') {
+              *(int *)*(uint32_t *)(tallyPtr + 0x1e) = *(int *)*(uint32_t *)(tallyPtr + 0x1e) + 1;
             }
-            else if (BuildingTypes[bVar1].resource == '\x03') {
-              *(int *)*(uint32_t *)(uVar4 + 0x22) = *(int *)*(uint32_t *)(uVar4 + 0x22) + 1;
+            else if (BuildingTypes[bldTypeVal].resource == '\x03') {
+              *(int *)*(uint32_t *)(tallyPtr + 0x22) = *(int *)*(uint32_t *)(tallyPtr + 0x22) + 1;
             }
           }
         }
-        *(int *)(uVar4 - 2) =
-             *(int *)(uVar4 - 2) -
-             (*(int *)*(uint32_t *)(uVar4 + 0x1e) + *(int *)*(uint32_t *)(uVar4 + 0x22));
-        *(int *)*(uint32_t *)(uVar4 + 10) =
-             *(int *)*(uint32_t *)(uVar4 + 10) - *(int *)*(uint32_t *)(uVar4 + 0x1e);
-        *(int *)*(uint32_t *)(uVar4 + 0xe) =
-             *(int *)*(uint32_t *)(uVar4 + 0xe) - *(int *)*(uint32_t *)(uVar4 + 0x22);
-        return *(uint16_t *)(uVar4 - 2);
+        *(int *)(tallyPtr - 2) =
+             *(int *)(tallyPtr - 2) -
+             (*(int *)*(uint32_t *)(tallyPtr + 0x1e) + *(int *)*(uint32_t *)(tallyPtr + 0x22));
+        *(int *)*(uint32_t *)(tallyPtr + 10) =
+             *(int *)*(uint32_t *)(tallyPtr + 10) - *(int *)*(uint32_t *)(tallyPtr + 0x1e);
+        *(int *)*(uint32_t *)(tallyPtr + 0xe) =
+             *(int *)*(uint32_t *)(tallyPtr + 0xe) - *(int *)*(uint32_t *)(tallyPtr + 0x22);
+        return *(uint16_t *)(tallyPtr - 2);
       }
-      if (*(char *)(uVar4 + 6) != -1) {
+      if (*(char *)(tallyPtr + 6) != -1) {
         uVar3 = manage_usesGUnits();
         return uVar3;
       }
       uVar3 = (uint16_t)((ulong)GUnits >> 0x10);
       puVar5 = GUnits;
     } while ((puVar5[unaff_SI].unitType == 0xff) ||
-            (uVar2 = *(uint32_t *)((uint)puVar5[unaff_SI].unitType << 2),
-            *(char *)((int)uVar2 + 0x3f) != '\0'));
+            (unitPtr = *(uint32_t *)((uint)puVar5[unaff_SI].unitType << 2),
+            *(char *)((int)unitPtr + 0x3f) != '\0'));
     in_AX = CONCAT11((char)(unaff_SI * 9 >> 8),(puVar5 + unaff_SI)->bldType);
-    unaff_BP = uVar4;
+    unaff_BP = tallyPtr;
   } while( true );
 }
 

@@ -94,7 +94,7 @@ void __cdecl16far ovc24_textKill(uint entityIndex)
   uint *puVar1;
   int *piVar2;
   uint8_t *puVar3;
-  byte bVar4;
+  byte agentAI;
   byte bVar5;
   uint uVar6;
   uint uVar7;
@@ -148,44 +148,44 @@ void __cdecl16far ovc24_textKill(uint entityIndex)
     entitiesSeg = (uint16_t)((ulong)Entities >> 0x10);
     gindex = (Entities)[entityIndex_00].base.gindex;
     *(undefined1 *)((int)&(Entities)[entityIndex_00].base.entity + 2) = 1;
-    bVar4 = AgntGs[(uint)gindex].ai;
+    agentAI = AgntGs[(uint)gindex].ai;
     bVar5 = ovc24_usesEntities(entityIndex_00);
     uVar7 = (uint)bVar5 * (uint)bVar5 * (uint)(Entities)[entityIndex_00].base.animFrame
     ;
-    puVar1 = (uint *)(&factionTimer[0] + bVar4);
+    puVar1 = (uint *)(&factionTimer[0] + agentAI);
     uVar16 = *puVar1;
     *puVar1 = *puVar1 + uVar7;
-    piVar2 = (int *)((int)&factionTimer[0] + (uint)bVar4 * 4 + 2);
+    piVar2 = (int *)((int)&factionTimer[0] + (uint)agentAI * 4 + 2);
     *piVar2 = *piVar2 + ((int)uVar7 >> 0xf) + (uint)CARRY2(uVar16,uVar7);
     if (((AgntGs[(uint)gindex].flags & 8) == 0) &&
        ((AgntGs[(uint)gindex].flags2 & 0x20) == 0)) {
-      puVar25 = factionMax + bVar4;
+      puVar25 = factionMax + agentAI;
       bVar5 = ovr_agnt_compute8(&(Entities)[entityIndex_00].base,
                                 (char)((ulong)Entities >> 0x10));
       if ((char)*puVar25 < (char)bVar5) {
-        pbVar26 = factionMax + bVar4;
+        pbVar26 = factionMax + agentAI;
         bVar5 = ovr_agnt_compute8(&Entities[entityIndex_00].base,(char)((ulong)Entities >> 0x10));
         *pbVar26 = bVar5;
       }
     }
     if ((AgntGs[(uint)gindex].flags & 8) == 0) {
-      puVar25 = factionMax + bVar4 + 2;
+      puVar25 = factionMax + agentAI + 2;
       bVar5 = ovr_agnt_compute8(&Entities[entityIndex_00].base,(char)((ulong)Entities >> 0x10));
       if ((char)*puVar25 < (char)bVar5) {
-        pbVar26 = factionMax + bVar4 + 2;
+        pbVar26 = factionMax + agentAI + 2;
         bVar5 = ovr_agnt_compute8(&Entities[entityIndex_00].base,(char)((ulong)Entities >> 0x10));
         *pbVar26 = bVar5;
       }
     }
-    if (((char)factionMax[bVar4 + 2] < '\x02') &&
+    if (((char)factionMax[agentAI + 2] < '\x02') &&
        ((AgntGs[(uint)gindex].flags & 2) != 0)) {
-      factionMax[bVar4 + 2] = 0x2;
+      factionMax[agentAI + 2] = 0x2;
     }
     uVar16 = entityIndex_00;
-    if ((((char)factionMax[bVar4] < '\x02') &&
+    if ((((char)factionMax[agentAI] < '\x02') &&
         ((AgntGs[(uint)gindex].flags & 2) != 0)) &&
        (4 < (Entities)[entityIndex_00].base.level)) {
-      factionMax[bVar4] = 0x2;
+      factionMax[agentAI] = 0x2;
     }
     do {
       uVar16 = uVar16 + 1;

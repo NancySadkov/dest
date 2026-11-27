@@ -404,8 +404,8 @@ void __cdecl16far constrct_usesLDIV_at_(byte partyIndex,int entityIndex)
   undefined1 stk_ff60;   /* stack slot ff60 */
   uint *puVar1;
   int *piVar2;
-  byte bVar3;
-  byte bVar4;
+  byte entityIdx;
+  byte classStrVal;
   uint uVar5;
   long *plVar6;
   char *msg;
@@ -427,11 +427,11 @@ void __cdecl16far constrct_usesLDIV_at_(byte partyIndex,int entityIndex)
   uint16_t count;
   
   lVar17 = CONCAT22((int)((ulong)in_stack_0000ff5e >> 0x10),unaff_SI);
-  bVar3 = AGNT_FIELD(&(Entities)[entityIndex], base.entity, 3);
-  if ((partyIndex != 0xff) && (bVar3 != 0xff)) {
-    bVar4 = (GLeaderSheets[partyIndex])->classStr;
-    iVar9 = AGNT_WORD(&AgntGs[(uint)bVar4], shortName, 5);
-    uVar5 = AGNT_WORD(&AgntGs[(uint)bVar4], shortName, 5) * 0xf;
+  entityIdx = AGNT_FIELD(&(Entities)[entityIndex], base.entity, 3);
+  if ((partyIndex != 0xff) && (entityIdx != 0xff)) {
+    classStrVal = (GLeaderSheets[partyIndex])->classStr;
+    iVar9 = AGNT_WORD(&AgntGs[(uint)classStrVal], shortName, 5);
+    uVar5 = AGNT_WORD(&AgntGs[(uint)classStrVal], shortName, 5) * 0xf;
     iVar13 = 0;
     for (uVar12 = 0; uVar12 < EntityCount; uVar12 = uVar12 + 1) {
       uVar14 = (uint16_t)((ulong)Entities >> 0x10);
@@ -452,8 +452,8 @@ void __cdecl16far constrct_usesLDIV_at_(byte partyIndex,int entityIndex)
                         uVar5);
     ovr_say(msg,0);
     lVar17 = LDIV_at_((ulong)uVar5,10);
-    uVar14 = (uint16_t)((ulong)*(uint32_t *)((uint)bVar3 << 2) >> 0x10);
-    iVar9 = (int)*(uint32_t *)((uint)bVar3 << 2);
+    uVar14 = (uint16_t)((ulong)*(uint32_t *)((uint)entityIdx << 2) >> 0x10);
+    iVar9 = (int)*(uint32_t *)((uint)entityIdx << 2);
     uVar8 = uVar5 - (uint)lVar17;
     puVar1 = (uint *)(iVar9 + 0x56);
     uVar12 = *puVar1;
@@ -464,19 +464,19 @@ void __cdecl16far constrct_usesLDIV_at_(byte partyIndex,int entityIndex)
     lVar17 = lVar17 + CONCAT22(GPopulationHi,GPopulationLo);
     GPopulationLo = (uint16_t)lVar17;
     GPopulationHi = (uint16_t)((ulong)lVar17 >> 0x10);
-    uVar14 = (uint16_t)((ulong)*(uint32_t *)((uint)bVar3 << 2) >> 0x10);
-    iVar10 = (int)*(uint32_t *)((uint)bVar3 << 2);
+    uVar14 = (uint16_t)((ulong)*(uint32_t *)((uint)entityIdx << 2) >> 0x10);
+    iVar10 = (int)*(uint32_t *)((uint)entityIdx << 2);
     iVar9 = *(int *)(iVar10 + 0x58);
-    uVar7 = (uint16_t)((ulong)*(uint32_t *)((uint)bVar3 << 2) >> 0x10);
-    iVar11 = (int)*(uint32_t *)((uint)bVar3 << 2);
+    uVar7 = (uint16_t)((ulong)*(uint32_t *)((uint)entityIdx << 2) >> 0x10);
+    iVar11 = (int)*(uint32_t *)((uint)entityIdx << 2);
     iVar13 = *(int *)(iVar11 + 0x8c);
     if ((iVar13 <= iVar9) &&
        ((iVar13 < iVar9 || (*(uint *)(iVar11 + 0x8a) < *(uint *)(iVar10 + 0x56))))) {
-      uVar7 = (uint16_t)((ulong)*(uint32_t *)((uint)bVar3 << 2) >> 0x10);
-      iVar9 = (int)*(uint32_t *)((uint)bVar3 << 2);
+      uVar7 = (uint16_t)((ulong)*(uint32_t *)((uint)entityIdx << 2) >> 0x10);
+      iVar9 = (int)*(uint32_t *)((uint)entityIdx << 2);
       uVar14 = *(uint16_t *)(iVar9 + 0x8a);
-      uVar15 = (uint16_t)((ulong)*(uint32_t *)((uint)bVar3 << 2) >> 0x10);
-      iVar13 = (int)*(uint32_t *)((uint)bVar3 << 2);
+      uVar15 = (uint16_t)((ulong)*(uint32_t *)((uint)entityIdx << 2) >> 0x10);
+      iVar13 = (int)*(uint32_t *)((uint)entityIdx << 2);
       *(uint16_t *)(iVar13 + 0x58) = *(uint16_t *)(iVar9 + 0x8c);
       *(uint16_t *)(iVar13 + 0x56) = uVar14;
       lVar17 = CONCAT22(GPopulationHi,GPopulationLo);

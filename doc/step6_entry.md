@@ -16106,3 +16106,53 @@ ovc41_usesBiosKeyAvail (766 lines, 349 occurrences)
   compare_state 1,625/0/0
   diff_dgroup 1,627/1,805 matched, 19 runs, sum|delta| 44,867, mean 27, worst 148
   compare_runtime 1,684 matched, 1,675 identical / 9 different (both sample points)
+
+### section 5: batch 8 - five functions (35,085 -> 34,966)
+section 5: batch 8 - five functions, the IFF ids and four smaller roles (35,085 -> 34,966)
+
+grabLbm (184 lines, 36 occurrences)
+    Every one is the high or low half of a 32-bit IFF chunk id, compared against a `stg_tmp_t tmp`
+    read from the file:
+
+        uVar2  IdFORM.hi -> formHi   uVar5  IdBMHD.lo -> bmhdLo   uVar9  IdCMAP.lo -> cmapLo
+        uVar3  IdILBM.lo -> ilbmLo   uVar6  IdBMHD.hi -> bmhdHi   uVar10 IdCMAP.hi -> cmapHi
+        uVar4  IdILBM.hi -> ilbmHi   uVar7  IdBODY.lo -> bodyLo   uVar11 IdPBM_.lo -> pbmLo
+                                     uVar8  IdBODY.hi -> bodyHi   uVar12 IdPBM_.hi -> pbmHi
+        bVar17 (uint32_t *)0xfffe < chnk_sz                        -> carry
+
+sub_OVC21_manage_c_24B1 (70 lines, 44 occurrences)
+    uVar4  `uVar4 = in_AX`, used as a base with offsets 6, 8, 10, 0xe, 0x12 where the
+           resource and population counters live                    -> tallyPtr   (35)
+    bVar1  GRecords[i].reserved08, then BuildingTypes[bVar1]        -> bldTypeVal (6)
+    uVar2  *(uint32_t *)(puVar5[unaff_SI].unitType << 2)            -> unitPtr    (3)
+
+    `tallyPtr` does not claim a signature: the export lost the parameter (`in_AX` is an ABI
+    register), but every use is a counter at a fixed offset from it, so the name states the role and
+    nothing more.  `bldTypeVal` rather than `bldType` because the body reads a `.bldType` field.
+
+ovc24_textKill (315 lines, 43 occurrences)
+    bVar4  AgntGs[(uint)gindex].ai, compared against BuildingTypes   -> agentAI (12)
+    The other nine are byte halves of a 32-bit timer and their copies (`uVar28 = uVar27`, ...), so
+    naming them would restate the split.
+
+constrct_usesLDIV_at_ (91 lines, 37 occurrences)
+    bVar3  AGNT_FIELD(&Entities[entityIndex].base.entity, 3), then (uint)bVar3 << 2 indexes the
+           entity pointer table                                      -> entityIdx   (13)
+    bVar4  (GLeaderSheets[partyIndex])->classStr                     -> classStrVal (4)
+    iVar10/iVar11 are both `(int)*(uint32_t *)(bVar3 << 2)` at different points and stay unnamed
+    rather than taking two near-identical names.
+
+uiReadString (165 lines, 37 occurrences)
+    uVar3  row * 0x12c0 + 0x2096, the row's offset in the text buffer -> rowOfs      (4)
+    iVar5  ovr_font_textWidth("_", ...)                               -> underscoreW (3)
+    iVar4  ovr_font_textWidth(&text, ...)                             -> textW       (3)
+
+  grep_checks 35,085 -> 34,966 (-119); build 65/65; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,625/0/0
+  diff_dgroup 1,627/1,805 matched, 19 runs, sum|delta| 44,867, mean 27, worst 148
+  compare_runtime 1,684 matched, 1,675 identical / 9 different (both sample points)
+
+BUDGET: tmp/rank_all5.py ranks every function (ovl.c excluded) by the occurrences belonging to
+single-assignment names.  The total is now 1,613 occurrences across 227 functions, so section 5 by
+renaming has a hard ceiling of about that many more - it cannot reach 0, because 10,927 in-function
+occurrences belong to multi-assignment scratch and 1,452 to the legitimate DGROUP string data.

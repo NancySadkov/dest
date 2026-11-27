@@ -215,17 +215,17 @@ stg_tmp_t far * __cdecl16far grabLbm(int16_t file_id,int16_t x,int16_t y,uint16_
   far_t handle_00;
   far_t handle_01;
   bool bVar1;
-  uint16_t uVar2;
-  uint16_t uVar3;
-  uint16_t uVar4;
-  uint16_t uVar5;
-  uint16_t uVar6;
-  uint16_t uVar7;
-  uint16_t uVar8;
-  uint16_t uVar9;
-  uint16_t uVar10;
-  uint16_t uVar11;
-  uint16_t uVar12;
+  uint16_t formHi;
+  uint16_t ilbmLo;
+  uint16_t ilbmHi;
+  uint16_t bmhdLo;
+  uint16_t bmhdHi;
+  uint16_t bodyLo;
+  uint16_t bodyHi;
+  uint16_t cmapLo;
+  uint16_t cmapHi;
+  uint16_t pbmLo;
+  uint16_t pbmHi;
   uint16_t fid;
   int iVar13;
   void *pvVar14;
@@ -233,7 +233,7 @@ stg_tmp_t far * __cdecl16far grabLbm(int16_t file_id,int16_t x,int16_t y,uint16_
   uint16_t uVar16;
   uint16_t i;
   uint16_t unaff_DI;
-  bool bVar17;
+  bool carry;
   stg_tmp_t far *dst;
   uint32_t remain;
   uint32_t cmszB;
@@ -247,17 +247,17 @@ stg_tmp_t far * __cdecl16far grabLbm(int16_t file_id,int16_t x,int16_t y,uint16_
   uint32_t chnk_sz;
   DW tmp;
   
-  uVar12 = IdPBM_.hi;
-  uVar11 = IdPBM_.lo;
-  uVar10 = IdCMAP.hi;
-  uVar9 = IdCMAP.lo;
-  uVar8 = IdBODY.hi;
-  uVar7 = IdBODY.lo;
-  uVar6 = IdBMHD.hi;
-  uVar5 = IdBMHD.lo;
-  uVar4 = IdILBM.hi;
-  uVar3 = IdILBM.lo;
-  uVar2 = IdFORM.hi;
+  pbmHi = IdPBM_.hi;
+  pbmLo = IdPBM_.lo;
+  cmapHi = IdCMAP.hi;
+  cmapLo = IdCMAP.lo;
+  bodyHi = IdBODY.hi;
+  bodyLo = IdBODY.lo;
+  bmhdHi = IdBMHD.hi;
+  bmhdLo = IdBMHD.lo;
+  ilbmHi = IdILBM.hi;
+  ilbmLo = IdILBM.lo;
+  formHi = IdFORM.hi;
   uVar16 = IdFORM.lo;
   fid = ovr_stshOpen(file_id);
   if ((int)fid < 0) {
@@ -267,15 +267,15 @@ stg_tmp_t far * __cdecl16far grabLbm(int16_t file_id,int16_t x,int16_t y,uint16_
   dst = ovr_stshAlloc(0x308);
   _fmemset(dst, 0, 0x308);
   (*(uint16_t *)((uint8_t *)&(remain))) = ovr_stshRead();
-  if ((((int)remain == 0 && (*(uint16_t *)((uint8_t *)&(remain) + 2)) == (stg_tmp_t *)0x0) && (tmp.hi == uVar2)) &&
+  if ((((int)remain == 0 && (*(uint16_t *)((uint8_t *)&(remain) + 2)) == (stg_tmp_t *)0x0) && (tmp.hi == formHi)) &&
      (tmp.lo == uVar16)) {
     bVar1 = false;
     ovr_stshRead();
     ovr_stshRead();
     uVar16 = tmp.lo;
-    if (((tmp.hi == uVar12) && (tmp.lo == uVar11)) || ((tmp.hi == uVar4 && (tmp.lo == uVar3)))) {
+    if (((tmp.hi == pbmHi) && (tmp.lo == pbmLo)) || ((tmp.hi == ilbmHi && (tmp.lo == ilbmLo)))) {
       while (iVar13 = ovr_stshRead(), iVar13 == 0 && uVar16 == 0) {
-        if ((tmp.hi == uVar6) && (tmp.lo == uVar5)) {
+        if ((tmp.hi == bmhdHi) && (tmp.lo == bmhdLo)) {
           bVar1 = true;
           uVar16 = tmp.lo;
           iVar13 = ovr_stshRead();
@@ -288,7 +288,7 @@ stg_tmp_t far * __cdecl16far grabLbm(int16_t file_id,int16_t x,int16_t y,uint16_
           (*(uint16_t *)((uint8_t *)&(sz) + 2)) = 0;
           (*(uint16_t *)((uint8_t *)&(sz))) = (uint16_t)(uint32_t *)((byte *)__C0_ASM_CopyRight + 0x10);
         }
-        else if ((tmp.hi == uVar10) && (tmp.lo == uVar9)) {
+        else if ((tmp.hi == cmapHi) && (tmp.lo == cmapLo)) {
           (*(uint16_t *)((uint8_t *)&(cmszB) + 2)) = tmp.lo;
           ovr_stshRead();
           (*(uint16_t *)((uint8_t *)&(cmszB))) = ovr_be4((uint32_t *)sz,CONCAT22(unaff_DI,(*(uint16_t *)((uint8_t *)&(sz) + 2))));
@@ -336,7 +336,7 @@ stg_tmp_t far * __cdecl16far grabLbm(int16_t file_id,int16_t x,int16_t y,uint16_
           }
         }
         else {
-          if ((tmp.hi == uVar8) && (tmp.lo == uVar7)) {
+          if ((tmp.hi == bodyHi) && (tmp.lo == bodyLo)) {
             if (bVar1) {
               ovr_stshRead();
               puVar15 = ovr_be4((uint32_t *)sz,CONCAT22(unaff_DI,(*(uint16_t *)((uint8_t *)&(sz) + 2))));
@@ -365,9 +365,9 @@ stg_tmp_t far * __cdecl16far grabLbm(int16_t file_id,int16_t x,int16_t y,uint16_
           (*(uint16_t *)((uint8_t *)&(chnk_sz))) = ovr_be4((uint32_t *)chnk_sz,CONCAT22(unaff_DI,(*(uint16_t *)((uint8_t *)&(chnk_sz) + 2))));
           (*(uint16_t *)((uint8_t *)&(chnk_sz) + 2)) = uVar16;
           if (((uint)(uint32_t *)chnk_sz & 1) != 0) {
-            bVar17 = (uint32_t *)0xfffe < (uint32_t *)chnk_sz;
+            carry = (uint32_t *)0xfffe < (uint32_t *)chnk_sz;
             (*(uint16_t *)((uint8_t *)&(chnk_sz))) = (uint16_t)(uint32_t *)((int)(uint32_t *)chnk_sz + 1);
-            (*(uint16_t *)((uint8_t *)&(chnk_sz) + 2)) = uVar16 + bVar17;
+            (*(uint16_t *)((uint8_t *)&(chnk_sz) + 2)) = uVar16 + carry;
           }
           puVar15 = ovr_stshTell((uint32_t *)fid,unaff_DI);
           uVar16 = ((int)puVar15 >> 0xf) + (*(uint16_t *)((uint8_t *)&(chnk_sz) + 2)) +

@@ -537,9 +537,9 @@ char * __cdecl16far uiReadString(char *textOfs,int textSeg,int row,char *gfxOfs,
   far_t handle_04;
   size_t sVar1;
   far_t far *pfVar2;
-  uint16_t uVar3;
-  int iVar4;
-  int iVar5;
+  uint16_t rowOfs;
+  int textW;
+  int underscoreW;
   char *pcVar6;
   uint8_t *puVar7;
   uint16_t uVar8;
@@ -583,12 +583,12 @@ char * __cdecl16far uiReadString(char *textOfs,int textSeg,int row,char *gfxOfs,
   saveui_usesBlitGfx10
             (gfx,(char *)CONCAT22(&cursorX,_SS),(byte *)CONCAT22(row,_SS),(uint *)uStack_5e,
              in_stack_0000ffa6);
-  uVar3 = row * 0x12c0 + 0x2096;
+  rowOfs = row * 0x12c0 + 0x2096;
   gfx_02.seg = trianglsCut4Seg;
   gfx_02.ofs = trianglsCut4Ofs;
   dst.seg = 0xa000;
-  dst.ofs = uVar3;
-  ovr_blitLoadRleGfx(gfx_02,dst,(char)uVar3);
+  dst.ofs = rowOfs;
+  ovr_blitLoadRleGfx(gfx_02,dst,(char)rowOfs);
   ovr_ovc40_flushInput();
   GMenuFlag = 1;
 L_uiReadString_0DC9:
@@ -598,10 +598,10 @@ L_uiReadString_0DC9:
               (bStack_5 < 0x4f)) && ((uStack_4 & 0xff) != 0x40))) {
         (&text)[bStack_5] = (uint8_t)uStack_4;
         (&uStack_5b)[bStack_5] = 0;
-        iVar4 = ovr_font_textWidth((char *)&text,(char *)CONCAT13((char)(Font03.ofs >> 8),
+        textW = ovr_font_textWidth((char *)&text,(char *)CONCAT13((char)(Font03.ofs >> 8),
                                                     CONCAT12((char)Font03.ofs,_SS)),(char)Font03.ofs,Font03.seg,0);
-        iVar5 = ovr_font_textWidth((char *)"_",(char *)CONCAT22(Font03.ofs,(char *)0x26510),(char)Font03.seg,0,0);
-        if (iVar4 + iVar5 + 0x2aU < 0xe0) {
+        underscoreW = ovr_font_textWidth((char *)"_",(char *)CONCAT22(Font03.ofs,(char *)0x26510),(char)Font03.seg,0,0);
+        if (textW + underscoreW + 0x2aU < 0xe0) {
           bStack_5 = bStack_5 + 1;
         }
         (&text)[bStack_5] = 0x0;
