@@ -15741,3 +15741,44 @@ earlier.
   compare_state 1,625/0/0
   diff_dgroup 1,627/1,805 matched, 19 runs, sum|delta| 44,867, mean 27, worst 148
   compare_runtime 1,684 matched, 1,675 identical / 9 different
+
+### section 5: batch 5 - _atol and fseek_Displacement (35,445 -> 35,429)
+section 5: batch 5 - _atol and fseek_Displacement (35,445 -> 35,429)
+
+    _atol (44 lines)
+        uVar7  (uint16_t)((ulong)s >> 0x10) where `s` is a NEAR char*  -> deleted (decl + store)
+        uVar1  (ulong)uVar3, the accumulator widened to 32 bits         -> acc32  (4)
+        uVar4  (uint)(uVar1 * 10), the low word of acc*10               -> acc10  (4)
+
+    fseek_Displacement (47 lines)
+        uVar8  (uint16_t)((ulong)stream >> 0x10), `stream` is near      -> deleted (decl + store)
+        uVar5  (int)*stream >> 0xf, the sign-extension mask             -> signMask (4)
+
+`uVar3` in _atol is the carry chain (four assignments) and `iVar4` in fseek_Displacement is a
+for-loop initialiser, so both stay unnamed.  Dead stores deleted before the renames.
+
+  grep_checks 35,445 -> 35,429; build 65/65; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,625/0/0
+  diff_dgroup 1,627/1,805 matched, 19 runs, sum|delta| 44,867, mean 27, worst 148
+  compare_runtime 1,684 matched, 1,675 identical / 9 different (both sample points)
+
+## A mechanical sweep worth ~40 more, NOT applied (two failed attempts)
+
+`tmp/sweep_deadsegs.py` finds locals whose only occurrences are the declaration and one
+`x = (uint16_t)((ulong)Y >> 0x10);` assignment - the same "segment of a near pointer" dead store as
+the two above.  A dry run finds **20 of them** (2 occurrences each = 40 grep points), spread over
+crtl.c (6), ovc06_blit.c (3), ovc10_constr.c (2), ovc14_attact.c (2) and one each in ovc11_audio,
+ovc18_leaderview, ovc21_manage, ovc22_classes, ovc25_intel, ovc33_stats, ovc42_demo, ovc45_unitinfo.
+
+Both attempts deleted the correct store but mis-computed the enclosing function's span, so a name
+that IS read later was treated as dead:
+
+  * first attempt counted braces naively - a char literal `'{'` opens a phantom block, the span
+    ends early, and `uVar7`/`uVar8` in `__fmovmem` plus `uVar2` in `constr_setHighlightAtOffset`
+    were deleted while still referenced (16 compile errors);
+  * second attempt strips quoted text per line, which is not enough: `__fmovmem`'s span still ends
+    early, so block comments containing braces must also be stripped, and that function has to be
+    excluded or handled explicitly.
+
+Reverted both times; the tree is at the state above.  The sweep is a real 40-point mechanical gain
+and needs the span scanner to strip `/* ... */` as well as quotes before it is safe.

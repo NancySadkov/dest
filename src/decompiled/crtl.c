@@ -4062,15 +4062,13 @@ int __cdecl16far _wherey(void)
 uint16_t __cdecl16far _atol(char *s)
 
 {
-  ulong uVar1;
+  ulong acc32;
   bool bVar2;
   uint uVar3;
-  uint uVar4;
+  uint acc10;
   byte bVar5;
   byte *pbVar6;
-  uint16_t uVar7;
   
-  uVar7 = (uint16_t)((ulong)s >> 0x10);
   pbVar6 = (byte *)s;
   uVar3 = 0;
   do {
@@ -4087,10 +4085,10 @@ uint16_t __cdecl16far _atol(char *s)
     pbVar6 = pbVar6 + 1;
 L__atol_21D0:
     if ((0x39 < bVar5) || (bVar5 < 0x30)) goto L__atol_2204;
-    uVar1 = (ulong)uVar3;
-    uVar4 = (uint)(uVar1 * 10);
-    uVar3 = uVar4 + (byte)(bVar5 - 0x30);
-  } while ((char)((char)(uVar1 * 10 >> 0x10) + CARRY2(uVar4,(uint)(byte)(bVar5 - 0x30))) == '\0');
+    acc32 = (ulong)uVar3;
+    acc10 = (uint)(acc32 * 10);
+    uVar3 = acc10 + (byte)(bVar5 - 0x30);
+  } while ((char)((char)(acc32 * 10 >> 0x10) + CARRY2(acc10,(uint)(byte)(bVar5 - 0x30))) == '\0');
   while( true ) {
     bVar5 = *pbVar6;
     pbVar6 = pbVar6 + 1;
@@ -4176,20 +4174,18 @@ int fseek_Displacement(uint *stream)
   int iVar2;
   int iVar3;
   int iVar4;
-  uint uVar5;
+  uint signMask;
   uint *puVar6;
   int iVar7;
-  uint16_t uVar8;
   undefined1 *uStack_6;   /* hand fix: dereferenced as *uStack_6 */
   
-  uVar8 = (uint16_t)((ulong)stream >> 0x10);
   puVar6 = (uint *)stream;
   if ((int)*stream < 0) {
     iVar2 = puVar6[3] + *stream + 1;
   }
   else {
-    uVar5 = (int)*stream >> 0xf;
-    iVar2 = (*stream ^ uVar5) - uVar5;
+    signMask = (int)*stream >> 0xf;
+    iVar2 = (*stream ^ signMask) - signMask;
   }
   iVar7 = iVar2;
   if ((puVar6[1] & 0x40) == 0) {
