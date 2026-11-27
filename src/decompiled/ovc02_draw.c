@@ -140,546 +140,86 @@ uint __cdecl16far draw_compute3(int x)
 
 
 /* 2e25:025a */
+
+/* Place and capture the nine-slice talk window for the current menu item, then blit its frame.
+   Re-derived from the image: with MenuMode 1 and GMenuItem 5 the position follows bigcompFrame
+   (0x108/0x46, 0x10c/0x49, 0x108/0x4d, 0x103/0x49 for cases 0/2/4/6; the odd cases leave it alone);
+   with MenuMode 1 and a real item it follows menuCursorX/menuCursorY; with MenuMode 2 it is
+   (0x128,0x73) for item 5 and (attact_usesLDIV_at_(item)+0xe4, 0x68) otherwise; any other mode uses
+   draw_compute1/draw_compute2 minus 6/5.  The window is captured from 0xa000:0000 with stshRleCut
+   (six words), then blitted from CrossBlitGfx; the open sound plays unless the mouse just moved. */
 void __cdecl16far draw_textTalkwin9Lbm(void)
 
 {
-  uint16_t _resetTextBlitCycle;   /* local lost by the decompiler */
-  byte *pbVar1;
-  int *piVar2;
-  uint *puVar3;
-  uint uVar4;
-  int *piVar5;
-  uint uVar6;
-  code *pcVar7;
-  char cVar8;
-  char cVar9;
-  byte bVar10;
-  byte bVar11;
-  uint uVar12;
-  char cVar16;
-  byte bVar17;
-  int iVar13;
-  int iVar14;
-  uint uVar15;
-  char cVar18;
-  byte bVar19;
-  char cVar21;
-  char cVar22;
-  int iVar20;
-  int in_CX;
-  char cVar23;
-  byte plane2Sum;
-  char cVar26;
-  undefined1 *puVar25;
-  byte plane3;
-  byte plane3Rot;
-  byte bVar29;
-  uint16_t in_DX;
-  char cVar30;
-  char cVar31;
-  char cVar34;
-  char cVar35;
-  byte *pbVar32;
-  char *pcVar33;
-  int framePtr;
-  int stackPtr;
-  undefined1 *puVar38;
-  int16_t *piVar39;
-  undefined1 *puVar40;
-  uint16_t *puVar41;
-  int16_t *piVar42;
-  undefined1 *puVar43;
-  byte *pbVar44;
-  ulong frameEnd;
-  uint32_t in_ESP;
-  char *pcVar46;
-  byte *pbVar47;
-  uint16_t unaff_BP;
-  undefined1 *puVar48;
-  char *unaff_SI;
-  char *pcVar49;
-  int *piVar50;
-  int unaff_DI;
-  uint16_t uVar51;
-  uint16_t uVar52;
-  bool bVar53;
-  byte in_AF;
-  bool bVar54;
-  bool bVar55;
-  uint32_t planeWord;
-  
-  uVar52 = 0x2e25;
-  stackPtr = (int)in_ESP;
-  uVar51 = (uint16_t)((ulong)in_ESP >> 0x10);
-  piVar39 = (int16_t *)(stackPtr + -2);
-  *(uint16_t *)(stackPtr + -2) = (uint16_t)unaff_BP;
+  far_t dst;
+
   if (GameRunning != false) {
     return;
   }
-  CrossBlitFlag = '\0';
+  CrossBlitFlag = 0;
   CrossBlitCount2 = 0;
   CrossBlitCount = 1;
-  if (CrossBlitPtr.ofs != 0 || CrossBlitPtr.seg != 0) {
-    *(uint16_t *)(stackPtr + -4) = CrossBlitPtr.seg;
-    *(uint16_t *)(stackPtr + -6) = CrossBlitPtr.ofs;
-    *(uint16_t *)(stackPtr + -8) = (uint16_t)(char *)0x2e25;
-    uVar52 = 0x2337;
-    puVar38 = (undefined1 *)(stackPtr + -10);
-    *(uint16_t *)(stackPtr + -10) = (uint16_t)0xe4f0;
-    ovr_stshFree(*(far_t far *)(stackPtr + -6));
-    piVar39 = (int16_t *)(puVar38 + 8);
+  if (CrossBlitPtr.seg != 0 || CrossBlitPtr.ofs != 0) {
+    ovr_stshFree(CrossBlitPtr);
   }
-  bVar29 = bigcompFrame;
   CrossBlitPtr.seg = 0;
   CrossBlitPtr.ofs = 0;
-  if (MenuMode != '\x01') {
-    if (MenuMode == '\x02') {
-      if (GMenuItem == 5) {
-        CrossBlitX = 0x128;
-        CrossBlitY = 0x73;
-      }
-      else {
-        *(uint16_t *)((int)piVar39 + -2) = (uint16_t)CONCAT11(0x24,GMenuItem);
-        *(uint16_t *)((int)piVar39 + -4) = (uint16_t)uVar52;
-        uVar52 = 0x2315;
-        puVar40 = (undefined1 *)((int)piVar39 + -6);
-        *(uint16_t *)((int)piVar39 + -6) = (uint16_t)0xe5d2;
-        uVar15 = ovr_attact_usesLDIV_at_(*(uint8_t *)((int)piVar39 + -2));
-        piVar39 = (int16_t *)(puVar40 + 6);
-        CrossBlitX = (uVar15 & 0xff) + 0xe4;
-        CrossBlitY = 0x68;
+  if (MenuMode == 1) {
+    if (GMenuItem == 5) {
+      switch (bigcompFrame) {
+      case 0:
+        CrossBlitX = 0x108;
+        CrossBlitY = 0x46;
+        break;
+      case 2:
+        CrossBlitX = 0x10c;
+        CrossBlitY = 0x49;
+        break;
+      case 4:
+        CrossBlitX = 0x108;
+        CrossBlitY = 0x4d;
+        break;
+      case 6:
+        CrossBlitX = 0x103;
+        CrossBlitY = 0x49;
+        break;
       }
     }
-    else if (GMenuItem == 5) {
+    else if (GMenuItem < 5) {
+      CrossBlitX = (char)((undefined *)&menuCursorX)[GMenuItem] + 0xed;
+      CrossBlitY = (char)((undefined *)&menuCursorY)[GMenuItem] + 0x3b - 5;
+    }
+  }
+  else if (MenuMode == 2) {
+    if (GMenuItem == 5) {
       CrossBlitX = 0x128;
       CrossBlitY = 0x73;
     }
-    else if (GMenuItem < 5) {
-      *(uint *)((int)piVar39 + -2) = (uint)GMenuItem;
-      *(uint16_t *)((int)piVar39 + -4) = (uint16_t)uVar52;
-      puVar41 = (uint16_t *)((int)piVar39 + -6);
-      *(uint16_t *)((int)piVar39 + -6) = (uint16_t)0xe60d;
-      iVar14 = draw_compute1(*(int *)((int)piVar39 + -2));
-      CrossBlitX = iVar14 + -6;
-      puVar41[2] = (uint)GMenuItem;
-      puVar41[1] = uVar52;
-      *puVar41 = 0xe620;
-      iVar14 = draw_compute2(puVar41[2]);
-      piVar39 = (int16_t *)((int)puVar41 + 6);
-      CrossBlitY = iVar14 + -5;
-    }
-L_draw_2e25_025a_03D9:
-    if (CrossBlitFlag == '\0') {
-      piVar39[-1] = CrossBlitY + 9;
-      piVar39[-2] = CrossBlitX + 0xd;
-      piVar39[-3] = CrossBlitY;
-      piVar39[-4] = CrossBlitX;
-      piVar39[-5] = 0xa000;
-      piVar39[-6] = 0;
-      piVar39[-7] = uVar52;
-      piVar42 = piVar39 + -8;
-      piVar39[-8] = 0xe652;
-      CrossBlitPtr.ofs =
-           (uint16_t)
-           ovr_stshRleCut((far_t far *)piVar39[-6],*(far_t far *)(piVar39 + -5),piVar39[-3],piVar39[-2],piVar39[-1],*piVar39,0,0,0);
-      CrossBlitPtr.seg = in_DX;
-      *(uint16_t *)((int)piVar42 + 0xe) = (uint16_t)0xa000;
-      *(int *)((int)piVar42 + 0xc) = CrossBlitX + CrossBlitY * 0x140;
-      *(uint16_t *)((int)piVar42 + 10) = CrossBlitGfx.seg;
-      *(uint16_t *)((int)piVar42 + 8) = CrossBlitGfx.ofs;
-      *(uint16_t *)((int)piVar42 + 6) = (uint16_t)(char *)0x22d3;
-      uVar52 = 0x22d3;
-      puVar43 = (undefined1 *)((int)piVar42 + 4);
-      *(uint16_t *)((int)piVar42 + 4) = (uint16_t)0xe689;
-      ovr_blitLoadRleGfx(*(far_t far *)((int)piVar42 + 8),*(far_t far *)((int)piVar42 + 0xc),0);
-      piVar39 = (int16_t *)(puVar43 + 0xc);
-    }
-    if (MouseMoved == 0) {
-      *(int *)((int)piVar39 + -2) = CrossBlitX;
-      *(uint16_t *)((int)piVar39 + -4) = (uint16_t)uVar52;
-      pbVar44 = (byte *)((int)piVar39 + -6);
-      *(uint16_t *)((int)piVar39 + -6) = (uint16_t)0xe69b;
-      uVar15 = draw_compute3(*(int *)((int)piVar39 + -2));
-      *(uint *)(pbVar44 + 4) = uVar15;
-      *(uint16_t *)(pbVar44 + 2) = (uint16_t)1;
-      *(uint16_t *)pbVar44 = 0;
-      *(uint16_t *)(pbVar44 + -2) = (uint16_t)uVar52;
-      *(uint16_t *)(pbVar44 + -4) = (uint16_t)0xe6a8;
-      ovr_play_sfxU(*pbVar44,*(int *)(pbVar44 + 2),*(uint16_t *)(pbVar44 + 4),0,0);
-    }
-                    /* WARNING: Read-only address (ram,0x00026001) is written */
-                    /* WARNING: Read-only address (ram,0x00033f01) is written */
-    return;
-  }
-  if (GMenuItem != 5) {
-    if (GMenuItem < 5) {
-      CrossBlitX = (char)((undefined *)&menuCursorX)[GMenuItem] + 0xed;
-      in_DX = 0x2410;
-      CrossBlitY = (char)((undefined *)&menuCursorY)[GMenuItem] + 0x36;
-    }
-    goto L_draw_2e25_025a_03D9;
-  }
-  if (6 < bigcompFrame) goto L_draw_2e25_025a_03D9;
-  pcVar33 = (char *)((uint)bigcompFrame * 2);
-  pcVar33[(int)unaff_SI] = pcVar33[(int)unaff_SI] + bigcompFrame;
-  { int _rep0; for (_rep0 = 0; _rep0 < 3182; _rep0++)
-      pcVar33[(int)unaff_SI] = pcVar33[(int)unaff_SI] + bVar29;
-  }
-  pbVar1 = (byte *)(pcVar33 + (int)unaff_SI);
-  bVar11 = *pbVar1;
-  *pbVar1 = *pbVar1 + bVar29;
-  bVar10 = bVar29 + pcVar33[(int)unaff_SI];
-  uVar12 = (uint)(byte)(bVar10 + CARRY1(bVar11,bVar29));
-  uVar15 = (uint)(CARRY1(bVar29,pcVar33[(int)unaff_SI]) || CARRY1(bVar10,CARRY1(bVar11,bVar29)));
-  uVar6 = uVar12 + *(uint *)(pcVar33 + (int)unaff_SI);
-  bVar53 = CARRY2(uVar12,*(uint *)(pcVar33 + (int)unaff_SI)) || CARRY2(uVar6,uVar15);
-  iVar14 = uVar6 + uVar15;
-  bVar29 = (byte)iVar14;
-  iVar14 = CONCAT11((char)((uint)iVar14 >> 8),bVar29 + bVar53) + 0x1600 +
-           (uint)CARRY1(bVar29,bVar53);
-  cVar30 = (char)pcVar33;
-  pcVar33[(int)unaff_SI] = pcVar33[(int)unaff_SI] + cVar30;
-  pcVar33[unaff_DI] = pcVar33[unaff_DI] + cVar30;
-  cVar34 = (char)((uint)pcVar33 >> 8);
-  *(char *)(stackPtr + -2 + unaff_DI) = *(char *)(stackPtr + -2 + unaff_DI) + cVar34;
-  cVar9 = (char)iVar14;
-  unaff_SI[stackPtr + -2] = unaff_SI[stackPtr + -2] + cVar9;
-  *unaff_SI = *unaff_SI + cVar9;
-  pcVar46 = (char *)(stackPtr + -1);
-  *pcVar46 = *pcVar46 + cVar9;
-  pcVar49 = (char *)(unaff_DI + 1);
-  (pcVar33 + 1)[(int)unaff_SI] = (pcVar33 + 1)[(int)unaff_SI] + (char)in_CX;
-  cVar35 = (char)(in_CX + -1);
-  pcVar46[(int)unaff_SI] = pcVar46[(int)unaff_SI] + cVar35;
-  *pcVar33 = *pcVar33 + (char)((uint)iVar14 >> 8);
-  *(uint16_t *)((int)piVar39 + -2) = (uint16_t)(char *)0x24ae;
-  cVar8 = (char)((uint)(in_CX + -1) >> 8);
-  pcVar46[(int)unaff_SI] = pcVar46[(int)unaff_SI] + cVar8;
-  _resetTextBlitCycle = *(int *)(pcVar33 + (int)unaff_SI) * 0x6c;
-  *pcVar49 = *pcVar49 + cVar8;
-  piVar5 = (int *)(unaff_SI + 1);
-  out(*unaff_SI,in_DX);
-  *pcVar33 = *pcVar33 + cVar8;
-  pcVar33[(int)piVar5] = (char)_resetTextBlitCycle;
-  cVar18 = (char)in_DX;
-  cVar9 = cVar18 * '\x02';
-  cVar30 = cVar30 + cVar9;
-  cVar16 = (char)((uint)_resetTextBlitCycle >> 8) + cVar9;
-  cVar21 = cVar8 + cVar35 + cVar9;
-  cVar8 = (char)_resetTextBlitCycle + cVar18 + cVar30;
-  cVar23 = cVar9 + cVar30;
-                    /* WARNING: Read-only address (ram,0x00033f01) is written */
-  cRam00033f01 = cVar8 + '\x10';
-  cVar18 = cVar35 + cVar18 + cVar30 + cVar21;
-  cVar31 = cVar30 + cVar16 + cVar21;
-  cVar22 = cVar21 + cVar16;
-  cVar26 = (char)(in_DX >> 8) + cVar35 + cVar9 + cVar16 + cVar31;
-  cVar35 = cVar34 + cVar35 + cVar9 + cVar30 + cVar21 * '\x04' + cVar16 * '\x02';
-  pcVar33 = (char *)CONCAT11(cVar35,cVar31);
-  *pcVar33 = *pcVar33 + cVar23;
-  *(char **)(pcVar33 + (int)piVar5) = pcVar33 + *(int *)(pcVar33 + (int)piVar5);
-  pcVar46 = pcVar46 + (int)pcVar49;
-  *pcVar49 = *pcVar49 + cVar31;
-                    /* WARNING: Read-only address (ram,0x00026001) is written */
-  (*(uint16_t *)((uint8_t *)&("halfling lodge") + 4)) = (uint16_t)pcVar33 + 0x696c;
-  piVar50 = (int *)(pcVar49 + (int)pcVar46);
-  cVar35 = cVar35 + cVar22;
-  iVar14 = CONCAT11(cVar35,cVar31);
-  *(char *)piVar5 = (char)*piVar5 + cVar18;
-  *piVar50 = *piVar50 + CONCAT11(cVar22,cVar18);
-  (*(uint16_t *)((uint8_t *)&(AgntAnms[0x30]) + 9)) = (uint16_t)(*(uint16_t *)((uint8_t *)&(AgntAnms[0x30]) + 9)) + CONCAT11(cVar22,cVar18);
-  piVar2 = (int *)(iVar14 + (int)piVar5);
-  *piVar2 = *piVar2 + CONCAT11(cVar26,cVar23);
-  piVar2 = (int *)(iVar14 + (int)piVar50);
-  *piVar2 = *piVar2 + CONCAT11(cVar26,cVar23);
-  cVar35 = cVar35 + cVar26 * '\x02';
-  iVar20 = CONCAT11(cVar35,cVar31);
-  cVar9 = cVar8 + cVar22 + cVar35;
-  iVar14 = CONCAT11(cVar16 * '\x02',cVar9);
-  *(char *)(iVar20 + (int)piVar50) = *(char *)(iVar20 + (int)piVar50) + cVar22 + cVar26;
-  *(char **)(pcVar46 + (int)piVar5) = pcVar46 + *(int *)(pcVar46 + (int)piVar5);
-  puVar25 = (undefined1 *)((int)piVar39 + -2) + (int)piVar5 + CONCAT11(cVar26 * '\x02',cVar23);
-  *(char *)((int)piVar50 + 1) = *(char *)((int)piVar50 + 1) + cVar9;
-  *(int *)(iVar20 + (int)piVar50) = *(int *)(iVar20 + (int)piVar50) - iVar14;
-  *(int *)(iVar20 + (int)piVar50) = *(int *)(iVar20 + (int)piVar50) - iVar14;
-  *(int *)(iVar20 + 1) = *(int *)(iVar20 + 1) + CONCAT11(cVar22 + cVar26,cVar18 + cVar35);
-  *(int *)((undefined1 *)((int)piVar39 + (int)piVar5) + -4) = iVar14;
-  (pcVar46 + (int)unaff_SI)[1] = (pcVar46 + (int)unaff_SI)[1] + (char)puVar25;
-  *(int *)((undefined1 *)((int)piVar39 + (int)piVar5) + -6) = iVar20;
-  *piVar5 = (int)(puVar25 + *piVar5);
-  *(char **)((undefined1 *)((int)piVar39 + (int)piVar5) + -8) = pcVar46;
-  *(undefined1 **)(pcVar46 + 1) = puVar25 + *(int *)(pcVar46 + 1);
-  *(char **)((undefined1 *)((int)piVar39 + (int)piVar5) + -10) =
-       (char *)((int)piVar50 + (int)pcVar46);
-  *(int *)(unaff_SI + iVar20 + 1) = *(int *)(unaff_SI + iVar20 + 1) + iVar20;
-  *(int *)(pcVar46 + (int)unaff_SI + 1) = *(int *)(pcVar46 + (int)unaff_SI + 1) + iVar20;
-  iVar14 = *(int *)((undefined1 *)((int)piVar39 + (int)piVar5) + -8);
-  *piVar5 = *piVar5 + iVar14;
-  *(int *)(*(int *)((undefined1 *)((int)piVar39 + (int)piVar5) + -6) + 1) =
-       *(int *)(*(int *)((undefined1 *)((int)piVar39 + (int)piVar5) + -6) + 1) + iVar14;
-  *(undefined1 **)(unaff_SI + iVar14 + 1) =
-       (undefined1 *)((int)piVar39 + -2) + (int)piVar5 + *(int *)(unaff_SI + iVar14 + 1);
-  piVar50 = *(int **)((undefined1 *)((int)piVar39 + -2) + (int)piVar5);
-  puVar48 = (undefined1 *)*(uint16_t *)((int)piVar39 + (int)piVar5);
-  pbVar47 = *(byte **)((undefined1 *)((int)piVar39 + (int)piVar5) + 2);
-  pbVar32 = *(byte **)((undefined1 *)((int)piVar39 + (int)piVar5) + 6);
-  uVar52 = *(uint16_t *)((undefined1 *)((int)piVar39 + (int)piVar5) + 8);
-  iVar20 = *(int *)((undefined1 *)((int)piVar39 + (int)piVar5) + 10);
-  uVar15 = *(uint *)((undefined1 *)((int)piVar39 + (int)piVar5) + 0xc);
-  *(undefined1 **)(pbVar47 + (int)puVar48 + 1) =
-       (undefined1 *)((int)piVar39 + (int)piVar5) + *(int *)(pbVar47 + (int)puVar48 + 1) + 0xe;
-  puVar3 = (uint *)(pbVar32 + (int)piVar50);
-  iVar14 = (uVar15 & 3) - (*puVar3 & 3);
-  *puVar3 = *puVar3 + (uint)(0 < iVar14) * iVar14;
-  *(int *)((int)piVar50 + 1) =
-       (int)((undefined1 *)((int)piVar39 + (int)piVar5) + *(int *)((int)piVar50 + 1) + 0xe);
-  *(undefined1 **)(pbVar32 + 1) =
-       (undefined1 *)CONCAT22(uVar51,(undefined1 *)((int)piVar39 + (int)piVar5) + 0xe) +
-       *(long *)(pbVar32 + 1);
-  *(char **)((undefined1 *)((int)piVar39 + (int)piVar5) + 0xc) = (char *)0x24af;
-  *(byte **)(pbVar47 + (int)puVar48 + 1) = pbVar47 + *(int *)(pbVar47 + (int)puVar48 + 1);
-  uVar15 = *(int *)(pbVar32 + (int)piVar50) * 0x6c;
-  *(int *)((int)piVar50 + 1) = (int)(pbVar47 + *(int *)((int)piVar50 + 1));
-  puVar25 = puVar48 + 1;
-  out(*puVar48,uVar52);
-  pbVar1 = pbVar32 + 1;
-  iVar14 = *(int *)pbVar1;
-  *(byte **)pbVar1 = pbVar47 + *(int *)pbVar1;
-  cVar8 = (char)uVar15;
-  cVar9 = cVar8;
-  if (SCARRY2(iVar14,(int)pbVar47)) {
-    puVar3 = (uint *)(pbVar47 + (int)puVar25 + 1);
-    uVar6 = *puVar3;
-    *puVar3 = (uint)(puVar25 + *puVar3);
-    uVar12 = *puVar3;
-                    /* WARNING: Read-only address (ram,0x00026001) is written */
-                    /* WARNING: Read-only address (ram,0x00033f01) is written */
-    if (CARRY2(uVar6,(uint)puVar25)) goto code_r0x000219de;
-    puVar3 = (uint *)((int)piVar50 + 1);
-    bVar53 = CARRY2(*puVar3,(uint)puVar25);
-    uVar6 = *puVar3;
-    *puVar3 = (uint)(puVar25 + *puVar3);
-    uVar12 = *puVar3;
-    bVar55 = *puVar3 == 0;
-    uVar4 = *puVar3;
-    if (!bVar53 && !bVar55) goto code_r0x000219e4;
-    puVar3 = (uint *)(pbVar32 + (int)puVar25 + 1);
-    bVar55 = SCARRY2(*puVar3,(int)piVar50);
-    *puVar3 = *puVar3 + (int)piVar50;
-    bVar53 = (int)*puVar3 < 0;
-    uVar4 = *puVar3;
-code_r0x000219e8:
-    bVar54 = true;
-    if (!bVar53) {
-      pbVar1 = pbVar47 + (int)piVar50 + 1;
-      bVar55 = SCARRY2(*(int *)pbVar1,(int)piVar50);
-      *(int *)pbVar1 = *(int *)pbVar1 + (int)piVar50;
-      bVar54 = *(int *)pbVar1 < 0;
-      goto code_r0x000219ee;
-    }
-code_r0x000219ea:
-    bVar53 = false;
-    if ((POPCOUNT(uVar4 & 0xff) & 1U) != 0) goto code_r0x000219ec;
-    piVar2 = (int *)(puVar48 + 2);
-    bVar55 = SCARRY2(*piVar2,(int)piVar50);
-    *piVar2 = *piVar2 + (int)piVar50;
-    bVar54 = *piVar2 < 0;
-  }
-  else {
-    puVar3 = (uint *)(pbVar47 + (int)piVar50 + 1);
-    *puVar3 = (uint)(puVar25 + *puVar3);
-    uVar12 = *puVar3;
-code_r0x000219de:
-    if (uVar12 == 0) {
-      puVar3 = (uint *)(pbVar47 + 1);
-      bVar53 = CARRY2(*puVar3,(uint)puVar25);
-      uVar6 = *puVar3;
-      *puVar3 = (uint)(puVar25 + *puVar3);
-      uVar12 = *puVar3;
-      bVar55 = *puVar3 == 0;
-      uVar4 = *puVar3;
-code_r0x000219e4:
-      if (bVar53 || bVar55) goto code_r0x000219e6;
-      puVar3 = (uint *)(pbVar32 + (int)piVar50 + 1);
-      bVar55 = SCARRY2(*puVar3,(int)piVar50);
-      *puVar3 = *puVar3 + (int)piVar50;
-      bVar54 = (int)*puVar3 < 0;
-      uVar4 = *puVar3;
-      goto code_r0x000219ea;
-    }
-    puVar3 = (uint *)(pbVar32 + 1);
-    uVar6 = *puVar3;
-    *puVar3 = (uint)(puVar25 + *puVar3);
-    uVar12 = *puVar3;
-    uVar4 = *puVar3;
-code_r0x000219e6:
-    bVar55 = SCARRY2(uVar6,(int)puVar25);
-    bVar53 = false;
-    if (-1 < (int)uVar12) goto code_r0x000219e8;
-    puVar3 = (uint *)(pbVar47 + (int)puVar25 + 1);
-    bVar55 = SCARRY2(*puVar3,(int)piVar50);
-    *puVar3 = *puVar3 + (int)piVar50;
-    bVar54 = (int)*puVar3 < 0;
-    bVar53 = (POPCOUNT(*puVar3 & 0xff) & 1U) == 0;
-code_r0x000219ec:
-    if (!bVar53) {
-      *(int *)((int)piVar50 + 1) = *(int *)((int)piVar50 + 1) + (int)piVar50;
-      goto code_r0x000219f5;
-    }
-code_r0x000219ee:
-    if (bVar55 != bVar54) {
-      *(undefined1 **)(pbVar47 + (int)puVar25 + 1) =
-           (undefined1 *)((int)piVar39 + (int)piVar5) + *(int *)(pbVar47 + (int)puVar25 + 1) + 0xc;
-      cVar9 = (*(uint8_t *)((uint8_t *)&(_DATA) + 1));
-      goto code_r0x000219f5;
+    else {
+      CrossBlitX = ovr_attact_usesLDIV_at_(GMenuItem) + 0xe4;
+      CrossBlitY = 0x68;
     }
   }
-  if (bVar55 == bVar54) {
-    *(uint *)(pbVar32 + (int)puVar25) = *(int *)(pbVar32 + (int)puVar25) + uVar15;
-    cVar9 = (*(uint8_t *)((uint8_t *)&(_DATA) + 1));
+  else if (GMenuItem == 5) {
+    CrossBlitX = 0x128;
+    CrossBlitY = 0x73;
   }
-code_r0x000219f5:
-  (*(uint8_t *)((uint8_t *)&(_DATA) + 1)) = cVar9;
-  { int _rep1; for (_rep1 = 0; _rep1 < 143; _rep1++)
-      pbVar32[(int)puVar25] = pbVar32[(int)puVar25] + cVar8;
+  else if (GMenuItem < 5) {
+    CrossBlitX = draw_compute1(GMenuItem) - 6;
+    CrossBlitY = draw_compute2(GMenuItem) - 5;
   }
-  pbVar32[(int)puVar25] = pbVar32[(int)puVar25] + cVar8 + (char)uVar52;
-  bVar10 = __C0_ASM_CopyRight[0xb];
-  (pbVar32 + (int)puVar25)[0x1f] = (pbVar32 + (int)puVar25)[0x1f] + __C0_ASM_CopyRight[0xb];
-  pbVar32[(int)puVar25] = pbVar32[(int)puVar25] + bVar10;
-  pbVar32[(int)puVar25] = pbVar32[(int)puVar25] + bVar10;
-  pbVar1 = pbVar32 + (int)puVar25;
-  bVar29 = *pbVar1;
-  *pbVar1 = *pbVar1 + bVar10;
-  bVar17 = (byte)((uVar15 >> 8) << 1) | CARRY1(bVar29,bVar10);
-  (pbVar32 + (int)puVar25)[0x3a9] = (pbVar32 + (int)puVar25)[0x3a9] + bVar10;
-  (pbVar32 + (int)puVar25)[0x7e] = (pbVar32 + (int)puVar25)[0x7e] + bVar10;
-  *(byte **)((undefined1 *)((int)piVar39 + (int)piVar5) + 0xc) = pbVar32;
-  uVar51 = *(uint16_t *)((undefined1 *)((int)piVar39 + (int)piVar5) + 0xc);
-  frameEnd = ZEXT24((undefined1 *)((int)piVar39 + (int)piVar5) + 0xe);
-  bVar11 = bVar10 * '\x02';
-  bVar29 = 9 < (bVar11 & 0xf) | in_AF;
-  cVar9 = bVar11 + bVar29 * '\x06' + (0x99 < bVar11 || CARRY1(bVar10,bVar10)) * '`';
-  *(uint *)(pbVar32 + (int)puVar25) = *(uint *)(pbVar32 + (int)puVar25) | CONCAT11(bVar17,cVar9);
-  (pbVar32 + (int)puVar25)[-0x2f] = (pbVar32 + (int)puVar25)[-0x2f] + cVar9;
-  pbVar47[0xe] = pbVar47[0xe] + bVar17;
-  (pbVar47 + (int)puVar25)[0x10] = (pbVar47 + (int)puVar25)[0x10];
-  pbVar32[0x12] = pbVar32[0x12];
-  pbVar32[(int)puVar25] = pbVar32[(int)puVar25] + (cVar9 + 1U & 0x14);
-  do {
-    pcVar7 = (code *)swi(0x17);
-    planeWord = (*pcVar7)();
-    bVar10 = (byte)planeWord;
-    (pbVar32 + (int)puVar25)[0x19a2] = (pbVar32 + (int)puVar25)[0x19a2] + bVar10;
-    pbVar1 = pbVar32 + (int)puVar25 + 0x77;
-    bVar11 = *pbVar1;
-    *pbVar1 = *pbVar1 + bVar10;
-    iVar14 = ((int)planeWord - *(int *)(pbVar32 + (int)puVar25)) - (uint)CARRY1(bVar11,bVar10);
-    bVar19 = (byte)iVar20;
-    puVar48[0x1e] = puVar48[0x1e] + bVar19;
-    bVar10 = (char)iVar14 * '\x02';
-    *pbVar32 = *pbVar32 & (byte)pbVar32;
-    (pbVar32 + (int)puVar25)[0x20f5] = (pbVar32 + (int)puVar25)[0x20f5] + bVar10;
-    (pbVar32 + (int)puVar25)[-0x36] = (pbVar32 + (int)puVar25)[-0x36] + bVar10;
-    bVar11 = pbVar32[(int)puVar25];
-    pbVar32[0x24] = pbVar32[0x24] + (byte)pbVar32;
-    (pbVar47 + (int)piVar50)[0x26] = (pbVar47 + (int)piVar50)[0x26];
-    (pbVar32 + (int)puVar25)[0x28] = (pbVar32 + (int)puVar25)[0x28];
-    plane3 = (byte)((ulong)planeWord >> 0x18);
-    plane2Sum = (char)((ulong)planeWord >> 0x10) + plane3;
-    uVar15 = (CONCAT11((char)((uint)iVar14 >> 8),bVar10 & bVar11) + -0x29) -
-             *(int *)(pbVar32 + (int)puVar25);
-    plane3Rot = plane3 << 5 | plane3 >> 3;
-    bVar11 = (byte)uVar15;
-    (pbVar32 + (int)puVar25)[0x2f9b] = (pbVar32 + (int)puVar25)[0x2f9b] + bVar11;
-    (pbVar32 + (int)puVar25)[0x70] = (pbVar32 + (int)puVar25)[0x70] + bVar11;
-    *(uint *)(pbVar32 + (int)puVar25) = *(uint *)(pbVar32 + (int)puVar25) ^ uVar15;
-    *(char *)((int)piVar50 + 0x33) = *(char *)((int)piVar50 + 0x33) + bVar11;
-    bVar10 = bVar11 * '\x02';
-    *piVar50 = (*piVar50 - (int)puVar25) - (uint)CARRY1(bVar11,bVar11);
-    pbVar32[(int)puVar25] = pbVar32[(int)puVar25] + bVar10;
-    pbVar32[(int)puVar25] = pbVar32[(int)puVar25] + bVar10;
-    pbVar32[(int)puVar25] = pbVar32[(int)puVar25] + bVar10;
-    pbVar32[(int)puVar25] = pbVar32[(int)puVar25] + bVar10;
-    bVar17 = (char)(uVar15 >> 8) + bVar10;
-    *(uint *)(pbVar32 + (int)puVar25) = *(uint *)(pbVar32 + (int)puVar25) | CONCAT11(bVar17,bVar10);
-    (pbVar32 + (int)puVar25)[0x13] = (pbVar32 + (int)puVar25)[0x13] + bVar19;
-    pbVar1 = pbVar32 + (int)puVar25;
-    bVar11 = *pbVar1;
-    *pbVar1 = *pbVar1 + plane2Sum;
-    bVar29 = 9 < (bVar10 & 0xf) | bVar29;
-    cVar9 = bVar10 + bVar29 * '\x06' + (0x99 < bVar10 || CARRY1(bVar11,plane2Sum)) * '`';
-    pbVar32[(int)puVar25] = pbVar32[(int)puVar25] + cVar9;
-    *pbVar47 = *pbVar47 & bVar19;
-    (pbVar32 + (int)puVar25)[-100] = (pbVar32 + (int)puVar25)[-100] + cVar9;
-    pbVar32[(int)puVar25] = pbVar32[(int)puVar25] + cVar9;
-    bVar11 = cVar9 + plane3Rot + pbVar32[(int)puVar25];
-    iVar20 = iVar20 + -2;
-  } while (iVar20 != 0 && bVar11 != 0);
-  iVar14 = CONCAT11((byte)((uint)iVar20 >> 9),(byte)iVar20);
-  framePtr = (int)frameEnd;
-  *(uint16_t *)(framePtr + -2) = (uint16_t)uVar51;
-  bVar10 = bVar11 * '\x02';
-  *(uint *)(pbVar32 + (int)puVar25) =
-       *(uint *)(pbVar32 + (int)puVar25) |
-       CONCAT11(bVar17,bVar10 + (9 < (bVar10 & 0xf) | bVar29) * '\x06' +
-                       (0x99 < bVar10 || CARRY1(bVar11,bVar11)) * '`');
-  cVar9 = (char)AgntAnms[0x25].y;
-  uVar51 = *(uint16_t *)(pbVar32 + (int)puVar25);
-  (pbVar32 + (int)puVar25)[0x1005] = (pbVar32 + (int)puVar25)[0x1005] + plane2Sum;
-  (pbVar32 + (int)puVar25)[0x124f] = (pbVar32 + (int)puVar25)[0x124f] + cVar9;
-  pbVar1 = pbVar32 + (int)puVar25 + -0x67;
-  bVar29 = *pbVar1;
-  *pbVar1 = *pbVar1 + plane3Rot;
-  uVar15 = CONCAT11(bVar17 | (byte)((uint)uVar51 >> 8),cVar9 + CARRY1(bVar29,plane3Rot));
-  *(uint *)(framePtr + -4) = uVar15;
-  *(int *)(framePtr + -6) = iVar14;
-  *(uint16_t *)(framePtr + -8) = (uint16_t)CONCAT11(plane3Rot,plane2Sum);
-  *(uint16_t *)(framePtr + -10) = (uint16_t)pbVar32;
-  *(int *)(framePtr + -0xc) = framePtr + -2;
-  *(uint16_t *)(framePtr + -0xe) = (uint16_t)pbVar47;
-  *(uint *)(framePtr + -0x10) = (uint)puVar25;
-  *(uint16_t *)(framePtr + -0x12) = (uint16_t)piVar50;
-  if (iVar14 != 0) {
-    pbVar1 = pbVar32 + (int)puVar25 + 0x2d;
-    bVar29 = *pbVar1;
-    *pbVar1 = *pbVar1 + plane2Sum;
-    puVar3 = (uint *)(pbVar32 + (int)puVar25);
-    uVar6 = *puVar3;
-    uVar12 = *puVar3;
-    *puVar3 = (uVar12 - uVar15) - (uint)CARRY1(bVar29,plane2Sum);
-    iVar13 = uVar15 + 1;
-    if ((uVar15 <= uVar6 && (uint)CARRY1(bVar29,plane2Sum) <= uVar12 - uVar15) && iVar13 != 0) {
-      iVar13 = iVar13 - *(int *)(pbVar32 + (int)puVar25);
-      bVar29 = (plane3 >> 3) << 5 | plane3Rot >> 3;
-      (pbVar32 + (int)puVar25)[0x3010] = (pbVar32 + (int)puVar25)[0x3010] + bVar29;
-      (pbVar32 + (int)puVar25)[0x325a] =
-           (pbVar32 + (int)puVar25)[0x325a] + (char)((uint)iVar13 >> 8);
-      (pbVar32 + (int)puVar25)[0x34a4] = (pbVar32 + (int)puVar25)[0x34a4] + plane2Sum;
-      (pbVar32 + (int)puVar25)[0x36ee] = (pbVar32 + (int)puVar25)[0x36ee] + (char)iVar13;
-      (pbVar32 + (int)puVar25)[0x38] = (pbVar32 + (int)puVar25)[0x38] + bVar29;
-      *(int *)(framePtr + -0x14) = iVar13;
-      *(int *)(framePtr + -0x16) = iVar14;
-      *(uint16_t *)(framePtr + -0x18) = (uint16_t)CONCAT11(bVar29,plane2Sum);
-      *(uint16_t *)(framePtr + -0x1a) = (uint16_t)pbVar32;
-      *(int *)(framePtr + -0x1c) = framePtr + -0x12;
-      *(uint16_t *)(framePtr + -0x1e) = (uint16_t)pbVar47;
-      *(uint *)(framePtr + -0x20) = (uint)puVar25;
-      *(uint16_t *)(framePtr + -0x22) = (uint16_t)piVar50;
-      *(int *)(framePtr + -0x24) = iVar13;
-      pcVar7 = (code *)swi(3);
-      (*pcVar7)();
-      return;
-    }
-    pbVar32[(int)puVar25] = pbVar32[(int)puVar25] + plane3Rot;
-    *piVar50 = *piVar50;
-    pbVar47[(int)piVar50] = pbVar47[(int)piVar50] & (byte)iVar20;
-    pbVar32[(int)puVar25] = pbVar32[(int)puVar25] & (byte)iVar13;
-    *(byte *)(piVar50 + 0x11) = (char)piVar50[0x11] + plane2Sum;
-    pbVar32[(int)puVar25] = pbVar32[(int)puVar25] + (byte)iVar13;
+  if (CrossBlitFlag == 0) {
+    CrossBlitPtr.ofs =
+         (uint16_t)ovr_stshRleCut(0,0xa000,CrossBlitX,CrossBlitY,CrossBlitX + 0xd,CrossBlitY + 9);
+    CrossBlitPtr.seg = in_DX;
+    dst.seg = 0xa000;
+    dst.ofs = CrossBlitY * 0x140 + CrossBlitX;
+    ovr_blitLoadRleGfx(CrossBlitGfx,dst);
   }
-                    /* WARNING: Bad instruction - Truncating control flow here */
-  halt_baddata();
+  if (MouseMoved == 0) {
+    ovr_play_sfxU(0,1,draw_compute3(CrossBlitX));
+  }
+  return;
 }
 
 

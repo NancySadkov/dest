@@ -20359,6 +20359,37 @@ appears nowhere in the image window. Now:
 written as `ovr_blitLoadRleGfx(FontHandle,0xc31d,0xa000)` - identical push order, so the emitted code
 matches there too.)
 
+## `draw_textTalkwin9Lbm` re-derived (2e25:025a) - grep -1,703
+
+The tree held 542 lines for a 515-byte image routine with eight calls; the body was Ghidra's mangled
+recovery (891 `?Var`/`Stack_` names). The image is a clean two-part function:
+
+* `GameRunning` set -> return;
+* clear `CrossBlitFlag`/`CrossBlitCount2`, set `CrossBlitCount = 1`, free and clear `CrossBlitPtr`;
+* position: MenuMode 1 + item 5 switches on `bigcompFrame` (0x108/0x46, 0x10c/0x49, 0x108/0x4d,
+  0x103/0x49 for 0/2/4/6, odd values untouched), MenuMode 1 otherwise uses
+  `menuCursorX/Y[item] + 0xed / (0x3b-5)`; MenuMode 2 is (0x128,0x73) for item 5 else
+  (`attact_usesLDIV_at_(item)+0xe4`, 0x68); every other mode is (0x128,0x73) for item 5 else
+  `draw_compute1/2(item) - 6/-5`;
+* if `CrossBlitFlag` is clear, capture six words with `stshRleCut(0,0xa000,X,Y,X+0xd,Y+9)` and blit
+  `CrossBlitGfx` to `0xa000:(CrossBlitY*0x140+CrossBlitX)`;
+* unless `MouseMoved`, `play_sfxU(0,1,draw_compute3(CrossBlitX))`.
+
+Thunks resolved with `tmp/thunk_names.py`: 0x118,0x20 -> `ovr_stshRleCut`; 0x118,0x2a ->
+`ovr_blitLoadRleGfx`; 0x158,0x3e -> `ovr_attact_usesLDIV_at_` (all three module-2e25 sites agree);
+0x170,0x70 -> `ovr_stshFree`; 0x140,0x2f -> `ovr_play_sfxU`. The DX half of stshRleCut's far result
+keeps the tree's `in_DX` placeholder (as at ovc28_ui.c:544 and ovc16_saveui.c:116).
+
+## Measured (HEAD 46ca9e04+1 -> this commit)
+
+    grep_checks      23,850 -> 22,147   (-1,703: the mangled body's locals)
+    REBUILT.EXE      487,710 -> 482,336 (-5,374: the module is linked; 542 lines -> 106)
+    build 65/65, LINK.LOG 0 problems
+    compare_state    1,628/0/0 (unchanged)
+    diff_dgroup      1,639/1,805 matched, 5 runs, sum|delta| 18 (unchanged)
+    compare_runtime  1,692 matched, 1,683 identical / 9 different at all three sample points
+    screen_calls     `2e25:025a` leaves the delta table (C 891-era body, image 8 calls -> matched)
+
 ## Measured (HEAD 34dbbdd2 -> this commit)
 
 
