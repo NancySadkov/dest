@@ -3656,8 +3656,8 @@ uint16_t screenpos(uint vramOfs)
 void __cdecl16near moveto(uint16_t *curPos,uint16_t *nextPos)
 
 {
-  byte bVar1;
-  char cVar3;
+  byte nextCol;
+  char row;
   uint16_t uVar2;
   
   uVar2 = *nextPos;
@@ -3665,11 +3665,11 @@ void __cdecl16near moveto(uint16_t *curPos,uint16_t *nextPos)
     _VideoInt(0x0200);
     *curPos = uVar2;
   }
-  cVar3 = (char)(uVar2 >> 8);
-  bVar1 = (char)uVar2 + 1;
-  uVar2 = CONCAT11(cVar3,bVar1);
-  if (_video.screenwidth <= bVar1) {
-    uVar2 = (uint)(byte)(cVar3 + 1) << 8;
+  row = (char)(uVar2 >> 8);
+  nextCol = (char)uVar2 + 1;
+  uVar2 = CONCAT11(row,nextCol);
+  if (_video.screenwidth <= nextCol) {
+    uVar2 = (uint)(byte)(row + 1) << 8;
   }
   *nextPos = uVar2;
   return;

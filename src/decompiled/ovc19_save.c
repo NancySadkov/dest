@@ -302,21 +302,21 @@ int __cdecl16far save_writeBlock(int handle,void *buf,uint16_t bufSeg,uint16_t c
 {
   uint16_t in_AX;
   int iVar1;
-  uint16_t uVar2;
-  byte bVar3;
+  uint16_t written;
+  byte writtenHi;
   int in_stack_00000004;
   
   if ((*(uint16_t *)((uint8_t *)&(buf) + 2)) == 0) {
     iVar1 = CONCAT11((char)((uint)in_AX >> 8),1);
   }
   else {
-    uVar2 = write(in_stack_00000004,(void *)CONCAT22((void *)buf,handle),(*(uint16_t *)((uint8_t *)&(buf) + 2)));
-    bVar3 = (byte)(uVar2 >> 8);
-    if (uVar2 == (*(uint16_t *)((uint8_t *)&(buf) + 2))) {
-      iVar1 = CONCAT11(bVar3,1);
+    written = write(in_stack_00000004,(void *)CONCAT22((void *)buf,handle),(*(uint16_t *)((uint8_t *)&(buf) + 2)));
+    writtenHi = (byte)(written >> 8);
+    if (written == (*(uint16_t *)((uint8_t *)&(buf) + 2))) {
+      iVar1 = CONCAT11(writtenHi,1);
     }
     else {
-      iVar1 = (uint)bVar3 << 8;
+      iVar1 = (uint)writtenHi << 8;
     }
   }
   return iVar1;

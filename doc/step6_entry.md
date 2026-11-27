@@ -17355,3 +17355,35 @@ No code changed this turn; the tree is at the same measured state
 (build 65/65, LINK.LOG 65 bytes / 0 problems, grep_checks 34,599, compare_state 1,628/0/0,
 diff_dgroup 1,639/1,805 matched with sum|delta| 18, runtime 1,683 identical / 9 different at all three
 sample points).  `scripts/dis_orig.py` is the reusable tool this produced.
+
+### section 5: batch 18 - four small functions (34,599 -> 34,568)
+section 5: batch 18 - four small functions (34,599 -> 34,568)
+
+ovc41_specialAttack
+    uVar16  (undefined1)GSavedBlitSeg                  -> blitSegLo   (3)
+    iVar6   (uint)bVar4 + agnt->gdata->dmgBonus        -> damageTotal (3)
+
+ovc25_usesAlignUp48
+    uVar2  ovr_attact_usesGUnits(...)                  -> unitsResult (3)
+    uVar1  ovr_alignUp4(Entities[i].base.x + ...)      -> alignedX    (3)
+    iVar3  ovc25_usesAlignUp46(...)                    -> result46    (3)
+
+save_writeBlock
+    uVar2  write(handle, buf, count)                   -> written    (4)
+    bVar3  (byte)(uVar2 >> 8)                          -> writtenHi  (4)
+
+moveto
+    cVar3  (char)(uVar2 >> 8), the packed position's high byte -> row     (4)
+    bVar1  (char)uVar2 + 1, its low byte plus one              -> nextCol (4)
+        `moveto` advances the stored cursor by one column and wraps to the next row when
+        `_video.screenwidth <= nextCol`, so the two bytes are the row and the next column.
+
+  grep_checks 34,599 -> 34,568 (-31); build 65/65; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,628/0/0
+  diff_dgroup 1,639/1,805 matched, 5 runs, sum|delta| 18, mean 0, worst 12
+  compare_runtime 1,692 matched, 1,683 identical / 9 different at all three sample points
+
+The renameable total from tmp/rank_all5.py is now 1,118 occurrences across 210 functions (it was 1,613
+when the screen was first written), and the top of the ranking is entirely the code this project has
+repeatedly declined on evidence: `draw_textGoldProvidesHousing` (register fragments), `ovc22_textRingProt`'s
+`SBORROW1` chains, `draw_textTalkwin9Lbm`'s accumulator sums and the `__vprinter` helpers.

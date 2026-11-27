@@ -2653,7 +2653,7 @@ void __cdecl16far ovc41_specialAttack(agnt_t far *agnt,int targetIndex,uint16_t 
   byte bVar4;
   uint16_t uVar5;
   agnt_t far *targetAgnt;
-  int iVar6;
+  int damageTotal;
   char *textPtr;
   uint8_t *stashOfs;
   uint16_t uVar9;
@@ -2664,7 +2664,7 @@ void __cdecl16far ovc41_specialAttack(agnt_t far *agnt,int targetIndex,uint16_t 
   undefined1 uVar13;
   undefined1 uVar14;
   undefined1 uVar15;
-  undefined1 uVar16;
+  undefined1 blitSegLo;
   uint8_t actorName;
   uint8_t targetName;
   static char msg[64];   /* DGROUP-backed formatting buffer */
@@ -2696,9 +2696,9 @@ void __cdecl16far ovc41_specialAttack(agnt_t far *agnt,int targetIndex,uint16_t 
         else {
           bVar4 = ovr_manage_rollDice(((agntG_t far *)agnt->gdata)->dmgDice,
                                       ((agntG_t far *)agnt->gdata)->dmgSides);
-          iVar6 = (uint)bVar4 + (uint)((agntG_t far *)agnt->gdata)->dmgBonus;
+          damageTotal = (uint)bVar4 + (uint)((agntG_t far *)agnt->gdata)->dmgBonus;
           bVar4 = ovr_agnt_compute9(agnt,uVar13);
-          uVar10 = iVar6 + (char)bVar4;
+          uVar10 = damageTotal + (char)bVar4;
           damage = uVar10;
         }
         if ((damage != 0) && ((((agntG_t far *)agnt->gdata)->flags3 & 8) != 0)) {
@@ -2725,14 +2725,14 @@ void __cdecl16far ovc41_specialAttack(agnt_t far *agnt,int targetIndex,uint16_t 
                  (((agnt->gindex == 0x0 && ((((agntG_t far *)agnt->gdata)->flags2 & 2) != 0)) &&
                   (damage = ovr_ovc27_rollToHitEntity((uint32_t)agntPtr,0), (damage & 0xff) == 0)))
                  ) {
-                uVar16 = (undefined1)GSavedBlitSeg;
+                blitSegLo = (undefined1)GSavedBlitSeg;
                 textPtr = ovr_agnt_statusText((agnt_t far *)agntPtr,(char *)CONCAT13((char)((uint)&actorName >> 8),
                                                               CONCAT12((char)&actorName,
                                                                        (*(uint16_t *)((uint8_t *)&(agntPtr) + 2)))),0);
                 uVar15 = (undefined1)uVar10;
                 uVar12 = SUB21(textPtr,0);
                 textPtr = ovr_agnt_statusText(agnt,(char *)CONCAT22(&targetName,targetIndex),0);
-                stashOfs = ovr_ovc15_usesStshRealloc(textPtr,uVar10,uVar12,uVar15,uVar16,0,0,0);
+                stashOfs = ovr_ovc15_usesStshRealloc(textPtr,uVar10,uVar12,uVar15,blitSegLo,0,0,0);
                 textPtr = ovr_stsprintf(msg,(char *)CONCAT22(0x70b5,_SS),
                                        (char *)CONCAT22(stashOfs,(char *)0x2410),uVar10);
                 ovr_uiNotify(textPtr,uVar10,(char)uVar10);
