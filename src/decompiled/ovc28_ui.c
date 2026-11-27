@@ -628,9 +628,9 @@ char * __cdecl16far uiInputText(far_t entries,uint16_t count,far_t hint,uint8_t 
 {
   int entryPtr;
   uint uVar2;
-  undefined1 uVar5;
+  undefined1 segHi;
   uint16_t key;
-  uint16_t uVar4;
+  uint16_t screenModeResult;
   
   UserWantsExit = 0;
   if (hint.ofs != 0 || hint.seg != 0) {
@@ -653,10 +653,10 @@ char * __cdecl16far uiInputText(far_t entries,uint16_t count,far_t hint,uint8_t 
     uVar2 = 0x2410;
     GMenuItem = 0;
   }
-  uVar5 = (undefined1)(uVar2 >> 8);
+  segHi = (undefined1)(uVar2 >> 8);
   ovr_ovc40_flushInput();
   if (SfxPending != '\0') {
-    ovr_play_sfx(CONCAT11(uVar5,SfxPending),0,0);
+    ovr_play_sfx(CONCAT11(segHi,SfxPending),0,0);
     SfxPending = '\0';
   }
   GMenuFlag = 1;
@@ -803,11 +803,11 @@ L_uiInputText_1348:
         return (char *)0x2400;
       }
       if (key == 0xffff) {
-        uVar4 = ovc28_usesScreenMode(entries,count);
-        if ((char)uVar4 != -1) {
+        screenModeResult = ovc28_usesScreenMode(entries,count);
+        if ((char)screenModeResult != -1) {
           ovc28_usesBlitLoadRleGfx();
           GMenuFlag = 0;
-          return (char *)CONCAT11(0x24,(char)uVar4);
+          return (char *)CONCAT11(0x24,(char)screenModeResult);
         }
       }
     }

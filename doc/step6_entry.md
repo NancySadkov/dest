@@ -17623,3 +17623,43 @@ batch 25
 
 `frameWord1`/`frameWord3` state the offsets (pframe.ofs + 1 and + 3) rather than claiming which fields they
 are; the same for `remaining`, which is exactly `sz.lo - wrsz` / `nbytes.lo - n`.
+
+### section 5: batch 26 - seven functions (34,395 -> 34,339)
+section 5: batch 26 - seven functions (34,395 -> 34,339)
+
+ems_init / ems_init2 (crtl.c) - identical EMS/DOS probes
+    cVar2  a byte returned by an INT 21h call, tested against 0  -> int21Byte    (3 each)
+    uVar4  AX from INT 67h: AH tested for 0, AL tested < 0x40    -> emsVersionAx (4 each)
+        AL < 0x40 is the EMM version check (EMS 3.0 reports 0x40), so the word is that
+        call's AX rather than an arbitrary value.
+
+_gettext (crtl.c)
+    uVar3  __VPTR(y1, x1), the source video address            -> srcPtr         (4)
+    iVar1  __VALIDATEXY(y2, x2, y1, x1), the bounds result     -> validateResult (3)
+
+video_usesMiceUnkState (video.c)
+    iVar2  video_findAgentAt(MouseX - 0xc, MouseY - 7)         -> agentIdx  (3)
+    uVar3  video_pointInButton(MouseX - 0xc, MouseY - 7)       -> buttonHit (3)
+    uVar1  the result: 0 no state, 1 button, 2 agent, 3 terrain -> stateCode (9)
+
+ovc45_compute9 (ovc45_unitinfo.c)
+    uVar2  ovr_font_textWidth(src, font, maxWidth, 0, 0)       -> fullWidth (3)
+    bVar1  a byte read from the font data                      -> fontByte  (3)
+
+uiInputText (ovc28_ui.c)
+    uVar4  ovc28_usesScreenMode(entries, count), tested != -1 and packed as
+           CONCAT11(0x24, ...) in the return                   -> screenModeResult (4)
+    uVar5  high byte of uVar2, the segment of CONCAT11(uVar5, SfxPending)
+                                                               -> segHi (3)
+
+__vprinter_1000_0ebc (crtl.c) - the flush block whose behaviour was read from the image at 1000:0ebc
+    iVar2  unaff_DI - (unaff_BP - 0x96), bytes in the frame buffer -> flushCount (4)
+    iVar1  the emit callback's return, 0 sets the error flag       -> emitResult (3)
+
+`stateCode` is the one name here on a multi-assignment local: `uVar1` is written once on every branch
+and then returned, so it is the function's result rather than a reused scratch slot.
+
+  grep_checks 34,395 -> 34,339 (-56); build 65/65; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,628/0/0
+  diff_dgroup 1,639/1,805 matched, 5 runs, sum|delta| 18, mean 0, worst 12
+  compare_runtime 1,692 matched, 1,683 identical / 9 different at all three sample points

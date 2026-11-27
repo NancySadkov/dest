@@ -69,40 +69,40 @@ int __cdecl16far video_findAgentAt(int x,int y)
 uint8_t __cdecl16far video_usesMiceUnkState(void)
 
 {
-  uint8_t uVar1;
-  int iVar2;
-  uint16_t uVar3;
+  uint8_t stateCode;
+  int agentIdx;
+  uint16_t buttonHit;
   
   if (MiceUnkState == '\0') {
-    uVar1 = 0x0;
+    stateCode = 0x0;
   }
   else if ((((MouseX < 0xc) || (0xde < MouseX)) || (MouseY < 7)) || (0x96 < MouseY)) {
     if (((MouseX < 0xef) || (0x134 < MouseX)) || ((MouseY < 7 || (0x36 < MouseY)))) {
-      uVar1 = 0x0;
+      stateCode = 0x0;
     }
     else {
-      uVar1 = 0x3;
+      stateCode = 0x3;
     }
   }
   else if (GOngoingBattle == '\0') {
-    iVar2 = video_findAgentAt(MouseX - 0xc,MouseY - 7);
-    if (iVar2 == -1) {
-      uVar3 = video_pointInButton(MouseX - 0xc,MouseY - 7);
-      if ((char)uVar3 == '\0') {
-        uVar1 = 0x3;
+    agentIdx = video_findAgentAt(MouseX - 0xc,MouseY - 7);
+    if (agentIdx == -1) {
+      buttonHit = video_pointInButton(MouseX - 0xc,MouseY - 7);
+      if ((char)buttonHit == '\0') {
+        stateCode = 0x3;
       }
       else {
-        uVar1 = 0x1;
+        stateCode = 0x1;
       }
     }
     else {
-      uVar1 = 0x2;
+      stateCode = 0x2;
     }
   }
   else {
-    uVar1 = 0x3;
+    stateCode = 0x3;
   }
-  return uVar1;
+  return stateCode;
 }
 
 

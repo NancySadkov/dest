@@ -805,10 +805,10 @@ uint32_t * __cdecl16far ems_init(uint32_t *retStorage)
 
 {
   code *pcVar1;
-  char cVar2;
+  char int21Byte;
   uint32_t *puVar3;
   char extraout_AH;
-  uint16_t uVar4;
+  uint16_t emsVersionAx;
   char extraout_AH_00;
   char extraout_AH_01;
   int iVar5;
@@ -824,8 +824,8 @@ uint32_t * __cdecl16far ems_init(uint32_t *retStorage)
     (*pcVar1)();
     if ((!(bool)in_CF) && (bVar6 = false, (extraout_DX & 0x80) != 0)) {
       pcVar1 = (code *)swi(0x21);
-      cVar2 = (*pcVar1)();
-      if ((!bVar6) && (bVar6 = false, cVar2 != '\0')) {
+      int21Byte = (*pcVar1)();
+      if ((!bVar6) && (bVar6 = false, int21Byte != '\0')) {
         pcVar1 = (code *)swi(0x21);
         (*pcVar1)();
         if (bVar6) {
@@ -837,11 +837,11 @@ uint32_t * __cdecl16far ems_init(uint32_t *retStorage)
           return (uint32_t *)0x0;
         }
         pcVar1 = (code *)swi(0x67);
-        uVar4 = (*pcVar1)();
-        if ((char)((uint)uVar4 >> 8) != '\0') {
+        emsVersionAx = (*pcVar1)();
+        if ((char)((uint)emsVersionAx >> 8) != '\0') {
           return (uint32_t *)0x0;
         }
-        if ((byte)uVar4 < 0x40) {
+        if ((byte)emsVersionAx < 0x40) {
           return (uint32_t *)0x0;
         }
         pcVar1 = (code *)swi(0x67);
@@ -880,10 +880,10 @@ int __cdecl16far ems_init2(void)
 
 {
   code *pcVar1;
-  char cVar2;
+  char int21Byte;
   int iVar3;
   char extraout_AH;
-  uint16_t uVar4;
+  uint16_t emsVersionAx;
   char extraout_AH_00;
   char extraout_AH_01;
   uint extraout_DX;
@@ -900,8 +900,8 @@ int __cdecl16far ems_init2(void)
     (*pcVar1)();
     if ((!(bool)in_CF) && (bVar5 = false, (extraout_DX & 0x80) != 0)) {
       pcVar1 = (code *)swi(0x21);
-      cVar2 = (*pcVar1)();
-      if ((!bVar5) && (bVar5 = false, cVar2 != '\0')) {
+      int21Byte = (*pcVar1)();
+      if ((!bVar5) && (bVar5 = false, int21Byte != '\0')) {
         pcVar1 = (code *)swi(0x21);
         (*pcVar1)();
         if (bVar5) {
@@ -913,11 +913,11 @@ int __cdecl16far ems_init2(void)
           return 0;
         }
         pcVar1 = (code *)swi(0x67);
-        uVar4 = (*pcVar1)();
-        if ((char)((uint)uVar4 >> 8) != '\0') {
+        emsVersionAx = (*pcVar1)();
+        if ((char)((uint)emsVersionAx >> 8) != '\0') {
           return 0;
         }
-        if ((byte)uVar4 < 0x40) {
+        if ((byte)emsVersionAx < 0x40) {
           return 0;
         }
         pcVar1 = (code *)swi(0x67);
@@ -2379,20 +2379,20 @@ void __cdecl16near __vprinter_1000_0eb3(void)
 void __cdecl16near __vprinter_1000_0ebc(void)
 
 {
-  int iVar1;
+  int emitResult;
   int unaff_BP;
   int unaff_DI;
-  int iVar2;
+  int flushCount;
   
-  iVar2 = unaff_DI - (unaff_BP + -0x96);
-  iVar1 = (*(code *)*(uint16_t *)(unaff_BP + 0xe))
-                    (*(uint16_t *)(unaff_BP + 10),*(uint16_t *)(unaff_BP + 0xc),iVar2,
+  flushCount = unaff_DI - (unaff_BP + -0x96);
+  emitResult = (*(code *)*(uint16_t *)(unaff_BP + 0xe))
+                    (*(uint16_t *)(unaff_BP + 10),*(uint16_t *)(unaff_BP + 0xc),flushCount,
                      unaff_BP + -0x96);
-  if (iVar1 == 0) {
+  if (emitResult == 0) {
     *(uint16_t *)(unaff_BP + -0x16) = 1;
   }
   *(uint16_t *)((char *)init_textFilename + unaff_BP) = 0x50;
-  *(int *)(unaff_BP + -0x12) = *(int *)(unaff_BP + -0x12) + iVar2;
+  *(int *)(unaff_BP + -0x12) = *(int *)(unaff_BP + -0x12) + flushCount;
   return;
 }
 
@@ -3553,15 +3553,15 @@ uint __cdecl16far _farcoreleft(void)
 uint16_t __cdecl16far _gettext(int x1,int y1,int x2,int y2,int buf,uint16_t bufSeg)
 
 {
-  int iVar1;
+  int validateResult;
   uint16_t uVar2;
   uint16_t width;
-  uint32_t uVar3;
+  uint32_t srcPtr;
   uint16_t dstOfs;
   uint16_t dstSeg;
   
-  iVar1 = __VALIDATEXY(y2,x2,y1,x1);
-  if (iVar1 == 0) {
+  validateResult = __VALIDATEXY(y2,x2,y1,x1);
+  if (validateResult == 0) {
     uVar2 = 0;
   }
   else {
@@ -3569,8 +3569,8 @@ uint16_t __cdecl16far _gettext(int x1,int y1,int x2,int y2,int buf,uint16_t bufS
     for (; y1 <= y2; y1 = y1 + 1) {
       dstOfs = buf;
       dstSeg = bufSeg;
-      uVar3 = __VPTR(y1,x1);
-      __SCREENIO(width,(uint16_t)uVar3,(uint16_t)((ulong)uVar3 >> 0x10),dstOfs,dstSeg);
+      srcPtr = __VPTR(y1,x1);
+      __SCREENIO(width,(uint16_t)srcPtr,(uint16_t)((ulong)srcPtr >> 0x10),dstOfs,dstSeg);
       buf = buf + width * 2;
     }
     uVar2 = 1;
