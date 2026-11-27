@@ -16857,3 +16857,67 @@ computed (no `mov [0x200],...` exists anywhere in either EXE - checked by byte p
 
 Next: instrument or read our `vprinter` path for a store of three words to a computed DGROUP address, and
 compare against what the original's `printf` at 1000:2747 actually does with the same 62-byte argument.
+
+### step 6: the 0x0200 write is our stdio setup (setvbuf + library printf)
+step 6: the 0x0200 write is our stdio setup - `setvbuf`, and a printf that is not ours
+
+## The writer is setvbuf, proven by disabling it
+
+`scripts/probe_patch.py <symbol> [N]` patches one symbol's entry in the *rebuilt* image to a bare `retf`,
+runs it with the INT 16h TSR (which dumps DGROUP at the Nth AH=00) and reports whether
+DGROUP:0x1fa..0x206 is damaged:
+
+    python scripts/probe_patch.py printf 1     -> clean   (printf's body is required for the damage)
+    python scripts/probe_patch.py setvbuf 1    -> clean   (so is setvbuf)
+    unpatched                                  -> 66 69 67 68 74 65 00 27 00 13 00 1d
+
+So the damage needs both functions, and `setvbuf` is where the state is set up that the write then uses.
+
+## Why both are involved: printf is CM.LIB's, not the original's
+
+`REBUILT.MAP` shows `_PRINTF` in `_TEXT` as module **PRINTF** at `0000:19ED` - i.e. the C library's printf,
+pulled from CM.LIB.  The original's own printf is at `1000:2747`, which is where our recovered `st_printf`
+is annotated (`crtl.c: /* 1000:2747 */`), but our `st_printf` body is
+
+    void __cdecl16far st_printf(char *fmt,...) { __vprinter(); return; }
+
+and `__vprinter()` is a parameter-less stub chaining into `__vprinter_func_start()` (407 lines of
+`unaff_DI`/`in_AL` register fragments).  The recovered printf cannot be used until that chain is rebuilt,
+so the game's `printf` calls resolve to the library's instead - a real fidelity gap: the original ran its
+own CRT printf here.
+
+The library's printf and our recovered stdio code both operate on the same `_streams` array
+(`st_globals` DGROUP:0x8626, 20 `FILE` records of 20 bytes, matching the original's span to `_nfile`
+at 0x87b6).  Their expectations of that array differ, and the buffer setup is where it shows.
+
+## The state difference at the sample point
+
+Decoding `_streams` from both runtime dumps (same sample, first key read):
+
+    FILE[0]  ours  level=0      flags=020d  bsize=0200  buffer=77f5:b968  curp=77f5:b968  istemp=ffff
+             orig  level=0      flags=020d  bsize=0200  buffer=3830:0004  curp=3830:0004  istemp=0000
+    FILE[1]  ours  level=0      flags=0006  bsize=0206  buffer=77f5:b768  curp=77f5:b768
+             orig  level=fe6d   flags=0106  bsize=0200  buffer=3851:0004  curp=3851:0072
+
+Three concrete defects fall out of that table:
+
+  * `FILE[1].bsize` is 0x0206 where the original has 0x0200, and `FILE[1].flags` is 0x0006 where the
+    original has 0x0106 - the buffer-allocated bit is missing, so the library's printf treats stderr as
+    unbuffered while our code believes otherwise;
+  * our buffers are two 512-byte *statics* in DGROUP (0xb768, 0xb968) whereas the original allocates them
+    as separate far blocks (3830:0004, 3851:0004) - that is the hand-written replacement in
+    `crtl.c:4412` (`static char streamBuf0[0x200]`), under a comment marking the original's `1000:2b24`;
+  * `FILE[0].istemp` is left at 0xffff instead of 0.
+
+The 6-byte write into `s_fighter_unit_2410_01fa` is the visible symptom of that mis-set-up record: the
+library's printf walks the buffer fields we wrote and stores three words at a computed address that happens
+to be DGROUP:0x0200.  The values written (0x2700, 0x1300, 0x1d00) are segment-like, consistent with
+`buffer`/`curp` far-pointer halves rather than text.
+
+## Next
+
+Either (a) make `setvbuf` write the same record shape the original does - `bsize` exactly the requested
+size, the buffer-allocated flag set, `istemp` zeroed, and buffers obtained the way the original obtains them
+(farmalloc'ed far blocks, not DGROUP statics) - and re-measure with `scripts/dump_at_key.py`; or (b) finish
+recovering `__vprinter`'s parameter chain so the game uses the original's printf and CM.LIB's PRINTF member
+is no longer linked at all, which removes the mixed-implementation problem at its root.
