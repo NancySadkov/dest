@@ -183,7 +183,7 @@ void __cdecl16far stshInitSprites(bool grab)
   far_t far *pfVar1;
   int labelOfs;
   int prtOfs;
-  stg_tmp_t *gfx;
+  stg_tmp_t far *gfx;
   cte_t *pcVar4;
   uint32_t *puVar5;
   uint16_t in_DX;
@@ -235,7 +235,7 @@ void __cdecl16far stshInitSprites(bool grab)
         puVar7 = (uint8_t *)((int)&BuildingTypes[0x9f].income + 1);
         gfx = ovr_grabLbm(AgntGs[i].prtfls[j],0,0);
         puVar8 = puVar7;
-        ovr_stshUniqueColorsRemap(gfx,puVar7);
+        ovr_stshUniqueColorsRemap(gfx);
         pixels.seg = 0;
         pixels.ofs = (gfx->aptr).seg;
         pfVar1 = ovr_stshRleType2((far_t far *)(&gfx->aptr)->ofs,pixels,0,114,103,0,0,
@@ -248,7 +248,7 @@ void __cdecl16far stshInitSprites(bool grab)
         unaff_DI = (far_t far *)((ulong)sz >> 0x10);
         AgntGs[i].prtpals[j].seg = uVar6;
         AgntGs[i].prtpals[j].ofs = (uint16_t)( puVar5);
-        ovr_stgFreeTmp(gfx,puVar7);
+        ovr_stgFreeTmp(gfx);
       }
       else {
         pfVar1 = ovr_stshAllocStub();

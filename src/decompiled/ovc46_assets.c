@@ -12,7 +12,7 @@
 void __cdecl16far init_assets1(bool grab)
 
 {
-  stg_tmp_t *lbmTmp;
+  stg_tmp_t far *lbmTmp;
   far_t *rleRec;
   uint16_t in_DX;
   uint16_t rleSeg;
@@ -236,7 +236,7 @@ void __cdecl16far init_assets1(bool grab)
     asm { mov rleSeg,dx };
     BldGfxNormal[0x209].ofs = stsh_store((uint8_t *)rleRec, (uint16_t)rleSeg, &stshSegTmp);
     BldGfxNormal[0x209].seg = stshSegTmp;
-    ovr_stgFreeTmp(lbmTmp,in_DX);
+    ovr_stgFreeTmp(lbmTmp);
     lbmTmp = ovr_grabLbmTR(490);
     pixels_08.seg = 0x1b;
     pixels_08.ofs = (lbmTmp->aptr).seg;
@@ -293,7 +293,7 @@ void __cdecl16far init_assets1(bool grab)
     asm { mov rleSeg,dx };
     BldGfxRuin[0x209].ofs = stsh_store((uint8_t *)rleRec, (uint16_t)rleSeg, &stshSegTmp);
     BldGfxRuin[0x209].seg = stshSegTmp;
-    ovr_stgFreeTmp(lbmTmp,rleSeg2);
+    ovr_stgFreeTmp(lbmTmp);
     lbmTmp = ovr_grabLbmTR(491);
     pixels_17.seg = 2;
     pixels_17.ofs = (lbmTmp->aptr).seg;
@@ -350,7 +350,7 @@ void __cdecl16far init_assets1(bool grab)
     asm { mov rleSeg,dx };
     BldGfxNormal[0x212].ofs = stsh_store((uint8_t *)rleRec, (uint16_t)rleSeg, &stshSegTmp);
     BldGfxNormal[0x212].seg = stshSegTmp;
-    ovr_stgFreeTmp(lbmTmp,rleSeg3);
+    ovr_stgFreeTmp(lbmTmp);
     lbmTmp = ovr_grabLbmTR(492);
     pixels_26.seg = 2;
     pixels_26.ofs = (lbmTmp->aptr).seg;
@@ -407,7 +407,7 @@ void __cdecl16far init_assets1(bool grab)
     asm { mov rleSeg,dx };
     BldGfxRuin[0x212].ofs = stsh_store((uint8_t *)rleRec, (uint16_t)rleSeg, &stshSegTmp);
     BldGfxRuin[0x212].seg = stshSegTmp;
-    ovr_stgFreeTmp(lbmTmp,rleSeg2);
+    ovr_stgFreeTmp(lbmTmp);
     lbmTmp = ovr_grabLbmTR(493);
     pixels_35.seg = 0x1b;
     pixels_35.ofs = (lbmTmp->aptr).seg;
@@ -464,7 +464,7 @@ void __cdecl16far init_assets1(bool grab)
     asm { mov rleSeg,dx };
     BldGfxNormal[0x21b].ofs = stsh_store((uint8_t *)rleRec, (uint16_t)rleSeg, &stshSegTmp);
     BldGfxNormal[0x21b].seg = stshSegTmp;
-    ovr_stgFreeTmp(lbmTmp,rleSeg3);
+    ovr_stgFreeTmp(lbmTmp);
     lbmTmp = ovr_grabLbmTR(494);
     pixels_44.seg = 0x1b;
     pixels_44.ofs = (lbmTmp->aptr).seg;
@@ -521,7 +521,7 @@ void __cdecl16far init_assets1(bool grab)
     asm { mov rleSeg,dx };
     BldGfxRuin[0x21b].ofs = stsh_store((uint8_t *)rleRec, (uint16_t)rleSeg, &stshSegTmp);
     BldGfxRuin[0x21b].seg = stshSegTmp;
-    ovr_stgFreeTmp(lbmTmp,rleSeg2);
+    ovr_stgFreeTmp(lbmTmp);
     ovr_grabBldLbm(473,474,0xb4,0,0);
     lbmTmp = ovr_grabLbmTR(475);
     pixels_53.seg = 2;
@@ -543,7 +543,7 @@ void __cdecl16far init_assets1(bool grab)
     asm { mov rleSeg,dx };
     BldGfxNormal[0x227].ofs = stsh_store((uint8_t *)rleRec, (uint16_t)rleSeg, &stshSegTmp);
     BldGfxNormal[0x227].seg = stshSegTmp;
-    ovr_stgFreeTmp(lbmTmp,rleSeg3);
+    ovr_stgFreeTmp(lbmTmp);
     lbmTmp = ovr_grabLbmTR(476);
     pixels_56.seg = 2;
     pixels_56.ofs = (lbmTmp->aptr).seg;
@@ -564,7 +564,7 @@ void __cdecl16far init_assets1(bool grab)
     asm { mov rleSeg,dx };
     BldGfxRuin[0x227].ofs = stsh_store((uint8_t *)rleRec, (uint16_t)rleSeg, &stshSegTmp);
     BldGfxRuin[0x227].seg = stshSegTmp;
-    ovr_stgFreeTmp(lbmTmp,rleSeg2);
+    ovr_stgFreeTmp(lbmTmp);
     lbmTmp = ovr_grabLbmTR(498);
     pixels_59.seg = 0x6c;
     pixels_59.ofs = (lbmTmp->aptr).seg;
@@ -573,7 +573,7 @@ void __cdecl16far init_assets1(bool grab)
     asm { mov rleSeg,dx };
     BldGfxNormal[0x229].ofs = stsh_store((uint8_t *)rleRec, (uint16_t)rleSeg, &stshSegTmp);
     BldGfxNormal[0x229].seg = stshSegTmp;
-    ovr_stgFreeTmp(lbmTmp,rleSeg3);
+    ovr_stgFreeTmp(lbmTmp);
     lbmTmp = ovr_grabLbmTR(499);
     pixels_60.seg = 0x6c;
     pixels_60.ofs = (lbmTmp->aptr).seg;
@@ -582,7 +582,7 @@ void __cdecl16far init_assets1(bool grab)
     asm { mov rleSeg,dx };
     BldGfxRuin[0x229].ofs = stsh_store((uint8_t *)rleRec, (uint16_t)rleSeg, &stshSegTmp);
     BldGfxRuin[0x229].seg = stshSegTmp;
-    ovr_stgFreeTmp(lbmTmp,rleSeg2);
+    ovr_stgFreeTmp(lbmTmp);
   }
   else {
     ovr_stshStubifyBld(0xab);
@@ -642,7 +642,7 @@ void __cdecl16far init_assets1(bool grab)
     asm { mov rleSeg2,dx };
     BldGfxNormal[0x244].ofs = stsh_store((uint8_t *)rleRec, (uint16_t)rleSeg2, &stshSegTmp);
     BldGfxNormal[0x244].seg = stshSegTmp;
-    ovr_stgFreeTmp(lbmTmp,rleSeg);
+    ovr_stgFreeTmp(lbmTmp);
     lbmTmp = ovr_grabLbmTR(472);
     pixels_64.seg = 0x6e;
     pixels_64.ofs = (lbmTmp->aptr).seg;
@@ -663,7 +663,7 @@ void __cdecl16far init_assets1(bool grab)
     asm { mov rleSeg,dx };
     BldGfxRuin[0x244].ofs = stsh_store((uint8_t *)rleRec, (uint16_t)rleSeg, &stshSegTmp);
     BldGfxRuin[0x244].seg = stshSegTmp;
-    ovr_stgFreeTmp(lbmTmp,rleSeg3);
+    ovr_stgFreeTmp(lbmTmp);
   }
   else {
     BldGfxNormal[0x23e].ofs = (uint16_t)ovr_stshAllocStub();
@@ -713,7 +713,7 @@ void __cdecl16far init_assets1(bool grab)
     asm { mov rleSeg2,dx };
     BldGfxNormal[0x247].ofs = stsh_store((uint8_t *)rleRec, (uint16_t)rleSeg2, &stshSegTmp);
     BldGfxNormal[0x247].seg = stshSegTmp;
-    ovr_stgFreeTmp(lbmTmp,rleSeg);
+    ovr_stgFreeTmp(lbmTmp);
     lbmTmp = ovr_grabLbmTR(478);
     pixels_68.seg = 0x6b;
     pixels_68.ofs = (lbmTmp->aptr).seg;
@@ -722,7 +722,7 @@ void __cdecl16far init_assets1(bool grab)
     asm { mov rleSeg,dx };
     BldGfxRuin[0x247].ofs = stsh_store((uint8_t *)rleRec, (uint16_t)rleSeg, &stshSegTmp);
     BldGfxRuin[0x247].seg = stshSegTmp;
-    ovr_stgFreeTmp(lbmTmp,rleSeg3);
+    ovr_stgFreeTmp(lbmTmp);
   }
   else {
     rleSeg = BldGfxRuin[0x244].seg;
@@ -749,7 +749,7 @@ void __cdecl16far init_assets1(bool grab)
     asm { mov rleSeg2,dx };
     BldGfxNormal[0x24a].ofs = stsh_store((uint8_t *)rleRec, (uint16_t)rleSeg2, &stshSegTmp);
     BldGfxNormal[0x24a].seg = stshSegTmp;
-    ovr_stgFreeTmp(lbmTmp,rleSeg);
+    ovr_stgFreeTmp(lbmTmp);
     lbmTmp = ovr_grabLbmTR(488);
     pixels_70.seg = 0x6b;
     pixels_70.ofs = (lbmTmp->aptr).seg;
@@ -758,7 +758,7 @@ void __cdecl16far init_assets1(bool grab)
     asm { mov rleSeg,dx };
     BldGfxRuin[0x24a].ofs = stsh_store((uint8_t *)rleRec, (uint16_t)rleSeg, &stshSegTmp);
     BldGfxRuin[0x24a].seg = stshSegTmp;
-    ovr_stgFreeTmp(lbmTmp,rleSeg3);
+    ovr_stgFreeTmp(lbmTmp);
   }
   else {
     rleSeg = BldGfxRuin[0x247].seg;
@@ -834,7 +834,7 @@ void __cdecl16far init_assets1(bool grab)
     asm { mov rleSeg2,dx };
     BldGfxNormal[0x254].ofs = stsh_store((uint8_t *)rleRec, (uint16_t)rleSeg2, &stshSegTmp);
     BldGfxNormal[0x254].seg = stshSegTmp;
-    ovr_stgFreeTmp(lbmTmp,rleSeg);
+    ovr_stgFreeTmp(lbmTmp);
     lbmTmp = ovr_grabLbmTR(537);
     pixels_80.seg = 0xd;
     pixels_80.ofs = (lbmTmp->aptr).seg;
@@ -892,7 +892,7 @@ void __cdecl16far init_assets1(bool grab)
     asm { mov rleSeg,dx };
     BldGfxRuin[0x254].ofs = stsh_store((uint8_t *)rleRec, (uint16_t)rleSeg, &stshSegTmp);
     BldGfxRuin[0x254].seg = stshSegTmp;
-    ovr_stgFreeTmp(lbmTmp,rleSeg3);
+    ovr_stgFreeTmp(lbmTmp);
     lbmTmp = ovr_grabLbmTR(495);
     pixels_89.seg = 0x47;
     pixels_89.ofs = (lbmTmp->aptr).seg;
@@ -901,7 +901,7 @@ void __cdecl16far init_assets1(bool grab)
     asm { mov rleSeg,dx };
     BldGfxNormal[0x256].ofs = stsh_store((uint8_t *)rleRec, (uint16_t)rleSeg, &stshSegTmp);
     BldGfxNormal[0x256].seg = stshSegTmp;
-    ovr_stgFreeTmp(lbmTmp,rleSeg2);
+    ovr_stgFreeTmp(lbmTmp);
     lbmTmp = ovr_grabLbmTR(496);
     pixels_90.seg = 0x47;
     pixels_90.ofs = (lbmTmp->aptr).seg;
@@ -910,7 +910,7 @@ void __cdecl16far init_assets1(bool grab)
     asm { mov rleSeg,dx };
     BldGfxRuin[0x256].ofs = stsh_store((uint8_t *)rleRec, (uint16_t)rleSeg, &stshSegTmp);
     BldGfxRuin[0x256].seg = stshSegTmp;
-    ovr_stgFreeTmp(lbmTmp,rleSeg3);
+    ovr_stgFreeTmp(lbmTmp);
   }
   else {
     rleSeg = BldGfxRuin[0x24a].seg;
@@ -950,7 +950,7 @@ void __cdecl16far init_assets1(bool grab)
     asm { mov rleSeg2,dx };
     BldGfxNormal[0x25f].ofs = stsh_store((uint8_t *)rleRec, (uint16_t)rleSeg2, &stshSegTmp);
     BldGfxNormal[0x25f].seg = stshSegTmp;
-    ovr_stgFreeTmp(lbmTmp,rleSeg);
+    ovr_stgFreeTmp(lbmTmp);
     lbmTmp = ovr_grabLbmTR(470);
     pixels_94.seg = 9;
     pixels_94.ofs = (lbmTmp->aptr).seg;
@@ -971,7 +971,7 @@ void __cdecl16far init_assets1(bool grab)
     asm { mov rleSeg,dx };
     BldGfxRuin[0x25f].ofs = stsh_store((uint8_t *)rleRec, (uint16_t)rleSeg, &stshSegTmp);
     BldGfxRuin[0x25f].seg = stshSegTmp;
-    ovr_stgFreeTmp(lbmTmp,rleSeg3);
+    ovr_stgFreeTmp(lbmTmp);
   }
   else {
     rleSeg = BldGfxRuin[0x256].seg;
@@ -1010,7 +1010,7 @@ void __cdecl16far init_assets1(bool grab)
     asm { mov rleSeg,dx };
     BldGfxNormal[0x268].ofs = stsh_store((uint8_t *)rleRec, (uint16_t)rleSeg, &stshSegTmp);
     BldGfxNormal[0x268].seg = stshSegTmp;
-    ovr_stgFreeTmp(lbmTmp,rleSeg2);
+    ovr_stgFreeTmp(lbmTmp);
     lbmTmp = ovr_grabLbmTR(480);
     pixels_x00100.seg = 2;
     pixels_x00100.ofs = (lbmTmp->aptr).seg;
@@ -1031,7 +1031,7 @@ void __cdecl16far init_assets1(bool grab)
     asm { mov rleSeg,dx };
     BldGfxRuin[0x268].ofs = stsh_store((uint8_t *)rleRec, (uint16_t)rleSeg, &stshSegTmp);
     BldGfxRuin[0x268].seg = stshSegTmp;
-    ovr_stgFreeTmp(lbmTmp,rleSeg3);
+    ovr_stgFreeTmp(lbmTmp);
   }
   else {
     BldGfxNormal[0x262].ofs = (uint16_t)ovr_stshAllocStub();
@@ -1105,7 +1105,7 @@ void __cdecl16far init_assets1(bool grab)
     asm { mov rleSeg,dx };
     BldGfxNormal[0x272].ofs = stsh_store((uint8_t *)rleRec, (uint16_t)rleSeg, &stshSegTmp);
     BldGfxNormal[0x272].seg = stshSegTmp;
-    ovr_stgFreeTmp(lbmTmp,rleSeg2);
+    ovr_stgFreeTmp(lbmTmp);
     lbmTmp = ovr_grabLbmTR(497);
     pixels_x00112.seg = 2;
     pixels_x00112.ofs = (lbmTmp->aptr).seg;
@@ -1162,7 +1162,7 @@ void __cdecl16far init_assets1(bool grab)
     asm { mov rleSeg,dx };
     BldGfxRuin[0x272].ofs = stsh_store((uint8_t *)rleRec, (uint16_t)rleSeg, &stshSegTmp);
     BldGfxRuin[0x272].seg = stshSegTmp;
-    ovr_stgFreeTmp(lbmTmp,rleSeg3);
+    ovr_stgFreeTmp(lbmTmp);
     lbmTmp = ovr_grabLbmTR(481);
     pixels_x00121.seg = 2;
     pixels_x00121.ofs = (lbmTmp->aptr).seg;
@@ -1219,7 +1219,7 @@ void __cdecl16far init_assets1(bool grab)
     asm { mov rleSeg,dx };
     BldGfxNormal[0x27b].ofs = stsh_store((uint8_t *)rleRec, (uint16_t)rleSeg, &stshSegTmp);
     BldGfxNormal[0x27b].seg = stshSegTmp;
-    ovr_stgFreeTmp(lbmTmp,rleSeg2);
+    ovr_stgFreeTmp(lbmTmp);
     lbmTmp = ovr_grabLbmTR(482);
     pixels_x00130.seg = 2;
     pixels_x00130.ofs = (lbmTmp->aptr).seg;
@@ -1276,7 +1276,7 @@ void __cdecl16far init_assets1(bool grab)
     asm { mov rleSeg,dx };
     BldGfxRuin[0x27b].ofs = stsh_store((uint8_t *)rleRec, (uint16_t)rleSeg, &stshSegTmp);
     BldGfxRuin[0x27b].seg = stshSegTmp;
-    ovr_stgFreeTmp(lbmTmp,rleSeg3);
+    ovr_stgFreeTmp(lbmTmp);
     lbmTmp = ovr_grabLbmTR(483);
     pixels_x00139.seg = 2;
     pixels_x00139.ofs = (lbmTmp->aptr).seg;
@@ -1333,7 +1333,7 @@ void __cdecl16far init_assets1(bool grab)
     asm { mov rleSeg,dx };
     BldGfxNormal[0x284].ofs = stsh_store((uint8_t *)rleRec, (uint16_t)rleSeg, &stshSegTmp);
     BldGfxNormal[0x284].seg = stshSegTmp;
-    ovr_stgFreeTmp(lbmTmp,rleSeg2);
+    ovr_stgFreeTmp(lbmTmp);
     lbmTmp = ovr_grabLbmTR(484);
     pixels_x00148.seg = 2;
     pixels_x00148.ofs = (lbmTmp->aptr).seg;
@@ -1390,7 +1390,7 @@ void __cdecl16far init_assets1(bool grab)
     asm { mov rleSeg,dx };
     BldGfxRuin[0x284].ofs = stsh_store((uint8_t *)rleRec, (uint16_t)rleSeg, &stshSegTmp);
     BldGfxRuin[0x284].seg = stshSegTmp;
-    ovr_stgFreeTmp(lbmTmp,rleSeg3);
+    ovr_stgFreeTmp(lbmTmp);
     ovr_grabBldLbm(506,507,0xd7,0,0);
   }
   else {
