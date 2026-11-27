@@ -18684,3 +18684,57 @@ Measured (unchanged metrics, corrected code):
     grep_checks 26,977; build 65/65; LINK.LOG 65 bytes / 0 problems
     compare_state 1,628/0/0; diff_dgroup 1,639/1,805 with sum|delta| 18
     compare_runtime 1,692 matched, 1,683 identical / 9 different at all three sample points
+
+### step 6: emptyFunction() calls are intra-function calls, not missing imports
+step 6: the `emptyFunction()` calls are intra-function calls, not missing imports
+
+While starting on the two named-globals queue entries, a distinct defect class turned up that changes
+how both should be approached.
+
+## `5ded:10ea` (`ovc27_textTakesHalfDamage3`, 958 bytes, image 36 calls)
+
+Its call multiset already matches the image almost exactly:
+
+    image                     body
+    0x190,0x57  x2            ovr_manage_rollDice        x2
+    0x148,0x2f  x7            ovr_agnt_statusText        x7
+    0x160,0x25  x4            ovr_ovc15_usesStshRealloc  x4
+    0x170,0x7a  x4            ovr_stsprintf              x4
+    0xf8,0x39   x4            ovr_uiNotify               x4
+    0x140,0x48  x2            ovr_audio_panFromX         x2
+    0x140,0x2f  x2            ovr_play_sfxU              x2
+    0x170,0x5c  x1            ovr_randBelow              x1
+
+so the export is structurally right.  What it is missing is the image's six **near** calls, which the
+body renders as nine bare `emptyFunction();` statements.  Resolving those displacements against the
+function's own base:
+
+    1136 call -> 10ad      1167 call -> 1052      11d7 call -> 1d84
+    124a call -> 1135      12b6 call -> 1e63      13fd call -> 1faa
+
+The first two targets are *inside* the function itself (which spans 0x10ea..0x14a6), and none of the
+four is a named function in `audit/functions_real.tsv`.  So these are not unresolved imports that a
+thunk lookup could name - they are calls into the function's own interior, which is the shape Ghidra
+produces when it fails to recognise a shared tail or a loop head and emits a call instead.  The fix is
+therefore a structural rewrite of the body (fold the called blocks back into the flow), not a
+substitution; `emptyFunction()` is a symptom, not a missing dependency.
+
+That also explains the screen's delta for this function (36 vs 47): the extra eleven are the nine
+placeholders plus two self-references the comment-stripping cannot remove (the body names its own
+siblings in prose-free code).
+
+## `4d05:2d79` (`manage_textTotalPopulation`, 1,427 bytes, image 26 calls)
+
+Structure read in full: three `fmemcpy` template blocks into `ss:[bp-0x94]` (0x30 bytes),
+`ss:[bp-0xc4]` (0x30) and `ss:[bp-8]` (7), then eight `blitLabel` (0xf8,0x57), four `fmVsprintf`
+(0x170,0x7a), four `0xf8,0x34`, one `0x250,0x39`, one `0x1c8,0x3e` and six near calls.  The body's
+frame already matches those buffers (`auStack_94 [23]`, `auStack_66 [10]`), but it also carries
+`ovr_alignUp4` x8, `printf` x5, `ovr_font_textWidth` x4 and `ovr_play_sfx` x3, none of which the image
+has - another merged body, of the kind already corrected eight times.
+
+It is 1,427 bytes of panel layout code; I did not start the rewrite at the end of this turn rather than
+produce half of it.
+
+Gates unchanged this turn (the only `src` change was the Agnts/Entities correction committed as
+`ebb1b9da`): grep_checks 26,977; build 65/65; LINK.LOG 65 bytes / 0 problems; compare_state 1,628/0/0;
+diff_dgroup 1,639/1,805 with sum|delta| 18; compare_runtime 1,692 matched, 1,683 identical / 9 different.
