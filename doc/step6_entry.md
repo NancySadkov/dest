@@ -20058,3 +20058,50 @@ both matching the image's arithmetic and its `es:[bx+0x3f]` test.
 Note for the next `--asm` run: it re-stages the tree, so a full `build_standalone.py` must follow it
 before `link_standalone.py`, or the link runs against the listing-mode objects (I hit exactly that:
 LINK.LOG 28,081 bytes and a 7,930-byte EXE until the full rebuild).
+
+## printf arguments recovered from the image push windows
+
+The diagnostic `printf("%d \r")` calls were emitted without their variadic arguments. A new listing
+tool, `tmp/printf_args.py`, pairs every source printf with its image call site (by the function
+marker that precedes it), follows the `lcall 0,0x2747` (printf) backwards to the
+`push ds; push <literal>` pair, and prints the pushes in order. Each pushed word is labelled from
+`audit/dgroup_data.csv`.
+
+The dominant class is one variable: at `1301:00f8` the code writes `es:[0x898e] = 0x21` and at
+`1301:0111` pushes that same word into `printf("%d \r")`. `audit/dgroup_data.csv` names `0x898e`
+`GGameState`, and the same word is set to 0x16/0x17/c/3c/3d immediately before every other trace.
+49 sites in main.c, ovc02_draw.c, ovc10_constr.c, ovc14_attact.c, ovc22_classes.c, ovc41_main.c and
+ovc49_agents.c are therefore `printf("%d \r",GGameState)`.
+
+Further sites, each read from the push window:
+
+* `ovc14_attact.c` `3f0b:10d2` pushes `[0x9063]`(debugStaleTickCount), `[0x9065]`(debugEmptyCellCount),
+  `es:[0x898e]`(GGameState); the four later sites push the last two in the opposite order, so the
+  argument list is `GGameState,debugEmptyCellCount,debugStaleTickCount`.
+* `ovc05_error.c` `stExit`: `3168:0011` pushes `si`(=n); `3168:0038/003c` push `[bx+0x140]`/`[bx+0x13e]`
+  (a far string pointer from the table at ds:0x13e, format `ds:0x3fb`="%s\n"), so the `%s` branch is
+  the n>=0x80 one; `3168:0052` pushes `si`(n) then `[0x898e]`(GGameState) for
+  "Error %d %d.  (Give Cathryn BOTH numbers.)".
+* `ovc32_heap.c` `heapIsBadPtr`: `6316:001e` pushes `si` = `[bp+8]` = the segment word of the
+  `far_t ptr` parameter, so the `%lx` argument is `ptr.seg`.
+* `6ffe:7326` (the request that started this): `push 0xd93`, `push es:[0x90b6]`(StshCount), then the
+  format `ds:0x748e`; both copies of the call (in `init_assets` and in the duplicate
+  `ovc45_buildPlacementMessage` body) now read
+  `printf("getcache %d  SIZESTASH %d  \r",(uint16_t)StshCount,0xd93)`.
+
+Still un-argumented, deliberately not guessed (the push windows are recorded and reproducible with
+`tmp/printf_args.py`): the stash-chain dumps in `ovc20_textLenLoc` (9 pushes for 7 spec words - the
+developer passed an extra long), `ovc32_heapValidate*` (`Str %x %x` gets three pushes; the `[bp-x]`
+slots are not yet named), `ovc33_stats.c` `Exp %ld` (reads `entity+0x10` as a long, which disagrees
+with the current `entity_t` field map), the `x:%d y:%d`/`y1 %d ...` rasteriser dumps, and the five
+sites inside `5087:056e` (`ovc22_textRingProt`), a body that is still a stub so no image site exists
+to read. None of these can be written without inventing names.
+
+## Measured (HEAD 29695050 -> 62da90c4)
+
+    grep_checks      26,346 (unchanged - the arguments add no grep pattern)
+    REBUILT.EXE      493,526 -> 493,734   (+208 bytes: the 49 GGameState pushes and 8 more arg words)
+    build 65/65, LINK.LOG 0 problems
+    compare_state    1,628/0/0 (unchanged)
+    diff_dgroup      1,639/1,805 matched, 5 runs, sum|delta| 18 (unchanged)
+    compare_runtime  1,692 matched, 1,683 identical / 9 different at all three sample points
