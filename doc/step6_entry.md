@@ -15379,3 +15379,53 @@ original's offsets too, not just equivalent strings.
 Remaining steps in the profile are the tail: `-4` from `_dosErrorToSV` (after the `_doserrno`
 mis-pair), `-5` at `rand_Seed`, `-6` at `_video`, and the upstream `+16` that still sits over
 0x6601..0x6f63.
+
+### layout: right-size the CRT data block and place _doserrno (sum -> 71,519)
+layout: right-size the CRT data block and place _doserrno (sum 85,896 -> 71,519)
+
+The tail of DGROUP was a flat -6 at `_video` and -4/-5/-6 after it.  Comparing the block against
+audit/symbols.tsv and audit/dgroup_2410.bin gave five defects, all pure data:
+
+    0x87e0   4  _fmode                 ours 2   <- 2 short   (image: 00 40 ff ff)
+    0x87e4   2  _doserrno              ours -   <- absent from the block
+    0x87e6  90  _dosErrorToSV          ours 89  <- 1 short
+    0x884b  97  vprinter_printCtype    ours 96  <- 1 short
+    0x88bb   2  directvideo            ours -   <- absent
+
+`_fmode` keeps its two meaningful bytes (0x4000) and gets a two-byte tail, because `00 40 ff ff`
+does not describe `long 0x4000`.  `_dosErrorToSV` and `vprinter_printCtype` gain their final 0x00.
+`directvideo` is `01 00` in the image.
+
+THE BIG ONE IS `_doserrno`.  It was being supplied by Turbo C's CM.LIB, which places it at
+DGROUP:0xbfd4 - about half a segment away from the original's 0x87e4.  diff_dgroup pairs by name,
+so that single variable was reported as `+14,320` and was the worst entry in the whole profile.
+Defining it in the CRT block makes the extern resolve and the library member is not pulled in for
+it; the link reports no duplicate.
+
+MEASURED (HEAD 72380664 -> this commit)
+
+  diff_dgroup sum|delta|   85,896 -> 71,519   (-14,377, -17%)
+  diff_dgroup worst        14,320 ->    170   (no gross mis-pair left)
+  diff_dgroup mean             52 ->     43
+  diff_dgroup runs             26 ->     21
+  diff_dgroup matched       1,626 ->  1,627
+  compare_state             1,625/0/0 (unchanged)
+  compare_runtime matched   1,683 ->  1,684, identical 1,674 -> 1,675 (9 different, both points)
+  grep_checks              35,568 (unchanged)
+  build 65/65, LINK.LOG 65 bytes / 0 problems
+
+The map now reproduces the original's CRT offsets exactly:
+
+    87b6  __NFILE 87b8 __OPENFD 87e0 __FMODE 87e4 __DOSERRNO 87e6 __DOSERRORTOSV
+    8840  _RAND_SEED 8844 _VPRINTTER_NULLSTRING 884b _VPRINTER_PRINTCTYPE
+    88ac  __VIDEO 88bb _DIRECTVIDEO 88bd _S_COMPAQ 88c4 _S_PRINT_SCANF...
+
+and the profile ends at `+0 from s_getcache__d_SIZESTASH__d_2410_748e (748e), 150 symbols` with no
+further steps: everything from 0x748e onward is exact.
+
+On the objective's +16 band (0x6601..0x6f63): `tmp/delta_pair.py` shows it is not a surplus
+localised between goldPartyIndex and GStrangeTable - only 1 byte is lost at each of those two,
+and the band inherits the +16 that the head of DGROUP still carries.  The head surplus is the
+DATASEG-before-_DATA arrangement from the earlier analysis (C0M's 116-byte DATASEG plus the
+25-byte null-check string), so it cannot be removed by right-sizing an object; it needs the C0
+startup replaced.  The two 1-byte steps there remain to be found.
