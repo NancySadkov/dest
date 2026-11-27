@@ -17813,3 +17813,63 @@ init2_updateMouseButtons (ovc08_init2.c)
   compare_state 1,628/0/0
   diff_dgroup 1,639/1,805 matched, 5 runs, sum|delta| 18, mean 0, worst 12
   compare_runtime 1,692 matched, 1,683 identical / 9 different at all three sample points
+
+### step 6: ovc18_spawnClassAgent switch is a Ghidra structuring defect (documented)
+step 6: `ovc18_spawnClassAgent`'s switch is a Ghidra structuring defect - evidence, not speculation
+
+Chasing the two GUESS stubs (`smm_restore_state`, `ovr_season_usesGPromotable_e11a`) led to the call site in
+`ovc18_spawnClassAgent` (tree lines 127..398, module `48ac:0251`).  The original disassembles cleanly
+(`tmp/dis_seg.py 48ac 0251 0131`), and it disagrees with our body:
+
+    48ac:0297  push 5 / lcall 0x170,0x5c / add sp,2      ; ovr_randBelow(5, 0)
+    48ac:02a1  mov ah,0 / mov bx,ax / cmp bx,4 / ja 2cd
+    48ac:02aa  shl bx,1 / jmp word ptr cs:[bx+0x378]      ; 5-entry jump table
+    48ac:02b1  mov byte ptr [bp-1],0x13 / jmp 0x2cd      ; case 0
+    48ac:02b7  mov byte ptr [bp-1],0x19 / jmp 0x2cd      ; case 1
+    48ac:02bd  mov byte ptr [bp-1],6    / jmp 0x2cd      ; case 2
+    48ac:02c3  mov byte ptr [bp-1],0x1a / jmp 0x2cd      ; case 3
+    48ac:02c9  mov byte ptr [bp-1],0x1a / jmp 0x2cd      ; case 4
+    48ac:02cd  cmp byte ptr [bp+0x12],2                 ; the merge point both paths reach
+               ... push 7 args / lcall 0x160,0x20 / add sp,0xe / jmp 0x374
+
+and `tmp/dis_seg.py`'s decode of the table itself confirms the five targets:
+
+    CS:0x378 -> 0x2b1, 0x2b7, 0x2bd, 0x2c3, 0x2c9
+
+So every case is one immediate store followed by a jump to the shared tail.  Our exported body instead has
+
+    case 0x0: <a 100-line loop that scans entities>
+    case 0x1: uVar1 = in(uVar10); stshStoreFile_2("cmidpak.com" ... "mt32mpu.adv"); return mt32mpuAdvOfs;
+    case 0x2: ovr_ovc23_findClearColumn(...); "You cannot attract units to this location."; return txt;
+    case 0x3: ((int far *)StshHandles)[...] = ...; return (uint8_t *)in_stack_00000004;
+    case 0x4: smm_restore_state(); return (uint8_t *)pfVar8;
+    default: <the real merge point>
+
+i.e. the case bodies of *other functions in the same overlay* (the audio-driver file loader, the
+column-finding text routine, the StshHandles release path) have been merged into the switch, and the real
+merge point has been pushed into `default:`.
+
+Consequences, stated plainly:
+
+  * `smm_restore_state()` is not a game function that was lost; it is an artifact of this defect, which is
+    why no body could be recovered for it and why the stub in st_stubs.c is a GUESS returning 0.  The same
+    holds for `ovr_season_usesGPromotable_e11a`'s neighbours in that file.
+  * the switch as exported returns unrelated pointers for `randBelow(5,0)` values 1..4, where the original
+    stores a sprite index and falls into the same tail as case 0.  That is a behavioural divergence on a
+    gameplay path (a class agent spawning in the leader view), which none of the three runtime sample
+    points can see because they are all at startup.
+
+Rewriting it correctly needs the parameter order resolved as well: the image indexes `GLeaderSheets` with
+the byte at `[bp+0x10]` and tests `[bp+0x12] == 2`, while the exported signature has `classStr` at 0x0e,
+`partyIndex` at 0x10 and `mode` at 0x12 - so the two bytes are swapped relative to the body.  That, plus
+the four foreign case bodies, is a function-level re-decompilation rather than a rename, so it is recorded
+here as the next concrete item instead of being attempted blind: getting it wrong would replace a partly
+correct function with a confidently wrong one.
+
+Measured this turn (no change to this function):
+
+  grep_checks 34,270 -> 34,169 (batches 30-32, 18 functions)
+  build 65/65, LINK.LOG 65 bytes / 0 problems
+  compare_state 1,628/0/0
+  diff_dgroup 1,639/1,805 matched, 5 runs, sum|delta| 18, mean 0, worst 12
+  compare_runtime 1,692 matched, 1,683 identical / 9 different at all three sample points
