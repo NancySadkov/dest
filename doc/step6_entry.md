@@ -18112,3 +18112,79 @@ returns a byte, not a `char *` as the export had declared.
 The screen's remaining candidates are listed in the doc; the largest is `ovc49_body1` (8699:18c4,
 1,349 bytes, image 3 calls, C 637) and the largest *missing* body is `ovc47_constrct.c` 7e7c:0b9c
 (8,112 bytes, image 187 calls, C 1 - a stub), both queued for the same treatment.
+
+### step 6: ovc49_body1 re-decompiled from the image (grep 32,803 -> 29,795)
+step 6: `ovc49_body1` re-decompiled from the image (grep 32,803 -> 29,795)
+
+The largest call-count offender on the screen: the image function is 1,329 bytes and makes **3** calls,
+while the export was 2,588 lines making 637 - another function's body entirely.
+
+## The image (`tmp/dis_seg.py 8699 18c4 0x545`)
+
+    18c4  prologue; frames = agnt->frames; dirDelta = table[ovr_agnt_clampX(agnt->x)]
+    18fc  switch (agnt->combatState)
+      1:  gdata->flags3 & 2                      -> frame 0x12
+          else if animVariant == 0: six-way table on (timer + dir) % 6 -> (sub, frame)
+          else:                     four-way table on timer & 3      -> frame 4/5
+      2:  frames+0xa0 far pointer non-NULL       -> 0x12, else 0/4 by animVariant
+      _:  facing ladder from the two bytes at +4/+5 and +/-7 against dirDelta,
+          then a health-selected block over the far pointers at frames+0x74/0x76,
+          +0x9c, +0xa4, +0xa8, +0xac (7 / 0x11 / 0x13 / 0x14 / 0x15)
+    1ca7  tail: frame record NULL -> 4 or 0; clear targetY when idle; store sub at +0xf and
+          frame at +0x12; walk frames[frame]: byte +0x1a == 0xff -> counter advance with
+          ovr_agnt_usesAnimFrame() under gdata->flags3 & 4, else store +0x1a as targetY
+    1dee  return frame in AL
+
+The three calls resolve through the thunk table the audit lists (`0x148,0x39`, `0x170,0x5c`,
+`0x148,0x34`): `ovr_agnt_clampX`, `ovr_randBelow`, `ovr_agnt_usesAnimFrame`.
+
+## Verification, and why it had to go through the compiler listing
+
+`O49.OBJ` is **excluded from the link by default** (`scripts/link_standalone.py`: `O45.OBJ`, `O49.OBJ`,
+`O22.OBJ`, `O44.OBJ` are dropped so the resident image fits below 640 KiB; `stexcl.c` supplies stubs), so
+`tmp/dis_ours.py` cannot see this function in REBUILT.EXE.  Instead the single module was compiled to a
+listing (`build_standalone.py --only o49 --asm`) and the emitted body checked directly:
+
+    push bp / mov bp,sp / sub sp,12 / push si / push di
+    les  bx,dword ptr [bp+6]
+    mov  ax,word ptr es:[bx+21]      ; agnt->frames.seg (0x15)
+    mov  dx,word ptr es:[bx+19]      ; agnt->frames.ofs (0x13)
+    push word ptr es:[bx]            ; agnt->x
+    call far ptr _ovr_agnt_clampX
+    shl  ax,1
+    mov  es,seg _columnScreenY
+    mov  si,word ptr es:_columnScreenY[bx-422]
+    les  bx,dword ptr [bp+6]
+    cmp  byte ptr es:[bx+36],1       ; combatState
+    les  bx,dword ptr es:[bx+29]     ; gdata
+    test word ptr es:[bx+64],2       ; flags3 & 2
+    mov  byte ptr [bp-1],18          ; frame 0x12
+
+and the body-wide census matches the image exactly:
+
+    call far ptr _ovr_agnt_clampX        1       es:[bx+88] (+0x58)   2
+    call far ptr _ovr_randBelow          1       es:[bx+90] (+0x5a)   2
+    call far ptr _ovr_agnt_usesAnimFrame 1       es:[bx+116] (+0x74)  2   (+0x76 x2)
+    far byte [bx+4]  4      far byte [bx+5] 11   +0x9c/0x9e, +0xa4/0xa6, +0xa8/0xaa, +0xac/0xae, +0xa0/0xa2
+
+The one place where the read is a GUESS is the left/right table: the original indexes the 211 words
+immediately before `columnScreenY` in `16b3_DATA_game2` (0x1a6 against columnScreenY's 0x34c) and that
+data is not in the recovered image, so the address is taken relative to the symbol we do have
+(`es:_columnScreenY[bx-422]`, i.e. -0x1a6 bytes).
+
+An earlier iteration used `(uint8_t *)agnt + 4`, which the listing showed as a *near* `cmp byte ptr [bx+4]`
+- i.e. the segment was being dropped and DS used instead of ES.  The cast to `(uint8_t far *)agnt` (15
+sites) restored `les bx,es:[bx+4]`, matching the image.
+
+## Measured (HEAD 67e90247 -> this commit)
+
+    grep_checks      32,803 -> 29,795   (-3,008; the 2,588-line wrong body is gone)
+    build 65/65, LINK.LOG 65 bytes / 0 problems
+    compare_state    1,628/0/0 (unchanged)
+    diff_dgroup      1,639/1,805 matched, 5 runs, sum|delta| 18, mean 0, worst 12 (unchanged)
+    compare_runtime  1,692 matched, 1,683 identical / 9 different at all three sample points
+
+REBUILT.EXE stays 520,204 bytes because O49.OBJ is one of the four excluded overlays - the change is
+source-level fidelity (and section-5 names) that the default link does not carry.  A link with
+`EXCLUDE_OBJS` unset was checked in an earlier session to exceed the 640 KiB DOS limit; that is why the
+exclusion exists, so this function cannot be exercised by the gates until that budget is addressed.
