@@ -2051,18 +2051,16 @@ char * __cdecl16near __LONGTOA(char alphaBase,char signFlag,uint16_t radix,char 
 {
   char *pcVar1;
   byte bVar2;
-  ulong uVar3;
+  ulong packedRem;
   char cVar4;
-  uint uVar5;
+  uint hiQuot;
   uint uVar6;
   int iVar7;
   byte *pbVar8;
   char *pcVar9;
   char *pcVar10;
-  uint16_t uVar11;
   uint8_t digits [34];
   
-  uVar11 = (uint16_t)((ulong)buf >> 0x10);
   pcVar9 = (char *)buf;
   pcVar10 = pcVar9;
   if ((radix < 0x25) && (1 < (byte)radix)) {
@@ -2076,13 +2074,13 @@ char * __cdecl16near __LONGTOA(char alphaBase,char signFlag,uint16_t radix,char 
     if ((int)((ulong)value >> 0x10) == 0) goto L__LONGTOA_0BFF;
     do {
       uVar6 = (uint)((ulong)value >> 0x10);
-      uVar5 = uVar6 / radix;
-      uVar3 = (ulong)uVar6 % (ulong)radix << 0x10 | value & 0xffffU;
-      uVar6 = (uint)(uVar3 / radix);
-      value = CONCAT22(uVar5,uVar6);
-      *pbVar8 = (byte)(uVar3 % (ulong)radix);
+      hiQuot = uVar6 / radix;
+      packedRem = (ulong)uVar6 % (ulong)radix << 0x10 | value & 0xffffU;
+      uVar6 = (uint)(packedRem / radix);
+      value = CONCAT22(hiQuot,uVar6);
+      *pbVar8 = (byte)(packedRem % (ulong)radix);
       pbVar8 = pbVar8 + 1;
-    } while (uVar5 != 0);
+    } while (hiQuot != 0);
     while (uVar6 != 0) {
 L__LONGTOA_0BFF:
       *pbVar8 = (byte)(uVar6 % radix);
@@ -3283,21 +3281,21 @@ uint16_t __cdecl16near malloc_CreateHeap(void)
 
 {
   uint in_AX;
-  uint16_t uVar1;
-  ulong uVar2;
-  uint32_t uVar3;
+  uint16_t newSeg;
+  ulong curBrk;
+  uint32_t newBrk;
   
-  uVar2 = __sbrk(0,0);
-  if ((uVar2 & 0xf) != 0) {
-    __sbrk(0x10 - ((uint)uVar2 & 0xf),0);
+  curBrk = __sbrk(0,0);
+  if ((curBrk & 0xf) != 0) {
+    __sbrk(0x10 - ((uint)curBrk & 0xf),0);
   }
-  uVar3 = __sbrk(in_AX << 4,in_AX >> 0xc);
-  uVar1 = (uint16_t)((ulong)uVar3 >> 0x10);
-  if ((int)uVar3 != -1) {
-    __farmalloc_first = uVar1;
-    malloc__last = uVar1;
+  newBrk = __sbrk(in_AX << 4,in_AX >> 0xc);
+  newSeg = (uint16_t)((ulong)newBrk >> 0x10);
+  if ((int)newBrk != -1) {
+    __farmalloc_first = newSeg;
+    malloc__last = newSeg;
     *(uint *)0x0 = in_AX;
-    *(uint16_t *)((int)(uint32_t *)&_DATA + 2) = uVar1;
+    *(uint16_t *)((int)(uint32_t *)&_DATA + 2) = newSeg;
     return 4;
   }
   return 0;
@@ -3310,28 +3308,28 @@ uint16_t __cdecl16near malloc_CreateHeap(void)
 uint16_t __cdecl16near malloc_ExtendHeap(void)
 
 {
-  uint16_t uVar1;
+  uint16_t prevLast;
   uint in_AX;
   int iVar2;
-  ulong uVar3;
-  uint32_t uVar4;
+  ulong newBrk;
+  uint32_t padBrk;
   
-  uVar3 = __sbrk(in_AX << 4,in_AX >> 0xc);
-  iVar2 = (int)(uVar3 >> 0x10);
-  if ((uint)uVar3 == 0xffff) {
+  newBrk = __sbrk(in_AX << 4,in_AX >> 0xc);
+  iVar2 = (int)(newBrk >> 0x10);
+  if ((uint)newBrk == 0xffff) {
     return 0;
   }
-  if ((uVar3 & 0xf) != 0) {
-    uVar4 = __sbrk(0x10 - ((uint)uVar3 & 0xf),0);
-    if ((int)uVar4 == -1) {
+  if ((newBrk & 0xf) != 0) {
+    padBrk = __sbrk(0x10 - ((uint)newBrk & 0xf),0);
+    if ((int)padBrk == -1) {
       return 0;
     }
     iVar2 = iVar2 + 1;
   }
-  uVar1 = malloc__last;
+  prevLast = malloc__last;
   malloc__last = iVar2;
   *(uint *)0x0 = in_AX;
-  *(uint16_t *)((int)(uint32_t *)&_DATA + 2) = uVar1;
+  *(uint16_t *)((int)(uint32_t *)&_DATA + 2) = prevLast;
   return 4;
 }
 

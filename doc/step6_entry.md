@@ -15712,3 +15712,32 @@ section-5 names.
 Batch total this turn: 35,568 -> 35,480 (-88) across five functions and nineteen names, using
 tmp/screen_all5.py, which ranks all 258 phantom-free functions by the occurrences belonging to
 single-assignment names and prints each name with its assignment.
+
+### section 5: batch 4 - three recovered CRT helpers (35,480 -> 35,445)
+section 5: batch 4 - three recovered CRT helpers (35,480 -> 35,445)
+
+__LONGTOA (62 lines)
+    uVar11  (uint16_t)((ulong)buf >> 0x10) where `buf` is a NEAR char* - a write-only "segment"
+            nothing reads, and meaningless for a near pointer      -> deleted (declaration + store)
+    uVar5   uVar6 / radix, the high-word quotient of the divide    -> hiQuot      (4)
+    uVar3   (hiRem << 0x10) | (value & 0xffff), the packed remainder -> packedRem (4)
+
+malloc_CreateHeap (23 lines)
+    uVar2   __sbrk(0,0), the current break                          -> curBrk   (4)
+    uVar3   __sbrk(in_AX << 4, in_AX >> 0xc), the new break         -> newBrk   (4)
+    uVar1   (uint16_t)((ulong)uVar3 >> 0x10), stored into
+            __farmalloc_first / malloc__last / _DATA+2              -> newSeg   (5)
+
+malloc_ExtendHeap (27 lines)
+    uVar3   __sbrk(in_AX << 4, in_AX >> 0xc)                        -> newBrk   (6)
+    uVar4   __sbrk(0x10 - (uVar3 & 0xf), 0), the alignment padding  -> padBrk   (3)
+    uVar1   malloc__last, the previous last block                   -> prevLast (3)
+
+The dead store was removed BEFORE the renames, so its exact-text pattern still matched - running a
+pattern-based deletion after a rename silently does nothing, which is the sequencing bug recorded
+earlier.
+
+  grep_checks 35,480 -> 35,445 (-35: 33 renamed + 2 deleted); build 65/65; LINK.LOG 65 / 0 problems
+  compare_state 1,625/0/0
+  diff_dgroup 1,627/1,805 matched, 19 runs, sum|delta| 44,867, mean 27, worst 148
+  compare_runtime 1,684 matched, 1,675 identical / 9 different
