@@ -440,11 +440,11 @@ cte_t * __cdecl16far stshStoreFile(uint8_t *data,uint16_t arg2)
 
 {
   far_t buf;
-  uint16_t uVar1;
-  uint16_t uVar2;
+  uint16_t ctOfsLo;
+  uint16_t sizeLo;
   cte_t *psVar4;
   uint16_t unaff_BP;
-  bool bVar3;
+  bool carry;
   far_t fVar4;
   uint16_t in_stack_00000006;
   DW sz_00;
@@ -479,7 +479,7 @@ cte_t * __cdecl16far stshStoreFile(uint8_t *data,uint16_t arg2)
     sz.lo = *(uint *)(data + 0xc) + 0x14;
     sz.hi = *(int *)(data + 0xe) + (uint)(0xffeb < *(uint *)(data + 0xc));
   }
-  uVar2 = sz.lo;
+  sizeLo = sz.lo;
   if (StshCount < 0xd93) {
     StshCount = StshCount + 1;
     LXMUL_at_((long *)sz.lo,CONCAT22(uStack_6,sz.hi),CONCAT22(unaff_BP,in_stack_0000fffc));
@@ -490,18 +490,18 @@ cte_t * __cdecl16far stshStoreFile(uint8_t *data,uint16_t arg2)
     ofs = fVar4.seg;
     psVar4 = (cte_t *)ovr_mkp((uint32_t *)fVar4.ofs,ofs,0x1000);
     (psVar4->sz).hi = sz.hi;
-    (&psVar4->sz)->lo = uVar2;
+    (&psVar4->sz)->lo = sizeLo;
     ((cte_t *)CONCAT22(ofs,psVar4))->state = 0x0;
-    uVar1 = StshCtOfs.lo;
+    ctOfsLo = StshCtOfs.lo;
     (psVar4->ofs).hi = StshCtOfs.hi;
-    (&psVar4->ofs)->lo = uVar1;
+    (&psVar4->ofs)->lo = ctOfsLo;
     (psVar4->info + 10)[0] = 0x0;
     (psVar4->info + 10)[1] = 0x0;
     (psVar4->info + 8)[0] = 0x0;
     (psVar4->info + 8)[1] = 0x0;
-    bVar3 = CARRY2(StshCtOfs.lo,uVar2);
-    StshCtOfs.lo = StshCtOfs.lo + uVar2;
-    StshCtOfs.hi = StshCtOfs.hi + sz.hi + (uint)bVar3;
+    carry = CARRY2(StshCtOfs.lo,sizeLo);
+    StshCtOfs.lo = StshCtOfs.lo + sizeLo;
+    StshCtOfs.hi = StshCtOfs.hi + sz.hi + (uint)carry;
     (psVar4->info + 2)[0] = 0x0;
     (psVar4->info + 2)[1] = 0x0;
     psVar4->info[0] = 0x0;
@@ -515,7 +515,7 @@ cte_t * __cdecl16far stshStoreFile(uint8_t *data,uint16_t arg2)
       ovr_biosReadKey();
     }
     sz_00.hi = sz.hi;
-    sz_00.lo = uVar2;
+    sz_00.lo = sizeLo;
     buf.seg = in_stack_00000006;
     buf.ofs = (uint16_t)data;
     stshWriteFile(StshFile,buf,sz_00,0,0);

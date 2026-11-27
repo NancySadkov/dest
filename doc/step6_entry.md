@@ -16669,3 +16669,41 @@ The remaining 166 unmatched are unchanged in character:
      2  group/segment names
     27  the startup's error strings and saved-vector block (bytes are C0L's, under C0L's own names),
         struct-field labels (`_video.windowy1`, `IdFORM.hi`) and `stdout`/`stderr`
+
+### section 5: batch 11 - six functions (34,829 -> 34,769)
+section 5: batch 11 - six functions (34,829 -> 34,769)
+
+attact_usesRandBelow (37 lines)
+    uVar1     ovr_randBelow(4, AgntGs[gindex].ai)   -> randDir   (4)
+    uStack_6  agnt->y, captured before the move      -> startY    (2)
+    iStack_4  agnt->x, captured before the move      -> startX    (2)
+
+agnt_computeFrameExtents (102 lines)
+    uVar1  agnt->faction                            -> factionVal (4)
+    uVar2  *(uint16_t *)((int)&agnt->frames + 2)    -> framesHi   (2)
+
+inputUpdate (52 lines)
+    bVar5  MiceNeedsUpdate != '\0'                  -> mouseDirty (4)
+    bVar1  GDebug                                   -> debugFlag  (3)
+
+stshStoreFile (91 lines)
+    uVar2  sz.lo                                    -> sizeLo  (6)
+    uVar1  StshCtOfs.lo                             -> ctOfsLo (3)
+    bVar3  CARRY2(StshCtOfs.lo, uVar2)              -> carry   (3)
+
+__VRAM (79 lines)
+    iVar5  count + -1                               -> lastIdx (5)
+
+uiReadString (the three names the earlier batch left)
+    uStack_4  uiReadKey2(), tested against 0x1f/0x7f -> keyCode  (14)
+    uVar8     high word of row * 0xf                 -> rowSegHi (8)
+
+Left unnamed: `bVar7` in __VRAM (a comparison against a stack argument, so the operand's meaning is not
+established), `iVar3` in agnt_computeFrameExtents (`*piVar6` - the pointer's role is not established),
+`uVar9` in uiReadString (initialised to 0 and then only incremented) and the never-assigned `uStack_*`
+slots in all of them.
+
+  grep_checks 34,829 -> 34,769 (-60); build 65/65; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,628/0/0
+  diff_dgroup 1,639/1,805 matched, 5 runs, sum|delta| 18, mean 0, worst 12
+  compare_runtime 1,692 matched, 1,683 identical / 9 different (both sample points)

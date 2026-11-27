@@ -2827,7 +2827,7 @@ uint __VRAM(int count,uint *src)
   uint *puVar2;
   byte bVar3;
   uint *puVar4;
-  int iVar5;
+  int lastIdx;
   uint *puVar6;
   bool bVar7;
   uint *in_stack_00000004;
@@ -2838,10 +2838,10 @@ uint __VRAM(int count,uint *src)
   if (count != 0) {
     bVar7 = in_stack_00000004 < (*(uint16_t *)((uint8_t *)&(src) + 2));
     if (bVar7) {
-      iVar5 = count + -1;
-      puVar6 = (uint *)(iVar5 * 2);
-      in_stack_00000004 = in_stack_00000004 + iVar5;
-      (*(uint16_t *)((uint8_t *)&(src) + 2)) = (*(uint16_t *)((uint8_t *)&(src) + 2)) + iVar5;
+      lastIdx = count + -1;
+      puVar6 = (uint *)(lastIdx * 2);
+      in_stack_00000004 = in_stack_00000004 + lastIdx;
+      (*(uint16_t *)((uint8_t *)&(src) + 2)) = (*(uint16_t *)((uint8_t *)&(src) + 2)) + lastIdx;
     }
     if (puVar4 == (uint *)0x0) {
       for (; count != 0; count = count + -1) {

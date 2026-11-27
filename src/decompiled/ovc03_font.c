@@ -392,11 +392,11 @@ int __cdecl16far font_textWidth(char far *text, char far *font, uint16_t arg3, u
 uint16_t __cdecl16far inputUpdate(ulong msg_delay)
 
 {
-  bool bVar1;
+  bool debugFlag;
   bool housing;
   ulong *puVar3;
   uint16_t uVar4;
-  bool bVar5;
+  bool mouseDirty;
   ulong in_stack_0000fff8;
   uint uVar7;
   long lVar6;
@@ -404,12 +404,12 @@ uint16_t __cdecl16far inputUpdate(ulong msg_delay)
   undefined1 uVar9;
   
   rightButtonLatch = 0;
-  bVar5 = MiceNeedsUpdate != '\0';
-  if (bVar5) {
+  mouseDirty = MiceNeedsUpdate != '\0';
+  if (mouseDirty) {
     in_stack_0000fff8 = CONCAT22((int)(in_stack_0000fff8 >> 0x10),0x2410);
     ovr_miceBlitRect((brect_t *)(BlitRects + 1),0x2410);
   }
-  bVar1 = GDebug;
+  debugFlag = GDebug;
   GDebug = false;
   do {
     in_stack_0000fff8 = in_stack_0000fff8 & 0xffff0000;
@@ -435,10 +435,10 @@ uint16_t __cdecl16far inputUpdate(ulong msg_delay)
   } while ((uVar4 < (*(uint16_t *)((uint8_t *)&(msg_delay) + 2))) ||
           ((uVar4 == (*(uint16_t *)((uint8_t *)&(msg_delay) + 2)) && (puVar3 < (ulong *)msg_delay))));
   uVar9 = (undefined1)((uint)uVar8 >> 8);
-  if (bVar5) {
+  if (mouseDirty) {
     ovr_miceRestoreArea((brect_t *)(BlitRects + 1),0);
   }
-  GDebug = bVar1;
+  GDebug = debugFlag;
   return CONCAT11(0x24,uVar9);
 }
 

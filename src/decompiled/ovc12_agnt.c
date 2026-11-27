@@ -109,8 +109,8 @@ bool __cdecl16far agnt_compute4(char *flag)
 undefined1 __cdecl16far agnt_computeFrameExtents(agnt_t far *agnt,uint8_t *result,uint16_t arg3)
 
 {
-  uint8_t uVar1;
-  uint16_t uVar2;
+  uint8_t factionVal;
+  uint16_t framesHi;
   int iVar3;
   bool bVar4;
   int iVar5;
@@ -124,8 +124,8 @@ undefined1 __cdecl16far agnt_computeFrameExtents(agnt_t far *agnt,uint8_t *resul
   int iStack_6;
   
   if ((int)agnt->y < 0x15) {
-    uVar1 = agnt->faction;
-    uVar2 = *(uint16_t *)((int)&agnt->frames + 2);
+    factionVal = agnt->faction;
+    framesHi = *(uint16_t *)((int)&agnt->frames + 2);
     piVar6 = (int *)(*(int *)&agnt->frames + (uint)agnt->frameIndex * 4);
     iVar5 = piVar6[1];
     iVar3 = *piVar6;
@@ -175,7 +175,7 @@ undefined1 __cdecl16far agnt_computeFrameExtents(agnt_t far *agnt,uint8_t *resul
             if ((AgntArrayA[iVar5][iStack_a] != '\0') &&
                (((AgntArrayA[iVar5][iStack_a] <= AgntCount &&
                  (Agnts[AgntArrayA[iVar5][iStack_a] - 1].faction !=
-                  uVar1)) &&
+                  factionVal)) &&
                 (Agnts[AgntArrayA[iVar5][iStack_a] - 1].combatState == '\0')
                 ))) {
               *(char *)CONCAT22(in_stack_0000000a,(*(uint16_t *)((uint8_t *)&(result) + 2))) =
@@ -187,7 +187,7 @@ undefined1 __cdecl16far agnt_computeFrameExtents(agnt_t far *agnt,uint8_t *resul
             }
             if (((AgntArrayB[iVar5][iStack_a] != '\0') &&
                 (AgntArrayB[iVar5][iStack_a] <= AgntCount)) &&
-               ((Agnts[AgntArrayB[iVar5][iStack_a] - 1].faction != uVar1
+               ((Agnts[AgntArrayB[iVar5][iStack_a] - 1].faction != factionVal
                 && (Agnts[AgntArrayB[iVar5][iStack_a] - 1].combatState ==
                     '\0')))) {
               *(char *)CONCAT22(in_stack_0000000a,(*(uint16_t *)((uint8_t *)&(result) + 2))) =

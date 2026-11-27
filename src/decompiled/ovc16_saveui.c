@@ -542,7 +542,7 @@ char * __cdecl16far uiReadString(char *textOfs,int textSeg,int row,char *gfxOfs,
   int underscoreW;
   char *pcVar6;
   uint8_t *puVar7;
-  uint16_t uVar8;
+  uint16_t rowSegHi;
   uint16_t uVar9;
   /* 4528:0C98 prologue: mov si, word ptr [bp + 0xa] - the third parameter (row),
      and the only write to SI in the whole function, so the pseudo-register IS
@@ -555,7 +555,7 @@ char * __cdecl16far uiReadString(char *textOfs,int textSeg,int row,char *gfxOfs,
   int in_stack_0000ffa6;
   uint8_t cursorX;
   byte bStack_5;
-  uint16_t uStack_4;
+  uint16_t keyCode;
   
   uStack_5e = (uint16_t)CONCAT22(text,row);
   UserWantsExit = 0;
@@ -573,13 +573,13 @@ char * __cdecl16far uiReadString(char *textOfs,int textSeg,int row,char *gfxOfs,
   }
   sVar1 = strlen((char *)CONCAT22(_SS,&text));
   bStack_5 = (byte)sVar1;
-  uVar8 = (uint16_t)((ulong)((long)row * 0xf) >> 0x10);
+  rowSegHi = (uint16_t)((ulong)((long)row * 0xf) >> 0x10);
   pfVar2 = ovr_stshRleCut((far_t far *)0x0,far_from_u32((uint32_t)(0x16a000)),(int)((long)row * 0xf) + 0x1d,222,row * 0xf + 0x29,(int16_t)ey,0xde,0,0);
   TextBlitX = 0x2a;
   TextBlitY = row * 0xf + 0x1d;
   cursorX = 0;
   gfx.seg = (uint16_t)&text;
-  gfx.ofs = uVar8;
+  gfx.ofs = rowSegHi;
   saveui_usesBlitGfx10
             (gfx,(char *)CONCAT22(&cursorX,_SS),(byte *)CONCAT22(row,_SS),(uint *)uStack_5e,
              in_stack_0000ffa6);
@@ -594,9 +594,9 @@ char * __cdecl16far uiReadString(char *textOfs,int textSeg,int row,char *gfxOfs,
 L_uiReadString_0DC9:
   do {
     while( true ) {
-      while ((((uStack_4 = uiReadKey2(), 0x1f < (uStack_4 & 0xff) && ((uStack_4 & 0xff) < 0x7f)) &&
-              (bStack_5 < 0x4f)) && ((uStack_4 & 0xff) != 0x40))) {
-        (&text)[bStack_5] = (uint8_t)uStack_4;
+      while ((((keyCode = uiReadKey2(), 0x1f < (keyCode & 0xff) && ((keyCode & 0xff) < 0x7f)) &&
+              (bStack_5 < 0x4f)) && ((keyCode & 0xff) != 0x40))) {
+        (&text)[bStack_5] = (uint8_t)keyCode;
         (&uStack_5b)[bStack_5] = 0;
         textW = ovr_font_textWidth((char *)&text,(char *)CONCAT13((char)(Font03.ofs >> 8),
                                                     CONCAT12((char)Font03.ofs,_SS)),(char)Font03.ofs,Font03.seg,0);
@@ -606,29 +606,29 @@ L_uiReadString_0DC9:
         }
         (&text)[bStack_5] = 0x0;
         gfx_00.seg = (uint16_t)&text;
-        gfx_00.ofs = uVar8;
+        gfx_00.ofs = rowSegHi;
         saveui_usesBlitGfx10
                   (gfx_00,(char *)CONCAT22(&cursorX,_SS),(byte *)CONCAT22(row,_SS),
                    (uint *)uStack_5e,in_stack_0000ffa6);
       }
-      if (uStack_4 != 0x4b00) break;
+      if (keyCode != 0x4b00) break;
 L_uiReadString_0ECE:
       if (bStack_5 != 0) {
         bStack_5 = bStack_5 - 1;
         (&text)[bStack_5] = 0x0;
         gfx_01.seg = (uint16_t)&text;
-        gfx_01.ofs = uVar8;
+        gfx_01.ofs = rowSegHi;
         saveui_usesBlitGfx10
                   (gfx_01,(char *)CONCAT22(&cursorX,_SS),(byte *)CONCAT22(row,_SS),
                    (uint *)uStack_5e,in_stack_0000ffa6);
       }
     }
-    if (uStack_4 < 0x4b01) {
-      if (uStack_4 == 0x11b) {
+    if (keyCode < 0x4b01) {
+      if (keyCode == 0x11b) {
         UserWantsExit = 1;
 L_uiReadString_1068:
         inputCancelled = 1;
-        handle_03.seg = uVar8;
+        handle_03.seg = rowSegHi;
         handle_03.ofs = (uint16_t)pfVar2;
         ovr_stshFree(handle_03);
         if (gfxOfs != (char *)0x0 || gfxSeg != 0) {
@@ -639,17 +639,17 @@ L_uiReadString_1068:
         GMenuFlag = 0;
         return (char *)0x0;
       }
-      if (uStack_4 == 0xe08) goto L_uiReadString_0ECE;
-      if (uStack_4 == 0x1c0d) goto L_uiReadString_0FF7;
+      if (keyCode == 0xe08) goto L_uiReadString_0ECE;
+      if (keyCode == 0x1c0d) goto L_uiReadString_0FF7;
       goto L_uiReadString_0DC9;
     }
-    if (uStack_4 == 0x4b34) goto L_uiReadString_0ECE;
-    if (uStack_4 == 0xfffe) goto L_uiReadString_1068;
-    if (uStack_4 == 0xffff) {
+    if (keyCode == 0x4b34) goto L_uiReadString_0ECE;
+    if (keyCode == 0xfffe) goto L_uiReadString_1068;
+    if (keyCode == 0xffff) {
       if (((MouseMoved == 0) && (8 < MouseX)) &&
          ((MouseX < 0x19 && ((0xb4 < MouseY && ((MouseY < 0xb6 | 0xeU) != 0)))))) {
         inputCancelled = 1;
-        handle.seg = uVar8;
+        handle.seg = rowSegHi;
         handle.ofs = (uint16_t)pfVar2;
         ovr_stshFree(handle);
         if (gfxOfs != (char *)0x0 || gfxSeg != 0) {
@@ -663,7 +663,7 @@ L_uiReadString_1068:
       if ((((MouseMoved == 0) && (0x15 < MouseX)) && (MouseX < 0x26)) &&
          ((row * 0xf + 0x1aU <= MouseY && (MouseY <= row * 0xf + 0x28U)))) {
 L_uiReadString_0FF7:
-        handle_01.seg = uVar8;
+        handle_01.seg = rowSegHi;
         handle_01.ofs = (uint16_t)pfVar2;
         ovr_stshFree(handle_01);
         GMenuFlag = 0;
