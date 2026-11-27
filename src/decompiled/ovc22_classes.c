@@ -3069,7 +3069,7 @@ void __cdecl16far upd_usesAlignUp4(void)
   uint16_t *flagWord;
   int far *accHi;
   uint8_t *puVar4;
-  byte bVar5;
+  byte leaderIdx;
   short sVar6;
   uint32_t uVar7;
   far_t pctOut;
@@ -3082,7 +3082,7 @@ void __cdecl16far upd_usesAlignUp4(void)
   uint uVar12;
   char *msg;
   uint16_t index;
-  uint16_t uVar14;
+  uint16_t tableOfs;
   long *plVar15;
   agnt_t far *valueLo;
   unit_t *units;
@@ -3103,13 +3103,13 @@ void __cdecl16far upd_usesAlignUp4(void)
   bool bVar27;
   far_t table;
   uint8_t *puVar28;
-  uint16_t uVar29;
+  uint16_t pctSeg;
   uint8_t *puVar30;
-  uint16_t uVar31;
+  uint16_t remainderSeg;
   uint8_t *puVar32;
   undefined1 uVar33;
   undefined1 uVar34;
-  undefined1 uVar35;
+  undefined1 ptrSegHi;
   long a;
   uint uVar36;
   ulong in_stack_0000ffd2;
@@ -3131,7 +3131,7 @@ void __cdecl16far upd_usesAlignUp4(void)
   uint uStack_a;
   uint16_t uStack_8;
   byte gindex;
-  byte bStack_5;
+  byte firstLeader;
   uint sheetAA;
   
   a = CONCAT22(unaff_SI,unaff_DI);
@@ -3625,11 +3625,11 @@ void __cdecl16far upd_usesAlignUp4(void)
             unitsSeg = (uint16_t)((ulong)GUnits >> 0x10);
             sVar6 = (GUnits)[unitIdx].y;
             uVar33 = (undefined1)sVar6;
-            uVar35 = (undefined1)((uint)sVar6 >> 8);
+            ptrSegHi = (undefined1)((uint)sVar6 >> 8);
             uVar34 = 0x10;
             uVar12 = ovr_alignUp4((GUnits)[unitIdx].x,0,0);
             msg = ovr_fmVsprintf("Mine exhausted at (%d, %d).",
-                                     (char *)CONCAT13(uVar35,CONCAT12(uVar33,uVar12)));
+                                     (char *)CONCAT13(ptrSegHi,CONCAT12(uVar33,uVar12)));
             ovr_say(msg,uVar34);
             ovr_inputUpdate((ulong)((uint)MessageDelay * 2 + 0x24));
           }
@@ -3662,15 +3662,15 @@ void __cdecl16far upd_usesAlignUp4(void)
       }
     }
     iStack_e = 0;
-    bStack_5 = ovr_manage_findFirstLeader();
-    if ((bStack_5 == 0xff) || (GCanPromote == '\0')) {
+    firstLeader = ovr_manage_findFirstLeader();
+    if ((firstLeader == 0xff) || (GCanPromote == '\0')) {
       iStack_c = 0;
     }
-    else if ((GLeaderSheets[bStack_5])->titleIndex < 5) {
+    else if ((GLeaderSheets[firstLeader])->titleIndex < 5) {
       iStack_c = 0x28;
     }
     else {
-      iStack_c = (uint)(GLeaderSheets[bStack_5])->titleIndex * 4 + 0x14;
+      iStack_c = (uint)(GLeaderSheets[firstLeader])->titleIndex * 4 + 0x14;
     }
     for (idx = EntityScanPos; idx < EntityCount; idx = idx + 1) {
       unitsSeg = (uint16_t)((ulong)Entities >> 0x10);
@@ -3679,7 +3679,7 @@ void __cdecl16far upd_usesAlignUp4(void)
           (peVar20[idx].base.destX == 0)) && (peVar20[idx].base.destY == 0)) {
         gindex = peVar20[idx].base.gindex;
         sheetFaction = AgntGs[(uint)gindex].ai;
-        bVar5 = *(byte *)((int)&peVar20[idx].base.entity + 3);
+        leaderIdx = *(byte *)((int)&peVar20[idx].base.entity + 3);
         bVar27 = false;
         bVar9 = false;
         bVar8 = false;
@@ -3687,7 +3687,7 @@ void __cdecl16far upd_usesAlignUp4(void)
           bVar27 = true;
         }
         else {
-          partySlot = (GLeaderSheets[bVar5])->partySlot;
+          partySlot = (GLeaderSheets[leaderIdx])->partySlot;
           if (partySlot < 5) {
             entY = peVar20[idx].base.y;
             entX = ovr_alignUp4(((peVar20 + idx)->base).x,0,0);
@@ -3704,14 +3704,14 @@ void __cdecl16far upd_usesAlignUp4(void)
               puVar30 = &partialWeight;
               puVar28 = &bldType;
               index = CONCAT11((char)((uint)puVar28 >> 8),partySlot);
-              uVar29 = _SS;
-              uVar31 = _SS;
-              uVar14 = ovr_attact_usesSquareRecCount(entX,entY);
+              pctSeg = _SS;
+              remainderSeg = _SS;
+              tableOfs = ovr_attact_usesSquareRecCount(entX,entY);
               table.seg = randVal;
-              table.ofs = uVar14;
-              pctOut.seg = uVar29;
+              table.ofs = tableOfs;
+              pctOut.seg = pctSeg;
               pctOut.ofs = (uint16_t)puVar28;
-              remainderOut.seg = uVar31;
+              remainderOut.seg = remainderSeg;
               remainderOut.ofs = (uint16_t)puVar30;
               (*(uint8_t *)((uint8_t *)&(partOut.seg))) = uVar34;
               partOut.ofs = (uint16_t)puVar32;
@@ -3765,10 +3765,10 @@ void __cdecl16far upd_usesAlignUp4(void)
         }
         if (bVar9) {
           if ((AgntGs[(uint)gindex].shortName[3] != -1) &&
-             (bVar5 != 0xff)) {
-            if ((*(char *)((int)*(uint32_t *)((uint)bVar5 << 2) + 0x3f) != '\0') ||
+             (leaderIdx != 0xff)) {
+            if ((*(char *)((int)*(uint32_t *)((uint)leaderIdx << 2) + 0x3f) != '\0') ||
                (Entities[idx].base.level <
-                *(byte *)((int)*(uint32_t *)((uint)bVar5 << 2) + 0x53))) {
+                *(byte *)((int)*(uint32_t *)((uint)leaderIdx << 2) + 0x53))) {
               uVar34 = (undefined1)iStack_c;
               uVar33 = (undefined1)((uint)iStack_c >> 8);
               ovc22_usesLUDIV_at_((entity_t *)
@@ -3799,40 +3799,40 @@ void __cdecl16far upd_usesAlignUp4(void)
           ovc22_usesEntities4(idx);
         }
         iStack_2a = (uint)(Entities)[idx].base.animFrame -
-                    (uint)*(byte *)((int)*(uint32_t *)((uint)bVar5 << 2) + 0xa4);
+                    (uint)*(byte *)((int)*(uint32_t *)((uint)leaderIdx << 2) + 0xa4);
         if (0 < iStack_2a) {
           if (3 < iStack_2a) {
             iStack_2a = 3;
           }
           if (iStack_2a == 3) {
-            if (*(int *)((int)*(uint32_t *)((uint)bVar5 << 2) + 0x92) == 0) {
+            if (*(int *)((int)*(uint32_t *)((uint)leaderIdx << 2) + 0x92) == 0) {
               iStack_2a = 2;
             }
             else {
-              accHi = (int *)((int)*(uint32_t *)((uint)bVar5 << 2) + 0x92);
+              accHi = (int *)((int)*(uint32_t *)((uint)leaderIdx << 2) + 0x92);
               *accHi = *accHi + -1;
             }
           }
           if (iStack_2a == 2) {
-            if (*(int *)((int)*(uint32_t *)((uint)bVar5 << 2) + 0x90) == 0) {
+            if (*(int *)((int)*(uint32_t *)((uint)leaderIdx << 2) + 0x90) == 0) {
               iStack_2a = 1;
             }
             else {
-              accHi = (int *)((int)*(uint32_t *)((uint)bVar5 << 2) + 0x90);
+              accHi = (int *)((int)*(uint32_t *)((uint)leaderIdx << 2) + 0x90);
               *accHi = *accHi + -1;
             }
           }
           if (iStack_2a == 1) {
-            if (*(int *)((int)*(uint32_t *)((uint)bVar5 << 2) + 0x8e) == 0) {
+            if (*(int *)((int)*(uint32_t *)((uint)leaderIdx << 2) + 0x8e) == 0) {
               iStack_2a = 0;
             }
             else {
-              accHi = (int *)((int)*(uint32_t *)((uint)bVar5 << 2) + 0x8e);
+              accHi = (int *)((int)*(uint32_t *)((uint)leaderIdx << 2) + 0x8e);
               *accHi = *accHi + -1;
             }
           }
           (Entities)[idx].base.animFrame =
-               *(char *)((int)*(uint32_t *)((uint)bVar5 << 2) + 0xa4) + (char)iStack_2a;
+               *(char *)((int)*(uint32_t *)((uint)leaderIdx << 2) + 0xa4) + (char)iStack_2a;
         }
         iStack_e = iStack_e + 1;
         if (199 < iStack_e) break;

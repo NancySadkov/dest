@@ -16009,3 +16009,38 @@ lists 4 names and two of them are dead.
   compare_state 1,625/0/0
   diff_dgroup 1,627/1,805 matched, 19 runs, sum|delta| 44,867, mean 27, worst 148
   compare_runtime 1,684 matched, 1,675 identical / 9 different (both sample points)
+
+### section 5: ovc49_body1 and upd_usesAlignUp4 (35,210 -> 35,143)
+section 5: ovc49_body1 and upd_usesAlignUp4 (35,210 -> 35,143)
+
+Two of the largest phantom-laden bodies.  Their single-assignment names are few but unambiguous:
+
+ovc49_body1 (2587 lines, 857 occurrences, 4 single-assignment names / 36 occurrences)
+    uVar38  (undefined1)((uint)_SS >> 8)                  -> ssHi   (15)
+    bVar36  (byte)_SS                                     -> ssLo   (15)
+        the two halves of the stack segment, written into `dst.seg` byte by byte and packed into
+        CONCAT13(ssHi, CONCAT12(ssLo, ...)) for strcat
+    iVar35  -0x61fb, read at `iVar35 + 0x1d` for the sound id handed to ovr_play_sfxU
+                                                          -> sfxOfs (3)
+    bVar5   ovr_agnt_compute4(in_stack_00000008), used only as `if (bVar5)`
+                                                          -> compute4Flag (3)
+
+upd_usesAlignUp4 (816 lines, 368 occurrences, 6 single-assignment names / 31 occurrences)
+    bVar5      *(byte *)((int)&peVar20[idx].base.entity + 3), then
+               GLeaderSheets[bVar5]->partySlot and compared with 0xff  -> leaderIdx (14)
+    bStack_5   ovr_manage_findFirstLeader(), compared with 0xff and used
+               to index GLeaderSheets[]                              -> firstLeader (5)
+    uVar35     (undefined1)((uint)sVar6 >> 8), packed into
+               CONCAT13(uVar35, CONCAT12(uVar33, uVar12))            -> ptrSegHi (3)
+    uVar29     _SS, stored into pctOut.seg                          -> pctSeg (3)
+    uVar31     _SS, stored into remainderOut.seg                    -> remainderSeg (3)
+    uVar14     ovr_attact_usesSquareRecCount(entX, entY), stored into
+               table.ofs                                            -> tableOfs (3)
+
+The remaining 821 + 337 occurrences belong to 19 + 22 multi-assignment scratch names and stay
+unnamed.
+
+  grep_checks 35,210 -> 35,143 (-67); build 65/65; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,625/0/0
+  diff_dgroup 1,627/1,805 matched, 19 runs, sum|delta| 44,867, mean 27, worst 148
+  compare_runtime 1,684 matched, 1,675 identical / 9 different (both sample points)

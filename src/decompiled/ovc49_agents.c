@@ -898,7 +898,7 @@ uint __cdecl16far ovc49_body1(agnt_t far *agnt,uint16_t arg2)
   far_t gfx_07;
   far_t dst;
   agnt_t far *paVar4;
-  bool bVar5;
+  bool compute4Flag;
   char cVar6;
   undefined1 uVar7;
   char cVar8;
@@ -946,10 +946,10 @@ uint __cdecl16far ovc49_body1(agnt_t far *agnt,uint16_t arg2)
   stg_tmp_t *in_stack_0000ffe8;
   undefined1 uVar33;
   undefined1 uVar34;
-  int iVar35;
-  byte bVar36;
+  int sfxOfs;
+  byte ssLo;
   uint uVar37;
-  undefined1 uVar38;
+  undefined1 ssHi;
   undefined1 uVar39;
   stg_tmp_t *in_stack_0000fff6;
   char *pcStack_8;
@@ -1166,8 +1166,8 @@ L_OVC49_8699_18c4_1CA7:
     in_stack_0000fffd = 0x12;
     goto L_OVC49_8699_18c4_1CA7;
   }
-  bVar36 = (byte)_SS;
-  uVar38 = (undefined1)((uint)_SS >> 8);
+  ssLo = (byte)_SS;
+  ssHi = (undefined1)((uint)_SS >> 8);
   if (agnt->animVariant != 0x0) {
     uVar15 = agnt->timer & 3;
     if (uVar15 < 4) {
@@ -1193,9 +1193,9 @@ L_OVC49_8699_18c4_1CA7:
         (*(uint8_t *)((uint8_t *)&(gfx_07.seg) + 1)) = (char)((uint)audioSaveCut2Seg >> 8);
         ovr_blitLoadRleGfx(gfx_07,0,0);
         GGameState = 0x2c;
-        (*(uint8_t *)((uint8_t *)&(dst.seg))) = bVar36;
+        (*(uint8_t *)((uint8_t *)&(dst.seg))) = ssLo;
         dst.ofs = (uint16_t)&bStackY_32;
-        (*(uint8_t *)((uint8_t *)&(dst.seg) + 1)) = uVar38;
+        (*(uint8_t *)((uint8_t *)&(dst.seg) + 1)) = ssHi;
         ovr_ovc23_textBuildThfres01Lbm(dst);
         cVar6 = 'o';
         cVar8 = '#';
@@ -1291,7 +1291,7 @@ L_OVC49_8699_18c4_1CA7:
             pcVar10 = ovr_fmVsprintf(" Salvage value %d gold.",
                                      (char *)CONCAT22(in_stack_0000fff6,pcVar10));
                                      asm { mov uVar22,dx };
-            strcat((char *)CONCAT13(uVar38,CONCAT12(bVar36,auStackY_2ca)),
+            strcat((char *)CONCAT13(ssHi,CONCAT12(ssLo,auStackY_2ca)),
                    (char *)CONCAT13((char)((uint)uVar22 >> 8),CONCAT12((char)uVar22,pcVar10)));
           }
         }
@@ -1320,7 +1320,7 @@ L_OVC49_8699_18c4_1CA7:
             pcVar10 = ovr_fmVsprintf(" Upgrade costs %d gp.",
                                      (char *)CONCAT22(in_stack_0000fff6,pcVar10));
             uVar22 = 0x1000;
-            strcat((char *)CONCAT13(uVar38,CONCAT12(bVar36,auStackY_2ca)),
+            strcat((char *)CONCAT13(ssHi,CONCAT12(ssLo,auStackY_2ca)),
                    (char *)CONCAT13((char)((uint)uVar27 >> 8),CONCAT12((char)uVar27,pcVar10)));
           }
         }
@@ -1338,7 +1338,7 @@ L_OVC49_8699_18c4_1CA7:
           pcVar10 = ovr_fmVsprintf(" Repair costs %d gp.",
                                    (char *)CONCAT22(in_stack_0000fff6,pcVar10));
           uVar22 = 0x1000;
-          strcat((char *)CONCAT13(uVar38,CONCAT12(bVar36,auStackY_2ca)),
+          strcat((char *)CONCAT13(ssHi,CONCAT12(ssLo,auStackY_2ca)),
                  (char *)CONCAT13((char)(uVar20 >> 8),CONCAT12((char)uVar20,pcVar10)));
         }
       }
@@ -1635,7 +1635,7 @@ L_OVC49_8699_1e09_29B9:
                                                           )));
         pcStack_8 = (uint16_t)((char *)0x2337);
         in_stack_0000fff6 = (stg_tmp_t *)((char *)0x246fd);
-        strcpy((char *)CONCAT13(uVar38,CONCAT12(bVar36,auStackY_2ca)),
+        strcpy((char *)CONCAT13(ssHi,CONCAT12(ssLo,auStackY_2ca)),
                (char *)CONCAT22(pcVar10,pcVar21));
         break;
       case (cte_t *)0x3:
@@ -2878,8 +2878,8 @@ L_OVC49_8699_0000_0121:
               (Agnts[AgntArrayA[iVar14][uVar15] - 1].combatState == '\0'))))
           {
             *in_stack_00000008 = AgntArrayA[iVar14][uVar15];
-            bVar5 = ovr_agnt_compute4(in_stack_00000008);
-            if (bVar5) {
+            compute4Flag = ovr_agnt_compute4(in_stack_00000008);
+            if (compute4Flag) {
               return CONCAT11(extraout_AH,*in_stack_00000008);
             }
           }
@@ -2943,8 +2943,8 @@ L_OVC49_8699_1e09_3BDE:
       pbVar28 = (brect_t *)((char *)0x263d3);
       gfx.seg = uVar16;
       gfx.ofs = (uint16_t)(psVar17->cmap + 6);
-      bVar9 = bVar36;
-      uVar33 = uVar38;
+      bVar9 = ssLo;
+      uVar33 = ssHi;
       ovr_blitGfxRect(gfx,0,0,0,0,0,0,0,0,0,0,0);
       GGameState = 0x33;
       if ((Agnts[uStackY_22].flags & 100) != 0) {
@@ -2957,8 +2957,8 @@ L_OVC49_8699_1e09_3BDE:
         pbVar28 = (brect_t *)((char *)0x263d3);
         gfx_00.seg = ((uint16_t *)&crossBlitType2Seg)[uVar15 * 2];
         gfx_00.ofs = ((uint16_t *)&crossBlitType2Ofs)[uVar15 * 2];
-        bVar9 = bVar36;
-        uVar33 = uVar38;
+        bVar9 = ssLo;
+        uVar33 = ssHi;
         ovr_blitGfxRect(gfx_00,0,0,0,0,0,0,0,0,0,0,0);
       }
     }
@@ -2973,8 +2973,8 @@ L_OVC49_8699_1e09_3BDE:
         pbVar28 = (brect_t *)((char *)0x263d3);
         gfx_03.seg = ((uint16_t *)&crossBlitType2Seg)[uVar15 * 2];
         gfx_03.ofs = ((uint16_t *)&crossBlitType2Ofs)[uVar15 * 2];
-        bVar9 = bVar36;
-        uVar33 = uVar38;
+        bVar9 = ssLo;
+        uVar33 = ssHi;
         ovr_blitGfxRect(gfx_03,0,0,0,0,0,0,0,0,0,0,0);
         if (Agnts[uStackY_22].timer == '\0') {
           Agnts[uStackY_22].combatState = 0;
@@ -2990,8 +2990,8 @@ L_OVC49_8699_1e09_3BDE:
         pbVar28 = (brect_t *)((char *)0x263d3);
         gfx_01.seg = uVar16;
         gfx_01.ofs = (uint16_t)(psVar17->cmap + 6);
-        bVar9 = bVar36;
-        uVar33 = uVar38;
+        bVar9 = ssLo;
+        uVar33 = ssHi;
         ovr_blitGfxRect(gfx_01,0,0,0,0,0,0,0,0,0,0,0);
         if ((int)(uint)*(byte *)((int)&pbVar19[2].h + 1) <= Agnts[uStackY_22].targetY + 1
            ) {
@@ -3006,8 +3006,8 @@ L_OVC49_8699_1e09_3BDE:
         pbVar28 = (brect_t *)((char *)0x263d3);
         gfx_04.seg = uVar16;
         gfx_04.ofs = (uint16_t)(psVar17->cmap + 6);
-        bVar9 = bVar36;
-        uVar33 = uVar38;
+        bVar9 = ssLo;
+        uVar33 = ssHi;
         ovr_blitGfxRect(gfx_04,0,0,0,0,0,0,0,0,0,0,0);
         if ((int)(uint)*(byte *)((int)&pbVar19[2].h + 1) <= Agnts[uStackY_22].targetY + 1
            ) {
@@ -3077,7 +3077,7 @@ L_OVC49_8699_1e09_3BDE:
       if (Agnts[uStackY_22].gindex == '\0') {
         cVar8 = ovc49_usesFrameIndex2
                           ((agnt_t far *)MK_FP(SEG_OF(Agnts), (int)uStackY_22 * 0x34),
-                           (byte *)CONCAT13(uVar38,CONCAT12(bVar36,&stk_ffe4)));
+                           (byte *)CONCAT13(ssHi,CONCAT12(ssLo,&stk_ffe4)));
         if (cVar8 == '\0') {
           if ((Agnts[uStackY_22].frameIndex == '\x03') ||
              (Agnts[uStackY_22].frameIndex == '\x0f')) {
@@ -3095,7 +3095,7 @@ L_OVC49_8699_1e09_3BDE:
       else if (Agnts[uStackY_22].gindex == '\x01') {
         cVar8 = ovc49_usesFrameIndex
                           ((agnt_t far *)MK_FP(SEG_OF(Agnts), (int)uStackY_22 * 0x34),
-                           (byte *)CONCAT13(uVar38,CONCAT12(bVar36,&stk_ffe4)));
+                           (byte *)CONCAT13(ssHi,CONCAT12(ssLo,&stk_ffe4)));
         if (cVar8 != '\0') {
           pbVar29 = (brect_t *)((char *)0x26489);
           uVar15 = ovr_ovc27_compute1((agnt_t far *)&Agnts[uStackY_22].x,0,0,0);
@@ -3147,10 +3147,10 @@ L_OVC49_8699_1e09_3310:
       else if (((Agnts[uStackY_22].gindex == '\x02') ||
                (Agnts[uStackY_22].gindex == '\x04')) &&
               (Agnts[uStackY_22].animFrame == -1)) {
-        iVar35 = -0x61fb;
+        sfxOfs = -0x61fb;
         iVar18 = ovr_audio_panFromX((agnt_t far *)&Agnts[uStackY_22].x,0);
         uVar34 = (undefined1)((uint)iVar18 >> 8);
-        bVar9 = *(byte *)(iVar35 + 0x1d);
+        bVar9 = *(byte *)(sfxOfs + 0x1d);
         iVar18 = 0x22f8;
         pbVar29 = (brect_t *)((char *)0x263f8);
         ovr_play_sfxU(bVar9,0,0,0,0);
@@ -3285,8 +3285,8 @@ L_OVC49_8699_1e09_3310:
       pbVar29 = (brect_t *)((char *)0x263d3);
       gfx_05.seg = uVar16;
       gfx_05.ofs = (uint16_t)puVar32;
-      bVar9 = bVar36;
-      uVar33 = uVar38;
+      bVar9 = ssLo;
+      uVar33 = ssHi;
       ovr_blitGfxRect(gfx_05,0,0,0,0,0,0,0,0,0,0,0);
       agnt_00 = (agnt_t far *)CONCAT11(uVar33,bVar9);
       GGameState = 0x31;
