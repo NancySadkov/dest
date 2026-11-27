@@ -19076,3 +19076,69 @@ needs its calls re-derived from the image before it can be moved, not just its `
 expressions renamed.  That is now the documented next step, with the offset map
 (`+6/+8` = agnt, `-0xa/-8` = agntRec, `-0x122/-0xd2/-0x82` = text1/text2/msg, `-4/-2` = the two
 locals, `di` = agntIndex) already established.
+
+### step 6: 40 call sites in the 0x14a8 block given the image argument shapes (grep 26,617 -> 26,584)
+step 6: 40 call sites in the 0x14a8 block given the argument shapes the image pushes (grep 26,617 -> 26,584)
+
+`ovc27_textTakesHalfDamage4` (5ded:14a8) renders every call with a hand-reassembled far pointer,
+so the argument lists did not match what the original pushes.  Each class is uniform in the image,
+so all 40 sites were corrected at once from the push windows and their `add sp`:
+
+    audio_panFromX    push [bp-8] ; push [bp-0xa]                    add sp,4
+                      -> one far argument (the Agnts record), not two words          7 sites
+    play_sfxU         push ax ; push 0 ; push 0xNN                   add sp,6
+                      -> (id, 0, pan), not five arguments                            7 sites
+    agnt_statusText   push [GSavedBlitSeg] ; push ss ; lea ax,[bp-X] ; push ax ;
+                      push [bp-8]/[bp+8] ; push [bp-0xa]/[bp+6]      add sp,8
+                      -> (far buffer at SS:bp-X, far record); the GSavedBlitSeg push is
+                         one word too many for this call - it belongs to the uiNotify
+                         further down, which is why only 8 of the 10 bytes are removed  12 sites
+    usesStshRealloc   push dx ; push ax                              add sp,4
+                      -> one far argument (the text statusText returned)             7 sites
+    uiNotify          push dx ; push ax                              add sp,6
+                      -> (far text, GSavedBlitSeg): the third word is that leftover   7 sites
+
+so the code now reads
+
+    pan = ovr_audio_panFromX(agntRec);
+    ovr_play_sfxU(0x4c,0,pan);
+    statusText = ovr_agnt_statusText((char far *)MK_FP(_SS,&text2),agntRec);
+    stash = ovc15_usesStshRealloc(statusText);
+    ovr_uiNotify(msg,(uint16_t)GSavedBlitSeg);
+
+instead of passing `in_DX` (an uninitialised local) as the segment everywhere.  `text1`
+([bp-0x122]), `text2` ([bp-0xd2]) and `msg` ([bp-0x82]) are declared as the three 0x50 buffers.
+
+The function also now takes the two things it inherited from its caller, because it is entered by
+`jmp 0x14a8` from inside `5ded:10ea`:
+
+    void __cdecl16far ovc27_textTakesHalfDamage4(agnt_t far *agnt,uint16_t agntIndex)
+
+`agnt` is `[bp+6]/[bp+8]` and `agntIndex` is `di` (10ea does `mov di,[bp+0xa]` once and never
+touches it again).  The call site passes both.
+
+## Verified against the image by call multiset
+
+     ours (73 sites)              image (68 sites)
+     0x2ff                 12     agnt_statusText        12
+     0xc77                  8     rollToHitEntity         8
+     0x2e6/0x2cd/0x408/0x4cb/0x15b   7 each   panFromX / play_sfxU / usesStshRealloc /
+                                              stsprintf / uiNotify   7 each
+     0x818                  4     textParalyzed           4
+     0x82c                  5     6a8f_01e7_entry         5
+     0x6c4, 0x5b1           1+1   usesBDADailyTimeCounter + rollDice
+     0xfffff840             1     spellHalfDamage         1
+     0xbc4 (usesAgntCount)  1     usesAgntCount           1
+
+The five extra sites are `lcall 0,0x470` - the CRT `strchr(ptr,0)` idiom (`mov ax,ptr / mov dx,ds /
+mov cl,0 / lcall`) - which the original does not have in this block; they come from the tree's
+remaining `CONCAT22`/pointer expressions and are the next thing to remove.
+
+## Measured (HEAD 617c2f12 -> this commit)
+
+    grep_checks      26,617 -> 26,584   (-33)
+    REBUILT.EXE      496,854 -> 496,118
+    build 65/65, LINK.LOG 65 bytes / 0 problems
+    compare_state    1,628/0/0 (unchanged)
+    diff_dgroup      1,639/1,805 matched, 5 runs, sum|delta| 18, mean 0, worst 12 (unchanged)
+    compare_runtime  1,692 matched, 1,683 identical / 9 different at all three sample points
