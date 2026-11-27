@@ -118,224 +118,77 @@ int __cdecl16far ovc22_applyRankBonus(byte partyIndex,int cost)
 
 /* 5087:0234 */
 
-/* WARNING: Instruction at (ram,0x0005ff51) overlaps instruction at (ram,0x0005ff50)
-    */
-/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
-/* [R2] string "POPULATION" */
+/* Population a building type contributes: the base production, adjusted by the type's rank
+   bonus, halved or quartered for type 0x19 by the season and time, scaled by the per-agent code
+   for flagged types, and finally season-adjusted.  Re-derived from the image; the former body
+   had an unrelated entity scan merged into its tail. */
 
 char * __cdecl16far ovc22_textPOPULATION(byte bldType,byte partyIndex,agnt_t far *agnt,uint16_t arg4,uint16_t arg5)
 
 {
-  undefined1 stk_bac4;   /* stack slot bac4 */
-  byte *pbVar1;
-  code *pcVar2;
-  char cVar3;
-  int iVar4;
-  uint16_t uVar5;
-  char *pcVar6;
-  uint uVar7;
-  uint aligned;
-  char in_CL;
-  uint16_t uVar9;
-  uint16_t unaff_BP;
-  char *pcVar10;
-  uint16_t unaff_SI;
-  uint16_t unaff_DI;
-  uint16_t in_stack_0000000a;
-  uint16_t in_stack_0000000c;
-  uint16_t in_stack_0000000e;
-  static char numBuf[64];   /* DGROUP-backed formatting buffer */
-  uint16_t auStackY_11a [66];
-  uint8_t labelPtrs;
-  uint8_t menuItems;
-  uint8_t labelOfs;
-  char *suffix;
-  far_t entries;
-  byte bVar11;
-  undefined1 uVar12;
-  undefined1 uVar13;
-  
-  uVar12 = (undefined1)unaff_BP;
-  uVar13 = (undefined1)((uint)unaff_BP >> 8);
+  uint16_t value;
+  uint8_t code;
+
+  (void)arg4;
+  (void)arg5;
   if (BuildingTypes[bldType].unitType == '\x16') {
-    pcVar6 = (char *)0x0;
+    return (char *)0x0;
   }
-  else if (BuildingTypes[bldType].production == '\0') {
-    pcVar6 = (char *)0x0;
+  if (BuildingTypes[bldType].production == '\0') {
+    return (char *)0x0;
+  }
+  if ((BuildingTypes[bldType].flags2 & 0x20) != 0) {
+    value = (uint16_t)ovc22_compute1((int)(uint)partyIndex,
+                                    (uint)BuildingTypes[bldType].production);
+  }
+  else if ((BuildingTypes[bldType].flags2 & 0x80) != 0) {
+    value = (uint16_t)ovc22_applyRankBonus((int)(uint)partyIndex,
+                                          (uint)BuildingTypes[bldType].production);
   }
   else {
-    if ((BuildingTypes[bldType].flags2 & 0x20) == 0) {
-      if ((BuildingTypes[bldType].flags2 & 0x80) == 0) {
-        pcVar6 = (char *)(uint)BuildingTypes[bldType].production;
+    value = (uint16_t)BuildingTypes[bldType].production;
+  }
+  if (value == 0) {
+    return (char *)0x0;
+  }
+  if (BuildingTypes[bldType].unitType == '\x19') {
+    if (GSeason == '\0') {
+      if (GTimeLo < 0xf) {
+        value = (uint16_t)(value >> 2);
       }
       else {
-        pcVar6 = (char *)ovc22_applyRankBonus
-                                   (partyIndex,(uint)BuildingTypes[bldType].production);
+        value = (uint16_t)(value >> 1);
       }
     }
-    else {
-      pcVar6 = (char *)ovc22_compute1(partyIndex,(uint)BuildingTypes[bldType].production);
+    else if (GSeason == '\x02') {
+      value = (uint16_t)(value + (value >> 2));
     }
-    if (pcVar6 == (char *)0x0) {
-      pcVar6 = (char *)0x0;
-    }
-    else if (BuildingTypes[bldType].unitType == '\x19') {
-      if (GSeason == '\0') {
-        if (GTimeLo < 0xf) {
-          pcVar6 = (char *)((uint)pcVar6 >> 2);
-        }
-        else {
-          pcVar6 = (char *)((uint)pcVar6 >> 1);
-        }
-      }
-      else if (GSeason == '\x02') {
-        pcVar6 = pcVar6 + ((uint)pcVar6 >> 2);
-      }
-    }
-    else {
-      if ((BuildingTypes[bldType].flags2 & 0x80) != 0) {
-        uVar9 = in_stack_0000000a;
-        uVar7 = ovr_constr_usesGMapFlags2((int)agnt,in_stack_0000000a);
-        switch(uVar7 & 0xff) {
-        case 1:
-          *(char *)(unaff_DI + 0x34) = *(char *)(unaff_DI + 0x34) << 1;
-code_r0x0005b805:
-          if ((Entities)[pcVar6].base.destY != in_stack_0000000a)
-          goto L_OVC25_5b66_00ff_01D9;
-          do {
-            pbVar1 = (byte *)((uint8_t *)&(Entities)[pcVar6] + 0x33);
-            *pbVar1 = *pbVar1 | 8;
-L_OVC25_5b66_00ff_01D9:
-            while( true ) {
-              do {
-                pcVar6 = pcVar6 + 1;
-                if (EntityCount <= pcVar6) {
-                  if (partyIndex != 0) {
-                    iVar4 = 0;
-                    while ((iVar4 < (int)(uint)partyIndex &&
-                           (uVar7 = ovc25_usesAlignUp4(bldType,in_stack_0000000c,in_stack_0000000e,
-                                                       unaff_DI,in_stack_0000000a), -1 < (int)uVar7)
-                           )) {
-                      (Entities)[uVar7].base.state = 0;
-                      (Entities)[uVar7].base.destX = unaff_DI;
-                      (Entities)[uVar7].base.destY = in_stack_0000000a;
-                      pbVar1 = (byte *)((uint8_t *)&(Entities)[uVar7] + 0x33);
-                      *pbVar1 = *pbVar1 | 8;
-                      iVar4 = iVar4 + 1;
-                    }
-                  }
-                  return (char *)0xffff;
-                }
-                uVar5 = (uint16_t)((ulong)Entities >> 0x10);
-              } while (AGNT_FIELD(&(Entities)[pcVar6], base.entity, 3) != bldType);
-              uVar7 = ovr_alignUp4((Entities)[pcVar6].base.x,0,0);
-              aligned = ovr_alignUp4(unaff_DI,0,0);
-              uVar5 = (uint16_t)((ulong)Entities >> 0x10);
-              if ((uVar7 == aligned) &&
-                 ((Entities)[pcVar6].base.y == in_stack_0000000a))
-              break;
-              uVar7 = ovr_alignUp4((Entities)[pcVar6].base.destX,0,0);
-              aligned = ovr_alignUp4(unaff_DI,0,0);
-              if (uVar7 == aligned) goto code_r0x0005b805;
-            }
-          } while( true );
-        case 2:
-          pcVar2 = (code *)swi(1);
-          pcVar6 = (char *)(*pcVar2)();
-          return pcVar6;
-        case 3:
-          do {
-            if (*(byte *)(uVar9 + 0x32) < Agnts[pcVar6].strengthMax) {
-              Agnts[pcVar6].strengthMax = *(undefined1 *)(uVar9 + 0x32);
-            }
-            uVar9 = 0x34;
-            pcVar10 = pcVar6;
-code_r0x0005ff56:
-            bVar11 = *(byte *)((int)pcVar6 * uVar9 + 0x21);
-            uVar9 = CONCAT11((char)((int)pcVar6 * uVar9 >> 8),bVar11);
-            pcVar6 = pcVar10;
-            if (Agnts[pcVar10].strengthMax < bVar11) {
-              uVar12 = Agnts[pcVar10].strengthMax;
-              uVar9 = CONCAT11((char)((uint)((int)pcVar10 * 0x34) >> 8),uVar12);
-              Agnts[pcVar10].strength = uVar12;
-            }
-            do {
-              pcVar6 = pcVar6 + 1;
-              if ((int)(uint)AgntCount <= (int)pcVar6) {
-                iVar4 = ovr_audio_panFromX(agnt,0);
-                uVar12 = (undefined1)((uint)iVar4 >> 8);
-                ovr_play_sfxU(0x1c,0,0,0,0);
-                return (char *)CONCAT11(uVar12,1);
-              }
-            } while (Agnts[pcVar6].owner != agnt->owner);
-          } while( true );
-        case 4:
-          iVar4 = ovr_font_textWidth((char *)"POPULATION",(char *)CONCAT13(uVar13,CONCAT12(uVar12,unaff_SI)),0,0,0);
-          uVar9 = 0xd4 - iVar4;
-          cVar3 = -0x3c;
-          bVar11 = 0x22;
-          TextBlitX = uVar9;
-          unaff_SI = Font02.seg;
-          ovr_blitLabel((char *)"POPULATION");
-          for (pcVar10 = (char *)0x0; TextBlitY = TextBlitY + 0xc, (int)pcVar10 < (int)(uint)bVar11;
-              pcVar10 = pcVar10 + 1) {
-            TextBlitX = 0x11;
-            if (((int)pcVar10 < 5) || (cVar3 == '\0')) {
-              suffix = (char *)0x24298;
-              ovr_blitLabel(*(char **)(&labelPtrs + (int)pcVar10 * 4));
-            }
-            else {
-              suffix = (char *)&VideoFlag_2410_0167;
-              ovr_blitLabel((char *)auStackY_11a
-                                    [(int)pcVar10 * 2 +
-                                     (uint)*(byte *)((int)*(uint32_t *)((uint)bldType << 2) + 0x2f
-                                                    ) * 8]);
-            }
-            suffix = (char *)0x263c4;
-            labelOfs = 0x1b7;
-            ovc27_textCharmed();
-            ovr_stsprintf(numBuf);
-            iVar4 = ovr_font_textWidth(numBuf,0,0,0,0);
-            TextBlitX = 0x89 - iVar4;
-            suffix = (char *)0x2431a;
-            ovr_blitLabel(numBuf);
-            ovr_stsprintf(numBuf);
-            iVar4 = ovr_font_textWidth(numBuf,0,0,0,0);
-            uVar9 = 0xd4 - iVar4;
-            cVar3 = (char)Font02.ofs;
-            bVar11 = (byte)(Font02.ofs >> 8);
-            suffix = (char *)0x27d;
-            TextBlitX = uVar9;
-            ovr_blitLabel(numBuf);
-          }
-          CurSfxType3 = 0x3c;
-          entries.seg = _SS;
-          entries.ofs = (uint16_t)&menuItems;
-          suffix = (char *)0x263c4;
-          labelOfs = 0x327;
-          uVar5 = ovr_ovc28_usesUiInputText(entries,0,0,0,0,0);
-          cVar3 = (char)uVar5;
-          keyboardInputMode = 0;
-          if (((cVar3 != '\0') && (cVar3 != '\x01')) && (cVar3 != -2)) {
-            (&stk_bac4)[unaff_DI] = (&stk_bac4)[unaff_DI] + in_CL;
-            pcVar6 = (char *)0x26510;
-            goto code_r0x0005ff56;
-          }
-          if (cVar3 == -2) {
-            Cancelled = 1;
-          }
-          return (char *)0x26510;
-        }
-      }
-      if (GSeason == '\x01') {
-        pcVar6 = pcVar6 + ((uint)pcVar6 >> 2);
-      }
-      else if (GSeason == '\x02') {
-        pcVar6 = (char *)((uint)pcVar6 >> 2);
-      }
+    return (char *)(uint)value;
+  }
+  if ((BuildingTypes[bldType].flags2 & 0x80) != 0) {
+    code = (uint8_t)ovr_constr_usesGMapFlags2(agnt);
+    switch ((uint16_t)(code - 1)) {
+    case 0:
+      value = (uint16_t)(value << 1);
+      break;
+    case 1:
+      value = (uint16_t)((value * 3) >> 1);
+      break;
+    case 2:
+      value = (uint16_t)((value * 3) >> 2);
+      break;
+    case 3:
+      value = (uint16_t)((value * 3) >> 3);
+      break;
     }
   }
-  return pcVar6;
+  if (GSeason == '\x01') {
+    value = (uint16_t)(value + (value >> 2));
+  }
+  else if (GSeason == '\x02') {
+    value = (uint16_t)(value >> 2);
+  }
+  return (char *)(uint)value;
 }
 
 

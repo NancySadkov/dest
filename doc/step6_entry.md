@@ -18423,3 +18423,70 @@ The two functions fixed earlier in this session are still in place and the gates
   grep_checks 27,596; compare_state 1,628/0/0
   diff_dgroup 1,639/1,805 matched, 5 runs, sum|delta| 18
   compare_runtime 1,692 matched, 1,683 identical / 9 different at all three sample points
+
+### step 6: ovc22_textPOPULATION re-decompiled (grep 27,596 -> 27,368)
+step 6: `ovc22_textPOPULATION` re-decompiled from the image (grep 27,596 -> 27,368)
+
+Next queue entry: 469 bytes, image 3 calls, export 221 lines / 22 calls.  Here the head was already
+right - it used `BuildingTypes[bldType].unitType == 0x16`, `.production`, `flags2 & 0x20/0x80`,
+`ovc22_compute1`, `ovc22_applyRankBonus`, `GSeason` and `GTimeLo` - and only the tail had an unrelated
+entity scan merged into it.
+
+## The record base, from the offsets
+
+The image indexes a `0x27`-stride array at ES=0x60 with `test word [bx+0x121], 0x20`,
+`byte [bx+0x128]` and `byte [bx+0x133] == 0x16`.  Those three absolute offsets only line up with one
+base:
+
+    0x121 - 0x13 (flags2)  =  0x128 - 0x1a (production)  =  0x133 - 0x25 (unitType)  = 0x10e
+
+i.e. `BuildingTypes`, whose `bldtp_t` is exactly 39 bytes (`0x27`).  That is why the head of the
+export was already correct.
+
+## The image (`tmp/dis_seg.py 5087 0234 0x1d9`)
+
+    0234  if (unitType == 0x16) return 0
+    0256  if (production == 0) return 0
+    0277  value = flags2 & 0x20 ? compute1(party, production)
+                : flags2 & 0x80 ? applyRankBonus(party, production)
+                :                 production
+    0317  if (value == 0) return 0
+    0320  if (unitType == 0x19) {  switch (GSeason) { 0: GTimeLo < 0xf ? >>2 : >>1;
+                                                      2: value += value>>2 } return value }
+    0386  if (flags2 & 0x80)  switch (constr_usesGMapFlags2(agnt) - 1)
+                                  table CS:0x409 = 3ae,3b6,3c2,3cf
+            1: value <<= 1   2: value = value*3/2   3: value*3/4   4: value*3/8
+    03da  GSeason == 1 -> value += value>>2 ;  GSeason == 2 -> value >>= 2
+    0404  return value
+
+`+0x92c8`, the word the image compares against 0xf, is anonymous in the original's symbol table but our
+tree already names it `GTimeLo`, so nothing had to be invented.
+
+## Verification: a one-function listing
+
+O22.OBJ is excluded from the default link, and `--asm` on the whole file now fails inside an unrelated
+function (`Error o22.c 2536: Compiler table limit exceeded in function ovc22_textRingProt`), so the
+function was compiled on its own (`tmp/make_chkpop.py` + `tmp/compile_chkpop.py` write
+`buildsrc/chkpop.c` and drive BCC with the project's flags).  The listing reproduces the image:
+
+    cmp byte ptr es:_BuildingTypes[bx+37],22      ; unitType == 0x16
+    cmp byte ptr es:_BuildingTypes[bx+26],0       ; production == 0
+    test word ptr es:_BuildingTypes[bx+19],32     ; flags2 & 0x20
+    call far ptr _ovc22_compute1 / _ovc22_applyRankBonus
+    cmp word ptr DGROUP:_GTimeLo,15 -> shr ax,2 / shr ax,1
+    cmp byte ptr DGROUP:_GSeason,2  -> shr ax,2 / add dx,ax
+    call far ptr _ovr_constr_usesGMapFlags2
+    shl ax,1 | shl ax,1 + add ax,si + shr ax,1 | shr ax,2 | shr ax,3     ; the four scale arms
+    cmp byte ptr DGROUP:_GSeason,1 -> shr ax,2 / add dx,ax
+    cmp byte ptr DGROUP:_GSeason,2 -> shr ax,2
+
+The struct offsets 37/26/19 are `0x25`/`0x1a`/`0x13` - the same fields the image reaches at
+0x133/0x128/0x121.
+
+## Measured (HEAD 74fc6832 -> this commit)
+
+    grep_checks      27,596 -> 27,368   (-228)
+    build 65/65, LINK.LOG 65 bytes / 0 problems
+    compare_state    1,628/0/0 (unchanged)
+    diff_dgroup      1,639/1,805 matched, 5 runs, sum|delta| 18, mean 0, worst 12 (unchanged)
+    compare_runtime  1,692 matched, 1,683 identical / 9 different at all three sample points
