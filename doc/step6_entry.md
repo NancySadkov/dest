@@ -21391,3 +21391,56 @@ unchanged (the single caller at `ovc09_init.c:1549` discards the value):
 (`push row; push col`), but the tree declares `(int x, int y, uint16_t arg3)`. Writing the body needs
 that signature narrowed, which ripples into its other callers - the same class of arity fix already
 done for `grabLbm`/`grabRemap`/`stshSprite`, and it should be done as its own verified change.
+
+
+## `3381:08dc` body written - terrain generator, and `constr_usesGMapFlags` narrowed to (x,y)
+
+**Arity fix first (the recorded blocker).** The image pushes exactly two words at every
+`lcall 0x138,0x2a` site (verified across all 17 occurrences; the three "0 push" readings are backward-walk
+artefacts at block starts), and the function body never reads its third parameter. So
+`constr_usesGMapFlags` is now `uint __cdecl16far constr_usesGMapFlags(int x,int y)` in both the
+definition and `st_functions.h`; the two prototyped call sites in `ovc10_constr.c` dropped their
+trailing literal `0`. Every other caller goes through the unprototyped `ovr_` thunk, so nothing else
+changed.
+
+**The body.** `init_textFilename` was a 774-line mis-attributed body (110 call sites); it is now ~230
+lines derived from the trace, in six phases:
+
+1. 148-byte height `profile[]`: `randBelow(10)`-gated walk, `+= randBelow(2)*2 - 1`, clamped to
+   [-1,1], flat at both ends.
+2. `_fsetmem(GUnitGrid,0x4560,0)` then `_fsetmem(GMapFlags,0x4560,0)`.
+3. Height synthesis `for row in 0..0x3b`, mirrored (`d = row&1 ? -1 : +1`), per cell
+   `h = (nb in range ? cells[row][nb] : 0) + (row ? profile[col] + cells[row-1][col] : 0); h >>= 1;`
+   then the `randBelow(0x10)`-gated profile re-walk and `dy` ladder, the *separate* `spread` ladder
+   (`9/0x13/5/0xf/5/0xb`), `h += randBelow(spread) - spread/2 + dy + 1`, and the **reflecting** clamp
+   (`dy = |dy|` at -0x23, `dy = -|dy|` at 0x7f).
+4. `init_rebuildMapFlags(); init_usesRandBelow2(); init_rebuildMapFlags();`
+5. Terrain typing into the **transposed** `GUnitGrid[col][row]` over the bands
+   0x6a/0x55/0x3f/0x2a/0x15 (the `h > 0x15` four-way switch at `cs:0x168f` turned out to have all four
+   arms at the same target, `randBelow(6)+0x3d`).
+6. Shore pass over rows 1..0x39 / cols 1..0x91: eight-non-zero-neighbour test, six monotone-slope
+   comparisons, `init_getMapFlags` twice, `constr_usesGMapFlags2 == 2`, `BuildingTypes[bld].size < 2`,
+   then `GUnitGrid[col-1][row] = randBelow(5)+0x92; GUnitGrid[col][row] = 0;`
+7. `init_rebuildAllDirectionFlags();`
+
+**Call census: C 49 vs image 60 (delta -11), and the delta is explained.** The image inlines the whole
+per-cell body once per row parity, so it contains separate call sites for `randBelow(8)` and
+`randBelow(0x10)` (the swap) and two copies of the profile re-walk's `randBelow(2)`, plus two copies of
+the `dy` ladder. The body here factors the mirrored halves into one loop with a direction variable, so
+11 call sites collapse. Every other helper matches exactly: `_fsetmem` 2, `constr_usesGMapFlags` 6,
+`constr_usesGMapFlags2` 2, `init_getMapFlags` 2, `init_rebuildMapFlags` 2, `init_usesRandBelow2` 1,
+`init_rebuildAllDirectionFlags` 1.
+
+## Measured (HEAD ac2a766f -> this commit)
+
+    grep_checks      12,680 -> 11,960   (-720: the 774-line wrong body)
+    REBUILT.EXE      466,534 -> 461,908 (-4,626)
+    build 65/65, LINK.LOG 0 errors
+    compare_state    1,628 matched / 0 different / missing 2   (unchanged)
+    diff_dgroup      1,639/1,805 matched, 5 layout runs         (unchanged)
+    compare_runtime  1,692 matched / 1,683 identical / 9 different  (unchanged)
+    screen_calls     3381:08dc  C 49 / image 60  (was C 110 / image 60)
+
+The data gates are untouched because this is a code-only change, and the runtime dumps cannot see it:
+the function runs during init while the samples are taken at entry. That is why the body was verified
+against the instruction trace and the call census rather than at runtime.

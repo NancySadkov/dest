@@ -354,7 +354,7 @@ void __cdecl16far constr_usesScreenOriginY(uint16_t rect,uint16_t type,uint16_t 
         ovr_ovc07_usesBiosReadKey
                   (*(int *)(&mapSquareRightX[sq]),ScreenOriginY[0] - smoothR,*(int *)(&mapSquareLeftX[sq]),0x96,*(int *)(&mapSquareRightX[sq]),0x96,uVar4 & 0xff,(brect_t *)CONCAT22(type,rect),0,0,0,0,0,0);
       }
-      uVar4 = constr_usesGMapFlags(col + GfxRndSeed,GfxRndSeed2,0);
+      uVar4 = constr_usesGMapFlags(col + GfxRndSeed,GfxRndSeed2);
       if ((char)uVar4 != '\0') {
         ovr_ovc07_usesLDIV_at_
                   (*(int *)(&mapSquareLeftX[sq]),ScreenOriginY[0] - smoothL,*(int *)(&mapSquareRightX[sq]),ScreenOriginY[0] - smoothR,(char)fillColor + 0xfe,(brect_t *)rect,0);
@@ -1357,7 +1357,7 @@ void __cdecl16far constr_usesBlitGfxRect2(void)
           ovr_ovc07_usesBiosReadKey
                     (((uint16_t *)SquareRightX)[sq],RowScreenY[0] - smoothRight,((uint16_t *)SquareLeftX)[sq],0x36,((uint16_t *)SquareRightX)[sq],0x36,fillPiece & 0xff,BlitRects + 3,(char)((uint16_t *)SquareLeftX)[sq],0,0,0,0,0);
         }
-        mapFlagRes = constr_usesGMapFlags(column + GfxRndSeed,GfxRndSeed2,0);
+        mapFlagRes = constr_usesGMapFlags(column + GfxRndSeed,GfxRndSeed2);
         if ((char)mapFlagRes != '\0') {
           ovr_ovc07_usesLDIV_at_
                     (((uint16_t *)SquareLeftX)[sq],RowScreenY[0] - smoothLeft,((uint16_t *)SquareRightX)[sq],RowScreenY[0] - smoothRight,(char)fillColor + 0xff,(brect_t *)(BlitRects + 3),0);
@@ -1403,7 +1403,7 @@ void __cdecl16far constr_usesBlitGfxRect2(void)
 
 /* [R6] touches GMapFlags, GMapCells */
 
-uint __cdecl16far constr_usesGMapFlags(int x,int y,uint16_t arg3)
+uint __cdecl16far constr_usesGMapFlags(int x,int y)
 
 {
   /* Re-derived: validates a 2x1 placement cell.  Returns 1 only when in bounds, both

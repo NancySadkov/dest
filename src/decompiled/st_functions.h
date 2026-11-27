@@ -420,7 +420,7 @@ void __cdecl16far constr_flushDirtyRects(void);
 void __cdecl16far constr_usesBlitRect3(void);
 void __cdecl16far constr_usesBlitRect4(void);
 void __cdecl16far constr_usesBlitGfxRect2(void);
-uint __cdecl16far constr_usesGMapFlags(int x,int y,uint16_t arg3);
+uint __cdecl16far constr_usesGMapFlags(int x,int y);
 uint __cdecl16far constr_usesGMapFlags2(int x,int y);
 void __cdecl16far audio_usesLDIV_at_(void);
 bool __cdecl16far fmFreeAudio(uint16_t force);
