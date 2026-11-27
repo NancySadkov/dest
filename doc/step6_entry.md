@@ -17118,3 +17118,22 @@ Note for later: the same medium/large mismatch still exists for any *other* libr
 `FILE *` (`fopen`, `fclose`, `fread`, `fwrite`, `fgets`, ...).  They are not on the sampled paths, but if
 one is ever reached it will corrupt the same way; the durable fix is to compile large model and link
 CL.LIB, which is what the original did.
+
+### section 5: batch 14 - a constant divisor (34,701 -> 34,689)
+section 5: batch 14 - the bytes of a constant divisor (34,701 -> 34,689)
+
+attact_textAbnormalProgramTermination builds a 32-bit divisor from four byte-sized locals and divides:
+
+    uVar4  0x51, the low byte                          -> divisorLo  (3)
+    uVar5  0                                           -> divisorMid (3)
+    uVar6  0                                           -> divisorHi  (3)
+    uVar2  0, the high word of the dividend            -> dividendHi (3)
+
+i.e. CONCAT13(divisorHi, CONCAT12(divisorMid, divisorLo)) = 0x00000051 for LDIV_at_.  The roles follow
+from the expression itself, so this is a purely mechanical rename; the function now has no section-5
+names left.
+
+  grep_checks 34,701 -> 34,689 (-12); build 65/65; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,628/0/0
+  diff_dgroup 1,639/1,805 matched, 5 runs, sum|delta| 18, mean 0, worst 12
+  compare_runtime 1,692 matched, 1,683 identical / 9 different at ALL THREE sample points

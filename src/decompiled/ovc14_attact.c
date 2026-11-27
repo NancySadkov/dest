@@ -252,23 +252,23 @@ uint16_t __cdecl16far attact_textAbnormalProgramTermination(uint16_t value,uint8
 
 {
   long *plVar1;
-  uint16_t uVar2;
+  uint16_t dividendHi;
   uint16_t unaff_BP;
   long lVar3;
   uint16_t in_stack_00000000;
-  uint16_t uVar4;
-  undefined1 uVar5;
-  undefined1 uVar6;
+  uint16_t divisorLo;
+  undefined1 divisorMid;
+  undefined1 divisorHi;
   uint in_stack_0000fffc;
   
   callResultTemp = attact_countPartyUnits(partyIndex);
-  uVar5 = 0;
-  uVar6 = 0;
-  uVar4 = 0x51;
-  uVar2 = 0;
+  divisorMid = 0;
+  divisorHi = 0;
+  divisorLo = 0x51;
+  dividendHi = 0;
   plVar1 = LXMUL_at_((long *)((char *)0x24151),
                      (ulong)in_stack_0000fffc << 0x10,CONCAT22(in_stack_00000000,unaff_BP));
-  lVar3 = LDIV_at_((long)CONCAT22(uVar2,plVar1),CONCAT13(uVar6,CONCAT12(uVar5,uVar4)));
+  lVar3 = LDIV_at_((long)CONCAT22(dividendHi,plVar1),CONCAT13(divisorHi,CONCAT12(divisorMid,divisorLo)));
   return (uint16_t)lVar3;
 }
 
