@@ -91,8 +91,6 @@ void out();
 /* Borland's @-suffixed startup symbols. */
 #define _argv ((str_t *)_argv_at_)
 #define _argc ((int)_argc_at_)
-#define _envseg _envseg_at_
-#define _envSize _envSize_at_
 #define bdata bdata_at_
 #define DGROUP_ DGROUP_at__at_
 #define _bdata_at_ bdata_at_

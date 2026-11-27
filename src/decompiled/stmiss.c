@@ -12,8 +12,6 @@ char s_absentBlob[] =
   "\0"
   "%d \r"
   "\0"
-  "fighters' residence\0"
-  "Peaceful\0"
   "anim\\2rdrag0.lbm\0"
   "build\\rock01.lbm\0"
   "anim\\1fi1m.lbm\0"

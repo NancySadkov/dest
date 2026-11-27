@@ -234,7 +234,7 @@ void startx(void)
   _psp = psp;
   uVar17 = *(uint16_t far *)MK_FP(psp, 0x2c);  /* environment segment */
   iVar10 = *(uint16_t far *)MK_FP(psp, 0x02);  /* top of memory */
-  _envseg_at_ = uVar17;
+  _envseg = uVar17;
   _heaptop.seg = iVar10;
   asm { mov ah,0x30; int 21h; mov word ptr DosVersion, ax };
   SaveVectors();
@@ -259,7 +259,7 @@ L_startx_0034:
     pcVar13 = pcVar13 + 1;
   } while (*pcVar14 != (char)pcVar4);
   *(int *)&_env = -(uVar8 | 0x8000);
-  *(uint *)&_envSize_at_ = (int)pcVar13 * 4 + 0x10U & 0xfff0;
+  *(uint *)&_envSize = (int)pcVar13 * 4 + 0x10U & 0xfff0;
   if (__stklen < 0x200) {
     __stklen = 0x200;
   }
@@ -3874,7 +3874,7 @@ void __setargv(uint savedES)
     } while (*pcVar1 != '\0');
     if (uVar6 == 0) goto code_r0x000120eb;
     uVar6 = uVar6 ^ 0x7f;
-    uVar12 = _envseg_at_;
+    uVar12 = _envseg;
   }
   in_stack_00000004 = in_BX;
   puVar4 = (undefined1 *)(uVar6 + *(byte *)((int)(int *)&errno + 1) + 2 & 0xfffe);
@@ -3955,7 +3955,7 @@ SetArgvX:
   (&savedES)[iVar8 * -2] = *(uint16_t *)&__setargv_SavedReturn2;
   *(uint16_t *)(&stk_0000 + iVar8 * -4) = *(uint16_t *)&__setargv_SavedES;
   *(uint16_t *)&__C0argc = *(uint16_t *)&_argc_at_;
-  *(uint16_t *)&__C0argv_2 = *(uint16_t *)&_argv_at__2;
+  *(uint16_t *)((uint8_t *)&_C0argv + 2) = *(uint16_t *)&_argv_at__2;
   *(uint16_t *)&__C0argv = *(uint16_t *)&_argv_at_;
                     /* WARNING: Could not recover jumptable at 0x00012153. Too many branches */
                     /* WARNING: Treating indirect jump as call */

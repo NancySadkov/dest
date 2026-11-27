@@ -91,14 +91,20 @@ extern byte __C0_ASM_CopyRight[43];
 /* C0M's own saved INT 0/4/5/6 vectors, DGROUP:0x74..0x84.  The four 4-byte slots are
    contiguous, so one array over the first covers them all. */
 extern far_t _Int0Vector[4];
-extern uint16_t __C0argc;
-extern uint16_t __C0argv;
-extern uint16_t __C0argv_2;
-extern uint16_t __C0environ;
-extern uint16_t __C0environ_2;
-extern uint16_t _env;
-extern uint16_t _envseg_at_;
-extern uint16_t _envSize_at_;
+/* The startup's own parameter block.  C0L carries these at exactly the offsets the original uses
+   (0x6b..0x79), so they are aliased to C0L's objects instead of being declared a second time; the
+   aliases below keep the names the recovered CRT uses.  _C0argv/_C0environ are 4-byte far pointers in
+   C0L and are accessed here by their low word, which is what __C0argv always was in this tree. */
+extern uint16_t _C0argc;
+extern uint16_t _C0argv;
+extern uint16_t _C0environ;
+extern uint16_t _envLng;
+extern uint16_t _envseg;
+extern uint16_t _envSize;
+#define __C0argc    _C0argc
+#define __C0argv    _C0argv
+#define __C0environ _C0environ
+#define _env        _envLng
 extern uint16_t _psp;
 extern dosver_t DosVersion;
 extern int errno;

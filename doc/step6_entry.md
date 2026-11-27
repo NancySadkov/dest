@@ -16265,3 +16265,70 @@ __C0environ, _env, _envseg_at_, _envSize_at_, DosVersion), which is the exact li
 repointed at C0L's own objects - and for eight of them C0L *does* publish the equivalent under its own
 C name (`_C0argc`, `_C0envLng`, `_envseg`, `_envSize`, `_osversion`), so those need only a rename,
 not a byte.
+
+### layout: alias the parameter block to C0L (sum 68,590, state 1,625 -> 1,628)
+layout: alias the parameter block to C0L's own objects (sum 68,590, mean 42; state 1,625 -> 1,628)
+
+C0L occupies DGROUP:0x00..0x94 with exactly the original's header at exactly the original's offsets, and
+publishes the startup parameters under its own names.  Our tree then declared a second copy of them at
+0x94..0xa6.  They are now aliases of C0L's objects instead:
+
+    C0L symbol        offset   was                      now
+    __C0argc          0x6b     uint16_t __C0argc        #define __C0argc    _C0argc
+    __C0argv (4)      0x6d     __C0argv + __C0argv_2    _C0argv (low word)
+    __C0environ (4)   0x71     __C0environ + _2         _C0environ (low word)
+    __envLng          0x75     uint16_t _env            #define _env        _envLng
+    __envseg          0x77     uint16_t _envseg_at_     _envseg
+    __envSize         0x79     uint16_t _envSize_at_    _envSize
+
+`__C0argv_2` had no C0L counterpart (it is the high word of the 4-byte far pointer), so the one statement
+that writes it became `*(uint16_t *)((uint8_t *)&_C0argv + 2) = *(uint16_t *)&_argv_at__2;`.
+`st_compat.h`'s `#define _envseg _envseg_at_` / `#define _envSize _envSize_at_` shims are gone, since
+the names now have real definitions.
+
+MEASURED (HEAD 61b6ca5e -> this commit)
+
+  diff_dgroup sum|delta|   94,606 -> 68,590
+  diff_dgroup mean             58 ->     42
+  diff_dgroup runs             13 ->     13
+  diff_dgroup matched        1,630 ->  1,630
+  diff_dgroup head baseline   +70 ->    +54     (0x0094 onward)
+  compare_state              1,625/0/0 -> 1,628/0/0
+  compare_runtime matched    1,684 ->  1,687, identical 1,675 -> 1,678 / 9 different (both points)
+  grep_checks               34,863 -> 34,866  (+3 for the three string declarations below)
+  build 65/65, LINK.LOG 65 bytes / 0 problems
+
+## Two corrections to the previous commit
+
+1. **61b6ca5e is documentation only.**  Its message records the three-string/order-fix measurement
+   (matched 1,627 -> 1,630, runs 16 -> 13, sum 44,875 -> 94,606), but the source edits were lost: I ran
+   `git checkout -- src` to undo a failed experiment and that reverted the *uncommitted* string work as
+   well, then committed the doc alone.  The three declarations, the repairs/food-trade swap and both
+   blob removals are therefore re-applied here, and the numbers above include them.
+
+2. **st_compat.h must keep CRLF.**  Editing it with Python's universal-newline read + `newline=""`
+   rewrote the whole file to LF, and Turbo C 3.0 then failed on it with
+
+       Error compat.h 8: Illegal character '#' (0x23)
+       Error compat.h 8: Declaration syntax error
+
+   because the `#define __cdecl16far` lines were no longer seen as directives - every module failed
+   with `Size of '__cdecl16far' is unknown or zero`.  It is the only CRLF file among the ones edited
+   here (`git show HEAD:` shows CRLF=99 for it and LF-only for the rest), so `tmp/fix_eol.py` restores
+   CRLF for any file whose HEAD version has it, and does nothing for the others.
+
+## What is left in the head, and it is now precise
+
+    0x00  91  C0L DATASEG (copyright, error strings, null-check string)
+    0x5b  16  C0L saved interrupt vectors
+    0x6b  ..  C0L parameters - now shared with us at zero cost
+    0x94   4  _DATA            ours, duplicate of C0L's unnamed 0x00 dd
+    0x98  43  __C0_ASM_CopyRight   ours, duplicate of C0L's 0x04 text
+    0xd3   2  DosVersion       ours, C0L splits it into __osmajor/__osminor
+    0xd5  ..  game data        +54 from the original
+
+Deleting those last 49 bytes puts the game data at 0x94 exactly.  `_DATA` and the copyright are the two
+that cannot be aliased by name, because C0L carries them inside an *unnamed* segment (TLINK prints it
+`DATASEG@`) and publishes no symbol for either; a TASM label inside that segment does not merge with it
+(measured earlier: it landed in a separate segment at 7CF8:0004).  The remaining routes are to name that
+SEGDEF inside C0L.OBJ, or to move the two objects to the tail and accept their name-pair deltas.

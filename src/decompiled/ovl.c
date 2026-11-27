@@ -130,7 +130,7 @@ void __cdecl16near __OvrExeOpenEnv(void)
   
   pcVar3 = (code *)swi(0x21);
   bVar5 = (*pcVar3)();
-  uVar4 = _envseg_at_;
+  uVar4 = _envseg;
   if (2 < bVar5) {
     __C0_ASM_CopyRight[2] = 0x20;
     uStack0002 = 0x2410;
@@ -175,7 +175,7 @@ void __cdecl16near __OvrExeOpenEnvPath(void)
   byte *pbVar9;
   bool bVar10;
   
-  uVar5 = _envseg_at_;
+  uVar5 = _envseg;
   pbVar8 = (byte *)0x0;
   bVar10 = true;
   do {
