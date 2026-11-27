@@ -18490,3 +18490,70 @@ The struct offsets 37/26/19 are `0x25`/`0x1a`/`0x13` - the same fields the image
     compare_state    1,628/0/0 (unchanged)
     diff_dgroup      1,639/1,805 matched, 5 runs, sum|delta| 18, mean 0, worst 12 (unchanged)
     compare_runtime  1,692 matched, 1,683 identical / 9 different at all three sample points
+
+### step 6: heal-notice thunks identified; argument packing unverified
+step 6: heal-notice analysis - three of five thunks identified, argument packing still unverified
+
+`ovc41_textOnlyPlaceSingle` (6a8f:2084, 438 code bytes, 15 calls) is the heal-notice builder.  Its head
+(0x2084..0x21ec) is fully understood and uses only named data:
+
+    208b  fmemcpy(ss:&[bp-0x1a], ds:CureSpellPtrs, 0x10)     ; four far pointers to spell names
+    209c  ent = &Entities[[bp+0xa]]                         ; stride 0x34
+    20af  if (ent->flags (+0x2b) & 0x820) return
+    20bd  agnt->flags &= ~0x800
+    20c5  switch (agnt->entity->level)  <8 -> 0, <10 -> 1, <12 -> 2, else 3
+    2105  switch (that)   table CS:0x22c3 = 211b,212f,2145,215b
+            0: healed = manage_rollDice(1,6) + 1
+            1: healed = manage_rollDice(2,6) + 2
+            2: healed = manage_rollDice(3,6) + 3
+            3: healed = (ent->[0x22] - ent->[0x21]) - manage_rollDice(1,6)
+               if (healed < 6) { healed = manage_rollDice(3,6) + 3; level = 2 }
+    21a4  old = ent->[0x21]; ent->[0x21] += healed; clamp to ent->[0x22];
+          if (ent->[0x21] == old) return
+          ... message assembly ...
+
+The four spell-name pointers live at `ds:0x6e38` = `CureSpellPtrs` (16 bytes of four far pointers), and
+the message format is `ds:0x6feb` = "%s casts %s on %s to heal %d hitpoint%s for a total of %d
+hitpoint%s." - both already named in the tree.
+
+## The thunks, resolved by cross-reference
+
+Each runtime thunk segment is an import table, so the *offset* alone is ambiguous; matching a
+`seg,ofs` pair against functions whose bodies are already correct settles it:
+
+    0x140,0x48  -> agnt_usesAnimFrame        (ovc27_spellNotice calls it there)
+    0x140,0x2f  -> audio_panFromX            (same function, both uses)
+    0x148,0x2f  -> agnt_statusText           (ovc27_textTakesHalfDamage3: statusText = ...)
+    0x160,0x25  -> not yet resolved          (candidates: stshRealloc / usesStshRealloc / uiNotify)
+    0xf8,0x39   -> not yet resolved          (candidates: uiNotify / stshRleSub / ...)
+
+The tail's shape is then clear: statusText(entity, buf) -> statusText(agnt, buf2, CureSpellPtrs[level])
+-> the 0x160 call on that text -> fmVsprintf(buf3, 0x6feb, args...) -> the 0xf8 call on the result, with
+the two `pluralSuffix` results supplying the "%s" arguments after each count.
+
+## Why it is not rewritten yet
+
+The message call is a 7-argument `fmVsprintf` whose arguments are partly staged across three earlier
+calls (`add sp` removes only some of each batch, leaving the rest for the final call).  I traced the
+stack and could not make the byte counts close - `add sp,0x20` after the call implies 32 bytes removed,
+while the pushes I can account for total 20 - which means one of my readings of an `add sp` is wrong.
+Writing a text-formatting routine on a guess would produce plausible-but-wrong heal messages, so it is
+recorded here instead.
+
+## A second small gap found while screening
+
+`init_paths` (3381:01c8, 116 bytes) was re-derived earlier but stops after `strcat(&GWorkDir,
+GSaveFileName)`.  The image continues:
+
+    020e  push ds / push 0x5bb
+          push word es:[0x8978] / push word es:[0x8976]    ; a far pointer in DGROUP
+    0221  call 0x9a        ; then 0xfe, then 0x16c, each on the previous result
+    023a  pop bp / retf
+
+so three further calls (0x9a, 0xfe, 0x16c in module 3381) are missing from the body.  Those three and
+the `0x8976/0x8978` pair (anonymous in the original's symbol table) are the same unnamed-data situation
+as `ovc41_usesBiosKeyAvail`.
+
+Measured: no change to any gate this turn (grep_checks 27,368; build 65/65; LINK.LOG 65 bytes / 0
+problems; compare_state 1,628/0/0; diff_dgroup 1,639/1,805 with sum|delta| 18; compare_runtime 1,692
+matched, 1,683 identical / 9 different).
