@@ -389,14 +389,14 @@ stg_tmp_t * __cdecl16far init_textFilename(void)
 
 {
   undefined1 stk_d744;   /* stack slot d744 */
-  uint16_t uVar1;
+  uint16_t bptrSeg;
   far_t gfx;
   far_t gfx_00;
   far_t src;
   far_t src_00;
   far_t handle;
   far_t handle_00;
-  ulong uVar2;
+  ulong unitGridSeg;
   char cVar3;
   byte bVar4;
   uint32_t *puVar5;
@@ -404,13 +404,13 @@ stg_tmp_t * __cdecl16far init_textFilename(void)
   undefined1 uVar10;
   uint32_t *puVar6;
   uint16_t randPick;
-  uint uVar8;
+  uint cellDiff;
   stg_tmp_t *psVar9;
   undefined1 extraout_AH_00;
   int in_CX;
   uint extraout_DX;
-  uint uVar11;
-  uint uVar12;
+  uint otherDiffSign;
+  uint cellDiffSign;
   byte (*mapCells) [59] [148];
   short (*paasVar14) [148] [60];
   uint16_t unaff_SI;
@@ -422,7 +422,7 @@ stg_tmp_t * __cdecl16far init_textFilename(void)
   uint uVar17;
   uint32_t *retStorage;
   uint16_t uVar18;
-  bool bVar19;
+  bool carry;
   longdouble in_ST0;
   uint32_t in_stack_00000004;
   int16_t in_stack_00000008;
@@ -720,12 +720,12 @@ stg_tmp_t * __cdecl16far init_textFilename(void)
         mapCells = (byte (*) [59] [148])GMapCells;
         uVar17 = (int)(char)(*mapCells)[row + 1][col] -
                  (int)(char)(*mapCells)[row][col + 1];
-        uVar11 = (int)uVar17 >> 0xf;
-        uVar8 = (int)(char)(*mapCells)[row][col] -
+        otherDiffSign = (int)uVar17 >> 0xf;
+        cellDiff = (int)(char)(*mapCells)[row][col] -
                 (int)(char)(*mapCells)[row + 1][col + 1];
-        uVar12 = (int)uVar8 >> 0xf;
-        psVar9 = (stg_tmp_t *)((uVar8 ^ uVar12) - uVar12);
-        if ((int)((uVar17 ^ uVar11) - uVar11) < (int)psVar9) {
+        cellDiffSign = (int)cellDiff >> 0xf;
+        psVar9 = (stg_tmp_t *)((cellDiff ^ cellDiffSign) - cellDiffSign);
+        if ((int)((uVar17 ^ otherDiffSign) - otherDiffSign) < (int)psVar9) {
           psVar9 = (stg_tmp_t *)(col * 2);
           *(uint *)(psVar9->cmap + (int)(*(short (*) [60] [148])GMapFlags + row)) =
                *(uint *)(psVar9->cmap + (int)(*(short (*) [60] [148])GMapFlags + row)) | 4;
@@ -789,7 +789,7 @@ stg_tmp_t * __cdecl16far init_textFilename(void)
                     randPick = ovr_randBelow(5,0);
                     ((short (*) [148] [60])GUnitGrid)[-1][col + 0x93][row] =
                          (randPick & 0xff) + 0x92;
-                    uVar2 = (ulong)GUnitGrid >> 0x10;
+                    unitGridSeg = (ulong)GUnitGrid >> 0x10;
                     paasVar14 = (short (*) [148] [60])GUnitGrid;
                     psVar9 = (stg_tmp_t *)(row * 2);
                     (psVar9->cmap + (int)(*paasVar14 + col))[0] = 0;
@@ -1042,10 +1042,10 @@ bad_lbm:
     randPick = fStack_30.seg;
     psVar9 = (stg_tmp_t *)fStack_30.ofs;
     if ((&psVar9->bptr)->ofs != 0 || (psVar9->bptr).seg != 0) {
-      uVar1 = (psVar9->bptr).seg;
-      (*(uint8_t *)((uint8_t *)&(handle_00.seg))) = (char)uVar1;
+      bptrSeg = (psVar9->bptr).seg;
+      (*(uint8_t *)((uint8_t *)&(handle_00.seg))) = (char)bptrSeg;
       handle_00.ofs = (&psVar9->bptr)->ofs;
-      (*(uint8_t *)((uint8_t *)&(handle_00.seg) + 1)) = (char)(uVar1 >> 8);
+      (*(uint8_t *)((uint8_t *)&(handle_00.seg) + 1)) = (char)(bptrSeg >> 8);
       ovr_stshFree(handle_00);
     }
     ovr_stshClose((uint16_t)retStorage);
@@ -1146,9 +1146,9 @@ bad_lbm:
     puStack_26 = ovr_be4(puStack_26);
     uStack_24 = uVar17;
     if (((uint)puStack_26 & 1) != 0) {
-      bVar19 = (uint32_t *)0xfffe < puStack_26;
+      carry = (uint32_t *)0xfffe < puStack_26;
       puStack_26 = (uint32_t *)((int)puStack_26 + 1);
-      uStack_24 = uVar17 + bVar19;
+      uStack_24 = uVar17 + carry;
     }
     puVar6 = ovr_stshTell(retStorage,unaff_SI);
     uVar17 = ((int)puVar6 >> 0xf) + uStack_24 + (uint)CARRY2((uint)puVar6,(uint)puStack_26);

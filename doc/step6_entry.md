@@ -16044,3 +16044,34 @@ unnamed.
   compare_state 1,625/0/0
   diff_dgroup 1,627/1,805 matched, 19 runs, sum|delta| 44,867, mean 27, worst 148
   compare_runtime 1,684 matched, 1,675 identical / 9 different (both sample points)
+
+### section 5: init_textFilename and saveui_configureMessageDelay (35,143 -> 35,109)
+section 5: init_textFilename and saveui_configureMessageDelay (35,143 -> 35,109)
+
+init_textFilename (771 lines, 349 occurrences; 14 single-assignment names, most of them
+never-assigned stack slots)
+    uVar8   (int)(char)(*mapCells)[row][col] - ..., then made absolute with
+            (v ^ (v >> 0xf)) - (v >> 0xf)                  -> cellDiff     (4)
+    uVar12  (int)uVar8 >> 0xf, that absolute's mask         -> cellDiffSign (4)
+    uVar11  (int)uVar17 >> 0xf, the same idiom for uVar17   -> otherDiffSign (4)
+    uVar1   (psVar9->bptr).seg, split into handle_00.seg    -> bptrSeg      (4)
+    uVar2   (ulong)GUnitGrid >> 0x10, the grid's segment    -> unitGridSeg  (2)
+    bVar19  (uint32_t *)0xfffe < puStack_26, a carry into the 32-bit add
+                                                           -> carry        (3)
+
+saveui_configureMessageDelay (429 lines, 241 occurrences; 4 single-assignment names)
+    iVar16   CONCAT11(bVar17,(byte)puVar15), then used as `(iVar16 + -0x51f8)`
+             and `unaff_SI[iVar16 + 8]`                     -> entryOfs   (5)
+    uVar7    manage_usesLitoa103(), merged into uStack_1a's low byte
+                                                           -> litoaDigit (3)
+    uVar5    *(uint32_t *)(entity[3] << 2), then read at +0x89 -> entityPtr (3)
+    uStack_f AgntGs[gindex].ai                             -> agntAI     (2)
+
+Left unnamed: `uVar10` (`extraout_AH`, an ABI value) and the never-assigned `uStack_*` slots in both
+bodies - those are incoming stack arguments the export does not declare, so any name would be
+invention.
+
+  grep_checks 35,143 -> 35,109 (-34); build 65/65; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,625/0/0
+  diff_dgroup 1,627/1,805 matched, 19 runs, sum|delta| 44,867, mean 27, worst 148
+  compare_runtime 1,684 matched, 1,675 identical / 9 different (both sample points)

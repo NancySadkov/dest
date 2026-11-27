@@ -876,9 +876,9 @@ char * __cdecl16far saveui_configureMessageDelay(void)
   uint16_t *puVar2;
   uint8_t *puVar3;
   byte *pbVar4;
-  uint32_t uVar5;
+  uint32_t entityPtr;
   char cVar6;
-  undefined1 uVar7;
+  undefined1 litoaDigit;
   uint uVar8;
   uint uVar9;
   uint16_t uVar10;
@@ -889,7 +889,7 @@ char * __cdecl16far saveui_configureMessageDelay(void)
   uint16_t in_DX;
   entity_t *peVar14;
   uint *puVar15;
-  int iVar16;
+  int entryOfs;
   byte *unaff_SI;
   uint unaff_DI;
   uint16_t uVar18;
@@ -907,7 +907,7 @@ char * __cdecl16far saveui_configureMessageDelay(void)
   int iStack_16;
   int iStack_14;
   int iStack_12;
-  undefined1 uStack_f;
+  undefined1 agntAI;
   char acStack_e [6];
   uint16_t entY;
   uint16_t entX;
@@ -983,12 +983,12 @@ char * __cdecl16far saveui_configureMessageDelay(void)
                     /* WARNING: Read-only address (ram,0x00025f09) is written */
     (*(uint16_t *)((uint8_t *)&("fighters' residence"))) = (uint)&stk_ffde | 0x6966;
     bVar17 = (byte)((uint)puVar15 >> 8) | (byte)in_CX | bVar17 | (byte)unaff_DI;
-    iVar16 = CONCAT11(bVar17,(byte)puVar15);
-    pbVar4 = (byte *)(iVar16 + -0x51f8);
+    entryOfs = CONCAT11(bVar17,(byte)puVar15);
+    pbVar4 = (byte *)(entryOfs + -0x51f8);
     *pbVar4 = *pbVar4 | bVar17;
     ((char *)0x2c508)[unaff_DI] =
          ((char *)0x2c508)[unaff_DI] | (byte)in_DX | (byte)puVar15;
-    unaff_SI[iVar16 + 8] = unaff_SI[iVar16 + 8] | bVar17;
+    unaff_SI[entryOfs + 8] = unaff_SI[entryOfs + 8] | bVar17;
     (&stk_0007)[(int)unaff_SI] = (&stk_0007)[(int)unaff_SI] | (byte)puVar12;
                     /* WARNING: Bad instruction - Truncating control flow here */
     halt_baddata();
@@ -1036,8 +1036,8 @@ switchD_4000_6642_caseD_3:
   }
   else if (((char)uStack_18 != '\0') && ((*(uint8_t *)((uint8_t *)&(uStack_1a) + 1)) != '\0')) {
     pcStack_22 = (char *)CONCAT22(menuLabel,unaff_DI);
-    uVar7 = manage_usesLitoa103();
-    uStack_1a = CONCAT11((*(uint8_t *)((uint8_t *)&(uStack_1a) + 1)),uVar7);
+    litoaDigit = manage_usesLitoa103();
+    uStack_1a = CONCAT11((*(uint8_t *)((uint8_t *)&(uStack_1a) + 1)),litoaDigit);
     while ((char)uStack_1a != '\0') {
       uVar19 = (uint16_t)((ulong)uStack_1e >> 0x10);
       if (((((entity_t *)uStack_1e)->base).target & 1) == 0) {
@@ -1134,7 +1134,7 @@ switchD_4000_6642_caseD_3:
                  & 0x4000) != 0;
       entX = (uStack_1e->base).x;
       entY = (peVar14->base).y;
-      uStack_f = AgntGs[(uint)(peVar14->base).gindex].ai;
+      agntAI = AgntGs[(uint)(peVar14->base).gindex].ai;
       if ((peVar14->base).faction < (byte)(peVar14->base).state) {
         sVar13 = ((peVar14->base).faction & 3) << 1;
         in_CX = CONCAT11((char)((uint)in_CX >> 8),sVar13);
@@ -1249,8 +1249,8 @@ L_attact_3f0b_1082_1477:
             bStack_4 = 0xff;
           }
           else {
-            uVar5 = *(uint32_t *)((uint)*(byte *)((int)&(peVar14->base).entity + 3) << 2);
-            bStack_4 = *(byte *)((int)uVar5 + 0x89);
+            entityPtr = *(uint32_t *)((uint)*(byte *)((int)&(peVar14->base).entity + 3) << 2);
+            bStack_4 = *(byte *)((int)entityPtr + 0x89);
           }
           if (bStack_4 != 0xff) {
             for (unaff_SI = (byte *)0x0; unaff_SI < SquareRecCount; unaff_SI = unaff_SI + 1) {
