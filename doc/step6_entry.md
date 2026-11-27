@@ -21714,3 +21714,39 @@ Result: `5ded:10ea` is measured over its true extent (`0x10ea..0x1be7`) and drop
     diff_dgroup      1,639/1,805 matched                       (unchanged)
     compare_runtime  1,692 matched / 1,683 identical / 9 different  (unchanged)
     screen_calls     5ded:10ea removed from the delta table; 1433/14a8 no longer listed
+
+
+## `81b9:3e84` written from the listing; `ovr_stshRleType2` now returns its far pointer
+
+`grabBldLbm2` was a 23-call body for a 40-call routine. The listing (`tmp/o48_3e84.txt`, 512
+instructions) is completely regular, so the body was **generated from it** rather than transcribed:
+
+    grab the `normal` LBM, fill BldGfxNormal[1 + index*3 .. 25 + index*3], free it;
+    grab the `ruin`   LBM, fill BldGfxRuin  [1 + index*3 .. 25 + index*3], free it;
+
+18 identical blocks, each `BldGfxX[slot + index*3] = stsh_store(ovr_stshRleType2(src, ...))`, with the
+slots established by the far-pointer addresses (`0060:4e34`, `4e28`, ... and `0060:4294`, `4288`, ...)
+against the table bases `BldGfxNormal = 4dd0`, `BldGfxRuin = 4230` (both known from `stshTR_S_stubify0`).
+
+Overlay pairs, all resolved and confirmed by push counts: `0x188,0x5c` = `ovr_grabLbmTR`,
+`0x118,0x25` = `ovr_stshRleType2` (8 words), `0x188,0x25` = `ovr_stshStoreFile` via `stsh_store`
+(2 words), `0x188,0x66` = `ovr_stgFreeTmp`.
+
+**A real defect found and fixed:** `ovr_stshRleType2` was declared `undefined ...()`, so its far result
+(DX:AX) was discarded at every call site - 447 of them. It is now `far_t *ovr_stshRleType2();`. This is
+why the body did not compile at first (`Type mismatch in parameter 'data' in call to 'stsh_store'`).
+
+**A census gap found and fixed:** the routine's 40 image calls are 18 `stshRleType2` + 18 stores +
+2 grabs + 2 frees, but the store call goes through our `stsh_store` wrapper, which is not an image
+symbol, so it was not counted and the body looked 17 calls short. `screen_calls.py` now counts
+`LOCAL_WRAPPERS` (`stsh_store`), which also corrected `6ffe:02f7` from -340 to -143.
+
+## Measured (HEAD 939830dd -> this commit)
+
+    grep_checks      11,763 -> 11,760
+    REBUILT.EXE      460,852 -> 459,892
+    build 65/65, LINK.LOG 0 errors
+    compare_state    1,628 matched / 0 different / missing 2   (unchanged)
+    diff_dgroup      1,639/1,805 matched                       (unchanged)
+    compare_runtime  1,692 matched / 1,683 identical / 9 different  (unchanged)
+    screen_calls     81b9:3e84 leaves the delta table

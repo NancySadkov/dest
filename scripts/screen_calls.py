@@ -63,6 +63,11 @@ MARK = re.compile(r"^/\* ([0-9a-f]{4}):([0-9a-f]{4}) \*/$")
 
 COMMENTS = re.compile(r"/\*.*?\*/", re.S)
 
+# Local C wrappers that stand in for an image callee, so they must count as calls too.  stsh_store is
+# the st_stubs.c wrapper around ovr_stshStoreFile: it performs the image's two-word call and returns
+# DX:AX.  Counting it closes the gap for every asset loader that stores a sprite.
+LOCAL_WRAPPERS = {"stsh_store"}
+
 
 def count_calls(body):
     # Prose in a comment mentions call shapes ("digSoundPlaying()", 'strcat(dst, "") ...'), and
@@ -70,7 +75,8 @@ def count_calls(body):
     # file_open_rdonly both appeared on the list with their bodies right.  Strip comments first.
     body = COMMENTS.sub("", body)
     return sum(1 for m in IDENTS.finditer(body)
-               if m.group(1) in known or m.group(1).startswith("ovr_") or m.group(1).startswith("litoa"))
+               if m.group(1) in known or m.group(1) in LOCAL_WRAPPERS
+               or m.group(1).startswith("ovr_") or m.group(1).startswith("litoa"))
 
 
 rows = []

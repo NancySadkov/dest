@@ -1093,7 +1093,7 @@ undefined ovr_grabLbm();
 undefined ovr_alignToSeg();
 undefined ovr_stExit();
 undefined ovr_stshRleCut();
-undefined ovr_stshRleType2();
+far_t * ovr_stshRleType2();
 undefined ovr_blitLoadRleGfx();
 undefined ovr_blitGfx10();
 undefined ovr_blitGfxRect();
