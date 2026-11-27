@@ -61,20 +61,20 @@ void __cdecl16far ovc24_usesAlignUp4(void)
 char __cdecl16far ovc24_usesEntities(int entityIndex)
 
 {
-  byte bVar1;
-  char cVar2;
+  byte rankBonus;
+  char statResult;
   entity_t *peVar3;
-  uint16_t uVar4;
+  uint16_t entitiesSeg;
   char cStack_3;
   
-  bVar1 = ovr_agnt_compute8(&Entities[entityIndex].base,DAT_2000_d190);
-  uVar4 = (uint16_t)((ulong)Entities >> 0x10);
+  rankBonus = ovr_agnt_compute8(&Entities[entityIndex].base,DAT_2000_d190);
+  entitiesSeg = (uint16_t)((ulong)Entities >> 0x10);
   peVar3 = Entities;
-  cStack_3 = peVar3[entityIndex].base.level + bVar1 +
+  cStack_3 = peVar3[entityIndex].base.level + rankBonus +
              AgntGs[(uint)peVar3[entityIndex].base.gindex].rank +
              AgntGs[(uint)peVar3[entityIndex].base.gindex].shortName[1] + '\t';
-  cVar2 = ovr_stats_compute4(&peVar3[entityIndex].base,uVar4);
-  cStack_3 = cStack_3 - cVar2;
+  statResult = ovr_stats_compute4(&peVar3[entityIndex].base,entitiesSeg);
+  cStack_3 = cStack_3 - statResult;
   if (cStack_3 < '\0') {
     cStack_3 = '\0';
   }

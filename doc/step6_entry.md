@@ -15631,3 +15631,37 @@ depend on decisions or work outside reverse-engineering:
     accepting the grep as a heuristic a Ghidra export cannot satisfy;
   * runtime: deeper sample points need a resident hook (timer/keyboard ISR) because VROOMM
     overlays are packed at load, so code patching cannot reach them.
+
+### section 5: batch 1 of the all-258 phantom-free screen (35,568 -> 35,525)
+section 5: batch 1 of the all-258 phantom-free screen (35,568 -> 35,525)
+
+Extending the screener to every phantom-free function rather than the top ten by count found eight
+single-assignment names in four functions:
+
+    ovc41_usesXOfs       uVar1  (uint)Agnts[agntIndex].target, then indexes Agnts[]  -> targetIdx   (11)
+    ovc41_compute6       bVar1  ovr_agnt_compute14(level), a rank threshold         -> baseRank     (9)
+                         uVar3  (undefined1)(bVar1 + 1 >> 8), the packed high byte   -> packHi       (5)
+    ovc24_usesEntities   uVar4  (uint16_t)((ulong)Entities >> 0x10), a segment arg   -> entitiesSeg  (3)
+                         cVar2  ovr_stats_compute4(...)                             -> statResult   (3)
+                         bVar1  ovr_agnt_compute8(...), added to level and rank     -> rankBonus    (3)
+    ovc41_buildingNotice iVar1  a GUnitGrid lookup, then `GUnits + iVar1`           -> unitIdx      (5)
+                         uVar2  (uint16_t)((ulong)GUnits >> 0x10), the ovr_say seg  -> unitsSeg     (4)
+
+Each is written exactly once, so the assignment fixes its meaning for every use; the four functions
+are phantom-free and each replacement count is asserted.
+
+MEASURED (HEAD 7df3a56d -> this commit)
+
+  grep_checks   35,568 -> 35,525   (-43)
+  build 65/65; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,625/0/0
+  diff_dgroup 1,627/1,805 matched, 19 runs, sum|delta| 44,867, mean 27, worst 148
+  compare_runtime 1,684 matched, 1,675 identical / 9 different
+
+Note on the count: a `uVar`-style name matches only the `[iusbc]Var` pattern, so it counts once, not
+twice - the doubling applies only to names of the form `p[iusbc]Var` (e.g. `puVar1`), which is why
+43 occurrences moved the total by 43 rather than 86.
+
+TOOLING: tmp/screen_all5.py ranks all 258 phantom-free functions by the occurrences that belong to
+single-assignment names, and prints each name with its assignment.  tmp/reachable5.py already
+established the ceiling: 3,009 occurrences in phantom-free bodies, 11,180 behind phantoms.

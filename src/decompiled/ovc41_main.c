@@ -505,7 +505,7 @@ void __cdecl16far ovc41_paralyzeNearbyAgents(int agntIndex)
 void __cdecl16far ovc41_usesXOfs(int agntIndex)
 
 {
-  uint uVar1;
+  uint targetIdx;
   far_t dst;
   int iStack_c;
   uint8_t xOfs;
@@ -513,26 +513,26 @@ void __cdecl16far ovc41_usesXOfs(int agntIndex)
   dst.seg = _SS;
   dst.ofs = (uint16_t)&xOfs;
   F_SCOPY(far_from_u32((uint32_t)(0x24106e00)),dst,8);
-  uVar1 = (uint)Agnts[agntIndex].target;
+  targetIdx = (uint)Agnts[agntIndex].target;
   iStack_c = Agnts[agntIndex].targetY;
   if (2 < iStack_c) {
     iStack_c = 3;
   }
   if (Agnts[agntIndex].level == '\0') {
-    Agnts[uVar1].x = Agnts[agntIndex].x + *(int *)(&xOfs + iStack_c * 2);
+    Agnts[targetIdx].x = Agnts[agntIndex].x + *(int *)(&xOfs + iStack_c * 2);
   }
   else {
-    Agnts[uVar1].x = Agnts[agntIndex].x - *(int *)(&xOfs + iStack_c * 2);
+    Agnts[targetIdx].x = Agnts[agntIndex].x - *(int *)(&xOfs + iStack_c * 2);
   }
-  if (0xd2 < Agnts[uVar1].x) {
-    Agnts[uVar1].x = 0xd2;
+  if (0xd2 < Agnts[targetIdx].x) {
+    Agnts[targetIdx].x = 0xd2;
   }
-  if (Agnts[uVar1].x < 0) {
-    Agnts[uVar1].x = 0;
+  if (Agnts[targetIdx].x < 0) {
+    Agnts[targetIdx].x = 0;
   }
-  Agnts[uVar1].y = Agnts[agntIndex].y;
-  AGNT_FIELD(&Agnts[uVar1], targetX, 1) = 0;
-  AGNT_FIELD(&Agnts[uVar1], targetX, 0) = 0;
+  Agnts[targetIdx].y = Agnts[agntIndex].y;
+  AGNT_FIELD(&Agnts[targetIdx], targetX, 1) = 0;
+  AGNT_FIELD(&Agnts[targetIdx], targetX, 0) = 0;
   return;
 }
 
@@ -545,27 +545,27 @@ void __cdecl16far ovc41_usesXOfs(int agntIndex)
 uint16_t __cdecl16far ovc41_compute6(byte rank,uint8_t level)
 
 {
-  byte bVar1;
+  byte baseRank;
   uint16_t packed;
-  undefined1 uVar3;
+  undefined1 packHi;
   
-  bVar1 = ovr_agnt_compute14(level);
-  if (bVar1 + 2 < (uint)rank) {
-    packed = CONCAT11((char)(bVar1 + 2 >> 8),0xd);
+  baseRank = ovr_agnt_compute14(level);
+  if (baseRank + 2 < (uint)rank) {
+    packed = CONCAT11((char)(baseRank + 2 >> 8),0xd);
   }
-  else if (bVar1 + 2 == (uint)rank) {
-    packed = CONCAT11((char)(bVar1 + 2 >> 8),0xb);
+  else if (baseRank + 2 == (uint)rank) {
+    packed = CONCAT11((char)(baseRank + 2 >> 8),0xb);
   }
   else {
-    uVar3 = (undefined1)(bVar1 + 1 >> 8);
-    if (bVar1 + 1 == (uint)rank) {
-      packed = CONCAT11(uVar3,9);
+    packHi = (undefined1)(baseRank + 1 >> 8);
+    if (baseRank + 1 == (uint)rank) {
+      packed = CONCAT11(packHi,9);
     }
-    else if (bVar1 == rank) {
-      packed = CONCAT11(uVar3,7);
+    else if (baseRank == rank) {
+      packed = CONCAT11(packHi,7);
     }
     else {
-      packed = CONCAT11(uVar3,2);
+      packed = CONCAT11(packHi,2);
     }
   }
   return packed;
@@ -784,27 +784,27 @@ int __cdecl16far ovc41_turnUndeadNotice(agnt_t far *agnt)
 void __cdecl16far ovc41_buildingNotice(char delta)
 
 {
-  int iVar1;
+  int unitIdx;
   char *msg;
-  uint16_t uVar2;
+  uint16_t unitsSeg;
   static char text[64];   /* DGROUP-backed formatting buffer */
   byte bStack_3;
   
-  iVar1 = ((short (*) [148] [60])GUnitGrid)[-1][GfxRndSeed + 0x93][GfxRndSeed2];
-  if (0xf7 < iVar1) {
-    uVar2 = (uint16_t)((ulong)GUnits >> 0x10);
-    bStack_3 = (GUnits + iVar1)->bldType + delta;
+  unitIdx = ((short (*) [148] [60])GUnitGrid)[-1][GfxRndSeed + 0x93][GfxRndSeed2];
+  if (0xf7 < unitIdx) {
+    unitsSeg = (uint16_t)((ulong)GUnits >> 0x10);
+    bStack_3 = (GUnits + unitIdx)->bldType + delta;
     if (0xf7 < bStack_3) {
       bStack_3 = 0;
     }
-    (GUnits + iVar1)->bldType = bStack_3;
+    (GUnits + unitIdx)->bldType = bStack_3;
     ovr_constr_flushDirtyRects();
     msg = ovr_stsprintf(text,(char *)CONCAT22(0x6f23,_SS),
                         (char *)(ulong)CONCAT12(bStack_3,(char *)0x26510),
                         BLD_WORD(&BuildingTypes[bStack_3], name, 0),
                         BLD_WORD(&BuildingTypes[bStack_3], name, 2));
-    asm { mov uVar2,dx };
-    ovr_say(msg,uVar2);
+    asm { mov unitsSeg,dx };
+    ovr_say(msg,unitsSeg);
   }
   return;
 }
