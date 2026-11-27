@@ -20606,6 +20606,51 @@ registers:
 
 with `uint16_t resultSeg;` declared in the function.
 
+## Portrait half of `stshInitSprites` (4207:0762-0af9) - the last `AgntGs` near casts are gone
+
+Image (segment 0x60, record base 0x26d6): the portrait loop loads `prtfls[j]` at `+0x272a + j*2`,
+`prts[j]` at `+0x2736 + j*4` and `prtpals[j]` at `+0x274e + j*4`, all through ES:
+
+    0762  bx = i*0x95 + j*2 / cmp es:[bx+0x272a],0          ; prtfls[j]
+    078a  push 0 / push 0 / push es:[bx+0x272a] / lcall 0x100,0x20  ; grabLbm(prtfls[j],0,0)
+    07b5  push [bp-2] / push [bp-4] / lcall 0x188,0x61              ; stshUniqueColorsRemap(gfx)
+    07c3  push 0 / push 0 / push 0x67 / push 0x72 / push 0 / push 0
+    07cf  push es:[bx+0x302] / push es:[bx+0x300] / lcall 0x118,0x25 ; stshRleType2
+    07e4  push dx / push ax / lcall 0x188,0x25                      ; stsh_store(rle)
+    0811  push 0 / push 0x300 / push [bp-2] / push [bp-4] / lcall 0x188,0x34  ; stshWrite
+    083c  es:[bx+0x2750] / es:[bx+0x274e]                           ; prtpals[j]
+    0857  lcall 0x248,0x20 (x2)                                     ; no-grab stubs
+
+and the fixups are now taken from the image rather than from the decompiler's over-wide `uint`
+reads:
+
+    if ((prts[1].ofs|prts[1].seg) == 0 && (prts[0].ofs|prts[0].seg) != 0) {
+      prts[1] = prts[0];  prtpals[1] = prtpals[0];          /* 4207:08b0 */
+    }
+    for (j = 2; j < 6; j += 2) {
+      if (prts[j+1] empty && prts[j-1] not) { prts[j+1] = prts[j-1]; prtpals[j+1] = prtpals[j-1]; }
+      if (prts[j]   empty && prts[j-2] not) { prts[j]   = prts[j-2]; prtpals[j]   = prtpals[j-2]; }
+    }                                                       /* 4207:094f / 0a21 */
+
+(`prts[j].ofs|prts[j].seg` is the image's `mov ax,es:[bx+..]; or ax,es:[bx+..]; je`.) Verified in the
+rebuilt listing: `cmp word ptr es:[bx+0x261c],0` (prtfls[j]), `mov word ptr es:[bx+0x262a],ax`
+(prts[j].seg), `mov ax,word ptr es:[bx+0x262c]/or ax,word ptr es:[bx+0x262e]` (the prts[1] test),
+`mov word ptr es:[bx+0x2642],ax` (prtpals[j].seg) - all ES-relative like the image. **`ovc15_sprite.c`
+now contains zero `(int)AgntGs[0]` casts.**
+
+The store *values* keep the tree's existing expressions: `stsh_store`, `stshWrite`, `stshRleType2`,
+`stshUniqueColorsRemap` and `stgFreeTmp` still carry decompiler-garbled argument lists (the image
+pushes 2/4/8/2/2 words respectively), which is a separate tree-wide arity cleanup.
+
+## Measured (HEAD 568b7cf4 -> this commit)
+
+    grep_checks      21,184 -> 21,176
+    REBUILT.EXE      479,872 -> 480,016 (+144: the segment loads for the far accesses)
+    build 65/65, LINK.LOG 0 errors
+    compare_state    1,628/0/0 (unchanged)
+    diff_dgroup      1,639/1,805 matched, 5 runs, sum|delta| 18 (unchanged)
+    compare_runtime  1,692 matched, 1,683 identical / 9 different at all three sample points
+
 ## Measured (HEAD 6de64396 -> this commit)
 
     grep_checks      21,185 -> 21,184

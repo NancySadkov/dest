@@ -228,100 +228,58 @@ void __cdecl16far stshInitSprites(bool grab)
       }
     }
     for (j = 0; (int)j < 6; j = j + 1) {
-      if (*(int *)((int)AgntGs[0].prtfls + i * 0x95 + j * 2) != 0) {
-        if (grab) {
-          puVar7 = (uint8_t *)((int)&BuildingTypes[0x9f].income + 1);
-          gfx = ovr_grabLbm(*(int16_t *)((int)AgntGs[0].prtfls + i * 0x95 + j * 2),0,0);
-          puVar8 = puVar7;
-          ovr_stshUniqueColorsRemap(gfx,puVar7);
-          pixels.seg = 0;
-          pixels.ofs = (gfx->aptr).seg;
-          pfVar1 = ovr_stshRleType2((far_t far *)(&gfx->aptr)->ofs,pixels,0,114,103,0,0,(int16_t)unaff_DI,0,0);
-          pcVar4 = (char *)stsh_store((uint8_t *)pfVar1, (uint16_t)puVar8, &uVar6);
-          slot = i * 0x95 + j * 4;
-
-          *(int *)((int)AgntGs[0].prts + 2 + slot) = (int)puVar8;
-          *(uint16_t *)((int)AgntGs[0].prts + slot) =(uint16_t)( pcVar4);
-          sz = ZEXT24(unaff_DI) << 0x10;
-          puVar5 = ovr_stshWrite((uint32_t *)gfx,(uint8_t *)CONCAT22(0x300,puVar7),sz,0);
-          unaff_DI = (far_t far *)((ulong)sz >> 0x10);
-          slot = i * 0x95 + j * 4;
-          *(uint16_t *)((int)AgntGs[0].prtpals + 2 + slot) = uVar6;
-          *(uint16_t *)((int)AgntGs[0].prtpals + slot) =(uint16_t)( puVar5);
-          ovr_stgFreeTmp(gfx,puVar7);
-        }
-        else {
-          pfVar1 = ovr_stshAllocStub(unaff_DI);
-          slot = i * 0x95 + j * 4;
-          asm { mov uVar6,dx };
-          *(uint16_t *)((int)AgntGs[0].prts + 2 + slot) = uVar6;
-          *(uint16_t *)((int)AgntGs[0].prts + slot) =(uint16_t)( pfVar1);
-          pfVar1 = ovr_stshAllocStub(unaff_DI);
-          asm { mov uVar9,dx };
-          slot = i * 0x95 + j * 4;
-          *(uint16_t *)((int)AgntGs[0].prtpals + 2 + slot) = uVar9;
-          *(uint16_t *)((int)AgntGs[0].prtpals + slot) =(uint16_t)( pfVar1);
-        }
+      if (AgntGs[i].prtfls[j] == 0) {
+        continue;
+      }
+      if (grab) {
+        puVar7 = (uint8_t *)((int)&BuildingTypes[0x9f].income + 1);
+        gfx = ovr_grabLbm(AgntGs[i].prtfls[j],0,0);
+        puVar8 = puVar7;
+        ovr_stshUniqueColorsRemap(gfx,puVar7);
+        pixels.seg = 0;
+        pixels.ofs = (gfx->aptr).seg;
+        pfVar1 = ovr_stshRleType2((far_t far *)(&gfx->aptr)->ofs,pixels,0,114,103,0,0,
+                                  (int16_t)unaff_DI,0,0);
+        pcVar4 = (char *)stsh_store((uint8_t *)pfVar1, (uint16_t)puVar8, &uVar6);
+        AgntGs[i].prts[j].seg = (uint16_t)(uint)puVar8;
+        AgntGs[i].prts[j].ofs = (uint16_t)( pcVar4);
+        sz = ZEXT24(unaff_DI) << 0x10;
+        puVar5 = ovr_stshWrite((uint32_t *)gfx,(uint8_t *)CONCAT22(0x300,puVar7),sz,0);
+        unaff_DI = (far_t far *)((ulong)sz >> 0x10);
+        AgntGs[i].prtpals[j].seg = uVar6;
+        AgntGs[i].prtpals[j].ofs = (uint16_t)( puVar5);
+        ovr_stgFreeTmp(gfx,puVar7);
+      }
+      else {
+        pfVar1 = ovr_stshAllocStub(unaff_DI);
+        asm { mov uVar6,dx };
+        AgntGs[i].prts[j].seg = uVar6;
+        AgntGs[i].prts[j].ofs = (uint16_t)( pfVar1);
+        pfVar1 = ovr_stshAllocStub(unaff_DI);
+        asm { mov uVar9,dx };
+        AgntGs[i].prtpals[j].seg = uVar9;
+        AgntGs[i].prtpals[j].ofs = (uint16_t)( pfVar1);
       }
     }
-    pfVar1 = (far_t far *)(*(uint *)((int)AgntGs[0].prts + 4 + i * 0x95) |
-                      *(uint *)((int)AgntGs[0].prts + 6 + i * 0x95));
-    if ((pfVar1 == (far_t far *)0x0) &&
-       (pfVar1 = (far_t far *)0x0,
-       *(int *)((int)AgntGs[0].prts + i * 0x95) != 0 ||
-       *(int *)((int)AgntGs[0].prts + 2 + i * 0x95) != 0)) {
-      uVar6 = *(uint16_t *)((int)AgntGs[0].prts + i * 0x95);
-      *(uint16_t *)((int)AgntGs[0].prts + 6 + i * 0x95) =
-           *(uint16_t *)((int)AgntGs[0].prts + 2 + i * 0x95);
-      *(uint16_t *)((int)AgntGs[0].prts + 4 + i * 0x95) = uVar6;
-      pfVar1 = (far_t far *)*(uint16_t *)((int)AgntGs[0].prtpals + i * 0x95);
-      *(uint16_t *)((int)AgntGs[0].prtpals + 6 + i * 0x95) =
-           *(uint16_t *)((int)AgntGs[0].prtpals + 2 + i * 0x95);
-      *(uint16_t *)((int)AgntGs[0].prtpals + 4 + i * 0x95) =(uint16_t)( pfVar1);
-    }
-    for (slot = 2; slot < 6; slot = slot + 2) {
-      labelOfs = i * 0x95 + slot * 4;
-      if ((*(int *)((int)AgntGs[0].prts + 4 + labelOfs) == 0 &&
-           *(int *)((int)AgntGs[0].prts + 6 + labelOfs) == 0) &&
-         (labelOfs = i * 0x95 + slot * 4,
-         *(int *)((int)AgntGs[0].prtfls + 8 + labelOfs) != 0 ||
-         *(int *)((int)AgntGs[0].prtfls + 10 + labelOfs) != 0)) {
-        labelOfs = i * 0x95 + slot * 4;
-        uVar6 = *(uint16_t *)((int)AgntGs[0].prtfls + 8 + labelOfs);
-        prtOfs = i * 0x95 + slot * 4;
-        *(uint16_t *)((int)AgntGs[0].prts + 6 + prtOfs) =
-             *(uint16_t *)((int)AgntGs[0].prtfls + 10 + labelOfs);
-        *(uint16_t *)((int)AgntGs[0].prts + 4 + prtOfs) = uVar6;
-        labelOfs = i * 0x95 + slot * 4;
-        uVar6 = *(uint16_t *)((int)AgntGs[0].prts + 0x14 + labelOfs);
-        prtOfs = i * 0x95 + slot * 4;
-        *(uint16_t *)((int)AgntGs[0].prtpals + 6 + prtOfs) =
-             *(uint16_t *)((int)AgntGs[0].prts + 0x16 + labelOfs);
-        *(uint16_t *)((int)AgntGs[0].prtpals + 4 + prtOfs) = uVar6;
+    /* 4207:08b0: an empty prts[1] inherits prts[0] and prtpals[0]. */
+    if ((AgntGs[i].prts[1].ofs | AgntGs[i].prts[1].seg) == 0) {
+      if ((AgntGs[i].prts[0].ofs | AgntGs[i].prts[0].seg) != 0) {
+        AgntGs[i].prts[1] = AgntGs[i].prts[0];
+        AgntGs[i].prtpals[1] = AgntGs[i].prtpals[0];
       }
-      labelOfs = i * 0x95 + slot * 4;
-      pfVar1 = (far_t far *)(*(uint *)((int)AgntGs[0].prts + labelOfs) |
-                        *(uint *)((int)AgntGs[0].prts + 2 + labelOfs));
-      if (pfVar1 == (far_t far *)0x0) {
-        labelOfs = i * 0x95 + slot * 4;
-        if (*(int *)((int)AgntGs[0].prtfls + 4 + labelOfs) == 0 &&
-            *(int *)((int)AgntGs[0].prtfls + 6 + labelOfs) == 0) {
-          pfVar1 = (far_t far *)0x0;
-        }
-        else {
-          labelOfs = i * 0x95 + slot * 4;
-          uVar6 = *(uint16_t *)((int)AgntGs[0].prtfls + 4 + labelOfs);
-          prtOfs = i * 0x95 + slot * 4;
-          *(uint16_t *)((int)AgntGs[0].prts + 2 + prtOfs) =
-               *(uint16_t *)((int)AgntGs[0].prtfls + 6 + labelOfs);
-          *(uint16_t *)((int)AgntGs[0].prts + prtOfs) = uVar6;
-          labelOfs = i * 0x95 + slot * 4;
-          pfVar1 = (far_t far *)*(uint16_t *)((int)AgntGs[0].prts + 0x10 + labelOfs);
-          prtOfs = i * 0x95 + slot * 4;
-          *(uint16_t *)((int)AgntGs[0].prtpals + 2 + prtOfs) =
-               *(uint16_t *)((int)AgntGs[0].prts + 0x12 + labelOfs);
-          *(uint16_t *)((int)AgntGs[0].prtpals + prtOfs) =(uint16_t)( pfVar1);
-        }
+    }
+    /* 4207:094f: for each even slot, the next odd slot inherits the previous odd slot and the
+       even slot itself inherits the previous even slot, when empty. */
+    for (j = 2; (int)j < 6; j = j + 2) {
+      if (((AgntGs[i].prts[j + 1].ofs | AgntGs[i].prts[j + 1].seg) == 0) &&
+          ((AgntGs[i].prts[j - 1].ofs | AgntGs[i].prts[j - 1].seg) != 0)) {
+        AgntGs[i].prts[j + 1] = AgntGs[i].prts[j - 1];
+        AgntGs[i].prtpals[j + 1] = AgntGs[i].prtpals[j - 1];
+      }
+      if (((AgntGs[i].prts[j].ofs | AgntGs[i].prts[j].seg) == 0) &&
+          ((AgntGs[i].prts[j - 2].ofs | AgntGs[i].prts[j - 2].seg) != 0)) {
+        AgntGs[i].prts[j] = AgntGs[i].prts[j - 2];
+        AgntGs[i].prtpals[j] = AgntGs[i].prtpals[j - 2];
       }
     }
   }
