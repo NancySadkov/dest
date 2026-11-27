@@ -71,16 +71,16 @@ undefined1 __cdecl16far agnt_compute3(agnt_t far *agnt)
 
 {
   undefined1 uVar1;
-  int iVar2;
+  int exitVal;
   agnt_t far *agnt_00;
-  uint16_t uVar3;
+  uint16_t agntSeg;
   
-  uVar3 = (uint16_t)((ulong)agnt >> 0x10);
+  agntSeg = (uint16_t)((ulong)agnt >> 0x10);
   agnt_00 = (agnt_t far *)agnt;
   if (((((int)agnt_00->y < 0x15) || (agnt_00->moveState == 0x1)) && ((int)agnt->x < 0xd3)) &&
      (-1 < (int)agnt->x)) {
-    iVar2 = ovr_ovc49_usesStExit(agnt_00,uVar3);
-    uVar1 = (undefined1)iVar2;
+    exitVal = ovr_ovc49_usesStExit(agnt_00,agntSeg);
+    uVar1 = (undefined1)exitVal;
   }
   else {
     uVar1 = 1;

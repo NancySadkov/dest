@@ -1287,12 +1287,12 @@ uint16_t __cdecl16far attact_usesLDIV_at_(uint8_t menuIndex)
 {
   long *plVar1;
   undefined1 uVar2;
-  uint16_t uVar3;
+  uint16_t dividendHi;
   uint16_t unaff_BP;
   long lVar4;
   uint16_t in_stack_00000000;
   long *plVar5;
-  uint16_t uVar6;
+  uint16_t divisorHi;
   undefined1 in_stack_0000fffc;
   undefined1 uVar7;
   undefined1 in_stack_0000fffd;
@@ -1303,13 +1303,13 @@ uint16_t __cdecl16far attact_usesLDIV_at_(uint8_t menuIndex)
     uVar2 = 0;
   }
   else {
-    uVar6 = 0;
-    uVar3 = 0;
+    divisorHi = 0;
+    dividendHi = 0;
     plVar5 = (long *)callResultTemp;
     plVar1 = LXMUL_at_((long *)callResultTemp,
                        (ulong)CONCAT11(in_stack_0000fffd,in_stack_0000fffc) << 0x10,
                        CONCAT22(in_stack_00000000,unaff_BP));
-    lVar4 = LDIV_at_((long)CONCAT22(uVar3,plVar1),(long)CONCAT22(uVar6,plVar5));
+    lVar4 = LDIV_at_((long)CONCAT22(dividendHi,plVar1),(long)CONCAT22(divisorHi,plVar5));
     uVar2 = (undefined1)((ulong)lVar4 >> 8);
     uVar7 = (undefined1)lVar4;
   }
@@ -1424,8 +1424,8 @@ void __cdecl16far attact_usesRandBelow(agnt_t far *agnt,byte dir,uint16_t arg3,u
 
 {
   uint16_t randDir;
-  uint uVar2;
-  int iVar3;
+  uint blockedFlag;
+  int newX;
   undefined1 uStack0007;
   byte in_stack_00000008;
   uint16_t agntX;   /* hand fix: [BP-6] is a WORD copy of agnt->x (3f0b:246f) */
@@ -1438,8 +1438,8 @@ void __cdecl16far attact_usesRandBelow(agnt_t far *agnt,byte dir,uint16_t arg3,u
     in_stack_00000008 = (byte)randDir;
     do {
       agntX = agnt->x;
-      uVar2 = attact_usesAlignUp44((int *)CONCAT22(_SS,&agntX),agnt->y,in_stack_00000008);
-      if ((uVar2 & 0xff) == 0) goto L_attact_3f0b_2430_24BF;
+      blockedFlag = attact_usesAlignUp44((int *)CONCAT22(_SS,&agntX),agnt->y,in_stack_00000008);
+      if ((blockedFlag & 0xff) == 0) goto L_attact_3f0b_2430_24BF;
       in_stack_00000008 = in_stack_00000008 + 1 & 3;
     } while (in_stack_00000008 != (byte)randDir);
   }
@@ -1450,8 +1450,8 @@ L_attact_3f0b_2430_24BF:
     startX = agnt->x;
     startY = agnt->y;
     agnt->y = agnt->y + (int)*(char *)(in_stack_00000008 + 0x889);
-    iVar3 = ovr_ovc23_compute2(agntX + *(char *)(in_stack_00000008 + 0x885),agnt->y);
-    agnt->x = iVar3;
+    newX = ovr_ovc23_compute2(agntX + *(char *)(in_stack_00000008 + 0x885),agnt->y);
+    agnt->x = newX;
     func_0x0004fcda(0x236f);
     constructionDirty = 1;
   }

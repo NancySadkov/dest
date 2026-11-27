@@ -17724,3 +17724,31 @@ drawAgntStats (ovc33_stats.c)
   compare_state 1,628/0/0
   diff_dgroup 1,639/1,805 matched, 5 runs, sum|delta| 18, mean 0, worst 12
   compare_runtime 1,692 matched, 1,683 identical / 9 different at all three sample points
+
+### section 5: batch 30 - six functions (34,270 -> 34,234)
+section 5: batch 30 - six functions (34,270 -> 34,234)
+
+attact_usesRandBelow (ovc14_attact.c)
+    uVar2  attact_usesAlignUp44(...), tested `(uVar2 & 0xff) == 0` -> blockedFlag (3)
+    iVar3  ovr_ovc23_compute2(newX, newY), assigned to agnt->x     -> newX        (3)
+
+attact_usesLDIV_at_ (ovc14_attact.c)
+    uVar6  0, the divisor's high word in CONCAT22(uVar6, plVar5)   -> divisorHi  (3)
+    uVar3  0, the dividend's high word in CONCAT22(uVar3, plVar1)  -> dividendHi (3)
+
+agnt_compute3 (ovc12_agnt.c)
+    uVar3  (uint16_t)((ulong)agnt >> 0x10), the far pointer's segment -> agntSeg (3)
+    iVar2  ovr_ovc49_usesStExit(agnt_00, agntSeg)                  -> exitVal   (3)
+
+sfxInit / musInit (ovc11_audio.c) - both walk a 32-bit driver record
+    uVar3  (uint16_t)(record >> 0x10), its segment word            -> recSeg (2 each)
+    iVar2  (int)record, its offset word, then read at +5 and +7    -> recOfs (4 each)
+
+audio_usesLDIV_at_ (ovc11_audio.c)
+    uVar8  0, the divisor's high word in CONCAT22(uVar8, 0x8000)   -> divisorHi    (3)
+    bVar1  ovr_digSoundPlaying()                                   -> soundPlaying (3)
+
+  grep_checks 34,270 -> 34,234 (-36); build 65/65; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,628/0/0
+  diff_dgroup 1,639/1,805 matched, 5 runs, sum|delta| 18, mean 0, worst 12
+  compare_runtime 1,692 matched, 1,683 identical / 9 different at all three sample points
