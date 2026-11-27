@@ -606,7 +606,7 @@ void __cdecl16far ovc18_blitTriangles(void);
 void __cdecl16far ovc18_blitPanelIfNotRunning(void);
 void __cdecl16far ovc18_showLeaderView(void);
 uint8_t * __cdecl16far ovc18_spawnClassAgent(uint16_t x,uint16_t y,uint16_t destX,uint16_t destY,uint8_t classStr,uint8_t partyIndex,uint16_t mode);
-char * __cdecl16far ovc18_textTypeLen(uint8_t partyIndex,uint16_t destX,uint16_t destY,uint8_t textVariant,uint16_t arg5,uint16_t arg6);
+char * __cdecl16far ovc18_textTypeLen(uint8_t partyIndex,uint16_t destX,uint16_t destY,uint8_t mode);
 void __cdecl16far ovc18_checkFortressPlacement(char strongholdKind);
 uint __cdecl16far ovc18_usesRandBelow(int x,int y,byte bldType,byte unitType,uint16_t arg5,uint16_t arg6);
 bool __cdecl16far ovc18_textArena(uint16_t x,uint16_t y);

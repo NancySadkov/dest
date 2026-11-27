@@ -17968,3 +17968,71 @@ so the invented function was deleted from st_stubs.c rather than left behind as 
 
 `ovr_season_usesGPromotable_e11a` stays: it is still called from ovc18_leaderview.c:708 and remains
 a GUESS until that call site is read the same way.
+
+### step 6: ovc18_textTypeLen re-decompiled from the image (grep 34,002 -> 33,573)
+step 6: `ovc18_textTypeLen` re-decompiled from the image (grep 34,002 -> 33,573)
+
+Same defect class as `ovc18_spawnClassAgent`, same method, and the export turned out to be worse than
+suspected: `case 3` alone held ~200 lines of the leader panel's **text drawer** ("Income", "Gold",
+"Vault storage", "Fund Access", `TextBlitX`/`TextBlitY`, `litoa10`), and cases 1/2 returned unrelated
+pointers.  That text code is a duplicate of `ovc21_manage`'s `manage_textAllProperty` body - the same
+label sequence sits at ovc21_manage.c:539-571 with the same `CONCAT22(Font02.ofs,0x26510)` call shape -
+so removing it here loses nothing.
+
+## The image (`tmp/dis_seg.py 48ac 0382 0270`)
+
+    0382  prologue, sub sp,0xa; si=[bp+8] (destX); di=[bp+0xa] (destY)
+    0390  GLeaderSheets[[bp+6]];  sheetX = sheet->x (+0x39);  sheetY = sheet->y (+0x3b)
+    03c3  cls = sheet->cls (+0x2f)
+    03cc  switch (cls): 0,1,2,3 -> jump table CS:0x5ea = 0x402,0x4a4,0x4bf,0x4da
+                        4 -> 0x4f5 (sprite 0xa)   5 -> 0x510 (sprite 8)
+                        6 -> 0x52b (sprite 0xb)   0xff -> 0x545
+                        default -> 0x5af
+    0402  case 0: two coin flips (ovr_randBelow(2,0)) ordering sprite 0 and sprite 5
+    04a4/04bf/04da  cases 1/2/3 -> sprite 1/2/3
+    0545  case 0xff: if ((AgntGs[sheet->classStr].flags3 & 0x800) == 0)
+                     call with sprite = sheet->classStr; the two branches either side of the
+                     [bp+0xc] test are byte-identical, so that test is dead
+    05af  tail: if (AgntGs[sheet->classStr].flags2 & 0x8000)
+                     ovc18_spawnClassAgent(sheetX, sheetY, destX, destY, 1, partyIndex, mode)
+
+Every call is `ovc15_usesLDIV_at_(sheetX, sheetY, destX, destY, sprite, 1, partyIndex)` - the image
+pushes partyIndex, 1, sprite, di, si, sheetY, sheetX and then `add sp,0xe`.
+
+The signature is also corrected to the four parameters the image reads ([bp+6] partyIndex, [bp+8]
+destX, [bp+0xa] destY, [bp+0xc] mode).  The tree's prototype had six, which is what the "hand fix:
+prototype has 4 params" note at the ovc15_sprite.c thunk call site had already recorded.
+
+## The rebuilt code matches the image instruction for instruction
+
+`tmp/dis_ours.py _OVC18_TEXTTYPELEN`:
+
+    ours                              image
+    0003 sub sp,0xa                    0385 sub sp,0xa
+    0008 mov si,[bp+8]; mov di,[bp+0xa] 038a same
+    000e al=[bp+6]; shl ax,2           0390 same
+    0018 ax=[bx-0x6ae0]; dx=[bx-0x6ae2] 039f ax=es:[bx+2]; dx=es:[bx]
+    0026 les bx,[bp-a]; ax=es:[bx+0x39] 03af same
+    0030 ax=es:[bx+0x3b]               03b9 same
+    0037 al=es:[bx+0x2f]; ah=0         03c3 same
+    003d cmp ax,4 / jne / jmp          03cc same
+    0045 jg / bx=ax / cmp bx,3 / jbe   03d4 same
+    0051 shl bx,1 / jmp cs:[bx+0x5af]  03e0 shl bx,1 / jmp cs:[bx+0x5ea]
+    0083 push partyIndex / 1 / 0 / di / si / sheetY / sheetX / lcall / add sp,0xe
+                                        0412 same seven pushes, same order, same 0xe
+
+Only the data model differs (our `GLeaderSheets`/`AgntGs` are DGROUP-relative, so `es` becomes a
+segment constant and the offsets shift), plus the tree-wide `ovr_randBelow(n,0)` two-word idiom.
+
+## Measured (HEAD 7f1a2e1b -> these two commits)
+
+    grep_checks      34,002 -> 33,573   (-429: the 383-line wrong body is gone)
+    REBUILT.EXE      530,170 -> 526,550  (-3,620 bytes of foreign code)
+    build 65/65, LINK.LOG 65 bytes / 0 problems
+    compare_state    1,628/0/0 (unchanged)
+    diff_dgroup      1,639/1,805 matched, 5 runs, sum|delta| 18, mean 0, worst 12 (unchanged)
+    compare_runtime  1,692 matched, 1,683 identical / 9 different at all three sample points
+
+`ovr_season_usesGPromotable_e11a` was called only from the deleted text code, so its GUESS stub was
+removed as well - the second stub that turned out to be an artifact of a structuring defect rather
+than a lost function.  Both removals are in `st_stubs.c` and leave no references behind.

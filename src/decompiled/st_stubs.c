@@ -87,11 +87,6 @@ int halt_baddata()
 }
 
 
-/* GUESS: body not recovered */
-int ovr_season_usesGPromotable_e11a()
-{
-  return 0;
-}
 
 /* Ghidra renders an inline `INT n` as `pc = swi(n); (*pc)();`.
 
