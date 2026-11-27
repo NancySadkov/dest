@@ -257,7 +257,7 @@ uint8_t __cdecl16far vgaSetPalette(uint8_t *paletteOfs,uint8_t paletteSeg,int st
 uint8_t __cdecl16far vgaSetPalette8bit(uint8_t far *pal, uint16_t arg2);
 uint16_t __cdecl16far unrle(far_t src,far_t dst,uint16_t len);
 int __cdecl16far rle_blit_decode(byte far *src, byte far *dst, uint16_t sz);
-void __cdecl16far grabRemap(far_t pixels,uint8_t scolor,uint8_t dcolor,uint16_t arg4);
+void __cdecl16far grabRemap(far_t pixels,uint8_t scolor,uint8_t dcolor);
 void __cdecl16far masked_memcpy(char *dst,char *src,int skip,int src_sz,int dst_sz,uint mask,uint16_t arg7);
 int16_t __cdecl16far countRunLength(char far *src, uint16_t avail, uint16_t maxRun);
 int __cdecl16far rle_line(uint8_t far *src, uint8_t far *dst, uint16_t npixels);

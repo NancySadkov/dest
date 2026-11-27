@@ -429,13 +429,13 @@ int __cdecl16far rle_blit_decode(byte far *src, byte far *dst, uint16_t sz)
 
 /* 2d63:0292 */
 
-void __cdecl16far grabRemap(far_t pixels,uint8_t scolor,uint8_t dcolor,uint16_t arg4)
+void __cdecl16far grabRemap(far_t pixels,uint8_t scolor,uint8_t dcolor)
 
 {
   uint16_t count;
-  uint8_t *p;
-  
-  p = (uint8_t *)pixels.ofs;
+  uint8_t far *p;
+
+  p = (uint8_t far *)MK_FP(pixels.seg,pixels.ofs);
   count = 64000;
   do {
     if (*p == scolor) {

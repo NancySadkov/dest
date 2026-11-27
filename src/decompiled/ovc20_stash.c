@@ -107,10 +107,10 @@ stg_tmp_t * __cdecl16far grabLbmTR(int16_t file_id)
   (*(uint16_t *)((uint8_t *)&(r))) = ovr_grabLbm(file_id,0,0);
   pixels.seg = (((stg_tmp_t *)r)->aptr).seg;
   pixels.ofs = (&((stg_tmp_t *)r)->aptr)->ofs;
-  ovr_grabRemap(pixels,0x14,0x0,0);
+  ovr_grabRemap(pixels,0x14,0x0);
   pixels_00.seg = (((stg_tmp_t *)r)->aptr).seg;
   pixels_00.ofs = (&((stg_tmp_t *)r)->aptr)->ofs;
-  ovr_grabRemap(pixels_00,0xff,0x0,0);
+  ovr_grabRemap(pixels_00,0xff,0x0);
   return (stg_tmp_t *)r;
 }
 

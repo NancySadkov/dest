@@ -2528,7 +2528,7 @@ void __cdecl16far getcache(bool updateFile)
     pixels.seg = (((stg_tmp_t *)tg)->aptr).seg;
     pixels.ofs = (&((stg_tmp_t *)tg)->aptr)->ofs;
     rleSeg = rleSeg2;
-    ovr_grabRemap(pixels,0xff,0x0,0xff);
+    ovr_grabRemap(pixels,0xff,0x0);
     (*(uint16_t *)((uint8_t *)&(tg) + 2)) = rleSeg2;
   }
   for (iVar3 = 0; iVar3 < 3; iVar3 = iVar3 + 1) {

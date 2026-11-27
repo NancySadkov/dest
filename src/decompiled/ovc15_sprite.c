@@ -154,7 +154,7 @@ stshSprite(far_t *retStorage,int16_t file_id,anm_t *anms,uint16_t nanims,bool gr
     pixels.seg = (((stg_tmp_t *)fVar6)->aptr).seg;
     pixels.ofs = (&((stg_tmp_t *)fVar6)->aptr)->ofs;
     seg = (*(uint16_t *)((uint8_t *)&(fVar6) + 2));
-    ovr_grabRemap(pixels,0xff,0x0,0);
+    ovr_grabRemap(pixels,0xff,0x0);
     ofs = (uint16_t)
           stshRleAnims((uint8_t *)CONCAT22(file_id,(uint8_t *)(((stg_tmp_t *)fVar6)->aptr).seg),anms
                        ,unaff_SI);
