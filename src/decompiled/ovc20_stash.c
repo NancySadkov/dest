@@ -511,7 +511,7 @@ cte_t * __cdecl16far stshStoreFile(uint8_t *data,uint16_t arg2)
     (psVar4->info + 4)[0] = 0x0;
     (psVar4->info + 4)[1] = 0x0;
     if (DebugVerbose != false) {
-      printf("type %d len %ld \r");
+      printf("type %d len %ld \r",*data,sz);
       ovr_biosReadKey();
     }
     sz_00.hi = sz.hi;

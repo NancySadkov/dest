@@ -20402,6 +20402,22 @@ as data nor as a `push`/`mov ax` immediate), and the preceding function `ovc25_t
 (5b66:1b48, 161 bytes) ends at 5b66:1be9, so 1be9.. is a data region. The tree still carried a
 247-line body with 421 `?Var`/`Stack_` names and no callers; it is deleted.
 
+## `stshStoreFile`'s `type %d len %ld` argument (ovc20_stash.c:514)
+
+Image 4b0a:0b1c pushes `[bp-6]`, `[bp-8]`, then the record type byte (`les bx,[bp+6]; mov al,es:[bx]`)
+before `ds:0x4855` = "type %d len %ld \r". So the call is
+`printf("type %d len %ld \r",*data,sz)` - the block's first byte and the DW size (high word [bp-6], low
+word [bp-8]), which is the same `sz` the function uses two statements earlier at `sizeLo = sz.lo`.
+
+## Measured (HEAD 07643dcd -> this commit)
+
+    grep_checks      21,263 (unchanged)
+    REBUILT.EXE      479,232 -> 479,248 (+16: the two argument pushes)
+    build 65/65, LINK.LOG 0 problems
+    compare_state    1,628/0/0 (unchanged)
+    diff_dgroup      1,639/1,805 matched, 5 runs, sum|delta| 18 (unchanged)
+    compare_runtime  1,692 matched, 1,683 identical / 9 different at all three sample points
+
 ## Measured (HEAD 2909784e -> this commit)
 
     grep_checks      21,863 -> 21,263   (-600: the fake body and its neighbours)
