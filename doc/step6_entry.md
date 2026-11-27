@@ -17873,3 +17873,79 @@ Measured this turn (no change to this function):
   compare_state 1,628/0/0
   diff_dgroup 1,639/1,805 matched, 5 runs, sum|delta| 18, mean 0, worst 12
   compare_runtime 1,692 matched, 1,683 identical / 9 different at all three sample points
+
+### step 6: ovc18_spawnClassAgent re-decompiled from the image (grep 34,169 -> 34,002)
+step 6: `ovc18_spawnClassAgent` re-decompiled from the image (grep 34,169 -> 34,002)
+
+The documented defect from last turn is now fixed.  The function is 0x126 bytes in the image
+(`tmp/dis_seg.py 48ac 0251 0126`), and everything it does is accounted for:
+
+    0251  push bp / mov bp,sp / sub sp,2 / push si / push di
+    0259  mov si,[bp+6] / mov di,[bp+8]                  ; x, y
+    025f  al = [bp+0x10]; shl ax,2; es = 0x70; les bx,[bx]; al = es:[bx+0x3e]
+                                                          ; GLeaderSheets[partyIndex]->classStr
+    027a  imul ax,0x95; es = 0x60; test es:[bx+0x2716],0x800
+                                                          ; AgntGs[classStr].flags3 & 0x800
+    0292  jne 0x297 (set) / jmp 0x326 (clear)
+    0297  push 5 / lcall 0x170,0x5c / add sp,2            ; ovr_randBelow(5,0)
+    02a1  ah = 0; bx = ax; cmp bx,4; ja 0x2cd
+    02aa  shl bx,1; jmp cs:[bx+0x378]                     ; table -> 2b1,2b7,2bd,2c3,2c9
+    02b1  0x13   02b7  0x19   02bd  6   02c3  0x1a   02c9  0x1a      ; all jmp 0x2cd
+    02cd  cmp byte [bp+0x12],2                            ; mode
+    02d3  push partyIndex / push 0xa / push sprite / push destY / push destX / push y / push x
+          lcall 0x160,0x20 / add sp,0xe
+    02f0  (else) push partyIndex / push GLeaderSheets[partyIndex][0xa4] / ... same 7 args
+    0326  cmp byte [bp+0xe],5 -> sprite 6 ; cmp byte [bp+0xe],0xa -> 0x19 ; else 0x13
+    0342  the same 7-argument call as 0x2f0
+    0374  pop di / pop si / leave / retf
+
+Our exported body had four defects against that, all now corrected in the same edit:
+
+  1. the five switch cases held the bodies of other overlay functions
+     (`stshStoreFile_2("cmidpak.com" / "mt32mpu.adv")`, the "You cannot attract units to this
+     location." routine, the `StshHandles` release path) instead of the one-instruction stores;
+     the real shared tail had been pushed into `default:`
+  2. the threshold branch compared `destY` where the image compares the `classStr` byte
+     (`cmp byte ptr [bp+0xe],5` and `,0xa`)
+  3. the sheet lookup and the mode test used the wrong parameters: the image indexes
+     `GLeaderSheets` with `[bp+0x10]` (partyIndex) and tests `[bp+0x12] == 2` (mode)
+  4. every call carried an extra first argument (`(uint16_t)in_stack_00000004`), so the
+     seven-word call the image makes (`add sp,0xe`) was being made with eight - i.e. every
+     argument position was shifted by one word
+
+## The rebuilt code now has the image's shape
+
+`tmp/dis_ours.py _OVC18_SPAWNCLASSAGENT` on the new build:
+
+    000e  mov al,[bp+0x10] / mov ah,0 / shl ax,2 / les bx,[bx-0x6ae2] / mov al,es:[bx+0x3e]
+    0025  mov dx,0x95 / imul dx / mov dx,0x6757 / es = dx / test word es:[bx+0x2608],0x800
+    005b  mov byte [bp-1],0x13   0061  0x19   0067  6   006d  0x1a
+    0075  cmp byte [bp+0xe],6 / jae ; cmp byte [bp+0xe],0xb / jae   ; the threshold ladder
+    0091  cmp byte [bp+0x12],2
+    0097  mov al,[bp+0x10] / push ax / push 0xa / mov al,[bp-1] / push ax /
+          push [bp+0xc] / push [bp+0xa] / push di / push si /
+    00ad  lcall 0x2a7,0x403 / add sp,0xe
+    00bb  (else) push partyIndex / mov bx,[bx] / mov al,[bx+0xa4] / ... same 7 args
+
+Same argument order, same arity (`add sp,0xe`), same immediates, same threshold ladder, same
+byte compare on `[bp+0x12]`.  The differences are data-model ones only: our `GLeaderSheets` and
+`AgntGs` live in DGROUP (so `les`/`es` become a DGROUP-relative load and a fixed segment
+constant) instead of the original's segment 0x70 / 0x60.
+
+Two things this does not change, both pre-existing and outside this function: the tree passes
+`ovr_randBelow(n,0)` while the image pushes one word, and the return type is a near pointer so
+the compiler emits `mov ah,0` before the epilogue.  Neither alters the observable result (the
+callee reads its first parameter from `[bp+6]`, which is the last word pushed either way).
+
+## Measured (HEAD 5a1f9d2e -> this commit)
+
+    grep_checks      34,169 -> 34,002   (-167; the 272-line bogus body is gone)
+    build            65/65, LINK.LOG 65 bytes / 0 problems
+    REBUILT.EXE      530,170 bytes (was 532,484)
+    compare_state    1,628/0/0 (unchanged)
+    diff_dgroup      1,639/1,805 matched, 5 runs, sum|delta| 18, mean 0, worst 12 (unchanged)
+    compare_runtime  1,692 matched, 1,683 identical / 9 different at all three sample points
+
+`smm_restore_state` is no longer called from anywhere, which confirms last turn's finding that
+it was an artifact of the defect rather than a lost game function; its GUESS stub stays in
+st_stubs.c for now (removing it is a separate, trivially verifiable cleanup).
