@@ -15842,3 +15842,45 @@ places inside the condition chain.
   compare_runtime 1,684 matched, 1,675 identical / 9 different (both sample points)
 
 Turn total: 35,429 -> 35,370 (-59), of which -43 is the write-only near-pointer sweep.
+
+### section 5: batch 7 - three renames and a real brect_t fix (35,370 -> 35,338)
+section 5: batch 7 - three renames and a real brect_t fix (35,370 -> 35,338)
+
+## draw_usesBlitLoadRleGfx - the "dead" locals were the rest of a struct
+
+The screener flagged `iStack_a`, `iStack_8`, `iStack_6`, `uStack_4` as write-only (two occurrences
+each), and the naive reading is "delete them".  But the function calls
+
+    ovr_miceRestoreArea((brect_t *)&rect, 0);
+
+and `rect` was declared `uint8_t` - so the callee reads a whole 10-byte `brect_t` starting at `&rect`,
+and those four stack slots *are* its y / w / h / seg fields.  Deleting them would have left the mouse
+restore area reading uninitialised stack: a silent rendering bug the compiler cannot catch.
+
+Modelled properly instead, which also removes four section-5 names:
+
+    uint8_t rect; int iStack_a; int iStack_8; int iStack_6; uint16_t uStack_4;
+        ->  brect_t rect;
+    rect = CrossBlitX           -> rect.x = CrossBlitX
+    iStack_a = CrossBlitY       -> rect.y = CrossBlitY
+    iStack_8 = ...              -> rect.w = ...
+    iStack_6 = ...              -> rect.h = ...
+    uStack_4 = 0xa000           -> rect.seg = 0xa000
+    (brect_t *)&rect            -> &rect            (2 sites)
+
+ovc41_settleAgentCombat (45 lines)
+    iVar2  agnt->owner * 0x37, the owner's entity record offset -> ownerOfs (4)
+    bVar3  (byte)((uint)iVar2 >> 8), used in the packed return  -> ofsHi    (4)
+
+agnt_compute15 (22 lines)
+    bVar1  agnt_compute14(level)                               -> baseRank (4)
+    bVar3  (byte)(bVar1 + 2 >> 8), the packed high byte         -> packHi   (4)
+
+agnt_abilityModifier (30 lines)
+    bVar1  ((char_sheet_t *)...)->stats[0], indexed by the
+           modifier ladder                                     -> statValue (8)
+
+  grep_checks 35,370 -> 35,338; build 65/65; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,625/0/0
+  diff_dgroup 1,627/1,805 matched, 19 runs, sum|delta| 44,867, mean 27, worst 148
+  compare_runtime 1,684 matched, 1,675 identical / 9 different (both sample points)

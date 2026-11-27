@@ -693,22 +693,18 @@ void __cdecl16far draw_usesBlitLoadRleGfx(void)
   far_t gfx;
   far_t dst;
   far_t dst_00;
-  uint8_t rect;
-  int iStack_a;
-  int iStack_8;
-  int iStack_6;
-  uint16_t uStack_4;
+  brect_t rect;
   
   if (CrossBlitFlag == '\0') {
     if ((((CrossBlitPtr.ofs != 0 || CrossBlitPtr.seg != 0) &&
          (CrossBlitCount2 = CrossBlitCount2 + 1, 2 < CrossBlitCount2)) &&
         (CrossBlitCount2 = 0, CrossBlitCount != 0)) && (CrossBlitCount < 5)) {
-      rect = CrossBlitX;
-      iStack_a = CrossBlitY;
-      iStack_8 = CrossBlitX + *(int far *)((uint8_t far *)MK_FP(CrossBlitPtr.seg, CrossBlitPtr.ofs) +  5) + -1;
-      iStack_6 = CrossBlitY + *(int far *)((uint8_t far *)MK_FP(CrossBlitPtr.seg, CrossBlitPtr.ofs) +  7) + -1;
-      uStack_4 = 0xa000;
-      ovr_miceRestoreArea((brect_t *)&rect,0);
+      rect.x = CrossBlitX;
+      rect.y = CrossBlitY;
+      rect.w = CrossBlitX + *(int far *)((uint8_t far *)MK_FP(CrossBlitPtr.seg, CrossBlitPtr.ofs) +  5) + -1;
+      rect.h = CrossBlitY + *(int far *)((uint8_t far *)MK_FP(CrossBlitPtr.seg, CrossBlitPtr.ofs) +  7) + -1;
+      rect.seg = 0xa000;
+      ovr_miceRestoreArea(&rect,0);
       dst.seg = 0xa000;
       dst.ofs = CrossBlitX + CrossBlitY * 0x140;
       ovr_blitLoadRleGfx(CrossBlitPtr,dst,0);
@@ -719,7 +715,7 @@ void __cdecl16far draw_usesBlitLoadRleGfx(void)
         gfx.ofs = ((far_t *)&CrossBlitGfx + CrossBlitCount)->ofs;
         ovr_blitLoadRleGfx(gfx,dst_00,0);
       }
-      ovr_miceBlitRect((brect_t *)&rect,0);
+      ovr_miceBlitRect(&rect,0);
       CrossBlitCount = CrossBlitCount + 1;
     }
   }

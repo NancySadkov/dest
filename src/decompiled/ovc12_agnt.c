@@ -524,26 +524,26 @@ char far * __cdecl16far agnt_statusText(agnt_t far *agnt,char *text,uint16_t arg
 uint16_t __cdecl16far agnt_abilityModifier(byte partyIndex,byte abilityIndex)
 
 {
-  byte bVar1;
+  byte statValue;
   uint16_t modifier;
   
-  bVar1 = ((char_sheet_t *)(((uint)partyIndex << 2) + (uint)abilityIndex))->stats[0];
-  if (bVar1 < 4) {
+  statValue = ((char_sheet_t *)(((uint)partyIndex << 2) + (uint)abilityIndex))->stats[0];
+  if (statValue < 4) {
     modifier = 0xfd;
   }
-  else if (bVar1 < 6) {
+  else if (statValue < 6) {
     modifier = 0xfe;
   }
-  else if (bVar1 < 9) {
+  else if (statValue < 9) {
     modifier = 0xff;
   }
-  else if (bVar1 < 0xd) {
+  else if (statValue < 0xd) {
     modifier = 0;
   }
-  else if (bVar1 < 0x10) {
+  else if (statValue < 0x10) {
     modifier = 1;
   }
-  else if (bVar1 < 0x12) {
+  else if (statValue < 0x12) {
     modifier = 2;
   }
   else {
@@ -1265,21 +1265,21 @@ byte __cdecl16far agnt_compute14(byte level)
 int __cdecl16far agnt_compute15(byte rank,uint8_t level)
 
 {
-  byte bVar1;
+  byte baseRank;
   int iVar2;
-  byte bVar3;
+  byte packHi;
   
   if (rank == 0) {
     iVar2 = 0;
   }
   else {
-    bVar1 = agnt_compute14(level);
-    bVar3 = (byte)(bVar1 + 2 >> 8);
-    if (bVar1 + 2 < (uint)rank) {
-      iVar2 = (uint)bVar3 << 8;
+    baseRank = agnt_compute14(level);
+    packHi = (byte)(baseRank + 2 >> 8);
+    if (baseRank + 2 < (uint)rank) {
+      iVar2 = (uint)packHi << 8;
     }
     else {
-      iVar2 = CONCAT11(bVar3,1);
+      iVar2 = CONCAT11(packHi,1);
     }
   }
   return iVar2;

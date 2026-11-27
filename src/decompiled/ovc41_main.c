@@ -387,8 +387,8 @@ uint __cdecl16far ovc41_settleAgentCombat(agnt_t far *a,agnt_t far *b,uint16_t a
 {
   uint in_AX;
   uint uVar1;
-  int iVar2;
-  byte bVar3;
+  int ownerOfs;
+  byte ofsHi;
   agnt_t far *agnt;
   
   agnt = (agnt_t far *)b;
@@ -414,15 +414,15 @@ uint __cdecl16far ovc41_settleAgentCombat(agnt_t far *a,agnt_t far *b,uint16_t a
       agnt->targetY = 0;
     }
     ovr_agnt_usesAnimFrame(agnt);
-    iVar2 = agnt->owner * 0x37;
-    bVar3 = (byte)((uint)iVar2 >> 8);
-    ovr_ovc25_attackingNotice(*(byte *)((int)Entities + iVar2 + 0x1a));
+    ownerOfs = agnt->owner * 0x37;
+    ofsHi = (byte)((uint)ownerOfs >> 8);
+    ovr_ovc25_attackingNotice(*(byte *)((int)Entities + ownerOfs + 0x1a));
     if ((agnt->flags & 0xae4) == 0) {
       ovc41_markAgentDead(b);
-      uVar1 = CONCAT11(bVar3,1);
+      uVar1 = CONCAT11(ofsHi,1);
     }
     else {
-      uVar1 = (uint)bVar3 << 8;
+      uVar1 = (uint)ofsHi << 8;
     }
   }
   return uVar1;
