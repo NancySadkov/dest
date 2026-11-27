@@ -201,7 +201,7 @@ void __cdecl16far stshInitSprites(bool grab)
   uint16_t uVar9;
   uint16_t i;
   far_t far *unaff_DI;
-  int iVar10;
+  int slot;
   uint16_t j;
   far_t pixels;
   long sz;
@@ -212,23 +212,23 @@ void __cdecl16far stshInitSprites(bool grab)
   SprProjectiles.ofs = (uint16_t)pfVar1;
   SprProjectiles.seg = in_DX;
   for (i = 0; (int)i < 0x2a; i = i + 1) {
-    pfVar1 = stshSprite((far_t *)*(uint16_t *)((int)AgntGs[0].sprfls + i * 0x95),
+    pfVar1 = stshSprite((far_t *)AgntGs[i].sprfls[0],
                         *(int16_t *)((int)&AgntGs[0].anms + i * 0x95),
                         (anm_t *)(ulong)CONCAT12(*(undefined1 *)((int)&AgntGs[0].nanims + i * 0x95),
                                                  *(uint16_t *)
                                                   ((int)&AgntGs[0].anms + 2 + i * 0x95)),
                         CONCAT11((char)((uint)pfVar1 >> 8),grab),SUB21(unaff_DI,0));
     asm { mov uVar6,dx };
-    *(uint16_t *)((int)AgntGs[0].sprs + 2 + i * 0x95) = uVar6;
-    *(uint16_t *)((int)AgntGs[0].sprs + i * 0x95) =(uint16_t)( pfVar1);
-    if (*(int *)((int)AgntGs[0].sprfls + 2 + i * 0x95) == 0) {
-      uVar6 = *(uint16_t *)((int)AgntGs[0].sprs + i * 0x95);
-      *(uint16_t *)((int)AgntGs[0].sprs + 6 + i * 0x95) =
-           *(uint16_t *)((int)AgntGs[0].sprs + 2 + i * 0x95);
-      *(uint16_t *)((int)AgntGs[0].sprs + 4 + i * 0x95) = uVar6;
+    *(uint16_t far *)((uint8_t far *)&AgntGs[i].sprs[0] + 2) = uVar6;
+    *(uint16_t far *)((uint8_t far *)&AgntGs[i].sprs[0]) =(uint16_t)( pfVar1);
+    if (AgntGs[i].sprfls[1] == 0) {
+      uVar6 = *(uint16_t far *)((uint8_t far *)&AgntGs[i].sprs[0]);
+      *(uint16_t far *)((uint8_t far *)&AgntGs[i].sprs[1] + 2) =
+           *(uint16_t far *)((uint8_t far *)&AgntGs[i].sprs[0] + 2);
+      *(uint16_t far *)((uint8_t far *)&AgntGs[i].sprs[1]) = uVar6;
     }
     else {
-      pfVar1 = stshSprite((far_t *)*(uint16_t *)((int)AgntGs[0].sprfls + 2 + i * 0x95),
+      pfVar1 = stshSprite((far_t *)AgntGs[i].sprfls[1],
                           *(int16_t *)((int)&AgntGs[0].anms + i * 0x95),
                           (anm_t *)(ulong)CONCAT12(*(undefined1 *)
                                                     ((int)&AgntGs[0].nanims + i * 0x95),
@@ -236,17 +236,17 @@ void __cdecl16far stshInitSprites(bool grab)
                                                     ((int)&AgntGs[0].anms + 2 + i * 0x95)),
                           CONCAT11((char)(i * 0x95 >> 8),grab),SUB21(unaff_DI,0));
       asm { mov uVar6,dx };
-      *(uint16_t *)((int)AgntGs[0].sprs + 6 + i * 0x95) = uVar6;
-      *(uint16_t *)((int)AgntGs[0].sprs + 4 + i * 0x95) =(uint16_t)( pfVar1);
+      *(uint16_t far *)((uint8_t far *)&AgntGs[i].sprs[1] + 2) = uVar6;
+      *(uint16_t far *)((uint8_t far *)&AgntGs[i].sprs[1]) =(uint16_t)( pfVar1);
     }
-    if (*(int *)((int)AgntGs[0].sprfls + 4 + i * 0x95) == 0) {
-      uVar6 = *(uint16_t *)((int)AgntGs[0].sprs + 4 + i * 0x95);
-      *(uint16_t *)((int)AgntGs[0].sprs + 10 + i * 0x95) =
-           *(uint16_t *)((int)AgntGs[0].sprs + 6 + i * 0x95);
-      *(uint16_t *)((int)AgntGs[0].sprs + 8 + i * 0x95) = uVar6;
+    if (AgntGs[i].sprfls[2] == 0) {
+      uVar6 = *(uint16_t far *)((uint8_t far *)&AgntGs[i].sprs[1]);
+      *(uint16_t far *)((uint8_t far *)&AgntGs[i].sprs[2] + 2) =
+           *(uint16_t far *)((uint8_t far *)&AgntGs[i].sprs[1] + 2);
+      *(uint16_t far *)((uint8_t far *)&AgntGs[i].sprs[2]) = uVar6;
     }
     else {
-      pfVar1 = stshSprite((far_t *)*(uint16_t *)((int)AgntGs[0].sprfls + 4 + i * 0x95),
+      pfVar1 = stshSprite((far_t *)AgntGs[i].sprfls[2],
                           *(int16_t *)((int)&AgntGs[0].anms + i * 0x95),
                           (anm_t *)(ulong)CONCAT12(*(undefined1 *)
                                                     ((int)&AgntGs[0].nanims + i * 0x95),
@@ -254,22 +254,21 @@ void __cdecl16far stshInitSprites(bool grab)
                                                     ((int)&AgntGs[0].anms + 2 + i * 0x95)),
                           CONCAT11((char)(i * 0x95 >> 8),grab),SUB21(unaff_DI,0));
       asm { mov uVar6,dx };
-      *(uint16_t *)((int)AgntGs[0].sprs + 10 + i * 0x95) = uVar6;
-      *(uint16_t *)((int)AgntGs[0].sprs + 8 + i * 0x95) =(uint16_t)( pfVar1);
+      *(uint16_t far *)((uint8_t far *)&AgntGs[i].sprs[2] + 2) = uVar6;
+      *(uint16_t far *)((uint8_t far *)&AgntGs[i].sprs[2]) =(uint16_t)( pfVar1);
     }
-    for (iVar10 = 0; iVar10 < 3; iVar10 = iVar10 + 1) {
-      labelOfs = i * 0x95 + iVar10 * 2;
-      if (*(int *)((int)AgntGs[0].sprfls + 6 + labelOfs) == 0) {
-        labelOfs = i * 0x95 + iVar10 * 4;
-        uVar6 = *(uint16_t *)((int)AgntGs[0].sprs + labelOfs);
-        prtOfs = i * 0x95 + iVar10 * 4;
-        *(uint16_t *)((int)AgntGs[0].sprs + 0xe + prtOfs) =
-             *(uint16_t *)((int)AgntGs[0].sprs + 2 + labelOfs);
-        *(uint16_t *)((int)AgntGs[0].sprs + 0xc + prtOfs) = uVar6;
+    for (slot = 0; slot < 3; slot = slot + 1) {
+      labelOfs = i * 0x95 + slot * 2;
+      if (AgntGs[i].sprfls[3 + slot] == 0) {
+        labelOfs = i * 0x95 + slot * 4;
+        uVar6 = *(uint16_t far *)((uint8_t far *)&AgntGs[i].sprs[slot]);
+        prtOfs = i * 0x95 + slot * 4;
+        *(uint16_t far *)((uint8_t far *)&AgntGs[i].sprs[3 + slot] + 2) =
+             *(uint16_t far *)((uint8_t far *)&AgntGs[i].sprs[slot] + 2);
+        *(uint16_t far *)((uint8_t far *)&AgntGs[i].sprs[3 + slot]) = uVar6;
       }
       else {
-        pfVar1 = stshSprite((far_t *)*(uint16_t *)
-                                      ((int)AgntGs[0].sprfls + 6 + i * 0x95 + iVar10 * 2),
+        pfVar1 = stshSprite((far_t *)AgntGs[i].sprfls[3 + slot],
                             *(int16_t *)((int)&AgntGs[0].anms + i * 0x95),
                             (anm_t *)(ulong)CONCAT12(*(undefined1 *)
                                                       ((int)&AgntGs[0].nanims + i * 0x95),
@@ -277,7 +276,7 @@ void __cdecl16far stshInitSprites(bool grab)
                                                       ((int)&AgntGs[0].anms + 2 + i * 0x95)),
                             CONCAT11((char)((uint)labelOfs >> 8),grab),SUB21(unaff_DI,0));
         asm { mov uVar6,dx };
-        labelOfs = i * 0x95 + iVar10 * 4;
+        labelOfs = i * 0x95 + slot * 4;
         *(uint16_t *)((int)AgntGs[0].sprs + 0xe + labelOfs) = uVar6;
         *(uint16_t *)((int)AgntGs[0].sprs + 0xc + labelOfs) =(uint16_t)( pfVar1);
       }
@@ -293,29 +292,29 @@ void __cdecl16far stshInitSprites(bool grab)
           pixels.ofs = (gfx->aptr).seg;
           pfVar1 = ovr_stshRleType2((far_t far *)(&gfx->aptr)->ofs,pixels,0,114,103,0,0,(int16_t)unaff_DI,0,0);
           pcVar4 = (char *)stsh_store((uint8_t *)pfVar1, (uint16_t)puVar8, &uVar6);
-          iVar10 = i * 0x95 + j * 4;
+          slot = i * 0x95 + j * 4;
 
-          *(int *)((int)AgntGs[0].prts + 2 + iVar10) = (int)puVar8;
-          *(uint16_t *)((int)AgntGs[0].prts + iVar10) =(uint16_t)( pcVar4);
+          *(int *)((int)AgntGs[0].prts + 2 + slot) = (int)puVar8;
+          *(uint16_t *)((int)AgntGs[0].prts + slot) =(uint16_t)( pcVar4);
           sz = ZEXT24(unaff_DI) << 0x10;
           puVar5 = ovr_stshWrite((uint32_t *)gfx,(uint8_t *)CONCAT22(0x300,puVar7),sz,0);
           unaff_DI = (far_t far *)((ulong)sz >> 0x10);
-          iVar10 = i * 0x95 + j * 4;
-          *(uint16_t *)((int)AgntGs[0].prtpals + 2 + iVar10) = uVar6;
-          *(uint16_t *)((int)AgntGs[0].prtpals + iVar10) =(uint16_t)( puVar5);
+          slot = i * 0x95 + j * 4;
+          *(uint16_t *)((int)AgntGs[0].prtpals + 2 + slot) = uVar6;
+          *(uint16_t *)((int)AgntGs[0].prtpals + slot) =(uint16_t)( puVar5);
           ovr_stgFreeTmp(gfx,puVar7);
         }
         else {
           pfVar1 = ovr_stshAllocStub(unaff_DI);
-          iVar10 = i * 0x95 + j * 4;
+          slot = i * 0x95 + j * 4;
           asm { mov uVar6,dx };
-          *(uint16_t *)((int)AgntGs[0].prts + 2 + iVar10) = uVar6;
-          *(uint16_t *)((int)AgntGs[0].prts + iVar10) =(uint16_t)( pfVar1);
+          *(uint16_t *)((int)AgntGs[0].prts + 2 + slot) = uVar6;
+          *(uint16_t *)((int)AgntGs[0].prts + slot) =(uint16_t)( pfVar1);
           pfVar1 = ovr_stshAllocStub(unaff_DI);
           asm { mov uVar9,dx };
-          iVar10 = i * 0x95 + j * 4;
-          *(uint16_t *)((int)AgntGs[0].prtpals + 2 + iVar10) = uVar9;
-          *(uint16_t *)((int)AgntGs[0].prtpals + iVar10) =(uint16_t)( pfVar1);
+          slot = i * 0x95 + j * 4;
+          *(uint16_t *)((int)AgntGs[0].prtpals + 2 + slot) = uVar9;
+          *(uint16_t *)((int)AgntGs[0].prtpals + slot) =(uint16_t)( pfVar1);
         }
       }
     }
@@ -334,45 +333,45 @@ void __cdecl16far stshInitSprites(bool grab)
            *(uint16_t *)((int)AgntGs[0].prtpals + 2 + i * 0x95);
       *(uint16_t *)((int)AgntGs[0].prtpals + 4 + i * 0x95) =(uint16_t)( pfVar1);
     }
-    for (iVar10 = 2; iVar10 < 6; iVar10 = iVar10 + 2) {
-      labelOfs = i * 0x95 + iVar10 * 4;
+    for (slot = 2; slot < 6; slot = slot + 2) {
+      labelOfs = i * 0x95 + slot * 4;
       if ((*(int *)((int)AgntGs[0].prts + 4 + labelOfs) == 0 &&
            *(int *)((int)AgntGs[0].prts + 6 + labelOfs) == 0) &&
-         (labelOfs = i * 0x95 + iVar10 * 4,
+         (labelOfs = i * 0x95 + slot * 4,
          *(int *)((int)AgntGs[0].prtfls + 8 + labelOfs) != 0 ||
          *(int *)((int)AgntGs[0].prtfls + 10 + labelOfs) != 0)) {
-        labelOfs = i * 0x95 + iVar10 * 4;
+        labelOfs = i * 0x95 + slot * 4;
         uVar6 = *(uint16_t *)((int)AgntGs[0].prtfls + 8 + labelOfs);
-        prtOfs = i * 0x95 + iVar10 * 4;
+        prtOfs = i * 0x95 + slot * 4;
         *(uint16_t *)((int)AgntGs[0].prts + 6 + prtOfs) =
              *(uint16_t *)((int)AgntGs[0].prtfls + 10 + labelOfs);
         *(uint16_t *)((int)AgntGs[0].prts + 4 + prtOfs) = uVar6;
-        labelOfs = i * 0x95 + iVar10 * 4;
+        labelOfs = i * 0x95 + slot * 4;
         uVar6 = *(uint16_t *)((int)AgntGs[0].prts + 0x14 + labelOfs);
-        prtOfs = i * 0x95 + iVar10 * 4;
+        prtOfs = i * 0x95 + slot * 4;
         *(uint16_t *)((int)AgntGs[0].prtpals + 6 + prtOfs) =
              *(uint16_t *)((int)AgntGs[0].prts + 0x16 + labelOfs);
         *(uint16_t *)((int)AgntGs[0].prtpals + 4 + prtOfs) = uVar6;
       }
-      labelOfs = i * 0x95 + iVar10 * 4;
+      labelOfs = i * 0x95 + slot * 4;
       pfVar1 = (far_t far *)(*(uint *)((int)AgntGs[0].prts + labelOfs) |
                         *(uint *)((int)AgntGs[0].prts + 2 + labelOfs));
       if (pfVar1 == (far_t far *)0x0) {
-        labelOfs = i * 0x95 + iVar10 * 4;
+        labelOfs = i * 0x95 + slot * 4;
         if (*(int *)((int)AgntGs[0].prtfls + 4 + labelOfs) == 0 &&
             *(int *)((int)AgntGs[0].prtfls + 6 + labelOfs) == 0) {
           pfVar1 = (far_t far *)0x0;
         }
         else {
-          labelOfs = i * 0x95 + iVar10 * 4;
+          labelOfs = i * 0x95 + slot * 4;
           uVar6 = *(uint16_t *)((int)AgntGs[0].prtfls + 4 + labelOfs);
-          prtOfs = i * 0x95 + iVar10 * 4;
+          prtOfs = i * 0x95 + slot * 4;
           *(uint16_t *)((int)AgntGs[0].prts + 2 + prtOfs) =
                *(uint16_t *)((int)AgntGs[0].prtfls + 6 + labelOfs);
           *(uint16_t *)((int)AgntGs[0].prts + prtOfs) = uVar6;
-          labelOfs = i * 0x95 + iVar10 * 4;
+          labelOfs = i * 0x95 + slot * 4;
           pfVar1 = (far_t far *)*(uint16_t *)((int)AgntGs[0].prts + 0x10 + labelOfs);
-          prtOfs = i * 0x95 + iVar10 * 4;
+          prtOfs = i * 0x95 + slot * 4;
           *(uint16_t *)((int)AgntGs[0].prtpals + 2 + prtOfs) =
                *(uint16_t *)((int)AgntGs[0].prts + 0x12 + labelOfs);
           *(uint16_t *)((int)AgntGs[0].prtpals + prtOfs) =(uint16_t)( pfVar1);

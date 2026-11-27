@@ -20523,6 +20523,49 @@ The tree passed five words everywhere - `ovr_grabLbm(X,0,0,0,0)` at 54 sites and
 All 71 were narrowed and the definition/prototype went from five parameters to three
 (`arg4`/`arg5` were unused in the body).
 
+## `stshInitSprites`: the `AgntGs` accesses are far-record element accesses now (4207:047b)
+
+`AgntGs` is `agntG_t far far AgntGs[42]` (stride 0x95). Every access in the tree went through
+`(int)AgntGs[0].<field> + ...`, i.e. a NEAR pointer into DGROUP, while the image loads the records
+through ES with `bx = i * 0x95`:
+
+    mov ax,si / imul 0x95 / mov bx,ax / mov es,0x60
+    mov al,es:[bx+0x26d8]     ; nanims (+0x02)
+    mov ax,es:[bx+0x26fe]     ; anms.ofs (+0x28)
+    mov ax,es:[bx+0x2700]     ; anms.seg
+    mov ax,es:[bx+0x2702]     ; sprfls[0] (+0x2c), 0x2704 = [1], 0x2706 = [2], 0x2708 = [3+j]
+
+The sprite-slot statements now read and write the record directly:
+
+    for (slot = 0; slot < 3; slot = slot + 1) {
+      if (AgntGs[i].sprfls[3 + slot] == 0) {
+        *(uint16_t far *)((uint8_t far *)&AgntGs[i].sprs[3 + slot] + 2) =
+             *(uint16_t far *)((uint8_t far *)&AgntGs[i].sprs[slot] + 2);
+        *(uint16_t far *)((uint8_t far *)&AgntGs[i].sprs[3 + slot]) = uVar6;
+      }
+      else {
+        pfVar1 = stshSprite((far_t *)AgntGs[i].sprfls[3 + slot],...);
+      }
+    }
+
+`sprs` stays `spr_t far *[6]` (changing it to `far_t[6]` would also require the 42-record initializer
+in st_globals3.c and the `gdata->sprs[...]` frame casts in ovc15_usesLDIV_at_2), so the two words of
+each handle are addressed through a far pointer to the element.
+
+The `iVar10` scratch name became `slot` (43 hits). Verified in the rebuilt listing: the accesses are
+`mov word ptr es:[bx+0x25cd],ax` (sprs[0].ofs), `push word ptr es:[bx+0x25f4]` (anms), etc., i.e. the
+same ES-relative form the image uses, where before they were DS-relative.
+
+## Measured (HEAD 5642b0f7 -> this commit)
+
+    grep_checks      21,247 -> 21,209   (-38: `iVar10` -> `slot`; the element accesses themselves add
+                                        no pattern)
+    REBUILT.EXE      480,144 -> 480,288 (+144: segment loads for the far accesses)
+    build 65/65, LINK.LOG 0 problems
+    compare_state    1,628/0/0 (unchanged)
+    diff_dgroup      1,639/1,805 matched, 5 runs, sum|delta| 18 (unchanged)
+    compare_runtime  1,692 matched, 1,683 identical / 9 different at all three sample points
+
 ## Measured (HEAD cc57411d -> this commit)
 
     grep_checks      21,247 (unchanged)
