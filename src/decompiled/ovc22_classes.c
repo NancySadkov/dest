@@ -123,14 +123,12 @@ int __cdecl16far ovc22_applyRankBonus(byte partyIndex,int cost)
    for flagged types, and finally season-adjusted.  Re-derived from the image; the former body
    had an unrelated entity scan merged into its tail. */
 
-char * __cdecl16far ovc22_textPOPULATION(byte bldType,byte partyIndex,agnt_t far *agnt,uint16_t arg4,uint16_t arg5)
+char * __cdecl16far ovc22_textPOPULATION(byte bldType,byte partyIndex,agnt_t far *agnt)
 
 {
   uint16_t value;
   uint8_t code;
 
-  (void)arg4;
-  (void)arg5;
   if (BuildingTypes[bldType].unitType == '\x16') {
     return (char *)0x0;
   }
@@ -197,7 +195,7 @@ char * __cdecl16far ovc22_textPOPULATION(byte bldType,byte partyIndex,agnt_t far
 
 /* Returns a building's income adjusted for the current season and time of day. */
 
-uint __cdecl16far ovc22_seasonalIncome(byte bldType,uint8_t partyIndex,uint16_t arg3,uint16_t arg4,uint16_t arg5)
+uint __cdecl16far ovc22_seasonalIncome(byte bldType,uint8_t partyIndex,agnt_t far *agnt)
 
 {
   uint income;
@@ -364,15 +362,343 @@ uint __cdecl16far ovc22_seasonalIncome(byte bldType,uint8_t partyIndex,uint16_t 
    `lcall 0x208,0x20` occurs once in the whole image, so no cross-reference can name it; a body must
    use a documented placeholder for that one call (argument partyIndex, result -> sheet->popularity).
 
-   Body not derived yet; see doc/step6_entry.md. */
+   Body below. */
 
 
 void __cdecl16far ovc22_textRingProt(byte partyIndex)
 
 {
-  /* Not derived yet - see the comment above. */
-  (void)partyIndex;
-  return;
+  char_sheet_t far *sheet;
+  bldtp_t far *bt;
+  uint8_t far *raw;
+  uint16_t i;
+  uint16_t bldType;
+  uint16_t alignX;
+  uint16_t y;
+  uint16_t k;
+  uint16_t bitsA;
+  uint16_t bitsB;
+  uint16_t partyMask;
+  uint16_t extra[3];
+  uint32_t totalA;
+  uint32_t totalB;
+  uint16_t ring1;
+  uint16_t ring2;
+  uint16_t shared;
+  uint16_t dir1;
+  uint16_t dir2;
+  uint16_t dir3;
+  uint16_t resCount[4];
+  uint16_t population;
+  uint16_t housing;
+  uint16_t income;
+  uint16_t entityUnits;
+  uint16_t resourceTotal;
+  uint16_t levelCap;
+  uint16_t gindex;
+  uint8_t gval;
+  uint8_t g1;
+  uint8_t g2;
+  uint16_t spare;
+  uint16_t sum;
+  uint16_t e;
+  uint16_t di;
+
+  if (partyIndex == 0xff) {
+    return;
+  }
+  sheet = GLeaderSheets[partyIndex];
+  raw = (uint8_t far *)sheet;
+
+  entityUnits = 0;
+  population = 10;
+  income = 0;
+  housing = 0;
+  levelCap = 0;
+
+  dir1 = 0;
+  dir2 = 0;
+  dir3 = 0;
+  ring1 = 0;
+  ring2 = 0;
+  shared = 0;
+  extra[0] = 0;
+  extra[1] = 0;
+  extra[2] = 0;
+  totalB = 0;
+
+  sheet->pad_9a[0] = 0;
+  sheet->pad_9a[1] = 0;
+  sheet->pad_9a[2] = 0;
+
+  switch (Difficulty) {
+  case 1:
+    totalA = 0xfa0;
+    break;
+  case 2:
+    totalA = 0xbb8;
+    break;
+  default:
+    totalA = 0x7d0;
+    break;
+  }
+  resourceTotal = 0;
+  resCount[0] = 0;
+  resCount[1] = 0;
+  resCount[2] = 0;
+  resCount[3] = 0;
+
+  for (i = 0xf8; i < GUnitCount; i++) {
+    GUnits[i].flags &= 0xfd;
+  }
+
+  partyMask = (uint16_t)(0x1000 << (sheet->faction & 0x1f));
+
+  sheet->tailAD = 0;
+  sheet->tailAA[0] = 0;
+  sheet->tailAA[1] = 0;
+  sheet->tailAA[2] = 0;
+  if (sheet->faction != 0) {
+    sheet->flags5d &= 0xf9;
+  }
+  else {
+    sheet->flags5d |= 4;
+  }
+  sheet->flags5d &= 0xf7;
+  sheet->maxTrade = 0;
+  sheet->tailA6 = 0;
+  sheet->tailA5 = 0;
+  sheet->tailA9 = 0;
+
+  /* The image reads AgntGs[sheet->classStr] byte +0x46 (0060:0x271c) twice; the generic-agent
+     record has no named field at that offset in our model yet. */
+  gindex = sheet->classStr;
+  gval = ((uint8_t far *)&AgntGs[gindex])[0x46];
+  g1 = (uint8_t)(gval == 1);
+  g2 = (uint8_t)(gval == 0 || gval == 5);
+
+  for (i = 0xf8; i < GUnitCount; i++) {
+    if (GUnits[i].unitType != partyIndex) {
+      continue;
+    }
+    bldType = GUnits[i].bldType;
+    bt = &BuildingTypes[bldType];
+    alignX = (uint16_t)ovr_alignUp4(GUnits[i].x);
+    y = GUnits[i].y;
+
+    bitsA = 0;
+    for (k = 0; k < 4; k++) {
+      bitsA |= (uint16_t)(GMapFlags[y][alignX + k - 2] & 0x3000);
+    }
+    bitsB = 0;
+    if ((bt->flags & 3) == 1) {
+      for (k = 0; k < 4; k++) {
+        bitsB |= (uint16_t)(GMapFlags[y + 1][alignX + k - 2] & 0x3000);
+      }
+    }
+    if ((bitsA & partyMask) == 0 && (bitsB & partyMask) == 0) {
+      continue;
+    }
+    GUnits[i].flags |= 3;
+
+    switch (bt->unitType) {
+    case 7:
+      sheet->tailAD++;
+      break;
+    case 14:
+      if (bt->resource == 0) {
+        partyMask += 5;
+      }
+      else if (bt->resource <= 3) {
+        extra[bt->resource - 1] += 5;
+      }
+      break;
+    case 15:
+      raw[0x99 + bt->resource] += 3;
+      break;
+    case 17:
+      sheet->tailA6++;
+      sheet->flags5d |= 8;
+      break;
+    case 18:
+      sheet->tailA8++;
+      break;
+    case 20:
+      sheet->flags5d &= 0xfb;
+      break;
+    case 21:
+      sheet->tailA5++;
+      break;
+    case 22:
+      sheet->maxTrade += bt->production;
+      break;
+    case 23:
+      if (sheet->faction == 0) {
+        GCanPromote = 1;
+      }
+      break;
+    case 26:
+      raw[0xa9 + bt->resource]++;
+      break;
+    case 28:
+      sheet->tailA9 = (uint8_t)(sheet->tailA9 + 3 * bt->resource);
+      if (sheet->tailA9 > 100) {
+        sheet->tailA9 = 100;
+      }
+      break;
+    default:
+      break;
+    }
+
+    if (bt->unitType == 0x13) {
+      totalA += bt->storage;
+    }
+    else {
+      totalB += bt->storage;
+    }
+
+    if (bt->unitType == 0x1d || bt->unitType == 0x10) {
+      if (bt->unitType == 0x1d) {
+        if (g1 != 0) {
+          goto unitDone;
+        }
+      }
+      else if (g1 == 0) {
+        goto unitDone;
+      }
+      switch (bt->resource) {
+      case 0:
+        totalB += (uint32_t)bt->output << 16;
+        break;
+      case 1:
+        ring1 += bt->output;
+        break;
+      case 2:
+        ring2 += bt->output;
+        break;
+      case 3:
+        shared += bt->output;
+        break;
+      default:
+        break;
+      }
+      goto unitDone;
+    }
+    if (bt->output == 0) {
+      goto unitDone;
+    }
+    if (bt->unitType == 0x0d && g2 == 0) {
+      goto unitDone;
+    }
+    switch (bt->resource) {
+    case 0:
+      shared += bt->output;
+      break;
+    case 1:
+      dir1 += bt->output;
+      break;
+    case 2:
+      dir2 += bt->output;
+      break;
+    case 3:
+      dir3 += bt->output;
+      break;
+    default:
+      break;
+    }
+
+  unitDone:
+    housing += bt->housing;
+    if (i >= 0xf8) {
+      population += (uint16_t)ovc22_textPOPULATION((byte)bldType,partyIndex,
+                                                   (agnt_t far *)MK_FP(y,GUnits[i].x));
+      income += (uint16_t)ovc22_seasonalIncome((byte)bldType,partyIndex,
+                                               (agnt_t far *)MK_FP(y,GUnits[i].x));
+    }
+    if ((bt->flags2 & 1) != 0) {
+      if (sheet->cls == 0xff || (((uint16_t)(1 << (sheet->cls & 0x1f))) & bt->type) != 0) {
+        if (bt->resource <= 3) {
+          resCount[bt->resource]++;
+        }
+      }
+    }
+    if ((bt->flags2 & 0x200) != 0) {
+      resourceTotal += bt->resource;
+    }
+  }
+
+  for (e = 0; e < EntityCount; e++) {
+    if (((uint8_t far *)&Entities[e])[0x1a] == partyIndex) {
+      entityUnits += Entities[e].base.animFrame;
+    }
+  }
+
+  spare = sheet->tailAD;
+  di = 2;
+  for (;;) {
+    if (sheet->tailAA[di] > spare) {
+      sheet->tailAA[di] = (uint8_t)spare;
+      spare = 0;
+    }
+    else {
+      spare -= sheet->tailAA[di];
+    }
+    if (di == 0) {
+      break;
+    }
+    di--;
+  }
+
+  sum = 0;
+  for (di = 0; di <= 2; di++) {
+    sum += (uint16_t)(sheet->tailAA[di] * (di + 1) * 3);
+  }
+  sheet->tailAA[0] = (uint8_t)((sum >= 0x32) ? 0x32 : sum);
+
+  sheet->tail94 = extra[0];
+  sheet->tail96 = extra[1];
+  sheet->tail98 = extra[2];
+
+  levelCap = resCount[1];
+  if (levelCap > 5) {
+    levelCap = 5;
+  }
+  if ((uint16_t)(resCount[2] + levelCap) > 0xa) {
+    levelCap = 0xa;
+  }
+  else {
+    levelCap += resCount[2];
+  }
+  levelCap += resCount[3];
+
+  sheet->reserved_82 = 0;
+  if ((int32_t)totalB > 0) {
+    sheet->foodStorage = 0xffffL;
+  }
+  else {
+    sheet->foodStorage = (long)totalB;
+  }
+  sheet->housing = (short)housing;
+  sheet->population = (short)entityUnits;
+  sheet->foodProd = (short)population;
+  sheet->income = (short)income;
+  sheet->vaultStorage = (long)totalA;
+  sheet->dirBudgetIn[0] = dir1;
+  sheet->dirBudgetIn[1] = dir2;
+  sheet->dirBudgetIn[2] = dir3;
+  sheet->ringBudgetIn[0] = ring1;
+  sheet->ringBudgetIn[1] = ring2;
+  sheet->ringBudgetIn[2] = shared;
+  sheet->rank = (short)resourceTotal;
+  sheet->level = (uint8_t)((levelCap > 0xff) ? 0xff : levelCap);
+  sheet->levelLimit = (resCount[3] > 0) ? 0xff : (resCount[2] > 0) ? 0xc : (resCount[1] > 0) ? 8 : 4;
+
+  /* GAP: the image stores AL from `lcall 0x208,0x20` into sheet->popularity (5087:1413).  That
+     selector occurs exactly once in the whole binary, so no cross-reference can name the target and
+     the call cannot be emitted under a real name; the store is deliberately left out rather than
+     guessed (see doc/step6_entry.md). */
+
+  ovc22_usesPlayerCount(partyIndex);
 }
 
 

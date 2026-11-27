@@ -21118,3 +21118,55 @@ What still blocks the body itself is an allocation question, not logic: the two 
     compare_state    1,628/0/0 (unchanged)
     diff_dgroup      1,639/1,805 matched, 5 runs, sum|delta| 18 (unchanged)
     compare_runtime  1,692 matched, 1,683 identical / 9 different at all three sample points
+
+
+## `5087:056e` body written (ovc22_textRingProt)
+
+The routine is now real C instead of a stub. Two things unblocked it, both by measurement rather than
+assumption:
+
+**`GMapFlags` needed no re-typing.** The tree already declares it as `short (far *GMapFlags)[148]`,
+which is exactly the image's shape (`les bx, ptr es:[0x8a09]`, row stride 0x128 = 148 shorts). The
+`(short (*)[60][148])GMapFlags` casts elsewhere are decompiler noise. That also decoded the map
+geometry: the `-4` bias is index `alignX + k - 2`, and `+0x124` is `+0x128 - 4`, i.e. the *same* column
+one row down — the two accumulators are the building's two rows.
+
+**The two local helpers take three parameters, not five.** The image pushes four words for each call:
+`bldType`, `partyIndex`, and a far pointer built from the unit's own coordinates (`push y; push x` =
+segment:offset, so `MK_FP(y, x)`). `ovc22_textPOPULATION` and `ovc22_seasonalIncome` are now
+`(byte, byte, agnt_t far *)` in both the definitions and `st_functions.h`; `agnt` is genuinely used by
+the former (`ovr_constr_usesGMapFlags2(agnt)`), which confirms the far-pointer reading.
+
+The body follows the recorded alias model: `partyMask` + `extra[3]`, `uint32 totalA`/`totalB` (with
+`totalB`'s high word being ring slot 0), `ring1`/`ring2`, one `shared` word that is both `ring[3]` and
+`dir[0]`, `dir1..3`, and `resCount[4]` whose elements 1..3 drive the level-cap ladder. `0x90e8` turned
+out to be the named global `GCanPromote`.
+
+**Verification against the image (O22 is link-excluded, so this is a listing check).**
+`build_standalone.py --only o22 --asm`, then counting emitted `es:[…]` field offsets (Turbo C prints
+them in decimal):
+
+* 25 of the 26 sheet fields the image touches are emitted — `0x3e`(62, classStr), `0x3f`(63, faction),
+  `0x4d`(77, population), `0x4f`(79, foodProd), `0x52`/`0x53`, `0x54`, `0x5b`, `0x5d`(93, flags5d),
+  `0x94/0x96/0x98`, `0xa0`(160, maxTrade), `0xa5/0xa6/0xa8/0xa9`, `0xaa`..`0xac`(170-172),
+  `0xad`(173), `0x64/0x66/0x68`, `0x70/0x72/0x74`, `0x7e`, `0x82`, `0x87`, `0x8a/0x8c`;
+* the only absent one is `0x84` (`popularity`) — exactly the documented gap, the `lcall 0x208,0x20`
+  whose selector occurs once in the whole binary;
+* `and ax,12288` appears twice (the two `& 0x3000` masks) and `_GMapFlags` is loaded twice, matching
+  the image's two `les bx,ptr es:[0x8a09]`;
+* the two switches compile to `jmp word ptr cs:@7@C…[bx]` tables, and `es:_AgntGs[bx+70]` is the
+  generic-agent byte at +0x46.
+
+Call census (`scripts/screen_calls.py`): `5087:056e` went from 140 C calls (the old mis-attributed
+body) to **5 vs the image's 11**. The six missing ones are the six `memset` calls, which the body
+expresses as explicit field stores, plus the omitted overlay call.
+
+## Measured (HEAD 2fd7edfc -> this commit)
+
+    grep_checks      12,680 (unchanged - the body introduces no placeholder names)
+    REBUILT.EXE      466,534 (unchanged - O22 is link-excluded)
+    build 65/65, LINK.LOG 0 errors
+    compare_state    1,628/0/0 (unchanged)
+    diff_dgroup      1,639/1,805 matched, 5 runs, sum|delta| 18 (unchanged)
+    compare_runtime  1,692 matched, 1,683 identical / 9 different at all three sample points
+    screen_calls     5087:056e  C 5 / image 11  (was C 140 / image 11)
