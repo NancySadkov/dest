@@ -20097,6 +20097,41 @@ with the current `entity_t` field map), the `x:%d y:%d`/`y1 %d ...` rasteriser d
 sites inside `5087:056e` (`ovc22_textRingProt`), a body that is still a stub so no image site exists
 to read. None of these can be written without inventing names.
 
+## The mis-attributed `77eb:0d61` body is now a documented stub
+
+`ovc45_buildPlacementMessage` held 3,204 lines that belonged to the asset stubify/RLE loader, not to
+this function: 201 `ovr_stshRleType2`, 190 `stsh_store`, 138 `func_0x0007ffe0`, 59 `ovr_stgFreeTmp`,
+57 `ovr_grabLbmTR`, 38 `ovr_stshStoreFile`, against an image function that calls none of them. The
+same body already sits, byte for byte, in `init_assets` (`6ffe:02f7`) in ovc44_strong_dat.c
+(201/197/143/61/58/36 - the small deltas are the copy-loop rewrites recorded earlier), so nothing is
+lost by removing the duplicate.
+
+What the real function is, from `tmp/o45_d61.txt` + `tmp/o45_d61b.txt` (0x0d61..0x16b2, 2,385 bytes,
+plus the five-entry switch jump table at cs:0x16a8):
+
+* parameters `x` [bp+6], `y` [bp+8] (kept in di), `entityIndex` [bp+0xa], an in/out result byte
+  [bp+0xc], a flag byte [bp+0xe];
+* `GEntities[entityIndex]` (stride 0x37), its +0x1a byte indexing `GLeaderSheets` (image segment 0x70
+  at run time), whose sheet byte +0x85 is the building type;
+* `BuildingTypes[bldType]` (stride 0x27, image base 0060:010e = model 195d:010e): name/description at
+  +0/+4, kind +0x0c, size +0x0d, flags +0x10, flags2 +0x13, cost +0x17, unitType +0x25, flags3 +0x26;
+* the 15 rejection strings at 0x74f0..0x76e9 (single arena, bridge, outpost rank, min level, too
+  narrow, walls near land, water, unsuitable, cost line, gold line, too many sites);
+* a five-way menu switch at 0x1427 (codes 0x7685/0x768b/0x769b/0x76a8) ending in
+  `ovc45_textChoosePartyBuild` (0x4d8) with a 0xff reject, then a loop back to 0xd86.
+
+The stub records all of that in place so the body can be written incrementally. Side effect: o45 can
+be listed again (the module no longer trips Borland's "Compiler table limit exceeded").
+
+## Measured (HEAD f297af13 -> this commit)
+
+    grep_checks      26,346 -> 24,431   (-1,915: the mis-attributed body's locals)
+    REBUILT.EXE      493,734 (unchanged - O45 is link-excluded)
+    build 65/65, LINK.LOG 0 problems
+    compare_state    1,628/0/0 (unchanged)
+    diff_dgroup      1,639/1,805 matched, 5 runs, sum|delta| 18 (unchanged)
+    compare_runtime  1,692 matched, 1,683 identical / 9 different
+
 ## Measured (HEAD 29695050 -> 62da90c4)
 
     grep_checks      26,346 (unchanged - the arguments add no grep pattern)
