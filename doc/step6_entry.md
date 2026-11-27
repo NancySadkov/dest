@@ -18557,3 +18557,9 @@ as `ovc41_usesBiosKeyAvail`.
 Measured: no change to any gate this turn (grep_checks 27,368; build 65/65; LINK.LOG 65 bytes / 0
 problems; compare_state 1,628/0/0; diff_dgroup 1,639/1,805 with sum|delta| 18; compare_runtime 1,692
 matched, 1,683 identical / 9 different).
+
+### correction: the heal tail's stack accounting does close
+
+The entry above says the byte counts did not close (32 removed vs 20 accounted). Recounting push by push, with each `add sp` removing only the words of the call it follows, the stack at the final `fmVsprintf` holds 34 bytes and `add sp,0x20` then leaves exactly 2 - the word pushed at 6a8f:2207, discarded by `leave`. So the packing is consistent; what remains unresolved is only *which* staged value maps to each of the seven conversions, and the identities of `0x160,0x25` and `0xf8,0x39`.
+
+The words left on the stack for that call, in push order, are: `ds:[0x8ff7]`, the entity's post-heal strength, the two `pluralSuffix` results, the first `statusText` result, `CureSpellPtrs[level]`, and the `0x160` result - seven values for seven format arguments, which is the right shape.
