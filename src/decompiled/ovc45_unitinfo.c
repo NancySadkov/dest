@@ -388,19 +388,19 @@ uint16_t __cdecl16far ovc45_usesLDIV_at_(uint8_t partyIndex,uint16_t arg2,uint16
 
 {
   long *plVar1;
-  uint16_t uVar2;
+  uint16_t dividendHi;
   uint unaff_SI;
   long lVar3;
-  uint16_t uVar4;
-  uint16_t uVar5;
+  uint16_t divisorLo;
+  uint16_t divisorHi;
   long in_stack_0000fffa;
   
-  uVar5 = 0;
-  uVar4 = 10;
-  uVar2 = GPopulationHi;
+  divisorHi = 0;
+  divisorLo = 10;
+  dividendHi = GPopulationHi;
   plVar1 = LXMUL_at_((long *)((byte *)__C0_ASM_CopyRight + 6),(ulong)unaff_SI << 0x10,
                      in_stack_0000fffa);
-  lVar3 = LDIV_at_((long)CONCAT22(uVar2,plVar1),CONCAT22(uVar5,uVar4));
+  lVar3 = LDIV_at_((long)CONCAT22(dividendHi,plVar1),CONCAT22(divisorHi,divisorLo));
   return (int)lVar3;
 }
 

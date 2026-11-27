@@ -4533,8 +4533,8 @@ void __cdecl16far ovc22_usesRandBelow2(byte partyIndex,uint16_t outFlag,uint16_t
   uint *puVar1;
   int *piVar2;
   uint uVar3;
-  uint uVar4;
-  uint32_t uVar5;
+  uint bldWord23;
+  uint32_t sheetPtr;
   uint16_t randPick;
   uint uVar7;
   int sheetOfs;
@@ -4599,8 +4599,8 @@ void __cdecl16far ovc22_usesRandBelow2(byte partyIndex,uint16_t outFlag,uint16_t
   if (((GLeaderSheets[partyIndex])->flags5d & 2) != 0) {
     bStack_3 = bStack_3 | 1;
   }
-  uVar5 = (uint32_t)GLeaderSheets[partyIndex];
-  if ((*(byte *)((int)uVar5 + 0x5d) & 4) != 0) {
+  sheetPtr = (uint32_t)GLeaderSheets[partyIndex];
+  if ((*(byte *)((int)sheetPtr + 0x5d) & 4) != 0) {
     bStack_3 = bStack_3 | 2;
   }
   uVar7 = ovc22_searchCellsAround
@@ -4629,14 +4629,14 @@ void __cdecl16far ovc22_usesRandBelow2(byte partyIndex,uint16_t outFlag,uint16_t
           *(uint16_t *)(unitCount + 0x56) = 0;
         }
         else {
-          uVar4 = *(uint *)((uint8_t *)&BuildingTypes[uVar7] + 23);
+          bldWord23 = *(uint *)((uint8_t *)&BuildingTypes[uVar7] + 23);
           unitsSeg = (uint16_t)((ulong)(uint32_t)GLeaderSheets[partyIndex] >> 0x10);
           unitCount = (int)(uint32_t)GLeaderSheets[partyIndex];
           puVar1 = (uint *)(unitCount + 0x56);
           uVar3 = *puVar1;
-          *puVar1 = *puVar1 - uVar4;
+          *puVar1 = *puVar1 - bldWord23;
           piVar2 = (int *)(unitCount + 0x58);
-          *piVar2 = *piVar2 - (uint)(uVar3 < uVar4);
+          *piVar2 = *piVar2 - (uint)(uVar3 < bldWord23);
         }
       }
       bldType = (byte)uVar7;

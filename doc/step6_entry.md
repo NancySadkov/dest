@@ -17191,3 +17191,38 @@ multi-assignment scratch (520 occurrences) or never-assigned stack slots.
   compare_state 1,628/0/0
   diff_dgroup 1,639/1,805 matched, 5 runs, sum|delta| 18, mean 0, worst 12
   compare_runtime 1,692 matched, 1,683 identical / 9 different at all three sample points
+
+### section 5: batch 17 - four small functions (34,633 -> 34,599)
+section 5: batch 17 - four small functions (34,633 -> 34,599)
+
+ovc45_usesLDIV_at_ - `LDIV_at_((long)CONCAT22(uVar2,plVar1), CONCAT22(uVar5,uVar4))`
+    uVar5  0                                       -> divisorHi  (3)
+    uVar4  10                                      -> divisorLo  (3)
+    uVar2  GPopulationHi, the dividend's high word -> dividendHi (3)
+
+ovc42_textProvidesMoreHousing
+    uVar6  (uint16_t)(prevTick >> 0x10)            -> tickHi  (3)
+    uVar1  the BDA daily-tick word                 -> tickLo  (3)
+    uVar3  ovr_init2_updateMouseButtons()          -> mouseBtnResult (3)
+
+heapFree
+    uVar1  *(uint16_t *)((int)(uint32_t *)&_DATA + 2) -> dseg  (6)
+        the second word of `_DATA` is DS itself, and the value is used as a segment.
+    bVar2  heapIsBadPtr(ptr)                          -> badPtr (3)
+
+ovc22_usesRandBelow2
+    uVar5  (uint32_t)GLeaderSheets[partyIndex]        -> sheetPtr (3)
+    uVar4  *(uint *)((uint8_t *)&BuildingTypes[i] + 23) -> bldWord23 (4)
+        a word read at offset 23 of a BuildingTypes entry.  The offset is the only fact the code gives,
+        so the name says that rather than guessing which field it is.
+
+  grep_checks 34,633 -> 34,599 (-34); build 65/65; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,628/0/0
+  diff_dgroup 1,639/1,805 matched, 5 runs, sum|delta| 18, mean 0, worst 12
+  compare_runtime 1,692 matched, 1,683 identical / 9 different at all three sample points
+
+Note for the next turn: `__vprinter_func_start` (crtl.c:2401, 407 lines) is not usable as-is - it
+dereferences `unaff_BP` as a *value* (`*(int *)(unaff_BP + -4) = unaff_BP + -0x96`), i.e. the export lost
+the frame pointer entirely.  Rebuilding it means re-deriving the original's printf from the 989 bytes at
+1000:2747..2b24 with a real disassembler (capstone 5.0.7 is available), which is a dedicated job rather
+than a rename batch.

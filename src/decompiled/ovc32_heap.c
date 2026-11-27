@@ -351,19 +351,19 @@ void __cdecl16far heapValidateAll(void)
 void __cdecl16far heapFree(far_t ptr)
 
 {
-  uint16_t uVar1;
-  bool bVar2;
+  uint16_t dseg;
+  bool badPtr;
   uint16_t in_DX;
   uint16_t unaff_DI;
   int iVar3;
   uint16_t uStack_4;
   
-  bVar2 = heapIsBadPtr(ptr);
-  if (!bVar2) {
+  badPtr = heapIsBadPtr(ptr);
+  if (!badPtr) {
     ovr_mkp((uint32_t *)ptr.ofs,ptr.seg,unaff_DI);
     iVar3 = *(int *)0x0;
-    uVar1 = *(uint16_t *)((int)(uint32_t *)&_DATA + 2);
-    if (uVar1 == 0) {
+    dseg = *(uint16_t *)((int)(uint32_t *)&_DATA + 2);
+    if (dseg == 0) {
       printf("%lx already free \r");
       ovr_biosReadKey();
     }
@@ -371,11 +371,11 @@ void __cdecl16far heapFree(far_t ptr)
       if ((in_DX + iVar3 < HeapMax) && (*(int *)((int)(uint32_t *)&_DATA + 2) == 0)) {
         iVar3 = iVar3 + *(int *)0x0;
       }
-      uStack_4 = uVar1;
-      if ((uVar1 != in_DX) && (*(int *)((int)(uint32_t *)&_DATA + 2) == 0)) {
+      uStack_4 = dseg;
+      if ((dseg != in_DX) && (*(int *)((int)(uint32_t *)&_DATA + 2) == 0)) {
         iVar3 = iVar3 + *(int *)0x0;
         uStack_4 = *(uint16_t *)((byte *)__C0_ASM_CopyRight + 4);
-        in_DX = uVar1;
+        in_DX = dseg;
       }
       *(uint16_t *)((byte *)__C0_ASM_CopyRight + 4) = uStack_4;
       *(uint16_t *)((int)(uint32_t *)&_DATA + 2) = 0;

@@ -11,23 +11,23 @@
 char * __cdecl16far ovc42_textProvidesMoreHousing(uint32_t timeoutTicks)
 
 {
-  uint16_t uVar1;
+  uint16_t tickLo;
   ulong *retStorage;
   uint16_t uVar2;
-  uint uVar3;
+  uint mouseBtnResult;
   ulong *puVar4;
   ulong *puVar5;
   uint unaff_SI;
-  uint16_t uVar6;
+  uint16_t tickHi;
   ulong prevTick;
   
   prevTick = (ulong)unaff_SI << 0x10;
-  uVar1 = *(uint16_t far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
+  tickLo = *(uint16_t far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
   retStorage = *(ulong * far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs)   /* hand fix: the offset half is the address, not the far_t struct */;
   MiceNeedsUpdate = 1;
   puVar5 = retStorage;
   do {
-    uVar6 = (uint16_t)(prevTick >> 0x10);
+    tickHi = (uint16_t)(prevTick >> 0x10);
     uVar2 = ovr_biosKeyAvail();
     if ((char)uVar2 != '\0') {
       uVar2 = ovr_gameProcessKey();
@@ -38,14 +38,14 @@ char * __cdecl16far ovc42_textProvidesMoreHousing(uint32_t timeoutTicks)
         return (char *)0x1c01;
       }
     }
-    uVar3 = ovr_init2_updateMouseButtons();
-    if ((uVar3 != 0) || (rightButtonLatch != '\0')) {
+    mouseBtnResult = ovr_init2_updateMouseButtons();
+    if ((mouseBtnResult != 0) || (rightButtonLatch != '\0')) {
       if (rightButtonLatch != '\0') {
         return (char *)"woodcarver";
       }
       return (char *)0x2401;
     }
-    prevTick = CONCAT22(uVar6,uVar1);
+    prevTick = CONCAT22(tickHi,tickLo);
     puVar4 = ovr_attact_usesBDADailyTimeCounter(retStorage,prevTick,0);
   } while ((puVar5 < (*(uint16_t *)((uint8_t *)&(timeoutTicks) + 2))) ||
           ((puVar5 == (*(uint16_t *)((uint8_t *)&(timeoutTicks) + 2)) && (puVar4 < (ulong *)timeoutTicks))));
