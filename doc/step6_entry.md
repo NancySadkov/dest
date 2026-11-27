@@ -17169,3 +17169,25 @@ constrct_usesLDIV_at_
   compare_state 1,628/0/0
   diff_dgroup 1,639/1,805 matched, 5 runs, sum|delta| 18, mean 0, worst 12
   compare_runtime 1,692 matched, 1,683 identical / 9 different at all three sample points
+
+### section 5: batch 16 - remaining names in ovc23_textAdlibNone (34,648 -> 34,633)
+section 5: batch 16 - the remaining names in ovc23_textAdlibNone (34,648 -> 34,633)
+
+    uVar31  0xca, low byte of CONCAT11(uVar32,uVar31)   -> pack1Lo  (3)
+    uVar32  99,  its high byte                          -> pack1Hi  (3)
+    uVar33  0x83, low byte of CONCAT11(uVar34,uVar33)   -> pack2Lo  (3)
+    uVar34  0x9a, its high byte                         -> pack2Hi  (3)
+    uVar6   *(uint32_t *)((partyIndex & 0xff) << 2)     -> partyPtr (3)
+
+The names claim only what the expressions show.  The two `CONCAT11` pairs are packed keys - one compared
+against `iVar24`, the other assigned to it - and calling them `xLimit`/`yLimit` would have been a guess
+about which coordinate they hold, so they are named for their role as packed values instead.
+
+Left unnamed, with reasons: `bVar4` (a comma-expression result used as a condition), `uVar8`
+(`(ulong)uStack_6` immediately stored back into `uStack_6`, i.e. a no-op round trip), and the rest are
+multi-assignment scratch (520 occurrences) or never-assigned stack slots.
+
+  grep_checks 34,648 -> 34,633 (-15); build 65/65; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,628/0/0
+  diff_dgroup 1,639/1,805 matched, 5 runs, sum|delta| 18, mean 0, worst 12
+  compare_runtime 1,692 matched, 1,683 identical / 9 different at all three sample points

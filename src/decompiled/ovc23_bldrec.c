@@ -20,7 +20,7 @@ byte * __cdecl16far ovc23_textAdlibNone(uint partyIndex,uint16_t outFlag,agnt_t 
   uint8_t *puVar3;
   bool bVar4;
   uint32_t sheetPtr;
-  uint32_t uVar6;
+  uint32_t partyPtr;
   far_t entries;
   ulong uVar7;
   ulong uVar8;
@@ -59,10 +59,10 @@ byte * __cdecl16far ovc23_textAdlibNone(uint partyIndex,uint16_t outFlag,agnt_t 
   undefined1 boundYHi;
   undefined1 boundXLo;
   undefined1 boundXHi;
-  undefined1 uVar31;
-  undefined1 uVar32;
-  undefined1 uVar33;
-  undefined1 uVar34;
+  undefined1 pack1Lo;
+  undefined1 pack1Hi;
+  undefined1 pack2Lo;
+  undefined1 pack2Hi;
   uint uStack_10;
   byte bldType;
   uint uStack_c;
@@ -179,8 +179,8 @@ byte * __cdecl16far ovc23_textAdlibNone(uint partyIndex,uint16_t outFlag,agnt_t 
   if (CurSfxType3 != 0xff) {
     return (byte *)((char *)0x2410);
   }
-  uVar31 = 0xca;
-  uVar32 = 99;
+  pack1Lo = 0xca;
+  pack1Hi = 99;
   uVar15 = ovr_constr_usesGMapFlags2(GfxRndSeed);
   pbVar14 = (byte *)(uVar15 & 0xff);
   if ((byte *)__C0_ASM_CopyRight < pbVar14) {
@@ -193,8 +193,8 @@ byte * __cdecl16far ovc23_textAdlibNone(uint partyIndex,uint16_t outFlag,agnt_t 
     uVar16 = ovr_randBelow(in_stack_0000ffd8,0);
     randPick = ovr_randBelow(uStackY_2c,0);
     uStack_6 = (byte *)(CONCAT22(randPick,(byte *)uStack_6) & 0xffffff);
-    uVar33 = 0x83;
-    uVar34 = 0x9a;
+    pack2Lo = 0x83;
+    pack2Hi = 0x9a;
     randPick = ovr_randBelow(in_stack_0000ffd8,0);
     uStack_6 = (byte *)(CONCAT22((*(uint16_t *)((uint8_t *)&(uStack_6) + 2)),randPick) & 0xffff00ff);
     if ((uVar16 & 0xff) < uStack_c) {
@@ -217,7 +217,7 @@ byte * __cdecl16far ovc23_textAdlibNone(uint partyIndex,uint16_t outFlag,agnt_t 
     bStackY_2e = 0;
     iVar25 = -1;
     uStack_a = -1;
-    iVar24 = CONCAT11(uVar34,uVar33);
+    iVar24 = CONCAT11(pack2Hi,pack2Lo);
     break;
   case (uint16_t)0x1:
     TextBlitX = in_DX - (int)pbVar14;
@@ -512,8 +512,8 @@ byte * __cdecl16far ovc23_textAdlibNone(uint partyIndex,uint16_t outFlag,agnt_t 
     sheetPtr = *(uint32_t *)((partyIndex & 0xff) << 2);
     if (*(char *)((int)sheetPtr + 0x3f) == '\0') {
       sheetPtr = *(uint32_t *)((partyIndex & 0xff) << 2);
-      uVar6 = *(uint32_t *)((partyIndex & 0xff) << 2);
-      if (*(uint *)((int)sheetPtr + 0x5b) < *(uint *)((int)uVar6 + 0x4d)) {
+      partyPtr = *(uint32_t *)((partyIndex & 0xff) << 2);
+      if (*(uint *)((int)sheetPtr + 0x5b) < *(uint *)((int)partyPtr + 0x4d)) {
         pbVar14 = (byte *)ovr_ovc18_textTypeLen((byte)partyIndex,0,0,0,0,0);
       }
       else {
@@ -526,7 +526,7 @@ byte * __cdecl16far ovc23_textAdlibNone(uint partyIndex,uint16_t outFlag,agnt_t 
     return pbVar14;
   }
   do {
-    if (CONCAT11(uVar32,uVar31) < iVar24) {
+    if (CONCAT11(pack1Hi,pack1Lo) < iVar24) {
       if (uStack_a != -1) {
         if (iVar25 == -1) {
           ovr_attact_usesRandBelow(&Entities[uStack_a].base,(byte)((ulong)Entities >> 0x10),0,0);
