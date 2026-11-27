@@ -16075,3 +16075,34 @@ invention.
   compare_state 1,625/0/0
   diff_dgroup 1,627/1,805 matched, 19 runs, sum|delta| 44,867, mean 27, worst 148
   compare_runtime 1,684 matched, 1,675 identical / 9 different (both sample points)
+
+### section 5: ovc22_textRingProt and ovc41_usesBiosKeyAvail (35,109 -> 35,085)
+section 5: ovc22_textRingProt and ovc41_usesBiosKeyAvail (35,109 -> 35,085)
+
+ovc22_textRingProt - the largest body in the tree (2291 lines, 1900 occurrences)
+    bVar34  (byte)((uint)iVar52 >> 8) where iVar52 = uVar32 - uVar22, used as
+            CONCAT11(bVar34, bVar26) against AgntAnms[6].y and as a subtrahend
+            in `(byte)*puVar3 - bVar34`                        -> deltaHi  (9)
+    uVar65  (undefined1)((uint)_SS >> 8), written into entries.seg and
+            copied into uVar19 / uVar67                         -> ssHi     (6)
+    uVar24  ovr_attact_usesSquareRecCount(uStack_18, uStack_1a),
+            stored into table.ofs                               -> recCount (3)
+
+    Only 18 of its 1900 occurrences are reachable: the remaining 1841 belong to 53 multi-assignment
+    names.  uVar46 / bVar44 / bVar9 / bVar62 are the hand-rolled 32-bit borrow chain (SBORROW1 /
+    CARRY1 with each slot reused for several different subtractions within 50 lines), the four
+    uStack_* entries are never assigned, and cVar64 / cVar66 are plain copies of cVar14 whose role
+    is not established.
+
+ovc41_usesBiosKeyAvail (766 lines, 349 occurrences)
+    uVar8  ovr_init2_updateMouseButtons()                    -> mouseBtnResult (3)
+    iVar5  season_usesAlignUp42(*(int *)(iVar14 - 6), *(byte *)(iVar14 - 4))
+                                                             -> seasonVal      (3)
+
+    Its other 14 single-assignment names are never-assigned `uStack_*` slots - incoming arguments
+    the export does not declare - plus `bVar3`, which is only written inside a for-loop condition.
+
+  grep_checks 35,109 -> 35,085 (-24); build 65/65; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,625/0/0
+  diff_dgroup 1,627/1,805 matched, 19 runs, sum|delta| 44,867, mean 27, worst 148
+  compare_runtime 1,684 matched, 1,675 identical / 9 different (both sample points)

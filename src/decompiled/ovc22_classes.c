@@ -444,13 +444,13 @@ far_t * __cdecl16far ovc22_textRingProt(byte partyIndex)
   uint uVar22;
   uint uVar23;
   uint16_t index;
-  uint16_t uVar24;
+  uint16_t recCount;
   char cVar25;
   uint16_t in_CX;
   byte bVar26;
   byte bVar27;
   uint16_t *puVar28;
-  byte bVar34;
+  byte deltaHi;
   int iVar29;
   int iVar30;
   uint16_t uVar31;
@@ -503,7 +503,7 @@ far_t * __cdecl16far ovc22_textRingProt(byte partyIndex)
   uint16_t uStackY_60;
   uint16_t *puVar63;
   char cVar64;
-  undefined1 uVar65;
+  undefined1 ssHi;
   char cVar66;
   undefined1 uVar67;
   undefined1 uVar68;
@@ -555,7 +555,7 @@ far_t * __cdecl16far ovc22_textRingProt(byte partyIndex)
     iStack_22 = 0;
     uStack_20 =(uint16_t)( (byte *)__C0_ASM_CopyRight + 6);
     cVar14 = (char)_SS;
-    uVar65 = (undefined1)((uint)_SS >> 8);
+    ssHi = (undefined1)((uint)_SS >> 8);
     _fmemset(MK_FP(_SS, &uStack_28), 0, 6);
     _fmemset(MK_FP(_SS, &uStack_2e), 0, 6);
     _fmemset(MK_FP(GUnitDescriptions[partyIndex].seg, GUnitDescriptions[partyIndex].ofs + 0x9a), 0, 3);
@@ -705,7 +705,7 @@ far_t * __cdecl16far ovc22_textRingProt(byte partyIndex)
               bVar43 = (byte)iVar52;
               bVar26 = bVar43 - bVar16;
               bVar58 = bVar43 < bVar16 || bVar26 < bVar59;
-              bVar34 = (byte)((uint)iVar52 >> 8);
+              deltaHi = (byte)((uint)iVar52 >> 8);
               bVar26 = bVar26 - bVar59;
               bVar43 = bVar27 - *(byte *)(iVar39 + -0x4ae6);
               bVar59 = bVar27 < *(byte *)(iVar39 + -0x4ae6) || bVar43 < bVar58;
@@ -742,8 +742,8 @@ far_t * __cdecl16far ovc22_textRingProt(byte partyIndex)
               uVar23 = (uint)(puVar50 < puVar36 || uVar23 - (int)puVar36 < uVar22);
               (*(uint16_t *)((uint8_t *)&("Peaceful") + 4)) = (0x6665U - (int)unaff_DI) - uVar23;
               uVar23 = (uint)((uint)0x6665 < unaff_DI || (uint)(0x6665U - (int)unaff_DI) < uVar23);
-              bVar58 = (uint)AgntAnms[6].y < CONCAT11(bVar34,bVar26);
-              uVar22 = AgntAnms[6].y - CONCAT11(bVar34,bVar26);
+              bVar58 = (uint)AgntAnms[6].y < CONCAT11(deltaHi,bVar26);
+              uVar22 = AgntAnms[6].y - CONCAT11(deltaHi,bVar26);
               AgntAnms[6].y = uVar22 - uVar23;
               uVar23 = (uint)(bVar58 || uVar22 < uVar23);
               uVar22 = (uVar48 + iVar30 + -2) - (int)unaff_DI;
@@ -769,10 +769,10 @@ far_t * __cdecl16far ovc22_textRingProt(byte partyIndex)
               bVar56 = (byte)*puVar3 < bVar27 || bVar15 < bVar59;
               *(byte *)puVar3 = bVar15 - bVar59;
               puVar3 = puVar47 + 0xc;
-              bVar59 = (byte)*puVar3 < bVar34;
-              bVar15 = (byte)*puVar3 - bVar34;
+              bVar59 = (byte)*puVar3 < deltaHi;
+              bVar15 = (byte)*puVar3 - deltaHi;
               bVar57 = bVar59 || bVar15 < bVar56;
-              bVar62 = SBORROW1((byte)*puVar3,bVar34) != SBORROW1(bVar15,bVar56);
+              bVar62 = SBORROW1((byte)*puVar3,deltaHi) != SBORROW1(bVar15,bVar56);
               *(byte *)puVar3 = bVar15 - bVar56;
               bVar61 = (char)(byte)*puVar3 < '\0';
               bVar60 = (byte)*puVar3 == 0;
@@ -781,7 +781,7 @@ far_t * __cdecl16far ovc22_textRingProt(byte partyIndex)
               if (!bVar58) {
                 puVar3 = unaff_DI;
                 unaff_DI = (uint *)((int)unaff_DI + 1);
-                cVar25 = in(CONCAT11(bVar34,bVar16));
+                cVar25 = in(CONCAT11(deltaHi,bVar16));
                 *(char *)puVar3 = cVar25;
                 puVar3 = puVar49 + 0xc;
                 uVar23 = *puVar3;
@@ -843,7 +843,7 @@ far_t * __cdecl16far ovc22_textRingProt(byte partyIndex)
               uVar32 = (uint)unaff_DI & *(uint *)((char *)((int)puVar36 + (int)unaff_DI) + 0x23);
               *puVar45 = uVar22;
               uVar22 = uVar22 & *(uint *)((int)puVar36 + uVar32);
-              uVar23 = CONCAT11(bVar34,bVar16) & *(uint *)(iVar30 + uVar22);
+              uVar23 = CONCAT11(deltaHi,bVar16) & *(uint *)(iVar30 + uVar22);
               puVar49 = (uint *)CONCAT11(bVar44,bVar35 & bVar44 &
                                                 *(byte *)((int)&_streams[0xc].curp +
                                                          CONCAT11(bVar44,bVar35 & bVar44)));
@@ -1410,7 +1410,7 @@ L_OVC22_5087_0234_32B8:
               CurSfxType3 = 0x3c;
               (*(uint8_t *)((uint8_t *)&(entries.seg))) = cVar14;
               entries.ofs = (uint16_t)(acStackY_68 + 2);
-              (*(uint8_t *)((uint8_t *)&(entries.seg) + 1)) = uVar65;
+              (*(uint8_t *)((uint8_t *)&(entries.seg) + 1)) = ssHi;
               uVar53 = ovr_ovc28_usesUiInputText(entries,0,0,0,0,0);
               cVar14 = (char)uVar53;
               uStack_e =(uint16_t)( (uint *)CONCAT11(cVar14,(byte)uStack_e));
@@ -2502,16 +2502,16 @@ L_upd_units_5087_1d7d_202C:
             uStackY_60 = 0x2379;
             uStackY_62 = 0x3d98;
             cVar18 = cVar14;
-            uVar19 = uVar65;
+            uVar19 = ssHi;
             cVar64 = cVar14;
-            uVar67 = uVar65;
+            uVar67 = ssHi;
             cVar66 = cVar14;
-            uVar69 = uVar65;
-            uVar24 = ovr_attact_usesSquareRecCount(uStack_18,uStack_1a);
+            uVar69 = ssHi;
+            recCount = ovr_attact_usesSquareRecCount(uStack_18,uStack_1a);
             uStackY_60 = 0x2315;
             uStackY_62 = 0x3da2;
             table.seg = uVar31;
-            table.ofs = uVar24;
+            table.ofs = recCount;
             (*(uint8_t *)((uint8_t *)&(pctOut.seg))) = cVar18;
             pctOut.ofs = (uint16_t)puVar63;
             (*(uint8_t *)((uint8_t *)&(pctOut.seg) + 1)) = uVar19;

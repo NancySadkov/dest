@@ -1011,10 +1011,10 @@ char * __cdecl16far ovc41_usesBiosKeyAvail(char backdropIndex,uint16_t arg2)
   far_t handle_07;
   far_t entries;
   char cVar4;
-  int iVar5;
+  int seasonVal;
   char *textPtr;
   uint16_t uVar7;
-  uint uVar8;
+  uint mouseBtnResult;
   undefined1 extraout_AH;
   undefined1 segLo;
   byte *pbVar9;
@@ -1518,8 +1518,8 @@ char * __cdecl16far ovc41_usesBiosKeyAvail(char backdropIndex,uint16_t arg2)
               *(uint *)(iVar14 + -6) = uVar11;
               *(uint16_t *)(iVar14 + -8) = (uint16_t)(0x6000);
               *(uint16_t *)(iVar14 + -10) = (uint16_t)(0x8958);
-              iVar5 = season_usesAlignUp42(*(int *)(iVar14 + -6),*(byte *)(iVar14 + -4));
-              if ((char)iVar5 != '\0') {
+              seasonVal = season_usesAlignUp42(*(int *)(iVar14 + -6),*(byte *)(iVar14 + -4));
+              if ((char)seasonVal != '\0') {
                 pcVar12 = 0x2410;   /* hand fix: segment-half slot */
                 (GUnits)[uVar11].level = 8;
                 iVar15 = iVar15 + 1;
@@ -1658,8 +1658,8 @@ char * __cdecl16far ovc41_usesBiosKeyAvail(char backdropIndex,uint16_t arg2)
         }
         if (uVar7 == 0x1c0d) break;
       }
-      uVar8 = ovr_init2_updateMouseButtons();
-      if (uVar8 != 0) break;
+      mouseBtnResult = ovr_init2_updateMouseButtons();
+      if (mouseBtnResult != 0) break;
       if (rightButtonLatch != '\0') {
         cStack_1d = '\x02';
         break;
