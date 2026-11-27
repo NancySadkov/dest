@@ -168,11 +168,11 @@ void __cdecl16far draw_textTalkwin9Lbm(void)
   int iVar20;
   int in_CX;
   char cVar23;
-  byte bVar24;
+  byte plane2Sum;
   char cVar26;
   undefined1 *puVar25;
-  byte bVar27;
-  byte bVar28;
+  byte plane3;
+  byte plane3Rot;
   byte bVar29;
   uint16_t in_DX;
   char cVar30;
@@ -181,8 +181,8 @@ void __cdecl16far draw_textTalkwin9Lbm(void)
   char cVar35;
   byte *pbVar32;
   char *pcVar33;
-  int iVar36;
-  int iVar37;
+  int framePtr;
+  int stackPtr;
   undefined1 *puVar38;
   int16_t *piVar39;
   undefined1 *puVar40;
@@ -190,7 +190,7 @@ void __cdecl16far draw_textTalkwin9Lbm(void)
   int16_t *piVar42;
   undefined1 *puVar43;
   byte *pbVar44;
-  ulong uVar45;
+  ulong frameEnd;
   uint32_t in_ESP;
   char *pcVar46;
   byte *pbVar47;
@@ -206,13 +206,13 @@ void __cdecl16far draw_textTalkwin9Lbm(void)
   byte in_AF;
   bool bVar54;
   bool bVar55;
-  uint32_t uVar56;
+  uint32_t planeWord;
   
   uVar52 = 0x2e25;
-  iVar37 = (int)in_ESP;
+  stackPtr = (int)in_ESP;
   uVar51 = (uint16_t)((ulong)in_ESP >> 0x10);
-  piVar39 = (int16_t *)(iVar37 + -2);
-  *(uint16_t *)(iVar37 + -2) = (uint16_t)unaff_BP;
+  piVar39 = (int16_t *)(stackPtr + -2);
+  *(uint16_t *)(stackPtr + -2) = (uint16_t)unaff_BP;
   if (GameRunning != false) {
     return;
   }
@@ -220,13 +220,13 @@ void __cdecl16far draw_textTalkwin9Lbm(void)
   CrossBlitCount2 = 0;
   CrossBlitCount = 1;
   if (CrossBlitPtr.ofs != 0 || CrossBlitPtr.seg != 0) {
-    *(uint16_t *)(iVar37 + -4) = CrossBlitPtr.seg;
-    *(uint16_t *)(iVar37 + -6) = CrossBlitPtr.ofs;
-    *(uint16_t *)(iVar37 + -8) = (uint16_t)(char *)0x2e25;
+    *(uint16_t *)(stackPtr + -4) = CrossBlitPtr.seg;
+    *(uint16_t *)(stackPtr + -6) = CrossBlitPtr.ofs;
+    *(uint16_t *)(stackPtr + -8) = (uint16_t)(char *)0x2e25;
     uVar52 = 0x2337;
-    puVar38 = (undefined1 *)(iVar37 + -10);
-    *(uint16_t *)(iVar37 + -10) = (uint16_t)0xe4f0;
-    ovr_stshFree(*(far_t far *)(iVar37 + -6));
+    puVar38 = (undefined1 *)(stackPtr + -10);
+    *(uint16_t *)(stackPtr + -10) = (uint16_t)0xe4f0;
+    ovr_stshFree(*(far_t far *)(stackPtr + -6));
     piVar39 = (int16_t *)(puVar38 + 8);
   }
   bVar29 = bigcompFrame;
@@ -341,11 +341,11 @@ L_draw_2e25_025a_03D9:
   pcVar33[(int)unaff_SI] = pcVar33[(int)unaff_SI] + cVar30;
   pcVar33[unaff_DI] = pcVar33[unaff_DI] + cVar30;
   cVar34 = (char)((uint)pcVar33 >> 8);
-  *(char *)(iVar37 + -2 + unaff_DI) = *(char *)(iVar37 + -2 + unaff_DI) + cVar34;
+  *(char *)(stackPtr + -2 + unaff_DI) = *(char *)(stackPtr + -2 + unaff_DI) + cVar34;
   cVar9 = (char)iVar14;
-  unaff_SI[iVar37 + -2] = unaff_SI[iVar37 + -2] + cVar9;
+  unaff_SI[stackPtr + -2] = unaff_SI[stackPtr + -2] + cVar9;
   *unaff_SI = *unaff_SI + cVar9;
-  pcVar46 = (char *)(iVar37 + -1);
+  pcVar46 = (char *)(stackPtr + -1);
   *pcVar46 = *pcVar46 + cVar9;
   pcVar49 = (char *)(unaff_DI + 1);
   (pcVar33 + 1)[(int)unaff_SI] = (pcVar33 + 1)[(int)unaff_SI] + (char)in_CX;
@@ -556,7 +556,7 @@ code_r0x000219f5:
   (pbVar32 + (int)puVar25)[0x7e] = (pbVar32 + (int)puVar25)[0x7e] + bVar10;
   *(byte **)((undefined1 *)((int)piVar39 + (int)piVar5) + 0xc) = pbVar32;
   uVar51 = *(uint16_t *)((undefined1 *)((int)piVar39 + (int)piVar5) + 0xc);
-  uVar45 = ZEXT24((undefined1 *)((int)piVar39 + (int)piVar5) + 0xe);
+  frameEnd = ZEXT24((undefined1 *)((int)piVar39 + (int)piVar5) + 0xe);
   bVar11 = bVar10 * '\x02';
   bVar29 = 9 < (bVar11 & 0xf) | in_AF;
   cVar9 = bVar11 + bVar29 * '\x06' + (0x99 < bVar11 || CARRY1(bVar10,bVar10)) * '`';
@@ -568,13 +568,13 @@ code_r0x000219f5:
   pbVar32[(int)puVar25] = pbVar32[(int)puVar25] + (cVar9 + 1U & 0x14);
   do {
     pcVar7 = (code *)swi(0x17);
-    uVar56 = (*pcVar7)();
-    bVar10 = (byte)uVar56;
+    planeWord = (*pcVar7)();
+    bVar10 = (byte)planeWord;
     (pbVar32 + (int)puVar25)[0x19a2] = (pbVar32 + (int)puVar25)[0x19a2] + bVar10;
     pbVar1 = pbVar32 + (int)puVar25 + 0x77;
     bVar11 = *pbVar1;
     *pbVar1 = *pbVar1 + bVar10;
-    iVar14 = ((int)uVar56 - *(int *)(pbVar32 + (int)puVar25)) - (uint)CARRY1(bVar11,bVar10);
+    iVar14 = ((int)planeWord - *(int *)(pbVar32 + (int)puVar25)) - (uint)CARRY1(bVar11,bVar10);
     bVar19 = (byte)iVar20;
     puVar48[0x1e] = puVar48[0x1e] + bVar19;
     bVar10 = (char)iVar14 * '\x02';
@@ -585,11 +585,11 @@ code_r0x000219f5:
     pbVar32[0x24] = pbVar32[0x24] + (byte)pbVar32;
     (pbVar47 + (int)piVar50)[0x26] = (pbVar47 + (int)piVar50)[0x26];
     (pbVar32 + (int)puVar25)[0x28] = (pbVar32 + (int)puVar25)[0x28];
-    bVar27 = (byte)((ulong)uVar56 >> 0x18);
-    bVar24 = (char)((ulong)uVar56 >> 0x10) + bVar27;
+    plane3 = (byte)((ulong)planeWord >> 0x18);
+    plane2Sum = (char)((ulong)planeWord >> 0x10) + plane3;
     uVar15 = (CONCAT11((char)((uint)iVar14 >> 8),bVar10 & bVar11) + -0x29) -
              *(int *)(pbVar32 + (int)puVar25);
-    bVar28 = bVar27 << 5 | bVar27 >> 3;
+    plane3Rot = plane3 << 5 | plane3 >> 3;
     bVar11 = (byte)uVar15;
     (pbVar32 + (int)puVar25)[0x2f9b] = (pbVar32 + (int)puVar25)[0x2f9b] + bVar11;
     (pbVar32 + (int)puVar25)[0x70] = (pbVar32 + (int)puVar25)[0x70] + bVar11;
@@ -606,19 +606,19 @@ code_r0x000219f5:
     (pbVar32 + (int)puVar25)[0x13] = (pbVar32 + (int)puVar25)[0x13] + bVar19;
     pbVar1 = pbVar32 + (int)puVar25;
     bVar11 = *pbVar1;
-    *pbVar1 = *pbVar1 + bVar24;
+    *pbVar1 = *pbVar1 + plane2Sum;
     bVar29 = 9 < (bVar10 & 0xf) | bVar29;
-    cVar9 = bVar10 + bVar29 * '\x06' + (0x99 < bVar10 || CARRY1(bVar11,bVar24)) * '`';
+    cVar9 = bVar10 + bVar29 * '\x06' + (0x99 < bVar10 || CARRY1(bVar11,plane2Sum)) * '`';
     pbVar32[(int)puVar25] = pbVar32[(int)puVar25] + cVar9;
     *pbVar47 = *pbVar47 & bVar19;
     (pbVar32 + (int)puVar25)[-100] = (pbVar32 + (int)puVar25)[-100] + cVar9;
     pbVar32[(int)puVar25] = pbVar32[(int)puVar25] + cVar9;
-    bVar11 = cVar9 + bVar28 + pbVar32[(int)puVar25];
+    bVar11 = cVar9 + plane3Rot + pbVar32[(int)puVar25];
     iVar20 = iVar20 + -2;
   } while (iVar20 != 0 && bVar11 != 0);
   iVar14 = CONCAT11((byte)((uint)iVar20 >> 9),(byte)iVar20);
-  iVar36 = (int)uVar45;
-  *(uint16_t *)(iVar36 + -2) = (uint16_t)uVar51;
+  framePtr = (int)frameEnd;
+  *(uint16_t *)(framePtr + -2) = (uint16_t)uVar51;
   bVar10 = bVar11 * '\x02';
   *(uint *)(pbVar32 + (int)puVar25) =
        *(uint *)(pbVar32 + (int)puVar25) |
@@ -626,56 +626,56 @@ code_r0x000219f5:
                        (0x99 < bVar10 || CARRY1(bVar11,bVar11)) * '`');
   cVar9 = (char)AgntAnms[0x25].y;
   uVar51 = *(uint16_t *)(pbVar32 + (int)puVar25);
-  (pbVar32 + (int)puVar25)[0x1005] = (pbVar32 + (int)puVar25)[0x1005] + bVar24;
+  (pbVar32 + (int)puVar25)[0x1005] = (pbVar32 + (int)puVar25)[0x1005] + plane2Sum;
   (pbVar32 + (int)puVar25)[0x124f] = (pbVar32 + (int)puVar25)[0x124f] + cVar9;
   pbVar1 = pbVar32 + (int)puVar25 + -0x67;
   bVar29 = *pbVar1;
-  *pbVar1 = *pbVar1 + bVar28;
-  uVar15 = CONCAT11(bVar17 | (byte)((uint)uVar51 >> 8),cVar9 + CARRY1(bVar29,bVar28));
-  *(uint *)(iVar36 + -4) = uVar15;
-  *(int *)(iVar36 + -6) = iVar14;
-  *(uint16_t *)(iVar36 + -8) = (uint16_t)CONCAT11(bVar28,bVar24);
-  *(uint16_t *)(iVar36 + -10) = (uint16_t)pbVar32;
-  *(int *)(iVar36 + -0xc) = iVar36 + -2;
-  *(uint16_t *)(iVar36 + -0xe) = (uint16_t)pbVar47;
-  *(uint *)(iVar36 + -0x10) = (uint)puVar25;
-  *(uint16_t *)(iVar36 + -0x12) = (uint16_t)piVar50;
+  *pbVar1 = *pbVar1 + plane3Rot;
+  uVar15 = CONCAT11(bVar17 | (byte)((uint)uVar51 >> 8),cVar9 + CARRY1(bVar29,plane3Rot));
+  *(uint *)(framePtr + -4) = uVar15;
+  *(int *)(framePtr + -6) = iVar14;
+  *(uint16_t *)(framePtr + -8) = (uint16_t)CONCAT11(plane3Rot,plane2Sum);
+  *(uint16_t *)(framePtr + -10) = (uint16_t)pbVar32;
+  *(int *)(framePtr + -0xc) = framePtr + -2;
+  *(uint16_t *)(framePtr + -0xe) = (uint16_t)pbVar47;
+  *(uint *)(framePtr + -0x10) = (uint)puVar25;
+  *(uint16_t *)(framePtr + -0x12) = (uint16_t)piVar50;
   if (iVar14 != 0) {
     pbVar1 = pbVar32 + (int)puVar25 + 0x2d;
     bVar29 = *pbVar1;
-    *pbVar1 = *pbVar1 + bVar24;
+    *pbVar1 = *pbVar1 + plane2Sum;
     puVar3 = (uint *)(pbVar32 + (int)puVar25);
     uVar6 = *puVar3;
     uVar12 = *puVar3;
-    *puVar3 = (uVar12 - uVar15) - (uint)CARRY1(bVar29,bVar24);
+    *puVar3 = (uVar12 - uVar15) - (uint)CARRY1(bVar29,plane2Sum);
     iVar13 = uVar15 + 1;
-    if ((uVar15 <= uVar6 && (uint)CARRY1(bVar29,bVar24) <= uVar12 - uVar15) && iVar13 != 0) {
+    if ((uVar15 <= uVar6 && (uint)CARRY1(bVar29,plane2Sum) <= uVar12 - uVar15) && iVar13 != 0) {
       iVar13 = iVar13 - *(int *)(pbVar32 + (int)puVar25);
-      bVar29 = (bVar27 >> 3) << 5 | bVar28 >> 3;
+      bVar29 = (plane3 >> 3) << 5 | plane3Rot >> 3;
       (pbVar32 + (int)puVar25)[0x3010] = (pbVar32 + (int)puVar25)[0x3010] + bVar29;
       (pbVar32 + (int)puVar25)[0x325a] =
            (pbVar32 + (int)puVar25)[0x325a] + (char)((uint)iVar13 >> 8);
-      (pbVar32 + (int)puVar25)[0x34a4] = (pbVar32 + (int)puVar25)[0x34a4] + bVar24;
+      (pbVar32 + (int)puVar25)[0x34a4] = (pbVar32 + (int)puVar25)[0x34a4] + plane2Sum;
       (pbVar32 + (int)puVar25)[0x36ee] = (pbVar32 + (int)puVar25)[0x36ee] + (char)iVar13;
       (pbVar32 + (int)puVar25)[0x38] = (pbVar32 + (int)puVar25)[0x38] + bVar29;
-      *(int *)(iVar36 + -0x14) = iVar13;
-      *(int *)(iVar36 + -0x16) = iVar14;
-      *(uint16_t *)(iVar36 + -0x18) = (uint16_t)CONCAT11(bVar29,bVar24);
-      *(uint16_t *)(iVar36 + -0x1a) = (uint16_t)pbVar32;
-      *(int *)(iVar36 + -0x1c) = iVar36 + -0x12;
-      *(uint16_t *)(iVar36 + -0x1e) = (uint16_t)pbVar47;
-      *(uint *)(iVar36 + -0x20) = (uint)puVar25;
-      *(uint16_t *)(iVar36 + -0x22) = (uint16_t)piVar50;
-      *(int *)(iVar36 + -0x24) = iVar13;
+      *(int *)(framePtr + -0x14) = iVar13;
+      *(int *)(framePtr + -0x16) = iVar14;
+      *(uint16_t *)(framePtr + -0x18) = (uint16_t)CONCAT11(bVar29,plane2Sum);
+      *(uint16_t *)(framePtr + -0x1a) = (uint16_t)pbVar32;
+      *(int *)(framePtr + -0x1c) = framePtr + -0x12;
+      *(uint16_t *)(framePtr + -0x1e) = (uint16_t)pbVar47;
+      *(uint *)(framePtr + -0x20) = (uint)puVar25;
+      *(uint16_t *)(framePtr + -0x22) = (uint16_t)piVar50;
+      *(int *)(framePtr + -0x24) = iVar13;
       pcVar7 = (code *)swi(3);
       (*pcVar7)();
       return;
     }
-    pbVar32[(int)puVar25] = pbVar32[(int)puVar25] + bVar28;
+    pbVar32[(int)puVar25] = pbVar32[(int)puVar25] + plane3Rot;
     *piVar50 = *piVar50;
     pbVar47[(int)piVar50] = pbVar47[(int)piVar50] & (byte)iVar20;
     pbVar32[(int)puVar25] = pbVar32[(int)puVar25] & (byte)iVar13;
-    *(byte *)(piVar50 + 0x11) = (char)piVar50[0x11] + bVar24;
+    *(byte *)(piVar50 + 0x11) = (char)piVar50[0x11] + plane2Sum;
     pbVar32[(int)puVar25] = pbVar32[(int)puVar25] + (byte)iVar13;
   }
                     /* WARNING: Bad instruction - Truncating control flow here */

@@ -15955,3 +15955,32 @@ compared against `iVar24`, an entity index, so naming them after a coordinate wo
   compare_runtime 1,684 matched, 1,675 identical / 9 different (both sample points)
 
 Turn total: 35,334 -> 35,294 (-40) across the first two phantom-laden bodies.
+
+### section 5: draw_textTalkwin9Lbm, seven of fifteen names (35,294 -> 35,222)
+section 5: draw_textTalkwin9Lbm, seven of its fifteen names (35,294 -> 35,222)
+
+541 lines, 485 section-5 occurrences, 15 single-assignment names (123 occurrences).  Seven have a
+role the assignment fixes:
+
+    iVar37  (int)in_ESP                        -> stackPtr   (15)
+        the stack pointer, used to lay out the saved-register block at negative offsets
+        (`[stackPtr-2] = unaff_BP`, `[stackPtr-4] = CrossBlitPtr.seg`, ...)
+    uVar45  ZEXT24(ptr + 0xe)                  -> frameEnd   (3)
+    iVar36  (int)uVar45                        -> framePtr   (22)
+        the frame end, then walked backwards to store the surviving locals
+            [framePtr-2] = uVar51, [framePtr-4] = uVar15, [framePtr-6] = iVar14, ...
+    uVar56  (*pcVar7)()                        -> planeWord  (6)
+        the 32-bit helper result, split into bytes immediately below
+    bVar27  (byte)((ulong)planeWord >> 0x18)   -> plane3     (6)
+    bVar24  (char)((ulong)planeWord >> 0x10) + bVar27 -> plane2Sum (12)
+    bVar28  bVar27 << 5 | bVar27 >> 3          -> plane3Rot  (8)
+
+The other eight single-assignment names (cVar8/16/21/22/23/26/30/31/34/35, bVar19) are the char
+accumulators of the plane copy - `cVar22 = cVar21 + cVar16`, `cVar31 = cVar30 + cVar16 + cVar21` -
+so a name would restate the arithmetic instead of describing a role.  The 21 multi-assignment names
+(362 occurrences) stay unnamed as scratch.
+
+  grep_checks 35,294 -> 35,222 (-72); build 65/65; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,625/0/0
+  diff_dgroup 1,627/1,805 matched, 19 runs, sum|delta| 44,867, mean 27, worst 148
+  compare_runtime 1,684 matched, 1,675 identical / 9 different (both sample points)
