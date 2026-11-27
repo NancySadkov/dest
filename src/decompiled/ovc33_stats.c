@@ -1607,10 +1607,8 @@ void __cdecl16far stats_usesEntityCount(char partyIndex)
 {
   byte *pbVar1;
   uint uVar2;
-  uint16_t uVar3;
   
   for (uVar2 = 0; uVar2 < EntityCount; uVar2 = uVar2 + 1) {
-    uVar3 = (uint16_t)((ulong)Entities >> 0x10);
     if (*(char *)((int)&(Entities)[uVar2].base.entity + 3) == partyIndex) {
       pbVar1 = (byte *)((uint8_t *)&(Entities)[uVar2] + 0x33);
       *pbVar1 = *pbVar1 & 0xfb;

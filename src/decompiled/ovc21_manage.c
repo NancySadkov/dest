@@ -796,7 +796,6 @@ uint16_t __cdecl16far alignmentDlg(char_sheet_t *sheet)
   far_t dst;
   char *inputResult;
   uint uVar3;
-  uint16_t uVar4;
   far_t entries;
   char align;
   uint8_t inputBuf;
@@ -812,7 +811,6 @@ uint16_t __cdecl16far alignmentDlg(char_sheet_t *sheet)
     if (uVar3 == 0) {
       return 0;
     }
-    uVar4 = (uint16_t)((ulong)sheet >> 0x10);
     align = (char)inputResult;
     ((char_sheet_t *)sheet)->alignment = align - 1;
     pbVar1 = &((char_sheet_t *)sheet)->statMask;
@@ -2280,7 +2278,6 @@ manage_usesGUnitCount
   int iVar4;
   unit_t *puVar5;
   uint uVar6;
-  uint16_t uVar7;
   int *in_stack_00000018;
   int *in_stack_0000001c;
   int *in_stack_00000020;
@@ -2320,7 +2317,6 @@ manage_usesGUnitCount
       return iStack_4 - (iVar4 + iVar2);
     }
     if (partyIndex != -1) break;
-    uVar7 = (uint16_t)((ulong)GUnits >> 0x10);
     puVar5 = GUnits;
     if (((puVar5[uVar6].unitType != 0xff) &&
         (uVar3 = *(uint32_t *)((uint)puVar5[uVar6].unitType << 2),

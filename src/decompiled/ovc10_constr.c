@@ -88,13 +88,9 @@ byte __cdecl16far constr_setHighlightAtOffset(int dx,int dy,uint16_t arg3)
 
 {
   byte bVar1;
-  uint16_t uVar2;
-  uint16_t uVar3;
   
   if ((((dx + GfxRndSeed < 0x94) && (SCARRY2(dx,GfxRndSeed) == dx + GfxRndSeed < 0)) &&
       (GfxRndSeed2 - dy < 0x3c)) && (dy <= GfxRndSeed2)) {
-    uVar2 = (uint16_t)((ulong)GUnitGrid >> 0x10);
-    uVar3 = (uint16_t)((ulong)GUnits >> 0x10);
     HighlightLevel =
          (uint)(GUnits)
                [*(int *)((int)(short (*) [148] [60])GUnitGrid +

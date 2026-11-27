@@ -4229,15 +4229,11 @@ void * __cdecl16far __fmovmem(char *src,char *dst,word count)
   uint uVar4;
   char *pcVar5;
   char *pcVar6;
-  uint16_t uVar7;
-  uint16_t uVar8;
   byte in_CF;
   
   N_PCMP_at_();
   pvVar3 = (void *)(uint)in_CF;
-  uVar8 = (uint16_t)((ulong)src >> 0x10);
   pcVar5 = (char *)src;
-  uVar7 = (uint16_t)((ulong)dst >> 0x10);
   pcVar6 = (char *)dst;
   if (pvVar3 != (void *)0x0) {
     pcVar5 = pcVar5 + (count - 1);

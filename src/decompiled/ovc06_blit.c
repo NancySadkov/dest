@@ -170,7 +170,6 @@ void __cdecl16far blitGfx10(far_t gfx,uint16_t x,uint16_t y,brect_t *dst,bool ty
   int iVar1;
   uint16_t in_DX;
   int iVar2;
-  uint16_t uVar3;
   uint16_t uVar4;
   undefined1 uStack000f;
   far_t dst_01;
@@ -206,7 +205,6 @@ void __cdecl16far blitGfx10(far_t gfx,uint16_t x,uint16_t y,brect_t *dst,bool ty
       ovr_stExit(0x1a);
     }
     dst_x = dst->x;   /* hand fix: read the first field; *dst is the whole structure */
-    uVar3 = (uint16_t)((ulong)dst >> 0x10);
     dst_y = dst->y;
     dst_w = dst->w;
     dst_h = dst->h;
@@ -286,7 +284,6 @@ void __cdecl16far blit_usesDrawGfx(far_t gfx, int x, int y, brect_t far *rect)
   uint16_t in_DX;
   brect_t *rectP;
   int row;
-  uint16_t uVar4;
   far_t src;
   uint8_t rowBuf;
   int rectH;
@@ -315,7 +312,6 @@ void __cdecl16far blit_usesDrawGfx(far_t gfx, int x, int y, brect_t far *rect)
       ovr_stExit(0x1a);
     }
     rectX = rect->x;
-    uVar4 = (uint16_t)((ulong)rect >> 0x10);
     rectP = (brect_t *)rect;
     rectY = rectP->y;
     rectW = rectP->w;

@@ -169,10 +169,8 @@ void __cdecl16far ovc42_usesEntityCount(void)
 
 {
   uint uVar2;
-  uint16_t uVar3;
   
   for (uVar2 = 0; uVar2 < EntityCount; uVar2 = uVar2 + 1) {
-    uVar3 = (uint16_t)((ulong)Entities >> 0x10);
     if ((AGNT_FIELD(&(Entities)[uVar2], base.entity, 3) != -1) &&
        (AgntGs[(uint)(Entities)[uVar2].base.gindex].ai != '\0')) {
       *(uint16_t *)(Entities + uVar2) = 0;

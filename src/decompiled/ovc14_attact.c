@@ -189,7 +189,6 @@ uint __cdecl16far attact_usesSCARRY22(int x,int y,byte dir,char ignoreBlocked,ch
 {
   int iVar1;
   uint uVar2;
-  uint16_t uVar3;
   
   iVar1 = (int)*(char *)(dir + 0x885);
   if (((1 < x + iVar1) && (iVar1 = (int)*(char *)(dir + 0x889), SCARRY2(y,iVar1) == y + iVar1 < 0))
@@ -199,7 +198,6 @@ uint __cdecl16far attact_usesSCARRY22(int x,int y,byte dir,char ignoreBlocked,ch
       if (directionOnly != '\0') {
         return (uint)(byte)(*(char *)(dir + 0x889) >> 7) << 8;
       }
-      uVar3 = (uint16_t)((ulong)GMapFlags >> 0x10);
       uVar2 = (uint)(*(short (*) [60] [148])GMapFlags)[y][x] >> (dir + 4 & 0x1f);
       if (((uVar2 & 1) != 0) && (ignoreBlocked == '\0')) {
         return (uint)(*(short (*) [60] [148])GMapFlags)[y][x] >> (dir + 8 & 0x1f) & 0xff01 ^ 1;
@@ -222,7 +220,6 @@ int __cdecl16far attact_countPartyUnits(byte menuIndex)
 {
   uint uVar2;
   int count;
-  uint16_t uVar4;
   
   count = 0;
   if (((uint8_t *)MenuItemEnabled)[menuIndex] == 0xff) {
@@ -230,7 +227,6 @@ int __cdecl16far attact_countPartyUnits(byte menuIndex)
   }
   else {
     for (uVar2 = 0; uVar2 < EntityCount; uVar2 = uVar2 + 1) {
-      uVar4 = (uint16_t)((ulong)Entities >> 0x10);
       if (((AGNT_FIELD(&(Entities)[uVar2], base.entity, 3) == ((uint8_t *)MenuItemEnabled)[menuIndex]) &&
           (((*(uint *)(Entities + uVar2) < GfxRndSeed - 2U ||
             (GfxRndSeed + 1U < *(uint *)(Entities + uVar2))) ||
@@ -551,11 +547,9 @@ attact_usesEntities(int entityIndex,uint16_t destX,uint16_t destY,uint16_t flags
   uint16_t x;
   uint16_t y;
   int iVar1;
-  uint16_t uVar2;
   
   (Entities)[entityIndex].base.faction = 0;
   (Entities)[entityIndex].base.state = 0;
-  uVar2 = (uint16_t)((ulong)Entities >> 0x10);
   iVar1 = (int)Entities;
   x = ((entity_t *)iVar1)[entityIndex].base.destX;
   y = ((entity_t *)iVar1)[entityIndex].base.destY;

@@ -336,10 +336,8 @@ void __cdecl16far ovc25_usesEntityCount(char partyIndex)
 {
   byte *pbVar1;
   uint uVar2;
-  uint16_t uVar3;
   
   for (uVar2 = 0; uVar2 < EntityCount; uVar2 = uVar2 + 1) {
-    uVar3 = (uint16_t)((ulong)Entities >> 0x10);
     if (*(char *)((int)&(Entities)[uVar2].base.entity + 3) == partyIndex) {
       pbVar1 = (byte *)((uint8_t *)&(Entities)[uVar2] + 0x33);
       *pbVar1 = *pbVar1 & 0xf7;
@@ -1095,7 +1093,6 @@ char ignoreBlocked;
   uint *puVar27;
   uint16_t unaff_ES;
   uint16_t curSeg = _SS;
-  uint16_t uVar28;
   byte in_CF;
   bool bVar29;
   bool bVar30;
@@ -1167,7 +1164,6 @@ char ignoreBlocked;
     *puVar1 = *puVar1 + (uint)(0 < iVar21) * iVar21;
   }
   uVar7 = *(uint32_t *)(uVar14 + (int)puVar27);
-  uVar28 = (uint16_t)((ulong)uVar7 >> 0x10);
   iVar21 = (int)uVar7;
   count = puVar27 + 1;
   uVar25 = *puVar27;

@@ -286,11 +286,9 @@ ovc26_usesRandBelow(int entityIndex,uint16_t outFlag,uint16_t outFlagSeg,uint16_
   undefined1 uVar8;
   int iVar9;
   char unaff_DI;
-  uint16_t uVar10;
   short *psStack_c;
   byte bStack_7;
   
-  uVar10 = (uint16_t)((ulong)Entities >> 0x10);
   iVar9 = (int)Entities;
   if (AgntGs[(uint)((entity_t *)iVar9)[entityIndex].base.gindex].ai == '\0') {
     uVar5 = 0;

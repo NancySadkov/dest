@@ -437,10 +437,8 @@ uint16_t __cdecl16far audio_usesAlignToSeg(uint8_t *ofs,uint16_t seg,int size)
 void __cdecl16far audio_parseHexDigit(char *driverData,char ch)
 
 {
-  uint16_t uVar1;
   
   if (ch != '0') {
-    uVar1 = (uint16_t)((ulong)driverData >> 0x10);
     if (((char *)driverData)[0x108] != -1) {
       if ((((byte *)_ctype + 1)[ch] & 2) == 0) {
         ((char *)driverData)[0x108] = ch + -0x37;

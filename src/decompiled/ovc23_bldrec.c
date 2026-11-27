@@ -1277,7 +1277,6 @@ createConstructionRecord(byte bldType,int x,int y,uint8_t *outFlag,char partyInd
   uint uVar7;
   uint16_t unaff_DI;
   uint uVar8;
-  uint16_t uVar9;
   undefined1 uStack000d;
   byte in_stack_0000000e;
   char in_stack_00000010;
@@ -1348,7 +1347,6 @@ createConstructionRecord(byte bldType,int x,int y,uint8_t *outFlag,char partyInd
     *(byte *)((uint8_t *)&GRecords[GRecordCount] + 9) = in_stack_0000000e;
     iVar4 = ovc23_isLargeBuilding(x,y);
     uVar5 = (uint16_t)((ulong)GUnitGrid >> 0x10);
-    uVar9 = (uint16_t)((ulong)GUnits >> 0x10);
     if ((char)iVar4 == '\0') {
       bStack_5 = (GUnits + (*(short (*) [148] [60])GUnitGrid)[x][y])->bldType;
     }

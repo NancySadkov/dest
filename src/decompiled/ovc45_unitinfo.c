@@ -63,7 +63,6 @@ uint __cdecl16far ovc45_usesAlignUp4(int slotMin,int x,uint16_t y,uint *entityIn
 {
   uint uVar1;
   uint uVar3;
-  uint16_t uVar4;
   uint *in_stack_0000000a;
   byte bStack_3;
   
@@ -71,7 +70,6 @@ uint __cdecl16far ovc45_usesAlignUp4(int slotMin,int x,uint16_t y,uint *entityIn
   for (uVar3 = 0; uVar3 < EntityCount; uVar3 = uVar3 + 1) {
     uVar1 = ovr_alignUp4((Entities)[uVar3].base.x,0,0);
     if (uVar1 == x) {
-      uVar4 = (uint16_t)((ulong)Entities >> 0x10);
       if (((((Entities)[uVar3].base.y == y) &&
            (AgntGs[(uint)(Entities)[uVar3].base.gindex].ai == '\0')) &&
           (slotMin < (int)(uint)AGNT_FIELD(&(Entities)[uVar3], base.entity, 3))) &&

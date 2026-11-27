@@ -17,7 +17,6 @@ bool __cdecl16far ovc22_textArena(int x,int y)
   bool bVar1;
   int cellB;
   int cellMin;
-  uint16_t uVar4;
   int cellA;
   
   if ((((x < 0) || (y < 0)) || (0x93 < x + 1)) || (0x3b < y + 1)) {
@@ -25,7 +24,6 @@ bool __cdecl16far ovc22_textArena(int x,int y)
     bVar1 = false;
   }
   else {
-    uVar4 = (uint16_t)((ulong)GMapFlags >> 0x10);
     if ((((*(short (*) [60] [148])GMapFlags)[y][x] & 3U) == 0) &&
        (((*(short (*) [60] [148])GMapFlags)[y + 1][x] & 3U) == 0)) {
       cellA = (int)(char)(*(byte (*) [59] [148])GMapCells)[y + 1][x];

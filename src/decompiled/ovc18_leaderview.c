@@ -804,7 +804,6 @@ void __cdecl16far ovc18_checkFortressPlacement(char strongholdKind)
   uint entityIndex;
   int leaderIndex;
   uint16_t unaff_DI;
-  uint16_t uVar10;
   undefined1 xLo;
   undefined1 xHi;
   char partyIndex;
@@ -817,7 +816,6 @@ void __cdecl16far ovc18_checkFortressPlacement(char strongholdKind)
   (*(uint8_t *)((uint8_t *)&(dst.seg) + 1)) = (char)((uint)_SS >> 8);
   F_SCOPY(far_from_u32((uint32_t)(0x241045b9)),dst,12);
   for (entityIndex = 0; partyIndex = (char)unaff_DI, entityIndex < EntityCount; entityIndex = entityIndex + 1) {
-    uVar10 = (uint16_t)((ulong)Entities >> 0x10);
     if (AgntGs[(uint)(Entities)[entityIndex].base.gindex].ai != '\0') {
       uVar3 = ovr_alignUp4((Entities)[entityIndex].base.x,0,0);
       xLo = (undefined1)uVar3;

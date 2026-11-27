@@ -15782,3 +15782,40 @@ that IS read later was treated as dead:
 
 Reverted both times; the tree is at the state above.  The sweep is a real 40-point mechanical gain
 and needs the span scanner to strip `/* ... */` as well as quotes before it is safe.
+
+### section 5: delete the write-only near-pointer segment locals (35,429 -> 35,386)
+section 5: delete the write-only near-pointer segment locals (35,429 -> 35,386)
+
+A mechanical class, found by `tmp/sweep_deadsegs.py`: a local whose only two occurrences are its
+declaration and one `x = (uint16_t)((ulong)P >> 0x10);` assignment, where `P` is a NEAR pointer.  The
+high word of a near pointer has no meaning and nothing reads it, so both lines go.
+
+21 locals deleted (42 occurrences) across:
+
+    ovc06_blit.c 3 (blit_usesDrawGfx, blitGfx10)   ovc14_attact.c 3 (usesAlignUp4,
+                                                     countPartyUnits, usesSCARRY22)
+    ovc10_constr.c 2 (constr_setHighlightAtOffset) ovc18_leaderview 1  ovc21_manage.c 2
+    ovc22_classes 1  ovc23_bldrec 1  ovc25_intel 2  ovc26_fillgrid 1  ovc33_stats 1
+    ovc42_demo 1  ovc45_unitinfo 1  crtl.c 2 (__fmovmem)
+
+THE SCANNER NEEDED TWO FIXES, and the failure mode was the opposite of what I first assumed:
+
+  * spans are now `[this signature line, next signature line - 1]` instead of brace counting.
+    Brace counting OVER-RAN into the next function when a char literal `'{'` or a brace inside a
+    block comment kept the depth from returning to zero, so a declaration belonging to the *next*
+    function could be deleted while still referenced (16 compile errors: `uVar7`/`uVar8` in
+    `__fmovmem`, `uVar2` in `constr_setHighlightAtOffset`).
+  * `kills` is de-duplicated with `set()`, because two overlapping spans can report the same kill
+    twice and the second deletion then removes an unrelated line.
+
+`crtl.c` and `ovc10_constr.c` were still mispaired by the tool (it paired `uVar7`'s declaration with
+`uVar8`'s assignment), so those six were verified and deleted by explicit line number with the exact
+text asserted first.  `__fmovmem` has exactly four such lines and nothing else references either
+name.
+
+  grep_checks 35,429 -> 35,386 (-43); build 65/65; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,625/0/0
+  diff_dgroup 1,627/1,805 matched, 19 runs, sum|delta| 44,867, mean 27, worst 148
+  compare_runtime 1,684 matched, 1,675 identical / 9 different (both sample points)
+
+DGROUP 0x6f6a -> 0x6f63 (seven bytes smaller) from the removed declarations; no layout delta changed.
