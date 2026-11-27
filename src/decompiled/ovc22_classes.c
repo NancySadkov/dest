@@ -326,9 +326,46 @@ uint __cdecl16far ovc22_seasonalIncome(byte bldType,uint8_t partyIndex,uint16_t 
        cap += [bp-0x3c];
      - sheet->levelLimit = [bp-0x3c] > 0 ? 0xff : [bp-0x3e] > 0 ? 0xc : [bp-0x40] > 0 ? 8 : 4;
 
-   Still to transcribe: the tail stores 0x1220..0x1443 (the +0x82/+0x64/+0x70/+0x7e/+0x8a/+0x52
-   family and the 0x1413 overlay call), and the Difficulty thresholds at 0x06xx were noted as
-   0xfa0/0xbb8/0x7d0 from 0x909d.  Body not derived yet; see doc/step6_entry.md. */
+   Tail stores (0x1220..0x1443), all into sheet:
+     - sheet->reserved_82 (+0x82) = [bp-0x38];
+     - foodStorage (+0x7e long) = totalB, except that a *positive* totalB is replaced by 0xffff:
+       the image tests the high word and stores 0xffff/0 else, which is `totalB > 0 ? 0xffff : totalB`;
+     - housing (+0x5b) = housing; population (+0x4d) = entityUnits;
+       foodProd (+0x4f) = population; income (+0x54) = income;
+     - vaultStorage (+0x8a long) = totalA;
+     - dirBudgetIn[0..2] (+0x64/+0x66/+0x68) = dirBudget[1..3];
+     - ringBudgetIn[0..2] (+0x70/+0x72/+0x74) = ringBudget[1..3];
+     - rank (+0x87) = resourceTotal;
+     - level (+0x52) = levelCap > 0xff ? 0xff : levelCap;
+     - popularity (+0x84) = the one-argument overlay call `lcall 0x208,0x20` (see below);
+     - finally ovc22_usesPlayerCount(partyIndex) (5087:143a).
+
+   Stack-alias inventory.  The image seats several locals so that one word is shared, which the body
+   must reproduce explicitly (all offsets are bp-relative, and every pair below is the *same address*):
+
+     bp-0x0c  partyMask                      == word 0 of a 4-word array; case 14 adds 5 to
+                                                ((uint16_t *)&partyMask)[bt->resource]
+     bp-0x0a,-8,-6  extra[0..2]              the other three words of that array ->
+                                                stored to tail94/tail96/tail98
+     bp-0x36/-0x34  totalA low/high          -> vaultStorage
+     bp-0x32/-0x30  totalB low/high          totalB's HIGH word == ringBudget[0]
+     bp-0x2e,-0x2c  ringBudget[1..2]         -> ringBudgetIn[0..1]
+     bp-0x2a        ringBudget[3] == dirBudget[0]   (shared word)
+     bp-0x28,-0x26,-0x24  dirBudget[1..3]    -> dirBudgetIn[0..2]
+     bp-0x42        resCount[0]              per-resource building counts
+     bp-0x40,-0x3e,-0x3c  resCount[1..3]     the level-cap ladder's three words
+
+   So the cap is: levelCap = min(resCount[1],5); if (resCount[2]+levelCap > 10) levelCap = 10 else
+   levelCap += resCount[2]; levelCap += resCount[3]; and levelLimit (+0x53) = resCount[3] ? 0xff :
+   resCount[2] ? 0xc : resCount[1] ? 8 : 4.
+
+   Difficulty (0x909d, byte) picks totalA: 1 -> 0xfa0, 2 -> 0xbb8, otherwise 0x7d0.
+
+   `lcall 0x208,0x20` occurs once in the whole image, so no cross-reference can name it; a body must
+   use a documented placeholder for that one call (argument partyIndex, result -> sheet->popularity).
+
+   Body not derived yet; see doc/step6_entry.md. */
+
 
 void __cdecl16far ovc22_textRingProt(byte partyIndex)
 

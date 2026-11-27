@@ -21079,3 +21079,42 @@ Two things, both recorded in the source comment:
     compare_state    1,628/0/0 (unchanged)
     diff_dgroup      1,639/1,805 matched, 5 runs, sum|delta| 18 (unchanged)
     compare_runtime  1,692 matched, 1,683 identical / 9 different at all three sample points
+
+
+## `55fe:0000` mis-attributed body removed; its signature corrected to `void (void)`
+
+`ovc23_textAdlibNone` held 674 lines whose call census was 70 for a 1,159-byte image routine with
+seven calls. Two things were verified from the image before touching it:
+
+* the routine **never reads `[bp+N]`** (no stack argument at all), and
+* its epilogue is `pop di / pop si / leave / retf` with DX:AX untouched.
+
+So the export's three parameters were pseudo-registers, exactly as already noted at
+`ovc23_bldrec.c:1799`. The declaration is now `void __cdecl16far ovc23_textAdlibNone(void)`, the three
+in-file `ovc23_textAdlibNone(0,0,0)` calls are `ovc23_textAdlibNone()`, and the prototype in
+`st_functions.h` follows.
+
+The body was replaced by a documented stub recording the decode: the two cleared arrays (0x91d7 word
+array, 0x90ea four bytes), the four-square `GMapFlags & 0x3000` accumulation around
+`alignUp4(GfxRndSeed)`, the `cursorRecordFound` (0x91d6) reset, the record walk over `GRecordCount`
+with stride 0x12 in segment 0x88 (word +4 vs `GfxRndSeed2`, bit 0 of +0xd, span from +7/+2, record
+index into the word array and 1 into the byte array), the two-square `getUnitIndex`/`getUnitType`
+pass reading `GUnits[].unitType/.level`, `GLeaderSheets[].faction` and `BuildingTypes[].size/.sfxType`,
+and the `CurSfxType3` selection from 0x70/0x61/0x5e/0x80/0x83/0x7a/0x76/0x7d via `randBelow(2)` and
+`GSeason`.
+
+**This module is linked**, unlike O22, so the runtime dumps are a real oracle for the change: they stay
+at 1,683 identical / 9 different at all three sample points, which shows the removed body was never
+executed at main entry, `init_game` or the key handler.
+
+What still blocks the body itself is an allocation question, not logic: the two arrays (0x91d7,
+0x90ea) have no symbol in `audit/dgroup_data.csv` and no slot in our DGROUP layout.
+
+## Measured (HEAD 6020ce99 -> this commit)
+
+    grep_checks      13,412 -> 12,680   (-732: the 674-line wrong body)
+    REBUILT.EXE      474,208 -> 466,534 (-7,674)
+    build 65/65, LINK.LOG 0 errors
+    compare_state    1,628/0/0 (unchanged)
+    diff_dgroup      1,639/1,805 matched, 5 runs, sum|delta| 18 (unchanged)
+    compare_runtime  1,692 matched, 1,683 identical / 9 different at all three sample points
