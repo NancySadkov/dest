@@ -21233,3 +21233,46 @@ half-written.
     compare_state    1,628/0/0 (unchanged)
     diff_dgroup      1,639/1,805 matched, 5 runs, sum|delta| 18 (unchanged)
     compare_runtime  1,692 matched, 1,683 identical / 9 different at all three sample points
+
+
+## Scoped string inlining (step-5 grep #1): 41 symbols, and its measured cost
+
+The strings that are truly *passed as arguments* are a small subset. Measured before touching anything:
+of 1,457 declared string arrays only **167** have any use, and **770 of the 952 use lines are inside
+`st_globals*.c` itself** - far-pointer data tables such as
+`GMenuStrings[8] = { (char far *)&s_New_Game_2410_27eb[0], ... }` which need the symbol. Filtering to
+symbols whose *every* use is outside `st_globals*` leaves **41** inlinable symbols (34 are
+data-table-referenced and stay declared).
+
+Those 41 are now inlined at 53 call sites, their declarations and externs removed, e.g.
+
+    printf((char *)"NEW MAXSQUARE %d \r");        (was s_new_maxsquare_d)
+    strcat(dst,"leather armor +1 leather armor +2 leather armor" + 0x1f)   ->  sliced literal
+
+The five pointer-arithmetic selections (`ovc33_stats.c:280/288/299/309`, `ovc16_saveui.c:930`) were
+rewritten as literals sliced at the offset, so step-5 grep #2 (`" + [0-9a-bA-Z]`) stays **0** instead
+of gaining five new violations.
+
+**A real bug worth recording:** `re.subn(pattern, replacement, text)` interprets backslashes in the
+*replacement*, so inserting `"NEW MAXSQUARE %d \r"` produced a literal carriage return and
+`Unterminated string or character constant`. Regex substitution must use a lambda replacement
+(`lambda m: lit`) whenever the inserted text can contain escapes. The earlier `\x1A` failure was a
+second, independent escaping problem (hex escapes merge with a following hex digit); the encoder now
+emits 3-digit octal, which cannot merge.
+
+## Measured (HEAD 1d580b6e -> this commit)
+
+    grep_checks      12,680 -> 12,639   (-41, only the inlined declarations)
+    char [N] = ""    1,459  -> 1,418
+    " + [0-9a-b]         0  -> 0
+    REBUILT.EXE      466,534 -> 466,450
+    build 65/65, LINK.LOG 0 errors
+    compare_state    1,628 matched / 0 different, genuinely missing 2 -> 33
+    diff_dgroup      1,639 -> 1,606 matched, distinct layout runs 5 -> 36
+    compare_runtime  1,653 matched (was 1,692), 1,644 identical (was 1,683), 9 different
+
+**This is a net loss on the data gates**: 41 fewer grep hits buys 33 fewer matched DGROUP symbols,
+31 more missing symbols, and layout-delta runs going from 5 to 36 (the largest new run is +5,447
+bytes around `s_d`). Those 41 blobs were real DGROUP data; deleting them shifts everything after them.
+`compare_state` still reports 0 *different* among the symbols that remain, so no surviving byte
+changed - only placement did.

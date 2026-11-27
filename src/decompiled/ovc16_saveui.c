@@ -342,7 +342,7 @@ uint16_t __cdecl16far uiMenuSub(char far *title,far_t items,uint16_t nitems,uint
   }
   if (8 < (int)nitems) {
     titleSeg = _DS;
-    titleOfs = (uint16_t)&s_more;
+    titleOfs = (uint16_t)"More";
   }
   ssLow = (undefined1)_SS;
   ssHigh = (undefined1)(_SS >> 8);
@@ -886,29 +886,29 @@ char * __cdecl16far saveui_configureMessageDelay(void)
     ovr_resetTextBlitCycle();
     saveui_blitPanel();
     msg = (char far *)
-          ovr_fmVsprintf((char far *)MK_FP(_DS,(uint16_t)s_message_delay_is_now_d),
+          ovr_fmVsprintf((char far *)MK_FP(_DS,(uint16_t)"Message delay is now %d."),
                          (uint16_t)MessageDelay);
     ovr_say(msg);
     items[0].ofs = 0;
     items[0].seg = 0;
     if (MessageDelay != 0) {
-      items[0].ofs = (uint16_t)s_decrease_message_delay;
+      items[0].ofs = (uint16_t)"Decrease message delay";
       items[0].seg = _DS;
     }
     items[1].ofs = 0;
     items[1].seg = 0;
     if (MessageDelay < 0x28) {
-      items[1].ofs = (uint16_t)s_increase_message_delay;
+      items[1].ofs = (uint16_t)"Increase message delay";
       items[1].seg = _DS;
     }
-    items[2].ofs = (uint16_t)s_test;
+    items[2].ofs = (uint16_t)"Test";
     items[2].seg = _DS;
-    items[3].ofs = (uint16_t)s_done_2410_2798;
+    items[3].ofs = (uint16_t)"Done";
     items[3].seg = _DS;
     list.ofs = (uint16_t)&items;
     list.seg = _SS;
     choice = (uint8_t)
-             uiMenuSub((char far *)MK_FP(_DS,(uint16_t)s_change_message_delay),
+             uiMenuSub((char far *)MK_FP(_DS,(uint16_t)"Change message delay:"),
                        list,4,GMenuItem);
     switch (choice) {
     case 1:
@@ -924,10 +924,10 @@ char * __cdecl16far saveui_configureMessageDelay(void)
     case 3:
       ovr_resetTextBlitCycle();
       msg = (char far *)
-            ovr_fmVsprintf((char far *)MK_FP(_DS,(uint16_t)s_this_message_appears_at__ec7e),
+            ovr_fmVsprintf((char far *)MK_FP(_DS,(uint16_t)"This message appears at the message delay of %d."),
                            (uint16_t)MessageDelay);
       ovr_say(msg);
-      ovr_say((char far *)MK_FP(_DS,(uint16_t)(s__Empty__2410_272b + 7)));
+      ovr_say((char far *)MK_FP(_DS,(uint16_t)("")));
       break;
     default:
       done = 1;

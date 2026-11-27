@@ -277,7 +277,7 @@ far_t * __cdecl16far stats_textRingProt(char *dst,uint16_t src,uint16_t term,far
       /* the image appends the lone NUL at ds:0x620f, which does nothing */
     }
     else if ((int8_t)value > 0) {
-      sprintf(dst,s_normal_weaponry_2410_6210 + 0x10,(uint16_t)value);
+      sprintf(dst,"+%d ring of prot.",(uint16_t)value);
     }
     return (far_t *)dst;
   }
@@ -285,52 +285,52 @@ far_t * __cdecl16far stats_textRingProt(char *dst,uint16_t src,uint16_t term,far
   if (type == 3) {
     switch ((int16_t)((int8_t)count - 6)) {
     case 0:
-      strcat(dst,s_leather_armor_2410_623b + 0xe);
+      strcat(dst,"+1 leather armor\000+2 leather armor");
       break;
     case 1:
-      strcat(dst,s_leather_armor_2410_623b);
+      strcat(dst,"leather armor\0+1 leather armor\0+2 leather armor");
       break;
     case 2:
     case 3:
     case 4:
-      strcat(dst,s_no_armor_2410_6232);
+      strcat(dst,"no armor");
       break;
     default:
-      strcat(dst,s_leather_armor_2410_623b + 0x1f);
+      strcat(dst,"+2 leather armor");
       break;
     }
     return (far_t *)dst;
   }
   switch ((int8_t)count) {
   case 0:
-    strcat(dst,s_suit_armor_2410_62c6);
+    strcat(dst,"suit armor");
     break;
   case 1:
-    strcat(dst,s_plate_and_shield_2410_62a1 + 0x11);
+    strcat(dst,"plate and shield +1");
     break;
   case 2:
-    strcat(dst,s_plate_and_shield_2410_62a1);
+    strcat(dst,"plate and shield\0plate and shield +1");
     break;
   case 3:
-    strcat(dst,s_plate_mail_2410_6296);
+    strcat(dst,"plate mail");
     break;
   case 4:
-    strcat(dst,s_banded_armor_2410_6289);
+    strcat(dst,"banded armor");
     break;
   case 5:
-    strcat(dst,s_chain_mail_2410_627e);
+    strcat(dst,"chain mail");
     break;
   case 6:
-    strcat(dst,s_scale_armor_2410_6272);
+    strcat(dst,"scale armor");
     break;
   case 7:
-    strcat(dst,s_leather_armor_2410_623b);
+    strcat(dst,"leather armor\0+1 leather armor\0+2 leather armor");
     break;
   case 8:
-    strcat(dst,s_shield_2410_626b);
+    strcat(dst,"shield");
     break;
   default:
-    strcat(dst,s_no_armor_2410_6232);
+    strcat(dst,"no armor");
     break;
   }
   return (far_t *)dst;
@@ -1059,7 +1059,7 @@ void __cdecl16far stats_setAgentBase(byte agntIndex)
 /* 6386:1837 */
 
 /* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
-/* Formats the (char *)s_s_can_now_be_cal_2410_644e notice. */
+/* Formats the (char *)"%s can now be called away from home." notice. */
 
 void __cdecl16far stats_calledAwayNotice(byte agntIndex)
 

@@ -2297,11 +2297,11 @@ char * __cdecl16far manage_textTotalPopulation(byte charIndex,short arg6,char_sh
       extraBands = 1;
     }
   }
-  items[0].ofs = (uint16_t)s_Done_2410_50fb;
+  items[0].ofs = (uint16_t)"Done";
   items[0].seg = _DS;
-  items[1].ofs = (uint16_t)s_summary;
+  items[1].ofs = (uint16_t)"Summary";
   items[1].seg = _DS;
-  items[2].ofs = (uint16_t)s_all_levels;
+  items[2].ofs = (uint16_t)"All levels";
   items[2].seg = _DS;
   itemCount = 3;
   for (n = 0; n < count; n++) {
@@ -2324,13 +2324,13 @@ char * __cdecl16far manage_textTotalPopulation(byte charIndex,short arg6,char_sh
       TextBlitY = 0xc;
       TextBlitX = 0x11;
       if (charIndex == 0xff) {
-        ovr_blitLabel((char far *)MK_FP(_DS,(uint16_t)s_total_population),
+        ovr_blitLabel((char far *)MK_FP(_DS,(uint16_t)"Total population."),
                       (byte far *)MK_FP(Font02.seg,Font02.ofs),0xde,0x50);
       }
       else {
         sheetPtr = GLeaderSheets[charIndex];
         ovr_stsprintf((char far *)MK_FP(_SS,textBuf),
-                      (char far *)MK_FP(_DS,(uint16_t)s_s_population_loyal_to_s_s),
+                      (char far *)MK_FP(_DS,(uint16_t)"%s population, loyal to %s%s"),
                       (char far *)MK_FP(GUnitDescriptions[cls].seg,GUnitDescriptions[cls].ofs),
                       (char far *)MK_FP(_DS,(uint16_t)manage_playerTitle(sheetPtr)),
                       (char far *)ovr_ovc45_compute9((char far *)MK_FP(_SS,bandBuf),
@@ -2342,14 +2342,14 @@ char * __cdecl16far manage_textTotalPopulation(byte charIndex,short arg6,char_sh
       }
       TextBlitY = TextBlitY + 0xc;
       TextBlitX = (uint16_t)(0x89 -
-                  (int)ovr_font_textWidth((char far *)MK_FP(_DS,(uint16_t)s_units),
+                  (int)ovr_font_textWidth((char far *)MK_FP(_DS,(uint16_t)"UNITS"),
                                           (char far *)MK_FP(Font02.seg,Font02.ofs)));
-      ovr_blitLabel((char far *)MK_FP(_DS,(uint16_t)s_units),
+      ovr_blitLabel((char far *)MK_FP(_DS,(uint16_t)"UNITS"),
                     (byte far *)MK_FP(Font02.seg,Font02.ofs),0xde,0xe0);
       TextBlitX = (uint16_t)(0xd4 -
-                  (int)ovr_font_textWidth((char far *)MK_FP(_DS,(uint16_t)s_population),
+                  (int)ovr_font_textWidth((char far *)MK_FP(_DS,(uint16_t)"POPULATION"),
                                           (char far *)MK_FP(Font02.seg,Font02.ofs)));
-      ovr_blitLabel((char far *)MK_FP(_DS,(uint16_t)s_population),
+      ovr_blitLabel((char far *)MK_FP(_DS,(uint16_t)"POPULATION"),
                     (byte far *)MK_FP(Font02.seg,Font02.ofs),0xde,0xe0);
       TextBlitY = TextBlitY + 0xc;
       for (n = 0; n < count; n++) {
@@ -2365,14 +2365,14 @@ char * __cdecl16far manage_textTotalPopulation(byte charIndex,short arg6,char_sh
         manage_4d05_22cf_entry(charIndex,LevelRangeMin[n],LevelRangeMax[n],
                                &units,&population);
         ovr_stsprintf((char far *)MK_FP(_SS,textBuf),
-                      (char far *)MK_FP(_DS,(uint16_t)s__d_2410_4cd1),(uint16_t)units);
+                      (char far *)MK_FP(_DS,(uint16_t)"%d"),(uint16_t)units);
         TextBlitX = (uint16_t)(0x89 -
                     (int)ovr_font_textWidth((char far *)MK_FP(_SS,textBuf),
                                             (char far *)MK_FP(Font02.seg,Font02.ofs)));
         ovr_blitLabel((char far *)MK_FP(_SS,textBuf),
                       (byte far *)MK_FP(Font02.seg,Font02.ofs),0xde,0x50);
         ovr_stsprintf((char far *)MK_FP(_SS,textBuf),
-                      (char far *)MK_FP(_DS,(uint16_t)s__d_2410_4cd1),(uint16_t)population);
+                      (char far *)MK_FP(_DS,(uint16_t)"%d"),(uint16_t)population);
         TextBlitX = (uint16_t)(0xd4 -
                     (int)ovr_font_textWidth((char far *)MK_FP(_SS,textBuf),
                                             (char far *)MK_FP(Font02.seg,Font02.ofs)));

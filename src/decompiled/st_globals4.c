@@ -192,7 +192,6 @@ uint8_t far far miceTileTail[15] = { 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0
 /* __SEGTABLE__: owned by OVERLAY.LIB (VROOMM manager). */
 /* __SEGTABEND__: owned by OVERLAY.LIB (VROOMM manager). */
 /* data_OVR01_0000: owned by OVERLAY.LIB (VROOMM manager). */
-char s__2410_0094[] = "";
 char s__d_2410_0095[] = "%d \r";
 char s_sorry_you_may_not_pass_t_059e[] = "Sorry, you may not pass time during a battle.";
 char s_time_passes[16] = "Time passes...";
@@ -252,7 +251,6 @@ char s_thief_unit_2410_021f[] = "thief unit";
 char s_dwarf_unit_2410_022a[] = "dwarf unit";
 char s_elf_unit_2410_0235[] = "elf unit";
 char s_halfling_unit_2410_023e[] = "halfling unit";
-char s_d[] = "%d \r";
 char s_wwwwwwwwwwwwwwwwwwwwwwww_b900[] = "WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW";
 char s_archduchess[] = "Archduchess";
 char s_the_seed_is_lx[] = "The seed is %lx.";
@@ -346,8 +344,6 @@ undefined GSaveFileName[] = "strong.sav\\";
 undefined GCfgFileName[] = "%sgame.cfg";
 char s_debug_2410_05c7[] = "debug";
 char s_grab_2410_05cd[] = "grab";
-char s_new_maxsquare_d[] = "NEW MAXSQUARE %d \r";
-char s_new_smaxsquare_d[] = "NEW SMAXSQUARE %d \r";
 char s_choose_2410_05f9[] = "choose";
 char s_movement_2410_0600[] = "movement";
 char s_button_2410_0609[] = "button";
@@ -379,7 +375,6 @@ char s_Stronghold_copy_pro_2410_06b1[] = "Stronghold copy protection.";
 char s_Turn_to_page_d_of_th_2410_06cd[] = "Turn to page #%d of the manual.";
 char s_Including_titles__c_2410_06ed[] = "Including titles, count to line #%d.";
 /* 0712: 22 bytes - the image carries one padding NUL */
-char s_enter_the_first_word[22] = "Enter the first word.";
 uint8_t bandOrigin[10] = { 0x4E, 0x49, 0x47, 0x45, 0x43, 0x41, 0x40, 0x3F, 0x3E, 0x3D };
 /* GUESS: 0x732, a ten-byte shade ramp with no symbol of its own;
    emitted so cornerShadeBias and everything after stay at the original
