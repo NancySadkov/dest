@@ -248,31 +248,24 @@ uint16_t __cdecl16far ovc45_textChoosePartyBuild(uint16_t x,uint16_t y,int *enti
 
 /* 77eb:0683 */
 
-int __cdecl16far ovc45_usesGMapFlags(int x,int y)
+uint8_t __cdecl16far ovc45_usesGMapFlags(int x,int y)
 
 {
+  /* 77eb:0683, re-derived.  The map word for (x,y) is the word at
+     GMapFlags + y*0x128 + x*2 + 0x128; bits 0-1 nonzero means the square is already flagged.  Only
+     AL is ever written on the three return paths, so the result is a byte, not a word (the tree's
+     CONCAT11 pairs were the decompiler's rendering of that uninitialised AH).  The building lookup
+     is BuildingTypes[GUnits[idx].bldType] with the type stride 0x27, and the tested word is flags2
+     at +0x13 (image 0x60:0x121 = base 0x10e + 0x13). */
   short *rowPtr;
   short unitIdx;
-  int bldOfs;
-  int result;
-  byte ofsHi;
-  
+
   rowPtr = (*(short (*) [60] [148])GMapFlags)[y] + x;
-  if ((rowPtr[0x94] & 3U) == 0) {
-    unitIdx = ovc45_getUnitIndex(x,y);
-    bldOfs = (uint)(GUnits + unitIdx)->bldType * 0x27;
-    ofsHi = (byte)((uint)bldOfs >> 8);
-    if ((*(uint *)(bldOfs + 0x121) & 0x18) == 0) {
-      result = (uint)ofsHi << 8;
-    }
-    else {
-      result = CONCAT11(ofsHi,1);
-    }
+  if ((rowPtr[0x94] & 3U) != 0) {
+    return 1;
   }
-  else {
-    result = CONCAT11((char)((uint)rowPtr >> 8),1);
-  }
-  return result;
+  unitIdx = ovc45_getUnitIndex(x,y);
+  return (uint8_t)((BuildingTypes[(GUnits + unitIdx)->bldType].flags2 & 0x18) != 0);
 }
 
 

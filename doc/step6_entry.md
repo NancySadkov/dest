@@ -20123,6 +20123,39 @@ plus the five-entry switch jump table at cs:0x16a8):
 The stub records all of that in place so the body can be written incrementally. Side effect: o45 can
 be listed again (the module no longer trips Borland's "Compiler table limit exceeded").
 
+## `ovc45_usesGMapFlags` re-derived (77eb:0683)
+
+The tree returned an `int` built from `CONCAT11((byte)(bldOfs >> 8),1)` and read the building record
+through `*(uint *)(bldOfs + 0x121)` - a near pointer into nowhere, because the record lives in the far
+`BuildingTypes` array. The image writes only AL on all three return paths, so the result is a byte:
+
+    uint8_t __cdecl16far ovc45_usesGMapFlags(int x,int y)
+    {
+      short *rowPtr = (*(short (*) [60] [148])GMapFlags)[y] + x;
+      if ((rowPtr[0x94] & 3U) != 0) return 1;
+      unitIdx = ovc45_getUnitIndex(x,y);
+      return (uint8_t)((BuildingTypes[(GUnits + unitIdx)->bldType].flags2 & 0x18) != 0);
+    }
+
+Image: `GUnits[idx]` is a byte stride 9 at +0, `BuildingTypes[t]` stride 0x27, and the tested word is
+image `0x60:0x121` = record base `0x10e` + 0x13 = `flags2`. Verified against the emitted listing
+(`build_standalone.py --only o45 --asm`, which works again now that the 77eb:0d61 body is gone):
+
+    mov dx,9 / imul dx / les bx,DGROUP:_GUnits / add bx,ax / mov al,es:[bx]
+    mov dx,39 / imul dx / mov dx,seg _BuildingTypes / mov es,dx
+    test word es:_BuildingTypes[bx+19],24
+
+base + 19 = 0x13. Prototype in st_functions.h narrowed to `uint8_t`.
+
+## Measured (HEAD 298feaa6 -> this commit)
+
+    grep_checks      24,431 (unchanged - the removed locals were not `?Var` names)
+    REBUILT.EXE      493,734 (unchanged - O45 is link-excluded)
+    build 65/65, LINK.LOG 0 problems
+    compare_state    1,628/0/0 (unchanged)
+    diff_dgroup      1,639/1,805 matched, 5 runs, sum|delta| 18 (unchanged)
+    compare_runtime  1,692 matched, 1,683 identical / 9 different at all three sample points
+
 ## Measured (HEAD f297af13 -> this commit)
 
     grep_checks      26,346 -> 24,431   (-1,915: the mis-attributed body's locals)

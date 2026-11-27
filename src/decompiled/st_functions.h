@@ -968,7 +968,7 @@ short __cdecl16far ovc45_getUnitIndex(int x,int y);
 uint __cdecl16far ovc45_usesAlignUp4(int slotMin,int x,uint16_t y,uint *entityIndexOut);
 char * __cdecl16far ovc45_findEntityAt(uint16_t x,uint16_t y,uint *foundIndex,uint8_t *foundFlagOut,char foundFlag);
 uint16_t __cdecl16far ovc45_textChoosePartyBuild(uint16_t x,uint16_t y,int *entityIndexPtr,uint16_t arg4);
-int __cdecl16far ovc45_usesGMapFlags(int x,int y);
+uint8_t __cdecl16far ovc45_usesGMapFlags(int x,int y);
 bool __cdecl16far ovc45_usesGMapFlags2(int x,int y);
 int __cdecl16far ovc45_cellBelowBlocked(int x,int y);
 uint __cdecl16far ovc45_compute1(byte bldType,int x,int y);
