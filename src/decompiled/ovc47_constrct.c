@@ -406,11 +406,11 @@ void __cdecl16far constrct_usesLDIV_at_(byte partyIndex,int entityIndex)
   int *piVar2;
   byte entityIdx;
   byte classStrVal;
-  uint uVar5;
+  uint classCost;
   long *plVar6;
   char *msg;
   uint16_t uVar7;
-  uint uVar8;
+  uint costRemainder;
   int iVar9;
   int iVar10;
   int iVar11;
@@ -431,7 +431,7 @@ void __cdecl16far constrct_usesLDIV_at_(byte partyIndex,int entityIndex)
   if ((partyIndex != 0xff) && (entityIdx != 0xff)) {
     classStrVal = (GLeaderSheets[partyIndex])->classStr;
     iVar9 = AGNT_WORD(&AgntGs[(uint)classStrVal], shortName, 5);
-    uVar5 = AGNT_WORD(&AgntGs[(uint)classStrVal], shortName, 5) * 0xf;
+    classCost = AGNT_WORD(&AgntGs[(uint)classStrVal], shortName, 5) * 0xf;
     iVar13 = 0;
     for (uVar12 = 0; uVar12 < EntityCount; uVar12 = uVar12 + 1) {
       uVar14 = (uint16_t)((ulong)Entities >> 0x10);
@@ -449,18 +449,18 @@ void __cdecl16far constrct_usesLDIV_at_(byte partyIndex,int entityIndex)
     count = (uint16_t)(lVar16 + 1);
     msg = ovr_stsprintf(&stk_ff60,(char *)CONCAT22(0x81dc,_SS),
                         (char *)CONCAT22(plVar6,(char *)0x2410),uVar14,count,uVar7,
-                        uVar5);
+                        classCost);
     ovr_say(msg,0);
-    lVar17 = LDIV_at_((ulong)uVar5,10);
+    lVar17 = LDIV_at_((ulong)classCost,10);
     uVar14 = (uint16_t)((ulong)*(uint32_t *)((uint)entityIdx << 2) >> 0x10);
     iVar9 = (int)*(uint32_t *)((uint)entityIdx << 2);
-    uVar8 = uVar5 - (uint)lVar17;
+    costRemainder = classCost - (uint)lVar17;
     puVar1 = (uint *)(iVar9 + 0x56);
     uVar12 = *puVar1;
-    *puVar1 = *puVar1 + uVar8;
+    *puVar1 = *puVar1 + costRemainder;
     piVar2 = (int *)(iVar9 + 0x58);
-    *piVar2 = *piVar2 + (-(uint)(uVar5 < (uint)lVar17) - (int)((ulong)lVar17 >> 0x10)) +
-              (uint)CARRY2(uVar12,uVar8);
+    *piVar2 = *piVar2 + (-(uint)(classCost < (uint)lVar17) - (int)((ulong)lVar17 >> 0x10)) +
+              (uint)CARRY2(uVar12,costRemainder);
     lVar17 = lVar17 + CONCAT22(GPopulationHi,GPopulationLo);
     GPopulationLo = (uint16_t)lVar17;
     GPopulationHi = (uint16_t)((ulong)lVar17 >> 0x10);

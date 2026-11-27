@@ -100,7 +100,7 @@ void __cdecl16far ovc24_textKill(uint entityIndex)
   uint uVar7;
   long *plVar8;
   uint16_t randPick;
-  uint16_t uVar10;
+  uint16_t randPickB;
   uint16_t randPick2;
   int gOfs;
   char *msg;
@@ -111,17 +111,17 @@ void __cdecl16far ovc24_textKill(uint entityIndex)
   uint uVar16;
   uint16_t unaff_DI;
   uint16_t entitiesSeg;
-  undefined1 uVar18;
-  undefined1 uVar19;
+  undefined1 timerB0;
+  undefined1 timerB0c;
   byte gindex;
-  undefined1 uVar21;
-  undefined1 uVar22;
-  undefined1 uVar23;
-  undefined1 uVar24;
+  undefined1 timerB1;
+  undefined1 timerB1c;
+  undefined1 timerB2;
+  undefined1 timerB2c;
   uint8_t *puVar25;
   byte *pbVar26;
-  undefined1 uVar27;
-  undefined1 uVar28;
+  undefined1 timerB3;
+  undefined1 timerB3c;
   uint32_t in_stack_0000ffd0;
   long lVar29;
   uint32_t factionTimer[2];   /* [BP-0x2a]: two 32-bit per-faction timers */
@@ -206,31 +206,31 @@ void __cdecl16far ovc24_textKill(uint entityIndex)
     timerHi = (*(uint16_t *)((uint8_t *)&(factionTimer[1]) + 2));
     plStack_18 = (long *)factionTimer[1];
   }
-  uVar23 = (undefined1)timerHi;
-  uVar27 = (undefined1)((uint)timerHi >> 8);
-  uVar18 = SUB21(plStack_18,0);
-  uVar21 = (undefined1)((uint)plStack_18 >> 8);
+  timerB2 = (undefined1)timerHi;
+  timerB3 = (undefined1)((uint)timerHi >> 8);
+  timerB0 = SUB21(plStack_18,0);
+  timerB1 = (undefined1)((uint)plStack_18 >> 8);
   entitiesSeg = 0;
-  uVar19 = uVar18;
-  uVar22 = uVar21;
-  uVar24 = uVar23;
-  uVar28 = uVar27;
+  timerB0c = timerB0;
+  timerB1c = timerB1;
+  timerB2c = timerB2;
+  timerB3c = timerB3;
   plVar8 = LXMUL_at_(plStack_18,CONCAT22(unaff_DI,timerHi),lVar29);
   factionTimer[0] = LDIV_at_(CONCAT13((char)((uint)entitiesSeg >> 8),CONCAT12((char)entitiesSeg,plVar8)),
-                       CONCAT13(uVar28,CONCAT12(uVar24,CONCAT11(uVar22,uVar19))));
+                       CONCAT13(timerB3c,CONCAT12(timerB2c,CONCAT11(timerB1c,timerB0c))));
   factionTimer[0] = factionTimer[0] + 0x14;
   entitiesSeg = 0;
   plVar8 = LXMUL_at_(plStack_18,CONCAT22(unaff_DI,timerHi),lVar29);
   factionTimer[1] = LDIV_at_(CONCAT13((char)((uint)entitiesSeg >> 8),CONCAT12((char)entitiesSeg,plVar8)),
-                       CONCAT13(uVar27,CONCAT12(uVar23,CONCAT11(uVar21,uVar18))));
+                       CONCAT13(timerB3,CONCAT12(timerB2,CONCAT11(timerB1,timerB0))));
   factionTimer[1] = factionTimer[1] + 0x14;
   randPick = ovr_randBelow((uint16_t)(long *)factionTimer[0],0);
-  uVar10 = ovr_randBelow((uint16_t)(long *)factionTimer[1],0);
+  randPickB = ovr_randBelow((uint16_t)(long *)factionTimer[1],0);
   randPick2 = ovr_randBelow((uint16_t)(long *)factionTimer[0],0);
   uStack_8 = randPick2 & 0xff;
   randPick2 = ovr_randBelow((uint16_t)(long *)factionTimer[1],0);
   uVar16 = randPick2 & 0xff;
-  if ((uVar10 & 0xff) < (randPick & 0xff)) {
+  if ((randPickB & 0xff) < (randPick & 0xff)) {
     uStack_8 = uStack_8 / (uVar16 + 1);
     bStack_10 = 1;
   }

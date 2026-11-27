@@ -17137,3 +17137,35 @@ names left.
   compare_state 1,628/0/0
   diff_dgroup 1,639/1,805 matched, 5 runs, sum|delta| 18, mean 0, worst 12
   compare_runtime 1,692 matched, 1,683 identical / 9 different at ALL THREE sample points
+
+### section 5: batch 15 - the faction timer bytes and a cost remainder (34,689 -> 34,648)
+section 5: batch 15 - the faction timer's bytes and a cost remainder (34,689 -> 34,648)
+
+ovc24_textKill
+    Two 32-bit faction timers (`{plStack_18, timerHi}`) are compared and then each divided by the same
+    value, which is assembled byte by byte:
+
+        LDIV_at_(..., CONCAT13(uVar27, CONCAT12(uVar23, CONCAT11(uVar21,uVar18))))
+
+    so the four locals are the timer's bytes, low to high, and the second set is a copy taken so the first
+    division's arguments survive:
+
+        uVar18  SUB21(plStack_18,0)            -> timerB0   (4)
+        uVar21  (undefined1)(plStack_18 >> 8)  -> timerB1   (4)
+        uVar23  (undefined1)timerHi            -> timerB2   (4)
+        uVar27  (undefined1)(timerHi >> 8)     -> timerB3   (4)
+        uVar19 = uVar18 ... uVar28 = uVar27    -> timerB0c .. timerB3c (3 each)
+
+    and `uVar10`, a second `ovr_randBelow` result compared against `randPick` -> randPickB (3).
+
+constrct_usesLDIV_at_
+    uVar5  AGNT_WORD(&AgntGs[classStrVal], shortName, 5) * 0xf  -> classCost     (6)
+    uVar8  uVar5 - (uint)lVar17                                 -> costRemainder (4)
+
+    `lVar17` is set to `LDIV_at_((ulong)classCost, 10)` immediately before, so the subtraction is the
+    cost's last-digit remainder; it is added into a running total with a carry into the high word.
+
+  grep_checks 34,689 -> 34,648 (-41); build 65/65; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,628/0/0
+  diff_dgroup 1,639/1,805 matched, 5 runs, sum|delta| 18, mean 0, worst 12
+  compare_runtime 1,692 matched, 1,683 identical / 9 different at all three sample points
