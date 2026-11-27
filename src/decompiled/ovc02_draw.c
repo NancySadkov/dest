@@ -152,6 +152,7 @@ void __cdecl16far draw_textTalkwin9Lbm(void)
 
 {
   far_t dst;
+  uint16_t resultSeg;
 
   if (GameRunning != false) {
     return;
@@ -211,7 +212,8 @@ void __cdecl16far draw_textTalkwin9Lbm(void)
   if (CrossBlitFlag == 0) {
     CrossBlitPtr.ofs =
          (uint16_t)ovr_stshRleCut(0,0xa000,CrossBlitX,CrossBlitY,CrossBlitX + 0xd,CrossBlitY + 9);
-    CrossBlitPtr.seg = in_DX;
+    asm { mov resultSeg,dx };
+    CrossBlitPtr.seg = resultSeg;
     dst.seg = 0xa000;
     dst.ofs = CrossBlitY * 0x140 + CrossBlitX;
     ovr_blitLoadRleGfx(CrossBlitGfx,dst);

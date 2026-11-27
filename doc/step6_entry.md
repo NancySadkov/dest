@@ -20592,6 +20592,29 @@ add sp,0xa`. The per-record call does `push grab`, then `imul 0x95` + `mov es,se
 image uses. (Our AgntGs base is 0x25ca rather than 0x26d6; the _FARDATA layout itself is the known
 gap.)
 
+## `draw_textTalkwin9Lbm`: capture DX with an asm local instead of the missing `in_DX` extern
+
+The rewrite of `2e25:025a` used `CrossBlitPtr.seg = in_DX;` - the tree's placeholder for "the DX
+register after the call". `st_artifacts.h` only declares `extern uint16_t in_DX;`; every other user
+declares a *local* of that name, so a reference without a local (as here in O02) leaves `_IN_DX`
+undefined at link. The function now reads the register the way the rest of the tree reads other
+registers:
+
+    CrossBlitPtr.ofs = (uint16_t)ovr_stshRleCut(...);
+    asm { mov resultSeg,dx };
+    CrossBlitPtr.seg = resultSeg;
+
+with `uint16_t resultSeg;` declared in the function.
+
+## Measured (HEAD 6de64396 -> this commit)
+
+    grep_checks      21,185 -> 21,184
+    REBUILT.EXE      479,872 (unchanged)
+    build 65/65, LINK.LOG 0 errors (the O02 `_IN_DX` undefined symbol is gone)
+    compare_state    1,628/0/0 (unchanged)
+    diff_dgroup      1,639/1,805 matched, 5 runs, sum|delta| 18 (unchanged)
+    compare_runtime  1,692 matched, 1,683 identical / 9 different at all three sample points
+
 ## Measured (HEAD 6eae040f -> this commit)
 
     grep_checks      21,209 -> 21,185   (-24: the CONCAT11/SUB21/in_DX/unaff_DI rescue code is gone)
