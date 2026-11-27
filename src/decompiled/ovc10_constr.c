@@ -441,7 +441,7 @@ void __cdecl16far constr_usesAgnt_clear(void)
   far_t gfx_09;
   far_t gfx_10;
   far_t dst;
-  byte bVar3;
+  byte tileType;
   uint uVar4;
   int scrY;
   int iVar6;
@@ -456,11 +456,11 @@ void __cdecl16far constr_usesAgnt_clear(void)
   uint unaff_DI;
   uint16_t sq;
   undefined1 uVar12;
-  undefined1 uVar13;
-  undefined1 uVar14;
-  undefined1 uVar15;
+  undefined1 fontOfsHi;
+  undefined1 fontSegLo;
+  undefined1 fontSegHi;
   uint8_t term;
-  undefined1 uVar16;
+  undefined1 blitColour;
   char buf [81];
   byte bStack_3b;
   int drawX;
@@ -637,8 +637,8 @@ void __cdecl16far constr_usesAgnt_clear(void)
           for (sq = ((uint16_t *)rowMapSquareFirst)[row];
               (int)sq < (int)((uint16_t *)rowMapSquareEnd)[row]; sq = sq + 1) {
             sqCol = *(uint16_t *)(&mapSquareColumn[sq]);
-            bVar3 = constr_setHighlightAtOffset(sqCol,row,uVar12);
-            bldIndex = CONCAT11(extraout_AH,bVar3);
+            tileType = constr_setHighlightAtOffset(sqCol,row,uVar12);
+            bldIndex = CONCAT11(extraout_AH,tileType);
             GGameState = 0x37;
             if (DebugVerbose != false) {
               printf("%d \r");
@@ -925,17 +925,17 @@ void __cdecl16far constr_usesAgnt_clear(void)
     TextBlitX = 0xb6;
     TextBlitY = 10;
     if (GameRunning == false) {
-      uVar16 = 0xe0;
+      blitColour = 0xe0;
       term = 0x3f;
-      uVar14 = (undefined1)Font02.seg;
-      uVar15 = (undefined1)(Font02.seg >> 8);
+      fontSegLo = (undefined1)Font02.seg;
+      fontSegHi = (undefined1)(Font02.seg >> 8);
       uVar12 = (undefined1)Font02.ofs;
-      uVar13 = (undefined1)(Font02.ofs >> 8);
+      fontOfsHi = (undefined1)(Font02.ofs >> 8);
       uVar4 = ovr_alignUp4(GfxRndSeed,(char)GfxRndSeed2,0);
       text = ovr_stsprintf(buf,(char *)CONCAT22(0x76b,_SS),
                            (char *)CONCAT13((char)(uVar4 >> 8),CONCAT12((char)uVar4,0x2410)),0x10);
-      ovr_blitText(text,(byte *)CONCAT13(uVar13,CONCAT12(uVar12,uVar9)),CONCAT11(uVar15,uVar14),term
-                   ,(char)uVar9,uVar12,uVar14,term,uVar16);
+      ovr_blitText(text,(byte *)CONCAT13(fontOfsHi,CONCAT12(uVar12,uVar9)),CONCAT11(fontSegHi,fontSegLo),term
+                   ,(char)uVar9,uVar12,fontSegLo,term,blitColour);
     }
     TextBlitDstSeg = savedDstSeg;
     ovr_agnt_usesFmFreeAudio();

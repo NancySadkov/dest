@@ -190,13 +190,13 @@ void bldng_selectBuildingType(byte partyIndex)
 
 {
   undefined1 stk_fe0a;   /* stack slot fe0a */
-  uint16_t uVar1;
+  uint16_t tableOfs;
   far_t entries;
   far_t entries_00;
   far_t hint;
   uint uVar2;
   uint16_t uVar3;
-  int iVar4;
+  int recOfs;
   char *pcVar5;
   uint8_t *puVar6;
   uint16_t uVar7;
@@ -226,9 +226,9 @@ void bldng_selectBuildingType(byte partyIndex)
         uVar3 = bldng_compute2((uint8_t)iStack_6,in_stack_00000004);
         if ((char)uVar3 != '\0') {
           *(int *)(&buildTypes + count * 2) = iStack_6;
-          uVar1 = ((far_t far *)(GStrangeTable + 0x31) + iStack_6)->ofs;
+          tableOfs = ((far_t far *)(GStrangeTable + 0x31) + iStack_6)->ofs;
           auStack_190[count * 2] = *(uint16_t *)((int)&GStrangeTable[0x31].seg + iStack_6 * 4);
-          *(uint16_t *)(&menuEntries + count * 4) = uVar1;
+          *(uint16_t *)(&menuEntries + count * 4) = tableOfs;
           count = count + 1;
         }
       }
@@ -241,12 +241,12 @@ void bldng_selectBuildingType(byte partyIndex)
             ((uint32_t)CONCAT22(_SS,&buildTypes),entries_00,count,in_stack_00000004);
   uVar2 = bldng_usesGStrangeTable
                     ((GLeaderSheets[in_stack_00000004])->buildType[0]);
-  iVar4 = (uVar2 & 0xff) * 0x27;
-  uVar3 = *(uint16_t *)(iVar4 + 0x10e);
+  recOfs = (uVar2 & 0xff) * 0x27;
+  uVar3 = *(uint16_t *)(recOfs + 0x10e);
   uVar8 = (undefined1)uVar3;
   pcVar5 = ovr_stsprintf(acStack_ce,(char *)CONCAT22(0x690b,_SS),
                          (char *)CONCAT13((char)((uint)uVar3 >> 8),CONCAT12(uVar8,0x2410)),uVar8,
-                         (char)*(uint16_t *)(iVar4 + 0x110));
+                         (char)*(uint16_t *)(recOfs + 0x110));
   asm { mov uVar7,dx };
   puVar6 = &menuEntries;
   entries.seg = (uint16_t)_SS;

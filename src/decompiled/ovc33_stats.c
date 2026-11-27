@@ -1068,21 +1068,21 @@ L_OVC28_6018_0c76_0EAD:
 char __cdecl16far stats_compute4(agnt_t far *agnt,uint16_t arg2)
 
 {
-  byte bVar1;
-  byte bVar2;
+  byte gindexVal;
+  byte compute10Val;
   char cVar3;
-  uint16_t uVar4;
+  uint16_t abilityMod;
   uint16_t in_stack_00000006;
   
-  bVar1 = agnt->gindex;
-  if (AgntGs[(uint)bVar1].shortName[3] == -1) {
-    cVar3 = AgntGs[(uint)bVar1].shortName[4];
+  gindexVal = agnt->gindex;
+  if (AgntGs[(uint)gindexVal].shortName[3] == -1) {
+    cVar3 = AgntGs[(uint)gindexVal].shortName[4];
   }
   else {
-    bVar2 = ovr_agnt_compute10(agnt,in_stack_00000006);
-    cVar3 = AgntGs[(uint)bVar1].shortName[4] - bVar2;
-    uVar4 = ovr_agnt_abilityModifier(*(byte *)((int)&agnt->entity + 3),3);
-    cVar3 = cVar3 - (char)uVar4;
+    compute10Val = ovr_agnt_compute10(agnt,in_stack_00000006);
+    cVar3 = AgntGs[(uint)gindexVal].shortName[4] - compute10Val;
+    abilityMod = ovr_agnt_abilityModifier(*(byte *)((int)&agnt->entity + 3),3);
+    cVar3 = cVar3 - (char)abilityMod;
   }
   return cVar3;
 }

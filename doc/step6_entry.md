@@ -16707,3 +16707,34 @@ slots in all of them.
   compare_state 1,628/0/0
   diff_dgroup 1,639/1,805 matched, 5 runs, sum|delta| 18, mean 0, worst 12
   compare_runtime 1,692 matched, 1,683 identical / 9 different (both sample points)
+
+### section 5: batch 12 - three functions (34,769 -> 34,735)
+section 5: batch 12 - three functions (34,769 -> 34,735)
+
+bldng_selectBuildingType (75 lines)
+    iVar4  (uVar2 & 0xff) * 0x27            -> recOfs   (4)    a 39-byte record stride
+    uVar1  (GStrangeTable + 0x31)[i].ofs    -> tableOfs (3)
+
+stats_compute4 (21 lines)
+    bVar1  agnt->gindex                          -> gindexVal    (5)
+    uVar4  ovr_agnt_abilityModifier(entity+3, 3) -> abilityMod   (3)
+    bVar2  ovr_agnt_compute10(agnt, ...)         -> compute10Val (3)
+
+constr_usesAgnt_clear (530 lines)
+    uVar14  (undefined1)Font02.seg         -> fontSegLo (4)
+    uVar15  (undefined1)(Font02.seg >> 8)  -> fontSegHi (3)
+    uVar13  (undefined1)(Font02.ofs >> 8)  -> fontOfsHi (3)
+        these three rebuild the font's far pointer at the ovr_blitText call:
+        CONCAT13(fontOfsHi, CONCAT12(uVar12,uVar9)), CONCAT11(fontSegHi,fontSegLo)
+    uVar16  0xe0, the last argument of ovr_blitText -> blitColour (3)   (GUESS: colour)
+    bVar3   constr_setHighlightAtOffset(sqCol,row,uVar12) -> tileType (3)
+        it becomes the low byte of `bldIndex = CONCAT11(extraout_AH, bVar3)`
+
+Left unnamed: `uVar7` in bldng_selectBuildingType (never assigned), `uVar8`/`uVar3` (a byte split and its
+source), `NextChar`'s two names (one is an ABI register, the other reads through `unaff_SI`), and
+`__vprinter_1000_0e74` (the same mangled decimal arithmetic as its sibling).
+
+  grep_checks 34,769 -> 34,735 (-34); build 65/65; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,628/0/0
+  diff_dgroup 1,639/1,805 matched, 5 runs, sum|delta| 18, mean 0, worst 12
+  compare_runtime 1,692 matched, 1,683 identical / 9 different (both sample points)
