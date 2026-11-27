@@ -571,86 +571,47 @@ L_rle_line_0343:
 
 /* 2d63:03b6 */
 
-/* //apparently PCX compression
-   void process_data(uint8_t *src, uint16_t src_seg, uint16_t *dest, uint16_t dest_seg, uint16_t
-   dest_offset) {
-       uint8_t *SI = src;
-       uint8_t *DI = dest + dest_offset;
-       DI--;  // Adjust initial DI
-       bool done = false;
-       
-       while (!done) {
-           uint8_t AL = *SI++;  // Load byte from source
-           if (AL == 0x80) {
-               continue;  // Restart loop if AL is 0x80
-           }
-           
-           if (AL >= 0x80) {
-               uint8_t count = 256 - AL + 2;
-               AL = *SI++;
-               for (int i = 0; i < count; i++) {
-                   *DI-- = AL;  // Store byte to destination with repeat
-               }
-           } else {
-               uint8_t count = AL + 1;
-               for (int i = 0; i < count; i++) {
-                   *DI-- = *SI++;  // Store byte to destination
-               }
-           }
-           
-           if (DI <= dest) {
-               done = true;  // Exit loop if DI is at or before start of destination
-           }
-       }
-   } */
-
-int __cdecl16far unrle_mirror(byte far *src, byte far *dst, int len)
+/* Backwards PCX-style RLE decoder: same control bytes as unrle (literal run of ctrl+1, 0x80 is a
+   no-op, otherwise repeat the next byte ~ctrl+2 times), but the destination is filled downwards from
+   dst.ofs+len-1 to dst.ofs.  The image keeps the destination in DI as a 16-bit offset (it wraps at 0)
+   and compares it with the destination offset, so the same is done here. */
+uint16_t __cdecl16far unrle_mirror(far_t src,far_t dst,uint16_t len)
 
 {
-  undefined1 *srcByte;
-  byte ctrl;
-  undefined1 runVal;
-  undefined1 *dstByte;
-  byte *pbVar5;
-  uint16_t cnt;
-  uint litCount;
-  uint16_t ppsrc;
-  uint16_t psrc;
-  uint16_t pdst;
-  
-  pdst = (int)dst + len + -1;
-  pbVar5 = src;
-  do {
-    do {
-      ppsrc = (uint16_t)pbVar5;
-      psrc = ppsrc + 1;
-      ctrl = *(byte *)ppsrc;
-      pbVar5 = (undefined1 *)psrc;
-    } while (ctrl == 0x80);
-    if (ctrl < 0x80) {
-      cnt = (uint16_t)(byte)(ctrl + 1);
-      do {
-        srcByte = (undefined1 *)psrc;
-        psrc = psrc + 1;
-        dstByte = (undefined1 *)pdst;
-        pdst = pdst + -1;
-        *dstByte = *srcByte;
-        cnt = cnt - 1;
-      } while (cnt != 0);
+  uint8_t far *s;
+  uint8_t far *d;
+  uint16_t dofs;
+  uint8_t ctrl;
+  uint16_t count;
+  uint16_t i;
+  uint8_t val;
+
+  s = (uint8_t far *)MK_FP(src.seg,src.ofs);
+  d = (uint8_t far *)MK_FP(dst.seg,0);
+  dofs = dst.ofs + len - 1;
+  for (;;) {
+    ctrl = *s++;
+    if (ctrl == 0x80) {
+      continue;
     }
-    else {
-      srcByte = (undefined1 *)psrc;
-      psrc = ppsrc + 2;
-      runVal = *srcByte;
-      for (litCount = (uint)(byte)((ctrl ^ 0xff) + 2); litCount != 0; litCount = litCount - 1) {
-        srcByte = (undefined1 *)pdst;
-        pdst = pdst + -1;
-        *srcByte = runVal;
+    if (ctrl < 0x80) {
+      count = (uint16_t)ctrl + 1;
+      for (i = 0; i < count; i++) {
+        d[dofs--] = *s++;
       }
     }
-    pbVar5 = (byte *)psrc;
-  } while ((*(uint16_t *)((uint8_t *)&(dst) + 2)) <= pdst);
-  return psrc - (int)src;
+    else {
+      count = (uint16_t)(uint8_t)(~ctrl) + 2;
+      val = *s++;
+      for (i = 0; i < count; i++) {
+        d[dofs--] = val;
+      }
+    }
+    if (dofs < dst.ofs) {
+      break;
+    }
+  }
+  return (uint16_t)(s - (uint8_t far *)MK_FP(src.seg,src.ofs));
 }
 
 

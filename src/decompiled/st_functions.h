@@ -261,7 +261,7 @@ void __cdecl16far grabRemap(far_t pixels,uint8_t scolor,uint8_t dcolor,uint16_t 
 void __cdecl16far masked_memcpy(char *dst,char *src,int skip,int src_sz,int dst_sz,uint mask,uint16_t arg7);
 int16_t __cdecl16far countRunLength(char far *src, uint16_t avail, uint16_t maxRun);
 int __cdecl16far rle_line(uint8_t far *src, uint8_t far *dst, uint16_t npixels);
-int __cdecl16far unrle_mirror(byte far *src, byte far *dst, int len);
+uint16_t __cdecl16far unrle_mirror(far_t src,far_t dst,uint16_t len);
 int16_t __cdecl16far drawLine2(char far *src, char far *dst, uint16_t count);
 void __cdecl16far driver_scan1(far_t buf,uint16_t count,uint8_t fill,uint8_t threshold,far_t pattern,uint16_t index);
 void __cdecl16far driver_drawLine(uint8_t *ofs1,int row1,uint8_t *ofs2,int row2,uint8_t colour,uint16_t arg6,uint16_t arg7,uint16_t arg8,uint16_t arg9);

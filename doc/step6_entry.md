@@ -20442,6 +20442,27 @@ Now `uint16_t unrle(far_t src,far_t dst,uint16_t len)` with one literal copy loo
 The rebuilt listing reproduces the image: `les bx,[bp-4]; mov al,es:[bx]; inc word [bp-4]` (the
 `lodsb`), `cmp al,0x80 / je` (the no-op byte), `jae` to the fill path.
 
+## `unrle_mirror` re-derived (2d63:03b6)
+
+The backwards twin of `unrle` (70 bytes, image): same control bytes, but the destination is filled
+downwards from `dst.ofs + len - 1`. The tree's body was close but broken in three ways: it used near
+pointers (dropping the far segment), it compared the loop against `dst`'s *segment* word
+(`*(uint16_t *)(&dst + 2)`) instead of its offset, and it carried a stale commented-out pseudo-code
+block. The image `les dx,[bp+0xa]` loads the destination offset into DX and the segment into ES, and
+the loop is `cmp di,dx / jae next` - i.e. continue while the destination offset is still >= `dst.ofs`.
+
+Now a 16-bit offset `dofs` is tracked (the image's DI wraps at 0) and indexed through a
+segment-zero far pointer; the return is `si - src.ofs`.
+
+## Measured (HEAD 5c4d0941 -> this commit)
+
+    grep_checks      21,263 -> 21,253   (-10: the stale comment block's names)
+    REBUILT.EXE      479,328 -> 479,344 (+16)
+    build 65/65, LINK.LOG 0 problems
+    compare_state    1,628/0/0 (unchanged)
+    diff_dgroup      1,639/1,805 matched, 5 runs, sum|delta| 18 (unchanged)
+    compare_runtime  1,692 matched, 1,683 identical / 9 different at all three sample points
+
 ## Measured (HEAD d93eefb4 -> this commit)
 
     grep_checks      21,263 (unchanged)
