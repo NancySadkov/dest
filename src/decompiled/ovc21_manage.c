@@ -1954,44 +1954,45 @@ uint16_t __cdecl16far sub_OVC21_manage_c_24B1()
 uint16_t __cdecl16far manage_usesGUnits(void)
 
 {
-  byte bVar1;
-  uint32_t uVar2;
-  unit_t *puVar3;
+  byte bldType;            /* the unit's building type, fetched repeatedly */
+  uint32_t sheetRef;       /* the leader sheet a unit type points at */
+  unit_t *units;           /* a copy of GUnits */
   int unaff_BP;
   uint unaff_SI;
-  uint uVar4;
-  uint16_t uVar5;
+  uint rec;                /* GRecords index */
+  uint16_t unitsSeg;       /* segment half of GUnits */
+  uint16_t retVal;         /* the value the tail call returns */
   
-  uVar5 = (uint16_t)((ulong)GUnits >> 0x10);
+  unitsSeg = (uint16_t)((ulong)GUnits >> 0x10);
   if (((GUnits)[unaff_SI].unitType == *(byte *)(unaff_BP + 6)) &&
-     (bVar1 = (GUnits + unaff_SI)->bldType,
-     BuildingTypes[bVar1].unitType == *(char *)(unaff_BP + 8))) {
+     (bldType = (GUnits + unaff_SI)->bldType,
+     BuildingTypes[bldType].unitType == *(char *)(unaff_BP + 8))) {
     *(int *)(unaff_BP + -2) = *(int *)(unaff_BP + -2) + 1;
-    if (BuildingTypes[bVar1].resource == '\x01') {
+    if (BuildingTypes[bldType].resource == '\x01') {
       *(int *)*(uint32_t *)(unaff_BP + 10) = *(int *)*(uint32_t *)(unaff_BP + 10) + 1;
     }
-    else if (BuildingTypes[bVar1].resource == '\x02') {
+    else if (BuildingTypes[bldType].resource == '\x02') {
       *(int *)*(uint32_t *)(unaff_BP + 0xe) = *(int *)*(uint32_t *)(unaff_BP + 0xe) + 1;
     }
-    else if (BuildingTypes[bVar1].resource == '\x03') {
+    else if (BuildingTypes[bldType].resource == '\x03') {
       *(int *)*(uint32_t *)(unaff_BP + 0x12) = *(int *)*(uint32_t *)(unaff_BP + 0x12) + 1;
     }
   }
   while( true ) {
     unaff_SI = unaff_SI + 1;
     if (GUnitCount <= unaff_SI) {
-      for (uVar4 = 0; uVar4 < GRecordCount; uVar4 = uVar4 + 1) {
-        if ((GRecords[uVar4].party == *(char *)(unaff_BP + 6)) &&
-           (bVar1 = GRecords[uVar4].reserved08,
-           BuildingTypes[bVar1].unitType == *(char *)(unaff_BP + 8))) {
+      for (rec = 0; rec < GRecordCount; rec = rec + 1) {
+        if ((GRecords[rec].party == *(char *)(unaff_BP + 6)) &&
+           (bldType = GRecords[rec].reserved08,
+           BuildingTypes[bldType].unitType == *(char *)(unaff_BP + 8))) {
           *(int *)*(uint32_t *)(unaff_BP + 0x16) = *(int *)*(uint32_t *)(unaff_BP + 0x16) + 1;
-          if (BuildingTypes[bVar1].resource == '\x01') {
+          if (BuildingTypes[bldType].resource == '\x01') {
             *(int *)*(uint32_t *)(unaff_BP + 0x1a) = *(int *)*(uint32_t *)(unaff_BP + 0x1a) + 1;
           }
-          else if (BuildingTypes[bVar1].resource == '\x02') {
+          else if (BuildingTypes[bldType].resource == '\x02') {
             *(int *)*(uint32_t *)(unaff_BP + 0x1e) = *(int *)*(uint32_t *)(unaff_BP + 0x1e) + 1;
           }
-          else if (BuildingTypes[bVar1].resource == '\x03') {
+          else if (BuildingTypes[bldType].resource == '\x03') {
             *(int *)*(uint32_t *)(unaff_BP + 0x22) = *(int *)*(uint32_t *)(unaff_BP + 0x22) + 1;
           }
         }
@@ -2006,27 +2007,27 @@ uint16_t __cdecl16far manage_usesGUnits(void)
       return *(uint16_t *)(unaff_BP + -2);
     }
     if (*(char *)(unaff_BP + 6) != -1) break;
-    uVar5 = (uint16_t)((ulong)GUnits >> 0x10);
-    puVar3 = GUnits;
-    if (((puVar3[unaff_SI].unitType != 0xff) &&
-        (uVar2 = *(uint32_t *)((uint)puVar3[unaff_SI].unitType << 2),
-        *(char *)((int)uVar2 + 0x3f) == '\0')) &&
-       (bVar1 = (puVar3 + unaff_SI)->bldType,
-       BuildingTypes[bVar1].unitType == *(char *)(unaff_BP + 8))) {
+    unitsSeg = (uint16_t)((ulong)GUnits >> 0x10);
+    units = GUnits;
+    if (((units[unaff_SI].unitType != 0xff) &&
+        (sheetRef = *(uint32_t *)((uint)units[unaff_SI].unitType << 2),
+        *(char *)((int)sheetRef + 0x3f) == '\0')) &&
+       (bldType = (units + unaff_SI)->bldType,
+       BuildingTypes[bldType].unitType == *(char *)(unaff_BP + 8))) {
       *(int *)(unaff_BP + -2) = *(int *)(unaff_BP + -2) + 1;
-      if (BuildingTypes[bVar1].resource == '\x01') {
+      if (BuildingTypes[bldType].resource == '\x01') {
         *(int *)*(uint32_t *)(unaff_BP + 10) = *(int *)*(uint32_t *)(unaff_BP + 10) + 1;
       }
-      else if (BuildingTypes[bVar1].resource == '\x02') {
+      else if (BuildingTypes[bldType].resource == '\x02') {
         *(int *)*(uint32_t *)(unaff_BP + 0xe) = *(int *)*(uint32_t *)(unaff_BP + 0xe) + 1;
       }
-      else if (BuildingTypes[bVar1].resource == '\x03') {
+      else if (BuildingTypes[bldType].resource == '\x03') {
         *(int *)*(uint32_t *)(unaff_BP + 0x12) = *(int *)*(uint32_t *)(unaff_BP + 0x12) + 1;
       }
     }
   }
-  uVar5 = manage_usesGUnits();
-  return uVar5;
+  retVal = manage_usesGUnits();
+  return retVal;
 }
 
 
@@ -2237,38 +2238,38 @@ int owner;
   long lVar1;
   far_t entries;
   int iVar2;
-  char *pcVar3;
-  uint16_t uVar4;
+  char *numText;           /* litoa10 / ovr_stsprintf's result */
+  uint16_t valueSeg;       /* the segment half of the formatted value */
   int unaff_BP;
-  int iVar5;
-  int iVar6;
-  char *in_stack_00000002;
-  undefined1 uStack0006;
-  undefined1 uStack0007;
+  int row;                 /* the 0..0xc row of the section being scanned */
+  int sectBase;            /* 0x1a, 0xd or 0: the section's first row */
+  char *textOfsArg;        /* the text offset passed on the stack */
+  undefined1 segLo;        /* low byte of valueSeg */
+  undefined1 segHi;        /* high byte of valueSeg */
   
-  manage_usesBlitLabel2((char *)CONCAT22(textSeg,in_stack_00000002),uStack0006,0xe0);
+  manage_usesBlitLabel2((char *)CONCAT22(textSeg,textOfsArg),segLo,0xe0);
   manage_usesBlitLabel2("Level 3",0xdc,0xe0);
   TextBlitY = TextBlitY + 0xc;
   if (*(char *)(unaff_BP + -0x15) == '\x04') {
-    iVar6 = 0x1a;
+    sectBase = 0x1a;
   }
   else if (*(char *)(unaff_BP + -0x15) == '\x03') {
-    iVar6 = 0xd;
+    sectBase = 0xd;
   }
   else {
-    iVar6 = 0;
+    sectBase = 0;
   }
-  for (iVar5 = 0; iVar5 < 0xd; iVar5 = iVar5 + 1) {
-    if (iVar5 + iVar6 < 0x1e) {
+  for (row = 0; row < 0xd; row = row + 1) {
+    if (row + sectBase < 0x1e) {
       TextBlitX = 0x11;
-      iVar2 = (iVar5 + iVar6) * 6;
+      iVar2 = (row + sectBase) * 6;
       ovr_blitLabel((char *)*(uint16_t *)((int)&GStructures[0].name + iVar2),
                     (uint8_t *)
                     CONCAT22(Font02.ofs,
                              (uint8_t *)*(uint16_t *)((int)&GStructures[0].name + 2 + iVar2)),
                     Font02.seg,0xde);
-      lVar1 = (long)(iVar5 + iVar6) * 6;
-      uVar4 = (uint16_t)((ulong)lVar1 >> 0x10);
+      lVar1 = (long)(row + sectBase) * 6;
+      valueSeg = (uint16_t)((ulong)lVar1 >> 0x10);
       iVar2 = manage_usesGUnitCount
                         (*(char *)(unaff_BP + 6),(&((unk01_t *)GStructures)->type)[(int)lVar1],
                          (int *)CONCAT22(_SS,(int *)(unaff_BP + -6)),
@@ -2278,65 +2279,65 @@ int owner;
                          (int far *)0,(int far *)0,(int far *)0);
       *(int *)((char *)init_textFilename + unaff_BP) = iVar2;
       if (*(int *)(unaff_BP + -0xc) == 0) {
-        pcVar3 = litoa10((char *)(unaff_BP + -0x66),(long)CONCAT22(*(uint16_t *)((char *)init_textFilename + unaff_BP),
+        numText = litoa10((char *)(unaff_BP + -0x66),(long)CONCAT22(*(uint16_t *)((char *)init_textFilename + unaff_BP),
                                         _SS));
-        uStack0006 = (undefined1)uVar4;
-        uStack0007 = (undefined1)((uint)uVar4 >> 8);
-        manage_blitLabelRight((char *)CONCAT13(uStack0007,CONCAT12(uStack0006,pcVar3)),100);
+        segLo = (undefined1)valueSeg;
+        segHi = (undefined1)((uint)valueSeg >> 8);
+        manage_blitLabelRight((char *)CONCAT13(segHi,CONCAT12(segLo,numText)),100);
       }
       else {
-        pcVar3 = ovr_stsprintf((char *)(unaff_BP + -0xb6),(char *)CONCAT22(0x52e5,_SS),
+        numText = ovr_stsprintf((char *)(unaff_BP + -0xb6),(char *)CONCAT22(0x52e5,_SS),
                                (char *)CONCAT22(*(uint16_t *)
                                                  ((char *)init_textFilename + unaff_BP),
                                                 (char *)0x26510));
-        uStack0006 = (undefined1)uVar4;
-        uStack0007 = (undefined1)((uint)uVar4 >> 8);
-        manage_blitLabelRight((char *)CONCAT13(uStack0007,CONCAT12(uStack0006,pcVar3)),100);
+        segLo = (undefined1)valueSeg;
+        segHi = (undefined1)((uint)valueSeg >> 8);
+        manage_blitLabelRight((char *)CONCAT13(segHi,CONCAT12(segLo,numText)),100);
       }
-      lVar1 = (long)(iVar5 + iVar6) * 6;
-      uVar4 = (uint16_t)((ulong)lVar1 >> 0x10);
+      lVar1 = (long)(row + sectBase) * 6;
+      valueSeg = (uint16_t)((ulong)lVar1 >> 0x10);
       if (*(char *)((int)&GStructures[0].pad + (int)lVar1) != '\0') {
         if (*(int *)(unaff_BP + -0xe) == 0) {
-          pcVar3 = litoa10((char *)(unaff_BP + -0x66),(long)CONCAT22(*(uint16_t *)(unaff_BP + -6),_SS));
-          uStack0006 = (undefined1)uVar4;
-          uStack0007 = (undefined1)((uint)uVar4 >> 8);
-          manage_blitLabelRight((char *)CONCAT13(uStack0007,CONCAT12(uStack0006,pcVar3)),0x8c);
+          numText = litoa10((char *)(unaff_BP + -0x66),(long)CONCAT22(*(uint16_t *)(unaff_BP + -6),_SS));
+          segLo = (undefined1)valueSeg;
+          segHi = (undefined1)((uint)valueSeg >> 8);
+          manage_blitLabelRight((char *)CONCAT13(segHi,CONCAT12(segLo,numText)),0x8c);
         }
         else {
-          pcVar3 = ovr_stsprintf((char *)(unaff_BP + -0xb6),(char *)CONCAT22(0x52e5,_SS),
+          numText = ovr_stsprintf((char *)(unaff_BP + -0xb6),(char *)CONCAT22(0x52e5,_SS),
                                  (char *)CONCAT22(*(uint16_t *)(unaff_BP + -6),
                                                   (char *)0x26510));
-          uStack0006 = (undefined1)uVar4;
-          uStack0007 = (undefined1)((uint)uVar4 >> 8);
-          manage_blitLabelRight((char *)CONCAT13(uStack0007,CONCAT12(uStack0006,pcVar3)),0x8c);
+          segLo = (undefined1)valueSeg;
+          segHi = (undefined1)((uint)valueSeg >> 8);
+          manage_blitLabelRight((char *)CONCAT13(segHi,CONCAT12(segLo,numText)),0x8c);
         }
         if (*(int *)(unaff_BP + -0x10) == 0) {
-          pcVar3 = litoa10((char *)(unaff_BP + -0x66),(long)CONCAT22(*(uint16_t *)(unaff_BP + -8),_SS));
-          uStack0006 = (undefined1)uVar4;
-          uStack0007 = (undefined1)((uint)uVar4 >> 8);
-          manage_blitLabelRight((char *)CONCAT13(uStack0007,CONCAT12(uStack0006,pcVar3)),0xb4);
+          numText = litoa10((char *)(unaff_BP + -0x66),(long)CONCAT22(*(uint16_t *)(unaff_BP + -8),_SS));
+          segLo = (undefined1)valueSeg;
+          segHi = (undefined1)((uint)valueSeg >> 8);
+          manage_blitLabelRight((char *)CONCAT13(segHi,CONCAT12(segLo,numText)),0xb4);
         }
         else {
-          pcVar3 = ovr_stsprintf((char *)(unaff_BP + -0xb6),(char *)CONCAT22(0x52e5,_SS),
+          numText = ovr_stsprintf((char *)(unaff_BP + -0xb6),(char *)CONCAT22(0x52e5,_SS),
                                  (char *)CONCAT22(*(uint16_t *)(unaff_BP + -8),
                                                   (char *)0x26510));
-          uStack0006 = (undefined1)uVar4;
-          uStack0007 = (undefined1)((uint)uVar4 >> 8);
-          manage_blitLabelRight((char *)CONCAT13(uStack0007,CONCAT12(uStack0006,pcVar3)),0xb4);
+          segLo = (undefined1)valueSeg;
+          segHi = (undefined1)((uint)valueSeg >> 8);
+          manage_blitLabelRight((char *)CONCAT13(segHi,CONCAT12(segLo,numText)),0xb4);
         }
         if (*(int *)(unaff_BP + -0x12) == 0) {
-          pcVar3 = litoa10((char *)(unaff_BP + -0x66),(long)CONCAT22(*(uint16_t *)(unaff_BP + -10),_SS));
-          uStack0006 = (undefined1)uVar4;
-          uStack0007 = (undefined1)((uint)uVar4 >> 8);
-          manage_blitLabelRight((char *)CONCAT13(uStack0007,CONCAT12(uStack0006,pcVar3)),0xdc);
+          numText = litoa10((char *)(unaff_BP + -0x66),(long)CONCAT22(*(uint16_t *)(unaff_BP + -10),_SS));
+          segLo = (undefined1)valueSeg;
+          segHi = (undefined1)((uint)valueSeg >> 8);
+          manage_blitLabelRight((char *)CONCAT13(segHi,CONCAT12(segLo,numText)),0xdc);
         }
         else {
-          pcVar3 = ovr_stsprintf((char *)(unaff_BP + -0xb6),(char *)CONCAT22(0x52e5,_SS),
+          numText = ovr_stsprintf((char *)(unaff_BP + -0xb6),(char *)CONCAT22(0x52e5,_SS),
                                  (char *)CONCAT22(*(uint16_t *)(unaff_BP + -10),
                                                   (char *)0x26510));
-          uStack0006 = (undefined1)uVar4;
-          uStack0007 = (undefined1)((uint)uVar4 >> 8);
-          manage_blitLabelRight((char *)CONCAT13(uStack0007,CONCAT12(uStack0006,pcVar3)),0xdc);
+          segLo = (undefined1)valueSeg;
+          segHi = (undefined1)((uint)valueSeg >> 8);
+          manage_blitLabelRight((char *)CONCAT13(segHi,CONCAT12(segLo,numText)),0xdc);
         }
       }
       TextBlitY = TextBlitY + 0xc;
@@ -2345,8 +2346,8 @@ int owner;
   CurSfxType3 = 0x3c;
   entries.seg = (uint16_t)_SS;
   entries.ofs = unaff_BP - 0x142;
-  uVar4 = ovr_ovc28_usesUiInputText(entries,0x23,far_from_u32((uint32_t)(0x0)),0,0,0);
-  *(undefined1 *)(unaff_BP + -0x15) = (char)uVar4;
+  valueSeg = ovr_ovc28_usesUiInputText(entries,0x23,far_from_u32((uint32_t)(0x0)),0,0,0);
+  *(undefined1 *)(unaff_BP + -0x15) = (char)valueSeg;
   keyboardInputMode = 0;
   if (((*(char *)(unaff_BP + -0x15) != '\0') && (*(char *)(unaff_BP + -0x15) != '\x01')) &&
      (*(char *)(unaff_BP + -0x15) != -2)) {
