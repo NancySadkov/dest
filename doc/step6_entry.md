@@ -25142,3 +25142,40 @@ several unrelated lifetimes:
     diff_dgroup          288/1,805 matched (unchanged)
     compare_runtime      280 identical / 11 different at entry, init_game and key (unchanged)
     structural_deficits  two game bodies: 7e7c:0b9c (177/187), 77eb:0d61 (54/58)
+
+
+## `run_demo` (6d7a:08df): 177 hits down to 0, grep 6,930 -> 6,753 (-177)
+
+789 lines, five slots, and every one of them carries a role that is written straight from the
+statement text:
+
+    uVar3 -> nameSeg   the segment half of a 4-byte name record, the strcpy source (12 sites)
+             mouseRes  ovc42_usesMiceBlitRect's result, tested < 2 (24 sites)
+             tickNow   BDA_DailyTimeCounter, copied into TextBlitCycle (15 sites)
+             retWord   the byte-packed word the function returns (33 sites, 1040..1215)
+    uVar5 -> ssLo      (undefined1)_SS, the low byte of every far segment built here (31 sites)
+    uVar6 -> dsSeg     _DS, the segment of the static palette data (5 sites)
+             inputRes  ovr_inputUpdate's result, tested < 2 (21 sites)
+    bVar1 -> immediateFlag  0x10, a timeout the `< 2` test can never satisfy (4 sites)
+             fliRes    ovr_ovc43_playFli's result
+             alignRes  ovc_40_usesAlignToSeg's result
+    uStack_a -> deadStore    written at 572/598/941/974/1007 and never read
+
+## A note on `REBUILT.EXE` 447,858 -> 447,778
+
+The source diff for this commit is identifier-only (verified: no expression, constant, callee or
+statement order changes), yet the image shrank 80 bytes. That is the local frame being reshuffled:
+splitting three slots into thirteen locals changes the frame size, and Turbo C switches between
+disp8 and disp16 forms as the offsets move across 0x80. A byte-for-byte rebuild of the *previous*
+source gives 447,858 again, so this is layout, not semantics - and the six gates below are all
+identical.
+
+## Measured (HEAD eb864f7f -> this commit)
+
+    grep_checks          6,930 -> 6,753   (-177)
+    REBUILT.EXE          447,858 -> 447,778
+    build 65/65, LINK.LOG 0 errors
+    compare_state        identical 734 / 7 different / 889 missing (unchanged)
+    diff_dgroup          288/1,805 matched (unchanged)
+    compare_runtime      280 identical / 11 different at entry, init_game and key (unchanged)
+    structural_deficits  two game bodies: 7e7c:0b9c (177/187), 77eb:0d61 (54/58)

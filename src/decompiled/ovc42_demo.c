@@ -463,19 +463,25 @@ uint16_t __cdecl16far run_demo(void)
   far_t palette_16;
   far_t handle_03;
   far_t palette_17;
-  byte bVar1;
+  byte immediateFlag;       /* 0x10, a timeout that is always satisfied by the < 2 test */
+  byte fliRes;              /* ovr_ovc43_playFli's result */
+  byte alignRes;            /* ovr_ovc40_usesAlignToSeg's result */
   char *textPtr;
-  uint16_t uVar3;
+  uint16_t nameSeg;         /* the segment of a 4-byte name record (strcpy source) */
+  uint16_t mouseRes;        /* ovc42_usesMiceBlitRect's result, tested < 2 */
+  uint16_t tickNow;         /* BDA_DailyTimeCounter, copied into TextBlitCycle */
+  uint16_t retWord;         /* the byte-packed word this function returns */
   undefined1 extraout_AH;
-  undefined1 uVar5;
+  undefined1 ssLo;          /* (undefined1)_SS, the low byte of every far segment here */
   uint8_t *pal;
-  uint16_t uVar6;
+  uint16_t dsSeg;           /* _DS, the segment of the static palette data */
+  uint16_t inputRes;        /* ovr_inputUpdate's result, tested < 2 */
   int jitterX;
   int jitterY;
   undefined1 ssHi;
   uint8_t palette[0x300];   /* palette buffer, cleared at 6d7a:0cc6 */
   stg_tmp_t *gfxPtr;
-  uint16_t uStack_a;
+  uint16_t deadStore;       /* written at 572/598/941/974/1007 and never read */
   byte colorD;
   byte colorC;
   byte colorE;
@@ -495,17 +501,17 @@ uint16_t __cdecl16far run_demo(void)
   colorB = ovr_ovc30_textDivideError(10,1,'\x02',100,1,2);
   GfxRndSeed = demoCenterX;
   GfxRndSeed2 = demoCenterY;
-  uVar3 = ((uint16_t *)((uint)colorB * 4))[1];
-  strcpy((char *)CONCAT13((char)((uint)uVar3 >> 8),
-                          CONCAT12((char)uVar3,*(uint16_t *)((uint)colorB * 4))),"Nasher");
+  nameSeg = ((uint16_t *)((uint)colorB * 4))[1];
+  strcpy((char *)CONCAT13((char)((uint)nameSeg >> 8),
+                          CONCAT12((char)nameSeg,*(uint16_t *)((uint)colorB * 4))),"Nasher");
   colorE = ovr_ovc30_textDivideError(10,1,'\x02',100,1,2);
-  uVar3 = ((uint16_t *)((uint)colorE * 4))[1];
-  strcpy((char *)CONCAT13((char)((uint)uVar3 >> 8),
-                          CONCAT12((char)uVar3,*(uint16_t *)((uint)colorE * 4))),"Fordor");
+  nameSeg = ((uint16_t *)((uint)colorE * 4))[1];
+  strcpy((char *)CONCAT13((char)((uint)nameSeg >> 8),
+                          CONCAT12((char)nameSeg,*(uint16_t *)((uint)colorE * 4))),"Fordor");
   colorC = ovr_ovc30_textDivideError(10,1,'\x02',100,1,2);
-  uVar3 = ((uint16_t *)((uint)colorC * 4))[1];
-  strcpy((char *)CONCAT13((char)((uint)uVar3 >> 8),
-                          CONCAT12((char)uVar3,*(uint16_t *)((uint)colorC * 4))),"Kaunas");
+  nameSeg = ((uint16_t *)((uint)colorC * 4))[1];
+  strcpy((char *)CONCAT13((char)((uint)nameSeg >> 8),
+                          CONCAT12((char)nameSeg,*(uint16_t *)((uint)colorC * 4))),"Kaunas");
   ovc42_populateArea(colorB);
   for (jitterY = -2; jitterY < 3; jitterY = jitterY + 1) {
     for (jitterX = -1; jitterX < 1; jitterX = jitterX + 1) {
@@ -519,10 +525,10 @@ uint16_t __cdecl16far run_demo(void)
   ovr_ovc18_usesRandBelow(GfxRndSeed - 1,GfxRndSeed2,0x8c,0xff,(char)GfxRndSeed2,0x8c);
   ovr_ovc30_textDivideError(4,1,'\x01',100,1,1);
   colorA = ovr_ovc30_textDivideError(0x1a,1,'\x01',100,1,1);
-  uVar6 = _DS;
-  uVar3 = ((uint16_t *)((uint)colorA * 4))[1];
-  strcpy((char *)CONCAT13((char)((uint)uVar3 >> 8),
-                          CONCAT12((char)uVar3,*(uint16_t *)((uint)colorA * 4))),"Mindark");
+  dsSeg = _DS;
+  nameSeg = ((uint16_t *)((uint)colorA * 4))[1];
+  strcpy((char *)CONCAT13((char)((uint)nameSeg >> 8),
+                          CONCAT12((char)nameSeg,*(uint16_t *)((uint)colorA * 4))),"Mindark");
   ovr_ovc15_usesLDIV_at_(0x48,0x24,0x48,0x24,1,0x1,1,0x48,0x24,1,1);
   ovr_ovc15_usesLDIV_at_(0x48,0x24,0x48,0x24,2,0x1,1,0x48,0x24,2,1);
   ovr_ovc15_usesLDIV_at_(0x48,0x24,0x48,0x24,2,0x1,1,0x48,0x24,2,1);
@@ -551,17 +557,17 @@ uint16_t __cdecl16far run_demo(void)
   ovr_driver_fillRect(0,0,0x13f,199,0x0,0xa000,0,0x3f,199,0,0);
   ovr_fmFree();
   ovr_play_sfx(137,0,0);
-  bVar1 = 0x10;
+  immediateFlag = 0x10;
   (*(uint8_t *)((uint8_t *)&(gfx.seg))) = (char)l9Cut4Seg;
   gfx.ofs = l9Cut4Ofs;
   (*(uint8_t *)((uint8_t *)&(gfx.seg) + 1)) = (char)((uint)l9Cut4Seg >> 8);
   ovr_ovc43_playArchiveFli(gfx,(uint16_t)palette,(char)palette);
-  if (bVar1 < 2) {
+  if (immediateFlag < 2) {
     textPtr = ovc42_textProvidesMoreHousing(0x48);
     if ((byte)textPtr < 2) {
-      uVar5 = (undefined1)_SS;
+      ssLo = (undefined1)_SS;
       ssHi = (undefined1)(_SS >> 8);
-      (*(uint8_t *)((uint8_t *)&(palette_00.seg))) = uVar5;
+      (*(uint8_t *)((uint8_t *)&(palette_00.seg))) = ssLo;
       palette_00.ofs = (uint16_t)palette;
       (*(uint8_t *)((uint8_t *)&(palette_00.seg) + 1)) = ssHi;
       ovr_ovc40_usesVgaSetPalette8bit(palette_00);
@@ -569,21 +575,21 @@ uint16_t __cdecl16far run_demo(void)
       handle.ofs = ssilogoCut1Ofs;
       (*(uint8_t *)((uint8_t *)&(handle.seg) + 1)) = (char)((uint)ssilogoCut1Seg >> 8);
       gfxPtr = ovr_stshLoadGfx(handle);
-      uStack_a = uVar6;
-      memcpy((char *)CONCAT13(ssHi,CONCAT12(uVar5,palette)),
-             (char *)CONCAT13((char)(uVar6 >> 8),CONCAT12((char)uVar6,gfxPtr)),0x300);
+      deadStore = dsSeg;
+      memcpy((char *)CONCAT13(ssHi,CONCAT12(ssLo,palette)),
+             (char *)CONCAT13((char)(dsSeg >> 8),CONCAT12((char)dsSeg,gfxPtr)),0x300);
       ovr_driver_fillRect(0,0,0x13f,199,0x0,0xa000,0,0x3f,199,0,0);
       (*(uint8_t *)((uint8_t *)&(gfx_01.seg))) = (char)ssilogoCut2Seg;
       gfx_01.ofs = ssilogoCut2Ofs;
       (*(uint8_t *)((uint8_t *)&(gfx_01.seg) + 1)) = (char)((uint)ssilogoCut2Seg >> 8);
       ovr_blitLoadRleGfx(gfx_01,far_from_u32((uint32_t)(0xa0000000)),0);
-      (*(uint8_t *)((uint8_t *)&(palette_01.seg))) = uVar5;
+      (*(uint8_t *)((uint8_t *)&(palette_01.seg))) = ssLo;
       palette_01.ofs = (uint16_t)palette;
       (*(uint8_t *)((uint8_t *)&(palette_01.seg) + 1)) = ssHi;
       ovr_setSeasonPalette(palette_01);
       textPtr = ovc42_textProvidesMoreHousing(0x48);
       if ((byte)textPtr < 2) {
-        (*(uint8_t *)((uint8_t *)&(palette_02.seg))) = uVar5;
+        (*(uint8_t *)((uint8_t *)&(palette_02.seg))) = ssLo;
         palette_02.ofs = (uint16_t)palette;
         (*(uint8_t *)((uint8_t *)&(palette_02.seg) + 1)) = ssHi;
         ovr_ovc40_usesVgaSetPalette8bit(palette_02);
@@ -595,15 +601,15 @@ uint16_t __cdecl16far run_demo(void)
         handle_00.ofs = Lbm_nwpanel1.ofs;
         (*(uint8_t *)((uint8_t *)&(handle_00.seg) + 1)) = (char)(Lbm_nwpanel1.seg >> 8);
         gfxPtr = ovr_stshLoadGfx(handle_00);
-        uStack_a = uVar6;
-        ovr_calcSeasonPalette(gfxPtr->cmap,uVar6,palette,(char)uVar6,(char)palette,0);
-        ovc42_copy1((char *)CONCAT13(ssHi,CONCAT12(uVar5,palette)));
+        deadStore = dsSeg;
+        ovr_calcSeasonPalette(gfxPtr->cmap,dsSeg,palette,(char)dsSeg,(char)palette,0);
+        ovc42_copy1((char *)CONCAT13(ssHi,CONCAT12(ssLo,palette)));
         ovr_driver_fillRect(0,0,0x13f,199,0x0,0xa000,0,0x3f,199,0,0);
-        bVar1 = ovr_ovc43_playFli(0x184,(uint16_t)palette,(char)palette);
-        if (bVar1 < 2) {
+        fliRes = ovr_ovc43_playFli(0x184,(uint16_t)palette,(char)palette);
+        if (fliRes < 2) {
           textPtr = ovc42_textProvidesMoreHousing(0x10);
           if ((byte)textPtr < 2) {
-            (*(uint8_t *)((uint8_t *)&(palette_03.seg))) = uVar5;
+            (*(uint8_t *)((uint8_t *)&(palette_03.seg))) = ssLo;
             palette_03.ofs = (uint16_t)palette;
             (*(uint8_t *)((uint8_t *)&(palette_03.seg) + 1)) = ssHi;
             ovr_ovc40_usesVgaSetPalette8bit(palette_03);
@@ -616,22 +622,22 @@ uint16_t __cdecl16far run_demo(void)
             ovc42_drawTextRow("where you settle.",1);
             ovr_ovc40_usesCalcSeasonPalette('\x01');
             ovr_miceBlitRect((brect_t *)(BlitRects + 1),0x10);
-            uVar3 = ovc42_usesMiceBlitRect(0x32);
-            if ((byte)uVar3 < 2) {
+            mouseRes = ovc42_usesMiceBlitRect(0x32);
+            if ((byte)mouseRes < 2) {
               ovr_miceRestoreArea((brect_t *)(BlitRects + 1),0x10);
               GfxRndSeed = GfxRndSeed + 4;
               AgntFlag1 = false;
               ovr_ovc41_usesAgnt_clear('\0');
               ovr_miceBlitRect((brect_t *)(BlitRects + 1),0x10);
-              uVar3 = ovc42_usesMiceBlitRect(0x32);
-              if ((byte)uVar3 < 2) {
+              mouseRes = ovc42_usesMiceBlitRect(0x32);
+              if ((byte)mouseRes < 2) {
                 ovr_miceRestoreArea((brect_t *)(BlitRects + 1),0x10);
                 GfxRndSeed = GfxRndSeed + 4;
                 AgntFlag1 = false;
                 ovr_ovc41_usesAgnt_clear('\0');
                 ovr_miceBlitRect((brect_t *)(BlitRects + 1),0x10);
-                uVar3 = ovc42_usesMiceBlitRect(0x32);
-                if ((byte)uVar3 < 2) {
+                mouseRes = ovc42_usesMiceBlitRect(0x32);
+                if ((byte)mouseRes < 2) {
                   ovr_miceRestoreArea((brect_t *)(BlitRects + 1),0x10);
                   GfxRndSeed = GfxRndSeed + 4;
                   AgntFlag1 = false;
@@ -640,20 +646,20 @@ uint16_t __cdecl16far run_demo(void)
                   ovc42_drawTextRow("Balance building, money, and food production",1);
                   ovc42_drawTextRow("to keep your people happy.",2);
                   ovr_miceBlitRect((brect_t *)(BlitRects + 1),0x10);
-                  uVar3 = ovc42_usesMiceBlitRect(0x32);
-                  if ((byte)uVar3 < 2) {
+                  mouseRes = ovc42_usesMiceBlitRect(0x32);
+                  if ((byte)mouseRes < 2) {
                     ovr_miceRestoreArea((brect_t *)(BlitRects + 1),0x10);
                     GfxRndSeed = GfxRndSeed + 4;
                     AgntFlag1 = false;
                     ovr_ovc41_usesAgnt_clear('\0');
                     ovr_miceBlitRect((brect_t *)(BlitRects + 1),0x10);
-                    uVar3 = ovc42_usesMiceBlitRect(0x4b);
-                    if ((byte)uVar3 < 2) {
+                    mouseRes = ovc42_usesMiceBlitRect(0x4b);
+                    if ((byte)mouseRes < 2) {
                       ovr_miceRestoreArea((brect_t *)(BlitRects + 1),0x10);
                       ovr_ovc40_usesCalcSeasonPalette('\0');
                       ovc42_drawTextRow("Your world will be filled with a full range",0);
                       ovc42_drawTextRow("of official D&D@ game characters.",1);
-                      (*(uint8_t *)((uint8_t *)&(cmap.seg))) = uVar5;
+                      (*(uint8_t *)((uint8_t *)&(cmap.seg))) = ssLo;
                       cmap.ofs = (uint16_t)palette;
                       (*(uint8_t *)((uint8_t *)&(cmap.seg) + 1)) = ssHi;
                       ovc42_showAgentStats(0,colorB,'\0',cmap,0);
@@ -661,87 +667,87 @@ uint16_t __cdecl16far run_demo(void)
                       MiceUnkState = 0;
                       (*(uint16_t *)((uint8_t *)&(TextBlitCycle) + 2)) = *(uint16_t far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
                       (*(uint16_t *)((uint8_t *)&(TextBlitCycle))) = *(uint16_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs)   /* hand fix: the offset half is the address, not the far_t struct */;
-                      uVar6 = ovr_inputUpdate(0x3c);
-                      if ((byte)uVar6 < 2) {
+                      inputRes = ovr_inputUpdate(0x3c);
+                      if ((byte)inputRes < 2) {
                         ovr_miceRestoreArea((brect_t *)(BlitRects + 1),0x10);
-                        (*(uint8_t *)((uint8_t *)&(palette_04.seg))) = uVar5;
+                        (*(uint8_t *)((uint8_t *)&(palette_04.seg))) = ssLo;
                         palette_04.ofs = (uint16_t)palette;
                         (*(uint8_t *)((uint8_t *)&(palette_04.seg) + 1)) = ssHi;
                         ovr_ovc40_usesVgaSetPalette8bit(palette_04);
-                        (*(uint8_t *)((uint8_t *)&(cmap_00.seg))) = uVar5;
+                        (*(uint8_t *)((uint8_t *)&(cmap_00.seg))) = ssLo;
                         cmap_00.ofs = (uint16_t)palette;
                         (*(uint8_t *)((uint8_t *)&(cmap_00.seg) + 1)) = ssHi;
                         ovc42_showAgentStats(3,colorE,'\x01',cmap_00,0);
                         ovr_miceBlitRect((brect_t *)(BlitRects + 1),0x10);
                         (*(uint16_t *)((uint8_t *)&(TextBlitCycle) + 2)) = *(uint16_t far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
                         (*(uint16_t *)((uint8_t *)&(TextBlitCycle))) = *(uint16_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs)   /* hand fix: the offset half is the address, not the far_t struct */;
-                        uVar6 = ovr_inputUpdate(0x32);
-                        if ((byte)uVar6 < 2) {
+                        inputRes = ovr_inputUpdate(0x32);
+                        if ((byte)inputRes < 2) {
                           ovr_miceRestoreArea((brect_t *)(BlitRects + 1),0x10);
-                          (*(uint8_t *)((uint8_t *)&(palette_05.seg))) = uVar5;
+                          (*(uint8_t *)((uint8_t *)&(palette_05.seg))) = ssLo;
                           palette_05.ofs = (uint16_t)palette;
                           (*(uint8_t *)((uint8_t *)&(palette_05.seg) + 1)) = ssHi;
                           ovr_ovc40_usesVgaSetPalette8bit(palette_05);
-                          (*(uint8_t *)((uint8_t *)&(cmap_01.seg))) = uVar5;
+                          (*(uint8_t *)((uint8_t *)&(cmap_01.seg))) = ssLo;
                           cmap_01.ofs = (uint16_t)palette;
                           (*(uint8_t *)((uint8_t *)&(cmap_01.seg) + 1)) = ssHi;
                           ovc42_showAgentStats(8,colorC,'\x01',cmap_01,0);
                           ovr_miceBlitRect((brect_t *)(BlitRects + 1),0x10);
                           (*(uint16_t *)((uint8_t *)&(TextBlitCycle) + 2)) = *(uint16_t far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
                           (*(uint16_t *)((uint8_t *)&(TextBlitCycle))) = *(uint16_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs)   /* hand fix: the offset half is the address, not the far_t struct */;
-                          uVar6 = ovr_inputUpdate(0x32);
-                          if ((byte)uVar6 < 2) {
+                          inputRes = ovr_inputUpdate(0x32);
+                          if ((byte)inputRes < 2) {
                             ovr_miceRestoreArea((brect_t *)(BlitRects + 1),0x10);
-                            (*(uint8_t *)((uint8_t *)&(palette_06.seg))) = uVar5;
+                            (*(uint8_t *)((uint8_t *)&(palette_06.seg))) = ssLo;
                             palette_06.ofs = (uint16_t)palette;
                             (*(uint8_t *)((uint8_t *)&(palette_06.seg) + 1)) = ssHi;
                             ovr_ovc40_usesVgaSetPalette8bit(palette_06);
-                            (*(uint8_t *)((uint8_t *)&(cmap_02.seg))) = uVar5;
+                            (*(uint8_t *)((uint8_t *)&(cmap_02.seg))) = ssLo;
                             cmap_02.ofs = (uint16_t)palette;
                             (*(uint8_t *)((uint8_t *)&(cmap_02.seg) + 1)) = ssHi;
                             ovc42_showAgentStats(1,colorC,'\0',cmap_02,0xc);
                             ovr_miceBlitRect((brect_t *)(BlitRects + 1),0x10);
                             (*(uint16_t *)((uint8_t *)&(TextBlitCycle) + 2)) = *(uint16_t far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
                             (*(uint16_t *)((uint8_t *)&(TextBlitCycle))) = *(uint16_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs)   /* hand fix: the offset half is the address, not the far_t struct */;
-                            uVar6 = ovr_inputUpdate(0x32);
-                            if ((byte)uVar6 < 2) {
+                            inputRes = ovr_inputUpdate(0x32);
+                            if ((byte)inputRes < 2) {
                               ovr_miceRestoreArea((brect_t *)(BlitRects + 1),0x10);
-                              (*(uint8_t *)((uint8_t *)&(palette_07.seg))) = uVar5;
+                              (*(uint8_t *)((uint8_t *)&(palette_07.seg))) = ssLo;
                               palette_07.ofs = (uint16_t)palette;
                               (*(uint8_t *)((uint8_t *)&(palette_07.seg) + 1)) = ssHi;
                               ovr_ovc40_usesVgaSetPalette8bit(palette_07);
                               ovc42_drawTextRow("You are not alone in this pristine land.",0);
                               ovc42_drawTextRow("Official D&D@ game monsters will fight to",1);
                               ovc42_drawTextRow("destroy your city.",2);
-                              (*(uint8_t *)((uint8_t *)&(cmap_03.seg))) = uVar5;
+                              (*(uint8_t *)((uint8_t *)&(cmap_03.seg))) = ssLo;
                               cmap_03.ofs = (uint16_t)palette;
                               (*(uint8_t *)((uint8_t *)&(cmap_03.seg) + 1)) = ssHi;
                               ovc42_showAgentStats(0x15,colorA,'\x01',cmap_03,0);
                               ovr_miceBlitRect((brect_t *)(BlitRects + 1),0x10);
                               (*(uint16_t *)((uint8_t *)&(TextBlitCycle) + 2)) = *(uint16_t far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
                               (*(uint16_t *)((uint8_t *)&(TextBlitCycle))) = *(uint16_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs)   /* hand fix: the offset half is the address, not the far_t struct */;
-                              uVar6 = ovr_inputUpdate(0x32);
-                              if ((byte)uVar6 < 2) {
+                              inputRes = ovr_inputUpdate(0x32);
+                              if ((byte)inputRes < 2) {
                                 ovr_miceRestoreArea((brect_t *)(BlitRects + 1),0x10);
-                                (*(uint8_t *)((uint8_t *)&(palette_08.seg))) = uVar5;
+                                (*(uint8_t *)((uint8_t *)&(palette_08.seg))) = ssLo;
                                 palette_08.ofs = (uint16_t)palette;
                                 (*(uint8_t *)((uint8_t *)&(palette_08.seg) + 1)) = ssHi;
                                 ovr_ovc40_usesVgaSetPalette8bit(palette_08);
-                                (*(uint8_t *)((uint8_t *)&(cmap_04.seg))) = uVar5;
+                                (*(uint8_t *)((uint8_t *)&(cmap_04.seg))) = ssLo;
                                 cmap_04.ofs = (uint16_t)palette;
                                 (*(uint8_t *)((uint8_t *)&(cmap_04.seg) + 1)) = ssHi;
                                 ovc42_showAgentStats(0x24,colorA,'\x01',cmap_04,0);
                                 ovr_miceBlitRect((brect_t *)(BlitRects + 1),0x10);
                                 (*(uint16_t *)((uint8_t *)&(TextBlitCycle) + 2)) = *(uint16_t far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
                                 (*(uint16_t *)((uint8_t *)&(TextBlitCycle))) = *(uint16_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs)   /* hand fix: the offset half is the address, not the far_t struct */;
-                                uVar6 = ovr_inputUpdate(0x32);
-                                if ((byte)uVar6 < 2) {
+                                inputRes = ovr_inputUpdate(0x32);
+                                if ((byte)inputRes < 2) {
                                   ovr_miceRestoreArea((brect_t *)(BlitRects + 1),0x10);
-                                  (*(uint8_t *)((uint8_t *)&(palette_09.seg))) = uVar5;
+                                  (*(uint8_t *)((uint8_t *)&(palette_09.seg))) = ssLo;
                                   palette_09.ofs = (uint16_t)palette;
                                   (*(uint8_t *)((uint8_t *)&(palette_09.seg) + 1)) = ssHi;
                                   ovr_ovc40_usesVgaSetPalette8bit(palette_09);
-                                  (*(uint8_t *)((uint8_t *)&(cmap_05.seg))) = uVar5;
+                                  (*(uint8_t *)((uint8_t *)&(cmap_05.seg))) = ssLo;
                                   cmap_05.ofs = (uint16_t)palette;
                                   (*(uint8_t *)((uint8_t *)&(cmap_05.seg) + 1)) = ssHi;
                                   ovc42_showAgentStats(0xe,colorA,'\x01',cmap_05,0);
@@ -749,10 +755,10 @@ uint16_t __cdecl16far run_demo(void)
                                   (*(uint16_t *)((uint8_t *)&(TextBlitCycle) + 2)) =
                                        *(uint16_t far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
                                   (*(uint16_t *)((uint8_t *)&(TextBlitCycle))) = *(uint16_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs)   /* hand fix: the offset half is the address, not the far_t struct */;
-                                  uVar6 = ovr_inputUpdate(0x32);
-                                  if ((byte)uVar6 < 2) {
+                                  inputRes = ovr_inputUpdate(0x32);
+                                  if ((byte)inputRes < 2) {
                                     ovr_miceRestoreArea((brect_t *)(BlitRects + 1),0x10);
-                                    (*(uint8_t *)((uint8_t *)&(palette_10.seg))) = uVar5;
+                                    (*(uint8_t *)((uint8_t *)&(palette_10.seg))) = ssLo;
                                     palette_10.ofs = (uint16_t)palette;
                                     (*(uint8_t *)((uint8_t *)&(palette_10.seg) + 1)) = ssHi;
                                     ovr_ovc40_usesVgaSetPalette8bit(palette_10);
@@ -803,8 +809,8 @@ uint16_t __cdecl16far run_demo(void)
                                                   "play out in the courtyards of mighty castles.",1)
                                     ;
                                     ovr_ovc40_usesCalcSeasonPalette('\x01');
-                                    uVar3 = ovc42_usesMiceBlitRect(0xa0);
-                                    if ((byte)uVar3 < 2) {
+                                    mouseRes = ovc42_usesMiceBlitRect(0xa0);
+                                    if ((byte)mouseRes < 2) {
                                       ovr_ovc40_usesCalcSeasonPalette('\0');
                                       ovr_miceRestoreArea((brect_t *)(BlitRects + 1),0x10);
                                       ovc42_usesEntityCount();
@@ -817,48 +823,48 @@ uint16_t __cdecl16far run_demo(void)
                                       ovc42_drawTextRow("hard. Your city will grow...",1);
                                       ovr_ovc40_usesCalcSeasonPalette('\x01');
                                       ovr_miceBlitRect((brect_t *)(BlitRects + 1),0x10);
-                                      uVar3 = ovc42_usesMiceBlitRect(0x32);
-                                      if ((byte)uVar3 < 2) {
+                                      mouseRes = ovc42_usesMiceBlitRect(0x32);
+                                      if ((byte)mouseRes < 2) {
                                         ovr_miceRestoreArea((brect_t *)(BlitRects + 1),0x10);
                                         ovc42_usesGfxRndSeed();
                                         ovc42_drawTextRow("and grow...",2);
                                         AgntFlag1 = false;
                                         ovr_ovc41_usesAgnt_clear('\0');
                                         ovr_miceBlitRect((brect_t *)(BlitRects + 1),0x10);
-                                        uVar3 = ovc42_usesMiceBlitRect(0x32);
-                                        if ((byte)uVar3 < 2) {
+                                        mouseRes = ovc42_usesMiceBlitRect(0x32);
+                                        if ((byte)mouseRes < 2) {
                                           ovr_miceRestoreArea((brect_t *)(BlitRects + 1),0x10);
                                           ovc42_usesGfxRndSeed();
                                           ovc42_drawTextRow("                     and grow...",2);
                                           AgntFlag1 = false;
                                           ovr_ovc41_usesAgnt_clear('\0');
                                           ovr_miceBlitRect((brect_t *)(BlitRects + 1),0x10);
-                                          uVar3 = ovc42_usesMiceBlitRect(100);
-                                          if ((byte)uVar3 < 2) {
+                                          mouseRes = ovc42_usesMiceBlitRect(100);
+                                          if ((byte)mouseRes < 2) {
                                             ovr_miceRestoreArea((brect_t *)(BlitRects + 1),0x10);
                                             ovr_ovc40_usesCalcSeasonPalette('\0');
                                             ovc42_drawTextRow("But beware the evil Mindark, whose",0
                                                              );
                                             ovc42_drawTextRow(
                                                   "hordes destroyed your homeland long ago.",1);
-                                            (*(uint8_t *)((uint8_t *)&(cmap_06.seg))) = uVar5;
+                                            (*(uint8_t *)((uint8_t *)&(cmap_06.seg))) = ssLo;
                                             cmap_06.ofs = (uint16_t)palette;
                                             (*(uint8_t *)((uint8_t *)&(cmap_06.seg) + 1)) = ssHi;
                                             ovc42_showAgentStats(0x29,colorA,'\x01',cmap_06,0);
                                             ovr_miceBlitRect((brect_t *)(BlitRects + 1),0x10);
                                             MiceUnkState = 0;
-                                            uVar6 = ovr_inputUpdate(0x78);
-                                            if ((byte)uVar6 < 2) {
+                                            inputRes = ovr_inputUpdate(0x78);
+                                            if ((byte)inputRes < 2) {
                                               ovr_miceRestoreArea((brect_t *)(BlitRects + 1),0x10);
-                                              (*(uint8_t *)((uint8_t *)&(palette_11.seg))) = uVar5;
+                                              (*(uint8_t *)((uint8_t *)&(palette_11.seg))) = ssLo;
                                               palette_11.ofs = (uint16_t)palette;
                                               (*(uint8_t *)((uint8_t *)&(palette_11.seg) + 1)) = ssHi;
                                               ovr_ovc40_usesVgaSetPalette8bit(palette_11);
-                                              bVar1 = ovr_ovc40_usesAlignToSeg
+                                              alignRes = ovr_ovc40_usesAlignToSeg
                                                                 ('\x04',(char *)0x7174,0x2410,
                                                                  (char *)0x7174,
                                                                  0x2410,2,0x74,0x10,0x74,0x10);
-                                              if (bVar1 < 2) {
+                                              if (alignRes < 2) {
                                                 ovr_miceRestoreArea((brect_t *)(BlitRects + 1),0x10)
                                                 ;
                                                 demoCenterX = 0x58;
@@ -886,8 +892,8 @@ uint16_t __cdecl16far run_demo(void)
                                                 ovc42_drawTextRow(
                                                   "If you lead with wisdom and cunning...",0);
                                                 ovr_miceBlitRect((brect_t *)(BlitRects + 1),0x10);
-                                                uVar3 = ovc42_usesMiceBlitRect(0x3c);
-                                                if ((byte)uVar3 < 2) {
+                                                mouseRes = ovc42_usesMiceBlitRect(0x3c);
+                                                if ((byte)mouseRes < 2) {
                                                   GfxRndSeed2 = GfxRndSeed2 - 1;
                                                   AgntFlag1 = false;
                                                   ovr_ovc41_usesAgnt_clear('\0');
@@ -896,8 +902,8 @@ uint16_t __cdecl16far run_demo(void)
                                                   ovc42_drawTextRow(
                                                   "If you fight with valor and guile...",1);
                                                   ovr_miceBlitRect((brect_t *)(BlitRects + 1),0x10);
-                                                  uVar3 = ovc42_usesMiceBlitRect(0x3c);
-                                                  if ((byte)uVar3 < 2) {
+                                                  mouseRes = ovc42_usesMiceBlitRect(0x3c);
+                                                  if ((byte)mouseRes < 2) {
                                                     GfxRndSeed2 = GfxRndSeed2 - 1;
                                                     AgntFlag1 = false;
                                                     ovr_ovc41_usesAgnt_clear('\0');
@@ -906,15 +912,15 @@ uint16_t __cdecl16far run_demo(void)
                                                     ovc42_drawTextRow(
                                                   "You will truly be master of your...",2);
                                                   ovr_miceBlitRect((brect_t *)(BlitRects + 1),0x10);
-                                                  uVar3 = ovc42_usesMiceBlitRect(0x3c);
-                                                  if ((byte)uVar3 < 2) {
+                                                  mouseRes = ovc42_usesMiceBlitRect(0x3c);
+                                                  if ((byte)mouseRes < 2) {
                                                     ovr_miceRestoreArea((brect_t *)(BlitRects + 1),
                                                                         0x10);
                                                     ovr_ovc40_usesCalcSeasonPalette('\0');
                                                     ovr_driver_fillRect(0,0,0x13f,199,0x0,0xa000,0,
                                                                         0x3f,199,0,0);
                                                     ovr_freeLeaderData();
-                                                    bVar1 = 0x10;
+                                                    immediateFlag = 0x10;
                                                     (*(uint8_t *)((uint8_t *)&(gfx_00.seg))) = (char)sky06FliSeg;
                                                     gfx_00.ofs = sky06FliOfs;
                                                     (*(uint8_t *)((uint8_t *)&(gfx_00.seg) + 1)) =
@@ -922,14 +928,14 @@ uint16_t __cdecl16far run_demo(void)
                                                     ovr_ovc43_playArchiveFli
                                                               (gfx_00,(uint16_t)palette,
                                                                (char)palette);
-                                                    if (bVar1 < 2) {
+                                                    if (immediateFlag < 2) {
                                                       (*(uint16_t *)((uint8_t *)&(TextBlitCycle) + 2)) =
                                                            *(uint16_t far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
-                                                      uVar3 = *(uint16_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs)   /* hand fix: the offset half is the address, not the far_t struct */;
-                                                      (*(uint16_t *)((uint8_t *)&(TextBlitCycle))) = uVar3;
+                                                      tickNow = *(uint16_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs)   /* hand fix: the offset half is the address, not the far_t struct */;
+                                                      (*(uint16_t *)((uint8_t *)&(TextBlitCycle))) = tickNow;
                                                       textPtr = ovc42_textProvidesMoreHousing(0x30);
                                                       if ((byte)textPtr < 2) {
-                                                        (*(uint8_t *)((uint8_t *)&(palette_12.seg))) = uVar5;
+                                                        (*(uint8_t *)((uint8_t *)&(palette_12.seg))) = ssLo;
                                                         palette_12.ofs = (uint16_t)palette;
                                                         (*(uint8_t *)((uint8_t *)&(palette_12.seg) + 1)) = ssHi;
                                                         ovr_ovc40_usesVgaSetPalette8bit(palette_12);
@@ -938,11 +944,11 @@ uint16_t __cdecl16far run_demo(void)
                                                         (*(uint8_t *)((uint8_t *)&(handle_01.seg) + 1)) =
                                                              (char)((uint)cred01Cut1Seg >> 8);
                                                         gfxPtr = ovr_stshLoadGfx(handle_01);
-                                                        uStack_a = uVar3;
-                                                        memcpy((char *)CONCAT13(ssHi,CONCAT12(uVar5
+                                                        deadStore = tickNow;
+                                                        memcpy((char *)CONCAT13(ssHi,CONCAT12(ssLo
                                                   ,palette)),
-                                                  (char *)CONCAT13((char)((uint)uVar3 >> 8),
-                                                                   CONCAT12((char)uVar3,gfxPtr)),
+                                                  (char *)CONCAT13((char)((uint)tickNow >> 8),
+                                                                   CONCAT12((char)tickNow,gfxPtr)),
                                                   0x300);
                                                   ovr_driver_fillRect(0,0,0x13f,199,0x0,0xa000,0,
                                                                       0x3f,199,0,0);
@@ -951,18 +957,18 @@ uint16_t __cdecl16far run_demo(void)
                                                   (*(uint8_t *)((uint8_t *)&(gfx_02.seg) + 1)) =
                                                        (char)((uint)cred01Cut2Seg >> 8);
                                                   ovr_blitLoadRleGfx(gfx_02,far_from_u32((uint32_t)(0xa0000000)),0);
-                                                  (*(uint8_t *)((uint8_t *)&(palette_13.seg))) = uVar5;
+                                                  (*(uint8_t *)((uint8_t *)&(palette_13.seg))) = ssLo;
                                                   palette_13.ofs = (uint16_t)palette;
                                                   (*(uint8_t *)((uint8_t *)&(palette_13.seg) + 1)) = ssHi;
                                                   ovr_setSeasonPalette(palette_13);
                                                   (*(uint16_t *)((uint8_t *)&(TextBlitCycle) + 2)) =
                                                        *(uint16_t far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2)
                                                   ;
-                                                  uVar3 = *(uint16_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs)   /* hand fix: the offset half is the address, not the far_t struct */;
-                                                  (*(uint16_t *)((uint8_t *)&(TextBlitCycle))) = uVar3;
-                                                  uVar6 = ovr_inputUpdate(0xb4);
-                                                  if ((byte)uVar6 < 2) {
-                                                    (*(uint8_t *)((uint8_t *)&(palette_14.seg))) = uVar5;
+                                                  tickNow = *(uint16_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs)   /* hand fix: the offset half is the address, not the far_t struct */;
+                                                  (*(uint16_t *)((uint8_t *)&(TextBlitCycle))) = tickNow;
+                                                  inputRes = ovr_inputUpdate(0xb4);
+                                                  if ((byte)inputRes < 2) {
+                                                    (*(uint8_t *)((uint8_t *)&(palette_14.seg))) = ssLo;
                                                     palette_14.ofs = (uint16_t)palette;
                                                     (*(uint8_t *)((uint8_t *)&(palette_14.seg) + 1)) = ssHi;
                                                     ovr_ovc40_usesVgaSetPalette8bit(palette_14);
@@ -971,11 +977,11 @@ uint16_t __cdecl16far run_demo(void)
                                                     (*(uint8_t *)((uint8_t *)&(handle_02.seg) + 1)) =
                                                          (char)((uint)cred02Cut1Seg >> 8);
                                                     gfxPtr = ovr_stshLoadGfx(handle_02);
-                                                    uStack_a = uVar3;
-                                                    memcpy((char *)CONCAT13(ssHi,CONCAT12(uVar5,&
+                                                    deadStore = tickNow;
+                                                    memcpy((char *)CONCAT13(ssHi,CONCAT12(ssLo,&
                                                   palette)),
-                                                  (char *)CONCAT13((char)((uint)uVar3 >> 8),
-                                                                   CONCAT12((char)uVar3,gfxPtr)),
+                                                  (char *)CONCAT13((char)((uint)tickNow >> 8),
+                                                                   CONCAT12((char)tickNow,gfxPtr)),
                                                   0x300);
                                                   ovr_driver_fillRect(0,0,0x13f,199,0x0,0xa000,0,
                                                                       0x3f,199,0,0);
@@ -984,18 +990,18 @@ uint16_t __cdecl16far run_demo(void)
                                                   (*(uint8_t *)((uint8_t *)&(gfx_03.seg) + 1)) =
                                                        (char)((uint)cred02Cut2Seg >> 8);
                                                   ovr_blitLoadRleGfx(gfx_03,far_from_u32((uint32_t)(0xa0000000)),0);
-                                                  (*(uint8_t *)((uint8_t *)&(palette_15.seg))) = uVar5;
+                                                  (*(uint8_t *)((uint8_t *)&(palette_15.seg))) = ssLo;
                                                   palette_15.ofs = (uint16_t)palette;
                                                   (*(uint8_t *)((uint8_t *)&(palette_15.seg) + 1)) = ssHi;
                                                   ovr_setSeasonPalette(palette_15);
                                                   (*(uint16_t *)((uint8_t *)&(TextBlitCycle) + 2)) =
                                                        *(uint16_t far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2)
                                                   ;
-                                                  uVar3 = *(uint16_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs)   /* hand fix: the offset half is the address, not the far_t struct */;
-                                                  (*(uint16_t *)((uint8_t *)&(TextBlitCycle))) = uVar3;
-                                                  uVar6 = ovr_inputUpdate(0xb4);
-                                                  if ((byte)uVar6 < 2) {
-                                                    (*(uint8_t *)((uint8_t *)&(palette_16.seg))) = uVar5;
+                                                  tickNow = *(uint16_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs)   /* hand fix: the offset half is the address, not the far_t struct */;
+                                                  (*(uint16_t *)((uint8_t *)&(TextBlitCycle))) = tickNow;
+                                                  inputRes = ovr_inputUpdate(0xb4);
+                                                  if ((byte)inputRes < 2) {
+                                                    (*(uint8_t *)((uint8_t *)&(palette_16.seg))) = ssLo;
                                                     palette_16.ofs = (uint16_t)palette;
                                                     (*(uint8_t *)((uint8_t *)&(palette_16.seg) + 1)) = ssHi;
                                                     ovr_ovc40_usesVgaSetPalette8bit(palette_16);
@@ -1004,11 +1010,11 @@ uint16_t __cdecl16far run_demo(void)
                                                     (*(uint8_t *)((uint8_t *)&(handle_03.seg) + 1)) =
                                                          (char)((uint)cred03Cut1Seg >> 8);
                                                     gfxPtr = ovr_stshLoadGfx(handle_03);
-                                                    uStack_a = uVar3;
-                                                    memcpy((char *)CONCAT13(ssHi,CONCAT12(uVar5,&
+                                                    deadStore = tickNow;
+                                                    memcpy((char *)CONCAT13(ssHi,CONCAT12(ssLo,&
                                                   palette)),
-                                                  (char *)CONCAT13((char)((uint)uVar3 >> 8),
-                                                                   CONCAT12((char)uVar3,gfxPtr)),
+                                                  (char *)CONCAT13((char)((uint)tickNow >> 8),
+                                                                   CONCAT12((char)tickNow,gfxPtr)),
                                                   0x300);
                                                   ovr_driver_fillRect(0,0,0x13f,199,0x0,0xa000,0,
                                                                       0x3f,199,0,0);
@@ -1017,7 +1023,7 @@ uint16_t __cdecl16far run_demo(void)
                                                   (*(uint8_t *)((uint8_t *)&(gfx_04.seg) + 1)) =
                                                        (char)((uint)cred03Cut2Seg >> 8);
                                                   ovr_blitLoadRleGfx(gfx_04,far_from_u32((uint32_t)(0xa0000000)),0);
-                                                  (*(uint8_t *)((uint8_t *)&(palette_17.seg))) = uVar5;
+                                                  (*(uint8_t *)((uint8_t *)&(palette_17.seg))) = ssLo;
                                                   palette_17.ofs = (uint16_t)palette;
                                                   (*(uint8_t *)((uint8_t *)&(palette_17.seg) + 1)) = ssHi;
                                                   ovr_setSeasonPalette(palette_17);
@@ -1026,188 +1032,188 @@ uint16_t __cdecl16far run_demo(void)
                                                   ;
                                                   (*(uint16_t *)((uint8_t *)&(TextBlitCycle))) =
                                                        *(uint16_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs)   /* hand fix: the offset half is the address, not the far_t struct */;
-                                                  uVar6 = ovr_inputUpdate(0xb4);
-                                                  if ((byte)uVar6 < 2) {
+                                                  inputRes = ovr_inputUpdate(0xb4);
+                                                  if ((byte)inputRes < 2) {
                                                     ovc42_endDemo('\0',(int)palette,_SS);
                                                     GameRunning = false;
                                                     CurMusicType = 0xff;
                                                     CurSfxType3 = 0xff;
-                                                    uVar3 = 0x2400;
+                                                    retWord = 0x2400;
                                                   }
                                                   else {
                                                     pal = palette;
                                                     ovc42_endDemo('\x03',(int)pal,_SS);
-                                                    uVar3 = CONCAT11((char)((uint)pal >> 8),1);
-                                                  }
-                                                  }
-                                                  else {
-                                                    pal = palette;
-                                                    ovc42_endDemo('\x03',(int)pal,_SS);
-                                                    uVar3 = CONCAT11((char)((uint)pal >> 8),1);
+                                                    retWord = CONCAT11((char)((uint)pal >> 8),1);
                                                   }
                                                   }
                                                   else {
                                                     pal = palette;
                                                     ovc42_endDemo('\x03',(int)pal,_SS);
-                                                    uVar3 = CONCAT11((char)((uint)pal >> 8),1);
+                                                    retWord = CONCAT11((char)((uint)pal >> 8),1);
                                                   }
                                                   }
                                                   else {
                                                     pal = palette;
                                                     ovc42_endDemo('\x03',(int)pal,_SS);
-                                                    uVar3 = CONCAT11((char)((uint)pal >> 8),1);
+                                                    retWord = CONCAT11((char)((uint)pal >> 8),1);
                                                   }
                                                   }
                                                   else {
                                                     pal = palette;
                                                     ovc42_endDemo('\x03',(int)pal,_SS);
-                                                    uVar3 = CONCAT11((char)((uint)pal >> 8),1);
+                                                    retWord = CONCAT11((char)((uint)pal >> 8),1);
+                                                  }
+                                                  }
+                                                  else {
+                                                    pal = palette;
+                                                    ovc42_endDemo('\x03',(int)pal,_SS);
+                                                    retWord = CONCAT11((char)((uint)pal >> 8),1);
                                                   }
                                                   }
                                                   else {
                                                     ovc42_endDemo('\x01',0,0);
-                                                    uVar3 = CONCAT11((char)((uint)uVar3 >> 8),1);
+                                                    retWord = CONCAT11((char)((uint)retWord >> 8),1);
                                                   }
                                                   }
                                                   else {
                                                     ovc42_endDemo('\x01',0,0);
-                                                    uVar3 = CONCAT11((char)((uint)uVar3 >> 8),1);
+                                                    retWord = CONCAT11((char)((uint)retWord >> 8),1);
                                                   }
                                                 }
                                                 else {
                                                   ovc42_endDemo('\x01',0,0);
-                                                  uVar3 = CONCAT11((char)((uint)uVar3 >> 8),1);
+                                                  retWord = CONCAT11((char)((uint)retWord >> 8),1);
                                                 }
                                               }
                                               else {
-                                                uVar5 = extraout_AH;
+                                                ssLo = extraout_AH;
                                                 ovc42_endDemo('\x02',0,0);
-                                                uVar3 = CONCAT11(uVar5,1);
+                                                retWord = CONCAT11(ssLo,1);
                                               }
                                             }
                                             else {
                                               pal = palette;
                                               ovc42_endDemo('\x01',(int)pal,_SS);
-                                              uVar3 = CONCAT11((char)((uint)pal >> 8),1);
+                                              retWord = CONCAT11((char)((uint)pal >> 8),1);
                                             }
                                           }
                                           else {
                                             ovc42_endDemo('\x01',0,0);
-                                            uVar3 = CONCAT11((char)((uint)uVar3 >> 8),1);
+                                            retWord = CONCAT11((char)((uint)retWord >> 8),1);
                                           }
                                         }
                                         else {
                                           ovc42_endDemo('\x01',0,0);
-                                          uVar3 = CONCAT11((char)((uint)uVar3 >> 8),1);
+                                          retWord = CONCAT11((char)((uint)retWord >> 8),1);
                                         }
                                       }
                                       else {
                                         ovc42_endDemo('\x01',0,0);
-                                        uVar3 = CONCAT11((char)((uint)uVar3 >> 8),1);
+                                        retWord = CONCAT11((char)((uint)retWord >> 8),1);
                                       }
                                     }
                                     else {
                                       ovc42_endDemo('\x01',0,0);
-                                      uVar3 = CONCAT11((char)((uint)uVar3 >> 8),1);
+                                      retWord = CONCAT11((char)((uint)retWord >> 8),1);
                                     }
                                   }
                                   else {
                                     pal = palette;
                                     ovc42_endDemo('\x01',(int)pal,_SS);
-                                    uVar3 = CONCAT11((char)((uint)pal >> 8),1);
+                                    retWord = CONCAT11((char)((uint)pal >> 8),1);
                                   }
                                 }
                                 else {
                                   pal = palette;
                                   ovc42_endDemo('\x01',(int)pal,_SS);
-                                  uVar3 = CONCAT11((char)((uint)pal >> 8),1);
+                                  retWord = CONCAT11((char)((uint)pal >> 8),1);
                                 }
                               }
                               else {
                                 pal = palette;
                                 ovc42_endDemo('\x01',(int)pal,_SS);
-                                uVar3 = CONCAT11((char)((uint)pal >> 8),1);
+                                retWord = CONCAT11((char)((uint)pal >> 8),1);
                               }
                             }
                             else {
                               pal = palette;
                               ovc42_endDemo('\x01',(int)pal,_SS);
-                              uVar3 = CONCAT11((char)((uint)pal >> 8),1);
+                              retWord = CONCAT11((char)((uint)pal >> 8),1);
                             }
                           }
                           else {
                             pal = palette;
                             ovc42_endDemo('\x01',(int)pal,_SS);
-                            uVar3 = CONCAT11((char)((uint)pal >> 8),1);
+                            retWord = CONCAT11((char)((uint)pal >> 8),1);
                           }
                         }
                         else {
                           pal = palette;
                           ovc42_endDemo('\x01',(int)pal,_SS);
-                          uVar3 = CONCAT11((char)((uint)pal >> 8),1);
+                          retWord = CONCAT11((char)((uint)pal >> 8),1);
                         }
                       }
                       else {
                         pal = palette;
                         ovc42_endDemo('\x01',(int)pal,_SS);
-                        uVar3 = CONCAT11((char)((uint)pal >> 8),1);
+                        retWord = CONCAT11((char)((uint)pal >> 8),1);
                       }
                     }
                     else {
                       ovc42_endDemo('\x01',0,0);
-                      uVar3 = CONCAT11((char)((uint)uVar3 >> 8),1);
+                      retWord = CONCAT11((char)((uint)retWord >> 8),1);
                     }
                   }
                   else {
                     ovc42_endDemo('\x01',0,0);
-                    uVar3 = CONCAT11((char)((uint)uVar3 >> 8),1);
+                    retWord = CONCAT11((char)((uint)retWord >> 8),1);
                   }
                 }
                 else {
                   ovc42_endDemo('\x01',0,0);
-                  uVar3 = CONCAT11((char)((uint)uVar3 >> 8),1);
+                  retWord = CONCAT11((char)((uint)retWord >> 8),1);
                 }
               }
               else {
                 ovc42_endDemo('\x01',0,0);
-                uVar3 = CONCAT11((char)((uint)uVar3 >> 8),1);
+                retWord = CONCAT11((char)((uint)retWord >> 8),1);
               }
             }
             else {
               ovc42_endDemo('\x01',0,0);
-              uVar3 = CONCAT11((char)((uint)uVar3 >> 8),1);
+              retWord = CONCAT11((char)((uint)retWord >> 8),1);
             }
           }
           else {
             pal = palette;
             ovc42_endDemo('\x03',(int)pal,_SS);
-            uVar3 = CONCAT11((char)((uint)pal >> 8),1);
+            retWord = CONCAT11((char)((uint)pal >> 8),1);
           }
         }
         else {
           pal = palette;
           ovc42_endDemo('\x03',(int)pal,_SS);
-          uVar3 = CONCAT11((char)((uint)pal >> 8),1);
+          retWord = CONCAT11((char)((uint)pal >> 8),1);
         }
       }
       else {
         pal = palette;
         ovc42_endDemo('\x03',(int)pal,_SS);
-        uVar3 = CONCAT11((char)((uint)pal >> 8),1);
+        retWord = CONCAT11((char)((uint)pal >> 8),1);
       }
     }
     else {
       pal = palette;
       ovc42_endDemo('\x03',(int)pal,_SS);
-      uVar3 = CONCAT11((char)((uint)pal >> 8),1);
+      retWord = CONCAT11((char)((uint)pal >> 8),1);
     }
   }
   else {
     pal = palette;
     ovc42_endDemo('\x03',(int)pal,_SS);
-    uVar3 = CONCAT11((char)((uint)pal >> 8),1);
+    retWord = CONCAT11((char)((uint)pal >> 8),1);
   }
-  return uVar3;
+  return retWord;
 }
 
 
