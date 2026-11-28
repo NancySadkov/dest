@@ -23731,3 +23731,50 @@ I have not yet pinned to the dispatch - that is the single remaining item in thi
     compare_state        identical 734 / 7 different / 889 missing (unchanged)
     diff_dgroup          288/1,805 matched (unchanged)
     compare_runtime      280 identical / 11 different at entry, init_game and key (unchanged)
+
+
+## `3381:08dc` closed: the h-range pinned, arm F's gate added, and the function's deficit fully accounted
+
+The dispatch chain settles the arm boundaries (`cmp [bp-0xa],K; jle/jg`, in address order):
+
+    0x0fcd  h > 0x6a        arm A  0x0fd3   r==2||r==3 -> flags -> randBelow(9)+0x67
+    0x1039  h > 0x55        arm B  0x1042   r==1 -> flags -> randBelow(2) ? 6 : 9 ; r==3 -> flags -> 9
+    0x112c  h > 0x3f        arm C  0x1132   r==3 -> flags && randBelow(2)!=0 -> 9      (fixed last pass)
+    0x11a1  h > 0x2a        arm D  0x11aa   r==1 -> 6 ; r==3 -> flags -> 9
+    0x1240  h > 0x15        arm E  0x1246   r = randBelow(4); jump table cs:0x168f, all four
+                                            entries = 0x1263, i.e. always randBelow(6)+0x3d
+    0x1296  h <= 0x15       arm F  0x1296   r==2 -> 6 ; r==3 -> flags && randBelow(2)==0 -> 9
+
+This **corrects my previous note**: the `randBelow(4) <= 3` body branch is arm E and is *right* - the
+image really does jump through a four-entry table whose arms all land on the same code, so `<= 3` is
+always true for a 0..3 draw. The arm I thought it should be (`r == 2 || r == 3`) is arm A, and the
+body's `h > 0x6a` branch already had exactly that. I checked all five other arms against the body one
+by one; four match, and only arm F was missing its gate.
+
+`0x12df`:
+
+    0x12e1  constr_usesGMapFlags     if (== 0) next
+    0x12ef  push 2; randBelow(2)     if (!= 0) next          <-- was absent
+    0x12ff  push 9; randBelow(9)     GUnitGrid = randBelow(9) + 0x67
+
+Added. `3381:08dc` goes 49/60 -> 50/60, and the argument multiset now leaves **exactly** the second
+copy of the height-profile loop:
+
+    image 43 draws, body 32
+    missing: 11 x1, 16 x3, 17 x1, 2 x1, 8 x3, 9 x1, plus one register-pushed draw
+    second copy (0x0c3d..0x0d3b): 16, 16, 2, 17, 8, 11, 16, 8, 9  = 16 x3, 2 x1, 17 x1, 8 x2, 11 x1, 9 x1
+
+The two agree value for value, and the count matches to the site (10). That is the proof that nothing
+is missing - so the function is now recorded in `structural_deficits.py`'s `ARTEFACTS` with the
+reason, the same treatment `6ffe:009b` and `2d63:04b7` get.
+
+## Measured (HEAD a65dc2dd -> this commit)
+
+    structural_deficits  3381:08dc  49/60 -> 50/60, then excluded as a duplicated-loop shape
+                         (4 artefacts listed; game code left: 7e7c:0b9c -10, 77eb:0d61 -4)
+    grep_checks          9,798 (unchanged)
+    REBUILT.EXE          447,906 -> 447,922
+    build 65/65, LINK.LOG 0 errors
+    compare_state        identical 734 / 7 different / 889 missing (unchanged)
+    diff_dgroup          288/1,805 matched (unchanged)
+    compare_runtime      280 identical / 11 different at entry, init_game and key (unchanged)

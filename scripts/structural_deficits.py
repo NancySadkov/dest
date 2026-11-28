@@ -56,6 +56,11 @@ ARTEFACTS = {
     ("ovc44_strong_dat.c", "6ffe:009b"): "image unrolls 9 allocator calls; body loops",
     ("ovc44_strong_dat.c", "6ffe:01c5"): "image unrolls 9 allocator calls; body loops",
     ("ovc01_driver.c", "2d63:04b7"): "image calls the row-base helper 3x; body inlines it",
+    ("ovc09_init.c", "3381:08dc"): (
+        "image emits the height-profile row generator twice, one copy per parity "
+        "(guards si == 0 vs si == 0x93, index bases profile[si] vs profile[si+2]); the body "
+        "merges them into one loop with d/col ternaries, so the second copy's 10 call sites "
+        "have no C counterpart - see doc/step6_entry.md"),
 }
 
 EXE = io.open(os.path.join(ROOT, "game", "STRONG.EXE"), "rb").read()

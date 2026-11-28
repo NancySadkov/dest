@@ -610,7 +610,10 @@ void __cdecl16far init_textFilename(void)
         if (r == 2) {
           GUnitGrid[col][row] = (short)((uint16_t)ovr_randBelow(6) + 0x3d);
         }
-        else if (r == 3 && constr_usesGMapFlags((int)row,(int)col) != 0) {
+        /* 0x12df: r == 3 tests the placement first, then a randBelow(2) == 0 gate, and only then
+           draws the tile; the gate was missing from this body. */
+        else if ((r == 3) && (constr_usesGMapFlags((int)row,(int)col) != 0) &&
+                 ((uint16_t)ovr_randBelow(2) == 0)) {
           GUnitGrid[col][row] = (short)((uint16_t)ovr_randBelow(9) + 0x67);
         }
       }
