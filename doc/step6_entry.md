@@ -23030,3 +23030,87 @@ still-unwritten probe loop, so the body is deterministic even with that GAP.
 
 Remaining 2 calls: the `ovc45_getUnitIndex` pair (`0x250,0x20` and `0x250,0x25`) inside the probe loop
 (0x01cd..0x037b), plus the `ovr_randBelow` at 0x035f.
+
+
+## 55fe:0000: the probe loop written - its call structure now matches the image exactly
+
+The remaining GAP (`0x01cd..0x037a`) is decoded and written. Two genuine defects in what was
+already there fell out of the decode:
+
+**The cursor-column calls had their arguments swapped.** The image pushes `GfxRndSeed2` first and
+`GfxRndSeed + si` second (`0x01e6`/`0x01f0`), so by cdecl the call is `f(x = GfxRndSeed + si,
+y = GfxRndSeed2)`. The body had `(GfxRndSeed2, GfxRndSeed + si)`. `GfxRndSeed` is the x coordinate
+(bounds `0x94`) and `GfxRndSeed2` the y (`< 0x3b`), per `ovc10_constr.c`'s span arithmetic.
+
+**The class call was the wrong function.** `lcall 0x138,0x61` is `ovr_constr_usesGMapFlags2`
+(`audit/overlay_segments.csv`: `0138 -> 22ef`, `functions_real.tsv`: `22ef:0061
+ovr_constr_usesGMapFlags2`), and its arguments are `(GfxRndSeed, GfxRndSeed2 + 1)`. The body called
+`constr_usesGMapFlags(alignedX, GfxRndSeed2)`. Both the callee and the arguments were wrong.
+
+Also added, all missing from the body:
+
+    0x01a1   if (GOngoingBattle) return flags;                  (DGROUP 0x899c)
+    0x0218   ovr_ovc45_getUnitType(GfxRndSeed + col, GfxRndSeed2)   -> the bldType the BuildingTypes reads use
+    0x035f   ovr_randBelow(2)                                   the "keep the previous sound" coin flip
+    0x01cd   the probe results the dispatch consumes: minLevel = 0xff, kindSum = 0, sameSfx = 0
+
+The loop as written:
+
+    for (col = -2; col <= 1; col++) {
+      idx     = ovc45_getUnitIndex(GfxRndSeed + col, GfxRndSeed2);
+      bldType = ovc45_getUnitType (GfxRndSeed + col, GfxRndSeed2);
+      unitType = GUnits[idx].unitType;
+      if (idx >= 0xf8 && unitType != 0xff && GLeaderSheets[unitType]->faction == 0)
+        if (GUnits[idx].level <= minLevel) minLevel = GUnits[idx].level;
+      if (GLeaderSheets[unitType]->faction == 0 && unitType != 0xff)
+        kindSum += BuildingTypes[bldType].kind;                  /* bldtp_t+0xd */
+      sfx = BuildingTypes[bldType].sfxType;                      /* bldtp_t+0x24 */
+      if (GUnits[idx].level >= 6 && sfx == 0x86) {
+        sameSfx++;
+        if (sameSfx < 2) sfx = 0;
+      }
+      if (sfx != 0) {
+        if (CurSfxType3 == 0xff) CurSfxType3 = sfx;
+        else if (ovr_randBelow(2) == 0) CurSfxType3 = sfx;
+      }
+    }
+    if (flags == 0x1000 && CurSfxType3 == 0xff) {
+      if (minLevel != 0xff) {
+        if (minLevel < 5)          CurSfxType3 = 0x61;
+        else if (kindSum >= 3)     CurSfxType3 = 0x5e;
+      }
+    }
+
+`di` in the image is `kindSum`, `[bp-3]` is `minLevel`, `[bp-6]` is `sameSfx`, `[bp-1]` is `sfx`,
+`[bp-5]` is `bldType`, `[bp-2]` is `unitType`. The earlier reading had `[bp-3]` as a "probe class"
+and `di` as a column index, which is why the dispatch looked under-determined.
+
+## Measurement correction: the call census counts each function's own definition as a call
+
+`screen_calls.py` matches `IDENT(` across the whole body, which includes the `type name(args)`
+signature line at the top. So every function with a matching body shows **delta +1**, not 0. The
+histogram over all 917 screened functions:
+
+    delta  -3..-340   36 functions      delta 0     34
+    delta  +1        817 functions      delta +2.. +68   29
+
+So `+1` is parity. Re-reading the recent numbers against that baseline:
+
+    55fe:0000   C 8   image 7   -> 7 real calls, exact parity
+    7e7c:0b9c   C 178 image 187 -> 177 real calls, still 10 short (not 9)
+    77eb:0d61   C 1   image 58  -> 0 written, 58 short
+
+The tool is left as is (changing it would move 817 rows at once and break comparability with every
+recorded number); the +1 bias is now recorded so the deltas are read correctly.
+
+## Measured (HEAD 31e4915b -> this commit)
+
+    screen_calls     55fe:0000  C 6 -> 8  (image 7; real calls 7 = parity)
+    grep_checks      9,798 (unchanged)
+    REBUILT.EXE      447,416 -> 447,784
+    build 65/65, LINK.LOG 0 errors
+    compare_state    292 matched / 7 different / missing 889 (unchanged)
+    diff_dgroup      288/1,805 matched, 62 distinct layout deltas
+    compare_runtime  280 identical / 11 different (unchanged, all three sample points)
+
+`55fe:0000` is now a complete body: no GAP markers remain.

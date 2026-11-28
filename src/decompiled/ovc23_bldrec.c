@@ -27,8 +27,15 @@ uint16_t __cdecl16far ovc23_textAdlibNone(void)
   int d;
   int si;
   byte colOfs;
-  byte probeClass;
-  int probeCol;
+  int idx;
+  byte unitType;
+  byte bldType;
+  byte sfx;
+  uint16_t kindSum;
+  byte minLevel;
+  byte sameSfx;
+  int col;
+  byte mapClass;
 
   flags = 0;
   alignedX = (int)ovr_alignUp4((uint16_t)GfxRndSeed);
@@ -83,6 +90,9 @@ uint16_t __cdecl16far ovc23_textAdlibNone(void)
   /* 0x0191..0x03c5: the cursor sound is cleared, then set from the accumulated flags and the
      placed-record state.  `CurSfxType3` (DGROUP 0x7a7) carries it. */
   CurSfxType3 = 0xff;
+  if (GOngoingBattle != 0) {
+    return flags;
+  }
   if (flags == 0x3000) {
     return flags;
   }
@@ -90,21 +100,49 @@ uint16_t __cdecl16far ovc23_textAdlibNone(void)
     CurSfxType3 = 0x70;
     return flags;
   }
-  /* the image initialises the probe results before the (unwritten) probe loop: 0x01d1..0x01d7 */
-  probeCol = 0;
-  probeClass = 0xff;
-  /* GAP: the cursor-column probe (0x01cd..0x037b) - ovc45_getUnitIndex(GfxRndSeed2, GfxRndSeed-2..+1)
-     at 0x250,0x20 and 0x250,0x25, and the ovr_randBelow call at 0x035f.  The probe's result feeds
-     [bp-3] and [bp-1], which the code below tests. */
-  if (flags == 0x1000) {
-    if (CurSfxType3 == 0xff) {
-      if ((byte)probeClass != 0xff) {
-        if ((byte)probeClass < 5) {
-          CurSfxType3 = 0x61;
-        }
-        else if (probeCol >= 3) {
-          CurSfxType3 = 0x5e;
-        }
+  /* 0x01cd..0x037a: probe the four columns around the cursor.  `minLevel` becomes the smallest level
+     of a friendly building found on them, `kindSum` the sum of the BuildingTypes kinds, and `sfx` the
+     per-building cursor sound that the loop copies into CurSfxType3. */
+  sfx = 0;
+  kindSum = 0;
+  minLevel = 0xff;
+  sameSfx = 0;
+  for (col = -2; col <= 1; col++) {
+    idx = (int)ovr_ovc45_getUnitIndex(GfxRndSeed + col,GfxRndSeed2);
+    bldType = (byte)ovr_ovc45_getUnitType(GfxRndSeed + col,GfxRndSeed2);
+    unitType = GUnits[idx].unitType;
+    if ((idx >= 0xf8) && (unitType != 0xff)) {
+      if (((GLeaderSheets[unitType])->faction == 0) &&
+          (GUnits[idx].level <= minLevel)) {
+        minLevel = GUnits[idx].level;
+      }
+    }
+    if (((GLeaderSheets[unitType])->faction == 0) && (unitType != 0xff)) {
+      kindSum = (uint16_t)(kindSum + BuildingTypes[bldType].kind);
+    }
+    sfx = BuildingTypes[bldType].sfxType;
+    if ((GUnits[idx].level >= 6) && (sfx == 0x86)) {
+      sameSfx = sameSfx + 1;
+      if (sameSfx < 2) {
+        sfx = 0;
+      }
+    }
+    if (sfx != 0) {
+      if (CurSfxType3 == 0xff) {
+        CurSfxType3 = sfx;
+      }
+      else if (ovr_randBelow(2) == 0) {
+        CurSfxType3 = sfx;
+      }
+    }
+  }
+  if ((flags == 0x1000) && (CurSfxType3 == 0xff)) {
+    if (minLevel != 0xff) {
+      if (minLevel < 5) {
+        CurSfxType3 = 0x61;
+      }
+      else if (kindSum >= 3) {
+        CurSfxType3 = 0x5e;
       }
     }
   }
@@ -113,8 +151,8 @@ uint16_t __cdecl16far ovc23_textAdlibNone(void)
   }
   /* 0x03e5..0x0479: the map-flag class picks the cursor sound through the cs:0x47d table
      (0x400=0x80, 0x40d=0x83, 0x41a=GSeason?0x7a:0x76, 0x443=GSeason?0x7a:0x7d, 0x46c=0x7a). */
-  probeClass = (byte)constr_usesGMapFlags((int)alignedX,(int)GfxRndSeed2);
-  switch ((uint16_t)probeClass) {
+  mapClass = (byte)ovr_constr_usesGMapFlags2(GfxRndSeed,GfxRndSeed2 + 1);
+  switch ((uint16_t)mapClass) {
   case 0:
     CurSfxType3 = 0x80;
     break;
