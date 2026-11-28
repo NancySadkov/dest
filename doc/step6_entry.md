@@ -26106,3 +26106,41 @@ instance at 87 occurrences.
       3f0b:2a09 (arena bar meter)          -47
       5b66:131f (uVar renames)             -34
       5b66:131f (unaff_BP reconstruction)    0 for the gate, ~100 artefacts resolved
+
+
+## `2e25:05e9` (construction-record compiler): 45 hits down to 0, grep 4,873 -> 4,820 (-53)
+
+Walks the construction records, advances their frames, and retires the finished ones.
+
+    uVar6  -> prevTickHi   the high word of prevTick
+              compute1Res  ovr_ovc23_compute1's result
+    pcVar1 -> framePtr     &GRecords[rec].frame
+    uVar4  -> nextFrame    GRecords[rec].frame + 1
+    cVar2  -> recState     GRecords[rec].state (0, 1 or 2)
+    uVar5  -> cursorRes    ovr_ovc23_isCursorAt's result
+              battleRes    ovr_ovc22_usesGOngoingBattle's result
+    puVar3 -> tickRes      ovr_attact_usesBDADailyTimeCounter's result
+    in_stack_0000fffa -> recY   GRecords[rec].y, the row handed to every callee
+
+`uVar6` needed one reachability check: it holds `prevTickHi` at 324/332/341/362 and then
+`compute1Res` at 363, and 377/387 read it again. Both of those sit in the `else if`s at 339/374, which
+are exclusive with 330's arm, so the compute1 result cannot reach them - the split is safe and the
+`prevTickHi` lifetime is unbroken.
+
+## Measured (HEAD ed848ca7 -> this commit)
+
+    grep_checks          4,873 -> 4,820   (-53)
+    REBUILT.EXE          447,938 (unchanged size)
+    build 65/65, LINK.LOG 0 errors
+    compare_state        identical 734 / 7 different / 889 missing (unchanged)
+    diff_dgroup          288/1,805 matched (unchanged)
+    compare_runtime      280 identical / 11 different at entry, init_game and key (unchanged)
+    structural_deficits  two game bodies: 7e7c:0b9c (177/187), 77eb:0d61 (54/58)
+
+## Turn total (HEAD 861fe0d5 -> here)
+
+    grep_checks          4,954 -> 4,820   (-134)
+      3f0b:2a09 (arena bar meter)          -47
+      5b66:131f (uVar renames)             -34
+      2e25:05e9 (construction records)     -53
+      5b66:131f (unaff_BP reconstruction)    0 for the gate, ~100 artefacts resolved

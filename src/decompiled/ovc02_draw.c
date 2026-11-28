@@ -299,82 +299,84 @@ void __cdecl16far draw_usesBlitLoadRleGfx2(void)
 void __cdecl16far draw_usesPlay_sfx(void)
 
 {
-  char *pcVar1;
-  char cVar2;
+  char *framePtr;           /* &GRecords[rec].frame */
+  char recState;            /* GRecords[rec].state */
   uint16_t x;
-  ulong *puVar3;
-  uint uVar4;
-  uint16_t uVar5;
-  uint uVar6;
+  ulong *tickRes;           /* ovr_attact_usesBDADailyTimeCounter's result */
+  uint nextFrame;           /* GRecords[rec].frame + 1 */
+  uint16_t cursorRes;       /* ovr_ovc23_isCursorAt's result */
+  uint16_t battleRes;       /* ovr_ovc22_usesGOngoingBattle's result */
+  uint prevTickHi;          /* the high word of prevTick */
+  uint compute1Res;         /* ovr_ovc23_compute1's result */
   word count;
   int in_DX;
   uint16_t unaff_SI;
   uint rec;
   ulong prevTick;
   uint16_t outFlag;
-  agnt_t far *in_stack_0000fffa;
+  agnt_t far *recY;         /* GRecords[rec].y, the row handed to the callees */
   byte col;
   
   prevTick = CONCAT22(unaff_SI,(*(uint16_t *)((uint8_t *)&(recordUpdateTick) + 2)));
-  puVar3 = ovr_attact_usesBDADailyTimeCounter((ulong *)recordUpdateTick,prevTick,0);
-  if ((in_DX != 0) || ((ulong *)((int)(uint32_t *)&_DATA + 1U) < puVar3)) {
+  tickRes = ovr_attact_usesBDADailyTimeCounter((ulong *)recordUpdateTick,prevTick,0);
+  if ((in_DX != 0) || ((ulong *)((int)(uint32_t *)&_DATA + 1U) < tickRes)) {
     (*(uint16_t *)((uint8_t *)&(recordUpdateTick) + 2)) = (uint16_t)*(uint16_t far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
     (*(uint16_t *)((uint8_t *)&(recordUpdateTick))) = (uint16_t)*(ulong * far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs);
     outFlag = 0;
-    for (rec = 0; uVar6 = (uint)(prevTick >> 0x10), rec < GRecordCount; rec = rec + 1) {
+    for (rec = 0; prevTickHi = (uint)(prevTick >> 0x10), rec < GRecordCount; rec = rec + 1) {
       GRecords[rec].buildTimer = GRecords[rec].buildTimer + 1;
       if (20000 < GRecords[rec].buildTimer) {
         GRecords[rec].buildTimer = (uint16_t)0x14;
       }
-      cVar2 = GRecords[rec].state;
-      if (cVar2 == '\0') {
-        uVar4 = GRecords[rec].frame + 1;
-        prevTick = CONCAT22(uVar6,uVar4);
-        if ((uVar4 < GRecords[rec].frameCount) && (0x13 < GRecords[rec].buildTimer)) {
+      recState = GRecords[rec].state;
+      if (recState == '\0') {
+        nextFrame = GRecords[rec].frame + 1;
+        prevTick = CONCAT22(prevTickHi,nextFrame);
+        if ((nextFrame < GRecords[rec].frameCount) && (0x13 < GRecords[rec].buildTimer)) {
           GRecords[rec].buildTimer = (uint16_t)0;
-          pcVar1 = (char *)&GRecords[rec].frame;
-          *pcVar1 = *pcVar1 + '\x01';
+          framePtr = (char *)&GRecords[rec].frame;
+          *framePtr = *framePtr + '\x01';
         }
       }
-      else if (cVar2 == '\x01') {
-        uVar4 = GRecords[rec].frame + 1;
-        prevTick = CONCAT22(uVar6,uVar4);
-        if (uVar4 < GRecords[rec].frameCount) {
+      else if (recState == '\x01') {
+        nextFrame = GRecords[rec].frame + 1;
+        prevTick = CONCAT22(prevTickHi,nextFrame);
+        if (nextFrame < GRecords[rec].frameCount) {
           if (0x13 < GRecords[rec].buildTimer) {
             GRecords[rec].buildTimer = (uint16_t)0;
-            pcVar1 = (char *)&GRecords[rec].frame;
-            *pcVar1 = *pcVar1 + '\x01';
+            framePtr = (char *)&GRecords[rec].frame;
+            *framePtr = *framePtr + '\x01';
           }
         }
         else {
           GRecords[rec].state = 2;
           x = GRecords[rec].x;
-          in_stack_0000fffa = (agnt_t far *)GRecords[rec].y;
-          uVar5 = ovr_ovc23_isCursorAt(x,(int)in_stack_0000fffa,0);
-          if (((char)uVar5 != '\0') && (GRecords[rec].reserved08 != '\0')) {
+          recY = (agnt_t far *)GRecords[rec].y;
+          cursorRes = ovr_ovc23_isCursorAt(x,(int)recY,0);
+          if (((char)cursorRes != '\0') && (GRecords[rec].reserved08 != '\0')) {
             ovr_play_sfx(80,0,0);
           }
           col = (byte)x;
-          uVar5 = ovr_ovc22_usesGOngoingBattle(col,(byte)in_stack_0000fffa);
-          if ((char)uVar5 != '\0') {
+          battleRes = ovr_ovc22_usesGOngoingBattle(col,(byte)recY);
+          if ((char)battleRes != '\0') {
             outFlag = CONCAT11(1,(char)outFlag);
           }
-          prevTick = (ulong)uVar6 << 0x10;
-          uVar6 = ovr_ovc23_compute1(x,(int)in_stack_0000fffa,GRecords[rec].reserved08,
+          prevTick = (ulong)prevTickHi << 0x10;
+          compute1Res = ovr_ovc23_compute1(x,(int)recY,GRecords[rec].reserved08,
                                      GRecords[rec].party);
-          if ((uVar6 & 0xff) == 0) {
+          if ((compute1Res & 0xff) == 0) {
             prevTick = prevTick & 0xffff0000;
             ovr_ovc23_placeBuilding
-                      (x,(int)in_stack_0000fffa,GRecords[rec].reserved08,
+                      (x,(int)recY,GRecords[rec].reserved08,
                        GRecords[rec].party);
           }
           GRecords[rec].buildTimer = (uint16_t)0;
         }
       }
-      else if ((cVar2 == '\x02') && (9 < GRecords[rec].buildTimer)) {
+      else if ((recState == '\x02') && (9 < GRecords[rec].buildTimer)) {
         if (rec + 1 < GRecordCount) {
           count = ((GRecordCount - rec) + -1) * 0x12;
-          prevTick = CONCAT22(uVar6,count);
+          prevTick = CONCAT22(prevTickHi,count);
           _fmemmove((char *)CONCAT22(_DS,(char *)&GREC_FIELD(&GRecords[rec], buildTimer, 0)),
                     (char *)CONCAT22(_DS,(char *)&GREC_FIELD(&GRecords[rec + 1], buildTimer, 0)),count);
           rec = rec - 1;
@@ -384,7 +386,7 @@ void __cdecl16far draw_usesPlay_sfx(void)
       }
     }
     if ((char)outFlag != '\0') {
-      ovr_ovc23_textAdlibNone(uVar6,outFlag,in_stack_0000fffa);
+      ovr_ovc23_textAdlibNone(prevTickHi,outFlag,recY);
     }
     if ((char)(outFlag >> 8) != '\0') {
       ovr_constr_flushDirtyRects();
