@@ -274,97 +274,99 @@ uint __cdecl16far
 ovc26_usesRandBelow(int entityIndex,uint16_t outFlag,uint16_t outFlagSeg,uint16_t flagsOfs,uint16_t flagsSeg)
 
 {
-  byte *pbVar1;
-  int iVar2;
-  int iVar3;
+  byte *flagPtr;            /* &Entities[i] + 0x33, the flags byte */
+  int entX;                 /* Entities[i].base.x */
+  int entY;                 /* Entities[i].base.y */
   uint16_t destX;
   uint16_t destY;
-  byte bVar4;
-  uint uVar5;
-  short *psVar6;
-  uint16_t uVar7;
-  undefined1 uVar8;
-  int iVar9;
+  byte unitType;            /* ovr_ovc45_getUnitType's result */
+  uint classOfs;            /* gindex * 0x95, the class record offset */
+  uint result;              /* the value every return path produces */
+  short *mapPtr;            /* a cell in the GMapFlags grid being probed */
+  uint16_t randVal;         /* ovr_randBelow(2,0) */
+  undefined1 packHi;        /* the high byte of the packed return */
+  int entitiesOfs;          /* (int)Entities, the base the body reads through */
+  int stepX;                /* ovr_ovc07_signum(destX - x): -1, 0 or 1 */
   char unaff_DI;
   short *psStack_c;
   byte bStack_7;
   
-  iVar9 = (int)Entities;
-  if (AgntGs[(uint)((entity_t *)iVar9)[entityIndex].base.gindex].ai == '\0') {
-    uVar5 = 0;
+  entitiesOfs = (int)Entities;
+  if (AgntGs[(uint)((entity_t *)entitiesOfs)[entityIndex].base.gindex].ai == '\0') {
+    result = 0;
   }
   else {
-    uVar5 = (uint)((entity_t *)iVar9)[entityIndex].base.gindex * 0x95;
-    if ((*(uint *)((int)&worldMenuLabels[6].seg + 1 + uVar5) & 0x80) == 0) {
+    classOfs = (uint)((entity_t *)entitiesOfs)[entityIndex].base.gindex * 0x95;
+    if ((*(uint *)((int)&worldMenuLabels[6].seg + 1 + classOfs) & 0x80) == 0) {
       if (AGNT_FIELD(&(Entities)[entityIndex], base.entity, 1) == '\0') {
-        iVar2 = *(int *)((entity_t *)iVar9 + entityIndex);
-        iVar3 = ((entity_t *)iVar9)[entityIndex].base.y;
-        destX = ((entity_t *)iVar9)[entityIndex].base.destX;
-        destY = ((entity_t *)iVar9)[entityIndex].base.destY;
-        iVar9 = ovr_ovc07_signum(((entity_t *)iVar9)[entityIndex].base.destX - iVar2);
+        entX = *(int *)((entity_t *)entitiesOfs + entityIndex);
+        entY = ((entity_t *)entitiesOfs)[entityIndex].base.y;
+        destX = ((entity_t *)entitiesOfs)[entityIndex].base.destX;
+        destY = ((entity_t *)entitiesOfs)[entityIndex].base.destY;
+        stepX = ovr_ovc07_signum(((entity_t *)stepX)[entityIndex].base.destX - entX);
         psStack_c = (short *)ovr_ovc07_signum((Entities)[entityIndex].base.destY -
-                                              iVar3);
-        psVar6 = psStack_c;
-        if ((iVar9 != 0) &&
-           (psVar6 = (*(short (*) [60] [148])GMapFlags)[iVar3] + iVar2 + iVar9,
-           (psVar6[0x94] & 3U) == 0)) {
-          iVar9 = 0;
+                                              entY);
+        mapPtr = psStack_c;
+        if ((stepX != 0) &&
+           (mapPtr = (*(short (*) [60] [148])GMapFlags)[entY] + entX + stepX,
+           (mapPtr[0x94] & 3U) == 0)) {
+          stepX = 0;
         }
         if ((psStack_c != (short *)0x0) &&
-           (psVar6 = (*(short (*) [60] [148])GMapFlags)[iVar3 + (int)psStack_c] + iVar2,
-           (psVar6[0x94] & 3U) == 0)) {
+           (mapPtr = (*(short (*) [60] [148])GMapFlags)[entY + (int)psStack_c] + entX,
+           (mapPtr[0x94] & 3U) == 0)) {
           psStack_c = (short *)0x0;
         }
-        if ((iVar9 == 0) && (psStack_c == (short *)0x0)) {
-          uVar5 = (uint)psVar6 & 0xff00;
+        if ((stepX == 0) && (psStack_c == (short *)0x0)) {
+          result = (uint)mapPtr & 0xff00;
         }
         else {
-          if ((iVar9 != 0) && (iVar9 != 0)) {
-            uVar7 = ovr_randBelow(2,0);
-            if ((uVar7 & 0xff) == 0) {
-              iVar9 = 0;
+          if ((stepX != 0) && (stepX != 0)) {
+            randVal = ovr_randBelow(2,0);
+            if ((randVal & 0xff) == 0) {
+              stepX = 0;
             }
             else {
               psStack_c = (short *)0x0;
             }
           }
-          if (iVar9 == 0) {
+          if (stepX == 0) {
             bStack_7 = 0xa1;
           }
           else {
             bStack_7 = 0xa0;
           }
-          bVar4 = ovr_ovc45_getUnitType(iVar2 + iVar9,iVar3 + (int)psStack_c);
-          if ((BuildingTypes[bVar4].flags & 0xc) == 0) {
+          unitType = ovr_ovc45_getUnitType(entX + stepX,entY + (int)psStack_c);
+          if ((BuildingTypes[unitType].flags & 0xc) == 0) {
             ovr_createConstructionRecordFar
-                      (bStack_7,iVar2 + iVar9,iVar3 + (int)psStack_c,(uint8_t *)CONCAT22(outFlagSeg,outFlag),AGNT_FIELD(&(Entities)[entityIndex], base.entity, 3),unaff_DI,0,0,0);
+                      (bStack_7,entX + stepX,entY + (int)psStack_c,(uint8_t *)CONCAT22(outFlagSeg,outFlag),AGNT_FIELD(&(Entities)[entityIndex], base.entity, 3),unaff_DI,0,0,0);
             ovr_attact_usesEntities
-                      (entityIndex,iVar2 + iVar9,iVar3 + (int)psStack_c,flagsOfs,flagsSeg,0,0,0,0);
-            (Entities)[entityIndex].base.targetX = iVar2 + iVar9;
-            (Entities)[entityIndex].base.targetY = iVar3 + (int)psStack_c;
-            pbVar1 = (byte *)((uint8_t *)&(Entities)[entityIndex] + 0x33);
-            *pbVar1 = *pbVar1 | 2;
-            pbVar1 = (byte *)((uint8_t *)&(Entities)[entityIndex] + 0x33);
-            *pbVar1 = *pbVar1 & 0xfa;
-            uVar8 = (undefined1)((uint)(entityIndex * 0x37) >> 8);
+                      (entityIndex,entX + stepX,entY + (int)psStack_c,flagsOfs,flagsSeg,0,0,0,0);
+            (Entities)[entityIndex].base.targetX = entX + stepX;
+            (Entities)[entityIndex].base.targetY = entY + (int)psStack_c;
+            flagPtr = (byte *)((uint8_t *)&(Entities)[entityIndex] + 0x33);
+            *flagPtr = *flagPtr | 2;
+            flagPtr = (byte *)((uint8_t *)&(Entities)[entityIndex] + 0x33);
+            *flagPtr = *flagPtr & 0xfa;
+            packHi = (undefined1)((uint)(entityIndex * 0x37) >> 8);
             ovr_ovc25_usesAlignUp44
                       (*(char *)((int)&(Entities)[entityIndex].base.entity + 3),1,destX,destY);
-            uVar5 = CONCAT11(uVar8,1);
+            result = CONCAT11(packHi,1);
           }
           else {
-            uVar5 = 0;
+            result = 0;
           }
         }
       }
       else {
-        uVar5 = entityIndex * 0x37 & 0xff00;
+        result = entityIndex * 0x37 & 0xff00;
       }
     }
     else {
-      uVar5 = uVar5 & 0xff00;
+      result = result & 0xff00;
     }
   }
-  return uVar5;
+  return result;
 }
 
 

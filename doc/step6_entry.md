@@ -25594,3 +25594,43 @@ Both are named in the log rather than guessed, the same treatment as `ovc49_draw
       ovc24_textKill (5943:026e)          -144
       ovc15_textMake (4207:10a3)          -104
       ovc43_usesFmFreeAudio (6fbe:0000)    -84
+
+
+## `ovc26_usesRandBelow` (5d45:06f0): 76 hits down to 2, grep 5,637 -> 5,549 (-88)
+
+The "step toward the target" helper - it picks a step direction, probes the GMapFlags grid ahead of
+the entity, and either records a construction or returns a packed status.
+
+    iVar9 -> entitiesOfs   (int)Entities, the base the body reads through
+             stepX         ovr_ovc07_signum(destX - x): -1, 0 or 1
+    iVar2 -> entX          Entities[i].base.x
+    iVar3 -> entY          Entities[i].base.y
+    uVar5 -> classOfs      gindex * 0x95, the class record offset
+             result        the value every return path produces
+    psVar6 -> mapPtr       a cell in the GMapFlags grid being probed
+    pbVar1 -> flagPtr      &Entities[i] + 0x33
+    bVar4 -> unitType      ovr_ovc45_getUnitType's result
+    uVar7 -> randVal       ovr_randBelow(2,0)
+    uVar8 -> packHi        the high byte of the packed return
+
+Only `unaff_DI` (2) is left - the register value the image leaves for the
+`ovr_createConstructionRecordFar` argument list, which is not a local I can name.
+
+## Measured (HEAD fbb475b9 -> this commit)
+
+    grep_checks          5,637 -> 5,549   (-88)
+    REBUILT.EXE          447,954 -> 447,970   (+16: frame reshuffle)
+    build 65/65, LINK.LOG 0 errors
+    compare_state        identical 734 / 7 different / 889 missing (unchanged)
+    diff_dgroup          288/1,805 matched (unchanged)
+    compare_runtime      280 identical / 11 different at entry, init_game and key (unchanged)
+    structural_deficits  two game bodies: 7e7c:0b9c (177/187), 77eb:0d61 (54/58)
+
+## Turn total (HEAD dbb7af4e -> here)
+
+    grep_checks          6,090 -> 5,549   (-541)
+      constr_usesAgnt_clear (36ce:0995)   -121
+      ovc24_textKill (5943:026e)          -144
+      ovc15_textMake (4207:10a3)          -104
+      ovc43_usesFmFreeAudio (6fbe:0000)    -84
+      ovc26_usesRandBelow (5d45:06f0)      -88
