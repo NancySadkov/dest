@@ -543,3 +543,55 @@ at leaf 25): they are different passes, not a duplicated arm.
 
 Consequence for the body: it is a `do { ... } while (!done)` with the flag arming the exit, and the
 `0x1f1a` blocks are `continue` statements, not `return`s. The arms must be emitted per pass.
+
+## The loop, the continuation and the exit paths (decoded)
+
+    b9c  frame 0x2f0
+    ba5  [bp-0x27] = 0                      ; pass flag
+    ba9  [bp-0x14] = GfxRndSeed + arg1 - 2  ; x
+    bc5  [bp-0x1f] = usesGfxRndSeed2(&x)    ; bldType
+    bdd  [bp-0x24] = getUnitIndex(GfxRndSeed2, x)   ; unitIdx
+
+    be8  loop:
+    bfc    [bp-0x20] = Entities[arg4].byte_0x1a     ; owner
+    c0a    if ([bp-0x27] != 0) goto pass2 (0f16)
+
+    /* pass 1: 0c0f..1f17 - leaves 1-24 build the message into [bp-0x2c8] */
+
+    1f1a continue:
+    f1a    si = 0
+       [bp-0x1e] = BuildingTypes[bld].cost * GUnits[unitIdx].level / 0x18 + 1
+       [bp+si-0x12] = 1                              ; per-entry flag byte
+       if ((BuildingTypes[bld].w116 | w118) != 0) {   ; far pointer at +0x116
+          list[si] = *(far_t *)&BuildingTypes[bld].w116; si++;
+          goto 0x20ae
+       }
+       if (unitIdx < 0xf8) goto 0x202c
+       if (BuildingTypes[bld].cost <= 0) goto 0x202c
+       if (BuildingTypes[bld].flags2 & 4) goto 0x202c
+       list[si] = "0x806a"; si++
+       if ([bp-0x27] == 0) goto 0x20ae
+       list[si] = fmVsprintf("0x8072", [bp-0x1e]); strcat(outBuf, list[si]); si++
+       202c: if ((flags2 & 4) && GUnits[unitIdx].unitType != 0xff &&
+                 GLeaderSheets[GUnits[unitIdx].unitType]->faction == 0)  goto 0x2094
+             2094: list[si] = "0x808a"; si++
+       20ae: ...
+
+    /* the region 0x20ae..0x2af0 (~700 instructions, still undecoded) finishes the list, renders
+       it and dispatches the two menu actions */
+
+    exit paths:
+    2b20   GUnits[unitIdx].unitType = Entities[arg4].byte_0x1a; goto loop
+    2b2d   [bp-0x27] = ([bp-0x27] == 0) ? 1 : 0; goto loop
+    2b35   goto loop
+    2b38   epilogue (pop di, pop si, leave, retf)
+
+So the function is: **compute the square's building, build a description message plus a list of
+far-pointer strings (the building's own name/description, a cost line, "0x808a"), show/dispatch it, and
+then update `GUnits[unitIdx].unitType` from the entity and re-run the whole thing once more** with
+`[bp-0x27]` flipped - which is what makes the same unitType values appear in two places.
+
+**What is still missing for the body:** the `0x20ae..0x2af0` region. It consumes the list built above
+(the `si` index, the `[bp-0x2f0]` array) and issues the UI calls - that is the part that gives the
+function its effect, and it is roughly 700 instructions. Everything before it (preamble, loop head,
+pass-1 arms, the `0x1f1a` continuation, both exits) is now decoded above.
