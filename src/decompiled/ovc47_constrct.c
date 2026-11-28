@@ -418,6 +418,8 @@ void constrct_buildInfoText(int x,byte far *flag,int entityIdx,int arg4,int arg5
   int v16;
   int v18;
   int choice;
+  uint16_t nounIdx;
+  char far *noun;
   char far *res;
   char outBuf[0x2b0];
   far_t list[0x10];
@@ -637,46 +639,50 @@ void constrct_buildInfoText(int x,byte far *flag,int entityIdx,int arg4,int arg5
         strcpy(outBuf,res);
       }
       else if ((bld->unitType == 0) || (bld->unitType == 8)) {
-        /* GUESS: the %s after the housing count is a far pointer taken from the table at
-           bld+0x74ad indexed by the housing kind; the literal below is a stand-in. */
+        /* The %s noun is the far pointer table at DGROUP 0x74ad, indexed by
+           ovc45_compute6(v18, bld->storage); its two entries are "person" and "people". */
+        nounIdx = (uint16_t)ovr_ovc45_compute6(v18,bld->storage);
+        noun = (nounIdx != 0) ? (char far *)"people" : (char far *)"person";
         if (bld->storage != 0) {
           res = ovr_fmVsprintf(
                     (char far *)"%s: Provides housing for %d %s and storage for %d food.",
                     (uint16_t)ovr_ovc15_usesStshRealloc(
                         (char far *)MK_FP((uint16_t)((uint32_t)bld->name >> 16),
-                                          (uint16_t)bld->name)),v18,(uint16_t)"housing",
+                                          (uint16_t)bld->name)),v18,(uint16_t)noun,
                     bld->storage);
         }
         else {
           res = ovr_fmVsprintf((char far *)"%s: Provides housing for %d %s.",
                                (uint16_t)ovr_ovc15_usesStshRealloc(
                                    (char far *)MK_FP((uint16_t)((uint32_t)bld->name >> 16),
-                                                     (uint16_t)bld->name)),v18,(uint16_t)"housing");
+                                                     (uint16_t)bld->name)),v18,(uint16_t)noun);
         }
         strcpy(outBuf,res);
       }
       else if (bld->unitType == 9) {
-        /* GUESS: the %s before the gold amount is a rate word from the same table. */
+        /* Same person/people table as the housing arms above. */
+        nounIdx = (uint16_t)ovr_ovc45_compute6(v18,bld->storage);
+        noun = (nounIdx != 0) ? (char far *)"people" : (char far *)"person";
         if (v16 != 0) {
           res = ovr_fmVsprintf((char far *)"%s: %s %d gold. Feeds %d %s.",
                                (uint16_t)ovr_ovc15_usesStshRealloc(
                                    (char far *)MK_FP((uint16_t)((uint32_t)bld->name >> 16),
-                                                     (uint16_t)bld->name)),(uint16_t)"Produces",
-                               bld->cost,v16,(uint16_t)"food");
+                                                     (uint16_t)bld->name)),(uint16_t)noun,
+                               bld->cost,v16,(uint16_t)noun);
         }
         else if (bld->housing != 0) {
           res = ovr_fmVsprintf(
                     (char far *)"%s: %s %d gold. provides housing for %d %s and feeds %d %s.",
                     (uint16_t)ovr_ovc15_usesStshRealloc(
                         (char far *)MK_FP((uint16_t)((uint32_t)bld->name >> 16),
-                                          (uint16_t)bld->name)),(uint16_t)"Produces",bld->cost,
-                    bld->housing,(uint16_t)"housing",v16,(uint16_t)"food");
+                                          (uint16_t)bld->name)),(uint16_t)noun,bld->cost,
+                    bld->housing,(uint16_t)noun,v16,(uint16_t)noun);
         }
         else {
           res = ovr_fmVsprintf((char far *)"%s: %s %d gold.",
                                (uint16_t)ovr_ovc15_usesStshRealloc(
                                    (char far *)MK_FP((uint16_t)((uint32_t)bld->name >> 16),
-                                                     (uint16_t)bld->name)),(uint16_t)"Produces",
+                                                     (uint16_t)bld->name)),(uint16_t)noun,
                                bld->cost);
         }
         strcpy(outBuf,res);

@@ -22496,3 +22496,39 @@ from the image; those two words are not.
 
 Remaining 55 calls: the arms for unitType 3, 7, 0xa, 0xb, 0xc (their literals are in the inventory,
 their argument tables are not resolved) and the `0x1a8,0x2a` site.
+
+
+## The `bld+0x74ad` noun table resolved
+
+The inner `%s` in the housing and feeder messages is **not** a `bldtp_t` field: the indexing code is
+
+    1a69.. imul 0x27 / es = 0x60 / bx = bld record
+    1a7a   push es:[bx + 0x12a]        ; bld->storage
+    1a7f   push [bp - 0x18]            ; v18 (housing count)
+    1a82   lcall 0x250, 0x84           ; ovc45_compute6 -> AX
+    1a8a   shl ax, 2                   ; * 4
+    1a8f   es = 0x280 (DGROUP)
+    1a96   push es:[bx + 0x74af] / push es:[bx + 0x74ad]   ; far pointer from the table
+
+so the table is at **DGROUP 0x74ad**, indexed by `ovc45_compute6(v18, bld->storage)`, and its entries are
+
+    [0] 2410:77e2  "person"
+    [1] 2410:77e9  "people"
+
+So the noun is `compute6(...) ? "people" : "person"`. Both `GUESS` markers are gone: the arms for
+unitType 0/8 and 9 now derive the noun from the real call and the two real literals, and the extra
+`ovc45_compute6` call sites the image has are in the tree.
+
+## Measured (HEAD c89bd110 -> this commit)
+
+    screen_calls     7e7c:0b9c  C 132 -> 134  (image 187), delta -55 -> -53
+    grep_checks      11,516 (unchanged)
+    REBUILT.EXE      466,134 -> 466,222
+    build 65/65, LINK.LOG 0 errors
+    compare_state    1,628 matched / 0 different / missing 2      (unchanged)
+    diff_dgroup      1,639/1,805 matched, 5 layout runs           (unchanged)
+    compare_runtime  1,692 matched / 1,683 identical / 9 different (unchanged, all three sample points)
+
+Note the count only moved by 2: the win here is correctness (a guessed noun replaced by the derived
+one), not census. Remaining 53 calls: the arms for unitType 3, 7, 0xa, 0xb, 0xc and the `0x1a8,0x2a`
+site.
