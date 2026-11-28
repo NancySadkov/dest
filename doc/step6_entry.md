@@ -24950,3 +24950,36 @@ zero nameable slots now.
     diff_dgroup          288/1,805 matched (unchanged)
     compare_runtime      280 identical / 11 different at entry, init_game and key (unchanged)
     structural_deficits  two game bodies: 7e7c:0b9c (177/187), 77eb:0d61 (54/58)
+
+
+## `upd_usesAlignUp4` (5087:1d7d): nine single-region slots cleared, grep 7,584 -> 7,526
+
+The disjoint-region test applied to the biggest remaining body:
+
+    iStack_2a  (1811-1845)  -> budget       the 0..3 clamp that decrements a leader's budget
+    uStack_10  (1284-1292)  -> popGain      gold / 10, added to GPopulation
+    pbVar1     (1152-1153)  -> flagsPtr     &GUnits[idx].flags
+    sVar6      (1636-1638)  -> unitY        GUnits[unitIdx].y
+    puVar28    (1715-1723)  -> bldTypePtr   &bldType, handed out as a far pointer
+    puVar30    (1714-1725)  -> partialPtr   &partialWeight
+    puVar32    (1713, 1727) -> successPtr   &successWeight
+    uStack_8   (1171-1177)  -> randRange    0x96 or 0x5dc, the ovr_randBelow bound
+    uVar26     (1440, 1612) -> sheetSeg2    segment half of GLeaderSheets[idx]
+
+Each appears in one contiguous region (or two adjacent ones for `puVar32`/`uVar26`, each with an
+assignment before the read), which is the test that made the `getcache` splits safe.
+
+**Not touched:** `uVar23` (59), `iVar17` (55), `iVar21` (46), `uVar12` (31) - their regions interleave
+with each other across the whole body (e.g. `uVar23` appears in eight or more separate ranges), so no
+assignment-before-read boundary separates their roles. Those need the body re-derived from the image,
+not a split.
+
+## Measured (HEAD 5d9a821b -> this commit)
+
+    grep_checks          7,584 -> 7,526   (-58)
+    REBUILT.EXE          447,858 (unchanged)
+    build 65/65, LINK.LOG 0 errors
+    compare_state        identical 734 / 7 different / 889 missing (unchanged)
+    diff_dgroup          288/1,805 matched (unchanged)
+    compare_runtime      280 identical / 11 different at entry, init_game and key (unchanged)
+    structural_deficits  two game bodies: 7e7c:0b9c (177/187), 77eb:0d61 (54/58)

@@ -1072,7 +1072,7 @@ uint16_t __cdecl16far ovc22_usesLUDIV_at_2(uint16_t valueLo,uint16_t valueHi,int
 void __cdecl16far upd_usesAlignUp4(void)
 
 {
-  byte *pbVar1;
+  byte *flagsPtr;          /* &GUnits[idx].flags */
   uint far *accLo;
   /* GUESS-free: GMapFlags is a 16-bit array, so its view is uint16_t * while accLo stays
      uint * for the sheet gold/trade counters at +0x56/+0x60/+0x7e. */
@@ -1080,7 +1080,7 @@ void __cdecl16far upd_usesAlignUp4(void)
   int far *accHi;
   uint8_t *puVar4;
   byte leaderIdx;
-  short sVar6;
+  short unitY;             /* GUnits[unitIdx].y */
   uint32_t uVar7;
   far_t pctOut;
   far_t remainderOut;
@@ -1109,21 +1109,21 @@ void __cdecl16far upd_usesAlignUp4(void)
   uint unitIdx;   /* the 0xf8..GUnitCount loops only */
   uint16_t unitsSeg;
   uint16_t sheetSeg;
-  uint16_t uVar26;
+  uint16_t sheetSeg2;       /* segment half of GLeaderSheets[idx] */
   bool bVar27;
   far_t table;
-  uint8_t *puVar28;
+  uint8_t *bldTypePtr;      /* &bldType, handed out as a far pointer */
   uint16_t pctSeg;
-  uint8_t *puVar30;
+  uint8_t *partialPtr;      /* &partialWeight */
   uint16_t remainderSeg;
-  uint8_t *puVar32;
+  uint8_t *successPtr;      /* &successWeight */
   undefined1 uVar33;
   undefined1 uVar34;
   undefined1 ptrSegHi;
   long a;
   uint uVar36;
   ulong in_stack_0000ffd2;
-  int iStack_2a;
+  int budget;              /* 0..3, decremented from the leader's budget */
   uint8_t bldType;
   uint8_t partialWeight;
   uint8_t successWeight;
@@ -1135,11 +1135,11 @@ void __cdecl16far upd_usesAlignUp4(void)
   uint idx;
   uint uStack_14;
   uint popAcc;
-  uint uStack_10;
+  uint popGain;             /* gold / 10, added to GPopulation */
   int iStack_e;
   int iStack_c;
   uint tradeAmount;
-  uint16_t uStack_8;
+  uint16_t randRange;       /* 0x96 or 0x5dc, the ovr_randBelow bound */
   byte gindex;
   byte firstLeader;
   uint sheetAA;
@@ -1149,8 +1149,8 @@ void __cdecl16far upd_usesAlignUp4(void)
     cStack_1d = '\0';
     found = 0x0;
     for (idx = 0xf8; idx < GUnitCount; idx = idx + 1) {
-      pbVar1 = &(GUnits)[idx].flags;
-      *pbVar1 = *pbVar1 & 0xfc;
+      flagsPtr = &(GUnits)[idx].flags;
+      *flagsPtr = *flagsPtr & 0xfc;
     }
     for (idx = 0; (int)idx < (int)(uint)GLeaderCount; idx = idx + 1) {
       if ((GLeaderSheets[idx])->active != '\0') {
@@ -1168,13 +1168,13 @@ void __cdecl16far upd_usesAlignUp4(void)
         if ((units[unitIdx].unitType == 0xff) ||
            (uVar7 = *(uint32_t *)((uint)units[unitIdx].unitType << 2),
            *(char *)((int)uVar7 + 0x3f) == '\0')) {
-          uStack_8 = 0x96;
+          randRange = 0x96;
         }
         else {
-          uStack_8 = 0x5dc;
+          randRange = 0x5dc;
         }
         if (units[unitIdx].level != 0) {
-          randVal = ovr_randBelow(uStack_8,0);
+          randVal = ovr_randBelow(randRange,0);
           unitsSeg = (uint16_t)((ulong)GUnits >> 0x10);
           units = GUnits;
           if ((int)(randVal & 0xff) <
@@ -1281,15 +1281,15 @@ void __cdecl16far upd_usesAlignUp4(void)
         }
         else {
           if ((sheetFaction == '\0') && (0 < *((int far *)GLeaderSheets[idx] + 0x54))) {
-            uStack_10 = *((int far *)GLeaderSheets[idx] + 0x54) / 10;
+            popGain = *((int far *)GLeaderSheets[idx] + 0x54) / 10;
           }
           else {
-            uStack_10 = 0;
+            popGain = 0;
           }
-          bVar27 = CARRY2(GPopulationLo,uStack_10);
-          GPopulationLo = GPopulationLo + uStack_10;
-          GPopulationHi = GPopulationHi + ((int)uStack_10 >> 0xf) + (uint)bVar27;
-          uVar12 = *((int far *)GLeaderSheets[idx] + 0x54) - uStack_10;
+          bVar27 = CARRY2(GPopulationLo,popGain);
+          GPopulationLo = GPopulationLo + popGain;
+          GPopulationHi = GPopulationHi + ((int)popGain >> 0xf) + (uint)bVar27;
+          uVar12 = *((int far *)GLeaderSheets[idx] + 0x54) - popGain;
           unitsSeg = (uint16_t)((ulong)(uint32_t)GLeaderSheets[idx] >> 0x10);
           accLo = (uint far *)((uint8_t far *)GLeaderSheets[idx] + 0x56);
           uVar23 = *accLo;
@@ -1437,7 +1437,7 @@ void __cdecl16far upd_usesAlignUp4(void)
           *accHi = *accHi + (uint)CARRY2(uVar23,tradeAmount);
           sheetSeg = (uint16_t)((ulong)(uint32_t)GLeaderSheets[idx] >> 0x10);
           unitsSeg = *(uint16_t far *)((uint8_t far *)GLeaderSheets[idx] + 0x7e);
-          uVar26 = (uint16_t)((ulong)(uint32_t)GLeaderSheets[idx] >> 0x10);
+          sheetSeg2 = (uint16_t)((ulong)(uint32_t)GLeaderSheets[idx] >> 0x10);
           iVar21 = (int)(uint32_t)GLeaderSheets[idx];
           *(uint16_t *)(iVar21 + 0x62) = *(uint16_t far *)((uint8_t far *)GLeaderSheets[idx] + 0x80);
           *(uint16_t *)(iVar21 + 0x60) = unitsSeg;
@@ -1609,7 +1609,7 @@ void __cdecl16far upd_usesAlignUp4(void)
            ((iVar21 < iVar17 || (*(uint *)(sheetOfs + 0x8a) < *(uint *)(iVar18 + 0x56))))) {
           sheetSeg = (uint16_t)((ulong)(uint32_t)GLeaderSheets[idx] >> 0x10);
           unitsSeg = *(uint16_t far *)((uint8_t far *)GLeaderSheets[idx] + 0x8a);
-          uVar26 = (uint16_t)((ulong)(uint32_t)GLeaderSheets[idx] >> 0x10);
+          sheetSeg2 = (uint16_t)((ulong)(uint32_t)GLeaderSheets[idx] >> 0x10);
           iVar21 = (int)(uint32_t)GLeaderSheets[idx];
           *(uint16_t *)(iVar21 + 0x58) = *(uint16_t far *)((uint8_t far *)GLeaderSheets[idx] + 0x8c);
           *(uint16_t *)(iVar21 + 0x56) = unitsSeg;
@@ -1633,9 +1633,9 @@ void __cdecl16far upd_usesAlignUp4(void)
           if (*(char *)((int)uVar7 + 0x3f) == '\0') {
             ovr_play_sfx(81,0,0);
             unitsSeg = (uint16_t)((ulong)GUnits >> 0x10);
-            sVar6 = (GUnits)[unitIdx].y;
-            uVar33 = (undefined1)sVar6;
-            ptrSegHi = (undefined1)((uint)sVar6 >> 8);
+            unitY = (GUnits)[unitIdx].y;
+            uVar33 = (undefined1)unitY;
+            ptrSegHi = (undefined1)((uint)unitY >> 8);
             uVar34 = 0x10;
             uVar12 = ovr_alignUp4((GUnits)[unitIdx].x,0,0);
             msg = ovr_fmVsprintf("Mine exhausted at (%d, %d).",
@@ -1710,21 +1710,21 @@ void __cdecl16far upd_usesAlignUp4(void)
             else {
               uVar34 = (undefined1)_SS;
               uVar33 = (undefined1)(_SS >> 8);
-              puVar32 = &successWeight;
-              puVar30 = &partialWeight;
-              puVar28 = &bldType;
-              index = CONCAT11((char)((uint)puVar28 >> 8),partySlot);
+              successPtr = &successWeight;
+              partialPtr = &partialWeight;
+              bldTypePtr = &bldType;
+              index = CONCAT11((char)((uint)bldTypePtr >> 8),partySlot);
               pctSeg = _SS;
               remainderSeg = _SS;
               tableOfs = ovr_attact_usesSquareRecCount(entX,entY);
               table.seg = randVal;
               table.ofs = tableOfs;
               pctOut.seg = pctSeg;
-              pctOut.ofs = (uint16_t)puVar28;
+              pctOut.ofs = (uint16_t)bldTypePtr;
               remainderOut.seg = remainderSeg;
-              remainderOut.ofs = (uint16_t)puVar30;
+              remainderOut.ofs = (uint16_t)partialPtr;
               (*(uint8_t *)((uint8_t *)&(partOut.seg))) = uVar34;
-              partOut.ofs = (uint16_t)puVar32;
+              partOut.ofs = (uint16_t)successPtr;
               (*(uint8_t *)((uint8_t *)&(partOut.seg) + 1)) = uVar33;
               ovr_attact_compute3(table,index,pctOut,remainderOut,partOut);
             }
@@ -1808,33 +1808,33 @@ void __cdecl16far upd_usesAlignUp4(void)
           ovc22_usesEntities3(idx);
           ovc22_usesEntities4(idx);
         }
-        iStack_2a = (uint)(Entities)[idx].base.animFrame -
+        budget = (uint)(Entities)[idx].base.animFrame -
                     (uint)*(byte *)((int)*(uint32_t *)((uint)leaderIdx << 2) + 0xa4);
-        if (0 < iStack_2a) {
-          if (3 < iStack_2a) {
-            iStack_2a = 3;
+        if (0 < budget) {
+          if (3 < budget) {
+            budget = 3;
           }
-          if (iStack_2a == 3) {
+          if (budget == 3) {
             if (*(int *)((int)*(uint32_t *)((uint)leaderIdx << 2) + 0x92) == 0) {
-              iStack_2a = 2;
+              budget = 2;
             }
             else {
               accHi = (int *)((int)*(uint32_t *)((uint)leaderIdx << 2) + 0x92);
               *accHi = *accHi + -1;
             }
           }
-          if (iStack_2a == 2) {
+          if (budget == 2) {
             if (*(int *)((int)*(uint32_t *)((uint)leaderIdx << 2) + 0x90) == 0) {
-              iStack_2a = 1;
+              budget = 1;
             }
             else {
               accHi = (int *)((int)*(uint32_t *)((uint)leaderIdx << 2) + 0x90);
               *accHi = *accHi + -1;
             }
           }
-          if (iStack_2a == 1) {
+          if (budget == 1) {
             if (*(int *)((int)*(uint32_t *)((uint)leaderIdx << 2) + 0x8e) == 0) {
-              iStack_2a = 0;
+              budget = 0;
             }
             else {
               accHi = (int *)((int)*(uint32_t *)((uint)leaderIdx << 2) + 0x8e);
@@ -1842,7 +1842,7 @@ void __cdecl16far upd_usesAlignUp4(void)
             }
           }
           (Entities)[idx].base.animFrame =
-               *(char *)((int)*(uint32_t *)((uint)leaderIdx << 2) + 0xa4) + (char)iStack_2a;
+               *(char *)((int)*(uint32_t *)((uint)leaderIdx << 2) + 0xa4) + (char)budget;
         }
         iStack_e = iStack_e + 1;
         if (199 < iStack_e) break;
