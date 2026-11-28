@@ -22059,3 +22059,40 @@ trick, the multiplication is kept and only the condition was retyped, so those r
     compare_state    1,628 matched / 0 different / missing 2      (unchanged)
     diff_dgroup      1,639/1,805 matched, 5 layout runs           (unchanged)
     compare_runtime  1,692 matched / 1,683 identical / 9 different (unchanged, all three sample points)
+
+
+## Building-type sweep, part 2: three more wrong-base reads
+
+A follow-up grep for `* 0x27` / `+ 0x1XX` found three more places that had kept Ghidra's raw form and
+therefore read from the wrong base:
+
+    ovc22_classes.c  ovc22_compute?  `*(uint far *)(GLeaderSheets[idx] + 0x121) & 0x200`
+                                     -> BuildingTypes[bldType].flags2 & 0x200
+    ovc23_bldrec.c   ovc23_compute1  `*(char *)(result + 0x11e) == 2`   -> flags == 2
+    ovc23_bldrec.c   ovc23_compute1  `*(char *)(result + 0x11e) == 1`   -> flags == 1
+
+The `ovc22` one was the worst of the class: it dereferenced `GLeaderSheets[idx] + 0x121`, but a
+`char_sheet_t` is 0xae bytes, so that read past the record entirely; the `(uint)bldType * 0x27` that
+Ghidra had folded into a dead comma sub-expression (`iVar17 = ...`) is the real address. The
+`iVar17` assignment is kept because the following `CONCAT13((char)((uint)iVar17 >> 8), ...)` uses it.
+
+Two forms were deliberately left alone, because they are stale-`AH` return artifacts rather than
+data-model bugs (the pattern already documented in `ovc25_intel`):
+
+    ovc45_unitinfo.c ovc45_compute4  `result = (uint)cellType * 0x27 & 0xff00`
+    ovc45_unitinfo.c ovc45_scan...   `CONCAT11((char)((uint)cellType * 0x27 >> 8),bldSize)`
+
+They only ever manufacture the high byte of the return value, which no caller reads - retyping them
+would change the generated AH for no gain and risks the caller's `CONCAT11` expectations.
+`ovc35_bldng.c:244-249` (`*(uint16_t *)(recOfs + 0x10e)` = `BuildingTypes[k].name.ofs`, `+0x110` = the
+segment) is `name`, but the surrounding `CONCAT13/CONCAT12(0x2410,...)` argument marshalling needs the
+format string at 0x690b decoded first, so it is left for a pass that can verify the argument list.
+
+## Measured (HEAD 218e5d1c -> this commit)
+
+    grep_checks      11,757 (unchanged: these replace expressions in place)
+    REBUILT.EXE      461,476 -> 461,508
+    build 65/65, LINK.LOG 0 errors
+    compare_state    1,628 matched / 0 different / missing 2      (unchanged)
+    diff_dgroup      1,639/1,805 matched, 5 layout runs           (unchanged)
+    compare_runtime  1,692 matched / 1,683 identical / 9 different (unchanged, all three sample points)

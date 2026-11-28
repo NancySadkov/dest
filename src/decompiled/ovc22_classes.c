@@ -1257,7 +1257,7 @@ void __cdecl16far upd_usesAlignUp4(void)
                     unitsSeg = (uint16_t)((ulong)GUnits >> 0x10);
                     if (((BuildingTypes[bldType].flags2 & 4) == 0) &&
                        ((iVar17 = 0, units[unitIdx].level == 0 ||
-                        (iVar17 = (uint)bldType * 0x27, (*(uint far *)((uint8_t far *)GLeaderSheets[idx] + 0x121) & 0x200) != 0))))
+                        (iVar17 = (uint)bldType * 0x27, (BuildingTypes[bldType].flags2 & 0x200) != 0))))
                     {
                       ovc22_usesGUnits(unitIdx,(uint8_t *)
                                               CONCAT13((char)((uint)iVar17 >> 8),

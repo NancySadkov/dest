@@ -1271,7 +1271,7 @@ uint __cdecl16far ovc23_compute1(int x,int y,byte bldType,uint8_t unitType)
   else if (bldFlags == '!') {
     neighbourType = ovr_ovc45_getUnitType(x + -1,y);
     result = (uint)neighbourType * 0x27;
-    if (*(char *)(result + 0x11e) == '\x02') {
+    if (BuildingTypes[neighbourType].flags == '\x02') {
       result = x - 1;
       ovc23_placeBuilding(result,y,neighbourType + 1,unitType);
     }
@@ -1280,7 +1280,7 @@ uint __cdecl16far ovc23_compute1(int x,int y,byte bldType,uint8_t unitType)
   else if (bldFlags == '\"') {
     neighbourType = ovr_ovc45_getUnitType(x,y + 1);
     result = (uint)neighbourType * 0x27;
-    if (*(char *)(result + 0x11e) == '\x01') {
+    if (BuildingTypes[neighbourType].flags == '\x01') {
       result = y + 1;
       ovc23_placeBuilding(x,result,neighbourType + 2,unitType);
     }
