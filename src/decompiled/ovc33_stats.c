@@ -1239,19 +1239,20 @@ stats_usesAlignUp42(byte agntIndex,byte gfxIndex,int16_t x,int16_t y,brect_t *re
   far_t gfx_04;
   char otherAgnt;          /* stats_prev/nextAgentByOwner's result */
   byte bVar3;
-  bool bVar4;
+  bool moreHousing;        /* ovr_draw_textProvidesMoreHousing's result */
   uint uVar5;
-  char *pcVar6;
-  ulong *puVar7;
+  uint aligned;            /* alignUp4 of a coordinate, compared with the cursor */
+  char *choice;            /* ovr_uiInputText's answer */
+  ulong *counterPtr;       /* ovr_attact_usesBDADailyTimeCounter's result */
   uint limit;              /* 5 while leading, then AgntCount */
-  uint8_t *puVar9;
+  uint8_t *tablePtr;        /* the byte table the answer indexes */
   uint16_t timeNow;        /* BDA_DailyTimeCounter, compared with InputEventTime */
-  uint16_t *puVar11;
-  int *piVar12;
-  uint16_t *puVar13;
+  uint16_t *gfxPair;        /* {ofs, seg} of the graphic to load */
+  int *classPair;          /* (class * 0x94) + level * 4, a two-word record */
+  uint16_t *classPairW;     /* the same address, read as words */
   int ownerIdx;            /* Agnts[agntIndex].owner, an entity index */
   uint16_t uVar15;
-  uint16_t uVar16;
+  uint16_t pairWord;       /* the word moved out of that record */
   undefined1 slotLo;       /* low byte of the alignUp4 result */
   undefined1 slotHi;       /* high byte of it */
   uint16_t menu0Ofs;       /* "Previous" at DGROUP:0x6473 */
@@ -1294,28 +1295,28 @@ L_stats_6386_1c9f_1E1D:
     if (bStack_3 == 0xff) {
       bStack_3 = 0;
     }
-    piVar12 = (int *)((uint)bStack_3 * 0x94 + (uint)Agnts[agntIndex].entity->base.level * 4);
-    if (*piVar12 != 0 || piVar12[1] != 0) {
-      puVar13 = (uint16_t *)((uint)bStack_3 * 0x94 + (uint)Agnts[agntIndex].entity->base.level * 4);
-      uVar16 = *puVar13;
+    classPair = (int *)((uint)bStack_3 * 0x94 + (uint)Agnts[agntIndex].entity->base.level * 4);
+    if (*classPair != 0 || classPair[1] != 0) {
+      classPairW = (uint16_t *)((uint)bStack_3 * 0x94 + (uint)Agnts[agntIndex].entity->base.level * 4);
+      pairWord = *classPairW;
       /* 0149: entity + 0x12 takes table[0];  014D: entity + 0x10 takes table[1]. */
-      *(uint16_t far *)((uint8_t far *)&Agnts[agntIndex].entity->base.frameIndex) = uVar16;
-      *(uint16_t far *)((uint8_t far *)&Agnts[agntIndex].entity->base.health) = puVar13[1];
-      uVar16 = AGNT_WORD(&Agnts[agntIndex], entity, 2);
-      ovr_ovc41_compute3(CONCAT13((char)((uint)uVar16 >> 8),
-                                  CONCAT12((char)uVar16,
+      *(uint16_t far *)((uint8_t far *)&Agnts[agntIndex].entity->base.frameIndex) = pairWord;
+      *(uint16_t far *)((uint8_t far *)&Agnts[agntIndex].entity->base.health) = classPairW[1];
+      pairWord = AGNT_WORD(&Agnts[agntIndex], entity, 2);
+      ovr_ovc41_compute3(CONCAT13((char)((uint)pairWord >> 8),
+                                  CONCAT12((char)pairWord,
                                            AGNT_WORD(&Agnts[agntIndex], entity, 0))));
     }
   }
   ownerIdx = Agnts[agntIndex].owner;
   stats_openAgentDetail((uint)agntIndex);
-  uVar16 = (uint16_t)((ulong)Entities >> 0x10);
+  pairWord = (uint16_t)((ulong)Entities >> 0x10);
   if ((Entities)[ownerIdx].base.targetY == GfxRndSeed2) {
-    uVar5 = ovr_alignUp4((Entities)[ownerIdx].base.targetX,0,0);
-    slotLo = (undefined1)uVar5;
-    slotHi = (undefined1)(uVar5 >> 8);
-    uVar5 = ovr_alignUp4(GfxRndSeed,0,0);
-    if (CONCAT11(slotHi,slotLo) == uVar5) {
+    aligned = ovr_alignUp4((Entities)[ownerIdx].base.targetX,0,0);
+    slotLo = (undefined1)aligned;
+    slotHi = (undefined1)(aligned >> 8);
+    aligned = ovr_alignUp4(GfxRndSeed,0,0);
+    if (CONCAT11(slotHi,slotLo) == aligned) {
       ovr_ovc39_textHalflingCastle(AGNT_FIELD(Agnts[agntIndex].entity, base.entity, 3));
     }
   }
@@ -1355,18 +1356,18 @@ L_stats_6386_1c9f_1ECD:
   menuCode4 = 6;
   menu4Seg = 0x2410;
   menu4Ofs = 0x6401;
-  puVar9 = (uint8_t *)((int)&AgntAnms[0x75].halfWidth + 1);
+  tablePtr = (uint8_t *)((int)&AgntAnms[0x75].halfWidth + 1);
   if (Agnts[agntIndex].gdata->ai == '\0') {
     menuBarShown = 1;
   }
   entries_00.seg = _SS;
   entries_00.ofs = (uint16_t)&menu0Ofs;
-  pcVar6 = ovr_uiInputText(entries_00,5,far_from_u32((uint32_t)(0x0)),0x0,0);
-  bStack_4 = (byte)pcVar6;
+  choice = ovr_uiInputText(entries_00,5,far_from_u32((uint32_t)(0x0)),0x0,0);
+  bStack_4 = (byte)choice;
   menuBarShown = 0;
   if ((bStack_4 != 0) && (bStack_4 < 10)) {
-    puVar9 = &permTable;
-    bStack_4 = puVar9[(uint)pcVar6 & 0xff];
+    tablePtr = &permTable;
+    bStack_4 = tablePtr[(uint)choice & 0xff];
   }
   flagA = '\0';
   flagB = '\0';
@@ -1418,13 +1419,13 @@ switchD_6000_58bf_caseD_5:
                     /* WARNING: Bad instruction - Truncating control flow here */
       halt_baddata();
     case 2:
-      uVar16 = (uint16_t)
+      pairWord = (uint16_t)
                ((ulong)*(uint32_t *)((undefined *)&GfxFramePtrs + (uint)gfxIndex * 4) >> 0x10);
-      puVar11 = (uint16_t *)
+      gfxPair = (uint16_t *)
                 ((int)*(uint32_t *)((undefined *)&GfxFramePtrs + (uint)gfxIndex * 4) +
                 (uint)bStack_3 * 4);
-      gfx.seg = puVar11[1];
-      gfx.ofs = *puVar11;
+      gfx.seg = gfxPair[1];
+      gfx.ofs = *gfxPair;
       ovr_blitGfxRect(gfx,x,y,rect,(uint8_t)type,true,(uint8_t)type,0,0,0,0,0);
       (*(uint8_t *)((uint8_t *)&(AnimSeqPtr[0].seg))) = bStack_3 + 1;
       GAnimPlaying = 1;
@@ -1434,8 +1435,8 @@ switchD_6000_58bf_caseD_5:
       slotHi = 0x24;
       bStack_3 = '\0';
       do {
-        bVar4 = ovr_draw_textProvidesMoreHousing();
-      } while (bVar4);
+        moreHousing = ovr_draw_textProvidesMoreHousing();
+      } while (moreHousing);
       while( true ) {
         timeNow = *(uint16_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs);
         if ((*(uint16_t far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2) != InputEventTime.hi) ||
@@ -1447,18 +1448,18 @@ switchD_6000_58bf_caseD_5:
         }
         bStack_4 = ovr_draw_textProvidesMoreHousing();
         if ((bool)bStack_4) break;
-        puVar7 = ovr_attact_usesBDADailyTimeCounter
+        counterPtr = ovr_attact_usesBDADailyTimeCounter
                            ((ulong *)TextBlitCycle,
                             CONCAT13(slotHi,CONCAT12(slotLo,(*(uint16_t *)((uint8_t *)&(TextBlitCycle) + 2)))),
                             (char)(*(uint16_t *)((uint8_t *)&(TextBlitCycle) + 2)));
-        if ((timeNow != 0) || ((ulong *)(uint)agntIndex <= puVar7)) break;
+        if ((timeNow != 0) || ((ulong *)(uint)agntIndex <= counterPtr)) break;
       }
       if (bStack_3 != '\0') {
         ovr_miceRestoreArea((brect_t *)(BlitRects + 1),0x10);
       }
       return bStack_4;
     case 4:
-      in(puVar9);
+      in(tablePtr);
       ovr_draw_freeRingBuffers();
       ovr_stop_audio();
       savedMenuItem = GMenuItem;
@@ -1497,13 +1498,13 @@ switchD_6000_58bf_caseD_5:
         if (Cancelled == 0) {
           ownerIdx = Agnts[agntIndex].owner;
           stats_openAgentDetail((uint)agntIndex);
-          uVar16 = (uint16_t)((ulong)Entities >> 0x10);
+          pairWord = (uint16_t)((ulong)Entities >> 0x10);
           if ((Entities)[ownerIdx].base.targetY == GfxRndSeed2) {
-            uVar5 = ovr_alignUp4((Entities)[ownerIdx].base.targetX,0,0);
-            slotLo = (undefined1)uVar5;
-            slotHi = (undefined1)(uVar5 >> 8);
-            uVar5 = ovr_alignUp4(GfxRndSeed,0,0);
-            if (CONCAT11(slotHi,slotLo) == uVar5) {
+            aligned = ovr_alignUp4((Entities)[ownerIdx].base.targetX,0,0);
+            slotLo = (undefined1)aligned;
+            slotHi = (undefined1)(aligned >> 8);
+            aligned = ovr_alignUp4(GfxRndSeed,0,0);
+            if (CONCAT11(slotHi,slotLo) == aligned) {
               ovr_ovc39_textHalflingCastle(AGNT_FIELD(Agnts[agntIndex].entity, base.entity, 3));
             }
           }

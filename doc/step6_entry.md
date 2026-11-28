@@ -24742,3 +24742,40 @@ that is all this commit changes:
 width/table defects (`69c8:04c6`, `6386:1c9f`), one was a split-array index error with two 1-byte
 buffers that cannot be sized from the frame (`77eb:1754`), and this one is an arithmetic-idiom rewrite.
 Each needs its own reading; there is no shared fix to sweep.
+
+
+## `at` (6386:1c9f) cleaned down to two slots: grep 7,965 -> 7,895 (-70)
+
+**Eight single-role slots named** (35 hits):
+
+    pcVar6   -> choice       ovr_uiInputText's answer
+    puVar9   -> tablePtr     the byte table the answer indexes
+    puVar11  -> gfxPair      {ofs, seg} of the graphic to load
+    piVar12  -> classPair    (class * 0x94) + level * 4, a two-word record
+    puVar13  -> classPairW   the same address read as words
+    uVar16   -> pairWord     the word moved out of that record
+    bVar4    -> moreHousing  ovr_draw_textProvidesMoreHousing's result
+    puVar7   -> counterPtr   ovr_attact_usesBDA DailyTimeCounter's result
+
+**One split, from `uVar5`'s three roles.** Its alignUp4 comparisons are a separate use from the menu
+value and the agent index that share the same slot, so those two blocks now read:
+
+    aligned = ovr_alignUp4((Entities)[ownerIdx].base.targetX,0,0);
+    slotLo = (undefined1)aligned;  slotHi = (undefined1)(aligned >> 8);
+    aligned = ovr_alignUp4(GfxRndSeed,0,0);
+    if (CONCAT11(slotHi,slotLo) == aligned) { ... }
+
+**Left: 39 hits**, all in `uVar5`. Its remaining uses mix two incompatible roles inside the same
+straight-line block - the menu answer at `0x1373`, then a loop index at `0x1383`
+(`uVar5 = 5; ... Agnts[uVar5]`) - so splitting it needs the block re-derived from the image, not
+renamed. `bVar3` (7) is `(byte)limit` returned and then `0x10`, also two roles.
+
+## Measured (HEAD f1cf5090 -> this commit)
+
+    grep_checks          7,965 -> 7,895   (-70)
+    REBUILT.EXE          447,810 (unchanged)
+    build 65/65, LINK.LOG 0 errors
+    compare_state        identical 734 / 7 different / 889 missing (unchanged)
+    diff_dgroup          288/1,805 matched (unchanged)
+    compare_runtime      280 identical / 11 different at entry, init_game and key (unchanged)
+    structural_deficits  two game bodies: 7e7c:0b9c (177/187), 77eb:0d61 (54/58)
