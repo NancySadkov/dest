@@ -25289,3 +25289,25 @@ slot that 1680 wrote - naming it twice would *change* behaviour, and the last se
     diff_dgroup          288/1,805 matched (unchanged)
     compare_runtime      280 identical / 11 different at entry, init_game and key (unchanged)
     structural_deficits  two game bodies: 7e7c:0b9c (177/187), 77eb:0d61 (54/58)
+
+
+## `ovc48_assets2.c` 81b9:0086: `uVar4`/`uVar5` named, grep 6,412 -> 6,379 (-33)
+
+    uVar4 -> i100Hi   the high word of i * 100, the length handed to stsh_store / stored
+             i14Hi    the high word of i * 0xe (the cross-blit table)
+    uVar5 -> savedOfs  a BldGfxNormal offset carried from entry to entry
+             retSeg    stsh_store's DX: the segment of what it stored, used by the five
+                       MK_FP calls and the four .seg stores
+             apSeg     lbmTmp->aptr.seg
+
+The body's remaining 104 hits are all `unaff_DI`, the register-passed argument this routine reads
+mid-flow - the same shape as `4d05:24b1` and `getcache`, so there is nothing left to name in it.
+
+## Measured (HEAD e745b0de -> this commit)
+
+    grep_checks          6,412 -> 6,379   (-33)
+    REBUILT.EXE          447,778 (unchanged size)
+    build 65/65, LINK.LOG 0 errors
+    compare_state        identical 734 / 7 different / 889 missing (unchanged)
+    diff_dgroup          288/1,805 matched (unchanged)
+    compare_runtime      280 identical / 11 different at entry, init_game and key (unchanged)
