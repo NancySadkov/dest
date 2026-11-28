@@ -22562,3 +22562,48 @@ instead of the cost-or-income label; both are corrected.
 
 Remaining 49 calls in this function: the arms for unitType 3, 7, 0xa, 0xb and 0xc, and the
 `0x1a8,0x2a` site.
+
+
+## unitType 3, 7, 0xa, 0xb, 0xc have no arms - the fall-through is by design
+
+Enumerating every `cmp byte ptr es:[bx + 0x133], N` in the function gives exactly 21 values:
+
+    0, 1, 2, 4, 5, 6, 8, 9, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 29
+    (i.e. 0,1,2,4,5,6,8,9,0xd,0xe,0xf,0x10,0x11,0x12,0x13,0x14,0x15,0x16,0x17,0x1d)
+
+3, 7, 0xa, 0xb and 0xc are **never tested**, so those building types get no description and fall
+straight through to the menu. That is the designed behaviour, not a missing arm - the objective's
+question is answered and no arms need writing for those five values.
+
+## What the 40-call deficit actually is: stubbed arguments, not missing branches
+
+Comparing per-callee counts (image vs body) after the arm work:
+
+    callee                     image  body
+    ovr_fmVsprintf              44     38     -6
+    ovr_ovc15_usesStshRealloc   41     39     -2
+    strcpy                      32     23     -9
+    ovr_ovc45_compute6           9      2     -7
+    ovr_ovc45_compute9           5      0     -5
+    ovr_ovc22_className          3      0     -3
+    ovr_ovc45_costOrIncomeLabel  5      1     -4
+    strcat                       3      0     -3
+
+Those are exactly the calls I had elided when I passed `0` for an argument I could not yet name. The
+branches all exist; the calls inside them do not.
+
+Restoring the three ownership leaves to their fully decoded form (which had been reduced to
+`..., 0, 0`) adds className x3, compute9 x5 and compute7 x1:
+
+## Measured (HEAD da832346 -> this commit)
+
+    screen_calls     7e7c:0b9c  C 138 -> 147  (image 187), delta -49 -> -40
+    grep_checks      11,516 (unchanged)
+    REBUILT.EXE      466,394 -> 466,746
+    build 65/65, LINK.LOG 0 errors
+    compare_state    1,628 matched / 0 different / missing 2      (unchanged)
+    diff_dgroup      1,639/1,805 matched, 5 layout runs           (unchanged)
+    compare_runtime  1,692 matched / 1,683 identical / 9 different (unchanged, all three sample points)
+
+The same restoration is what the remaining 40 need: compute9 line renders in the description arms
+(5 calls), costOrIncomeLabel (4), compute6 (7), the missing strcpy halves (9) and strcat (3).

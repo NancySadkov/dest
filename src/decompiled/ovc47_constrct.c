@@ -423,6 +423,8 @@ void constrct_buildInfoText(int x,byte far *flag,int entityIdx,int arg4,int arg5
   char far *noun;
   char far *res;
   char outBuf[0x2b0];
+  char line1[0x50];
+  char line2[0x50];
   far_t list[0x10];
   byte codes[0x10];
 
@@ -440,27 +442,55 @@ void constrct_buildInfoText(int x,byte far *flag,int entityIdx,int arg4,int arg5
     bld = &BuildingTypes[bldType];
 
     if (done == 0) {
-      /* ---- pass 1: ownership only (leaves 1-3) ---- */
+      /* ---- pass 1: ownership only (leaves 1-3), decoded exactly ---- */
       if (GUnits[unitIdx].unitType == 0xff) {
+        /* leaf 3: the owner's sheet is rendered once, at y = 0x55 */
         res = ovr_fmVsprintf((char far *)"%s: Active party is %s the %s.",
                              (uint16_t)ovr_ovc15_usesStshRealloc(
                                  (char far *)MK_FP((uint16_t)((uint32_t)bld->name >> 16),
-                                                   (uint16_t)bld->name)));
+                                                   (uint16_t)bld->name)),
+                             (uint16_t)ovr_ovc45_compute9(
+                                 (char far *)MK_FP(_SS,(uint16_t)line2),
+                                 (void far *)MK_FP(Font03.seg,Font03.ofs),0x55,3,
+                                 (char far *)((char_sheet_t far *)GLeaderSheets[owner])),
+                             (uint16_t)ovr_ovc22_className(owner));
         strcpy(outBuf,res);
       }
       else if (bld->durability == 0x64) {
+        /* leaf 2: two line renders at y = 0x46 */
         res = ovr_fmVsprintf((char far *)"%s: Owned by %s. Active party is %s the %s.",
                              (uint16_t)ovr_ovc15_usesStshRealloc(
                                  (char far *)MK_FP((uint16_t)((uint32_t)bld->name >> 16),
-                                                   (uint16_t)bld->name)),0,0);
+                                                   (uint16_t)bld->name)),
+                             (uint16_t)ovr_ovc45_compute9(
+                                 (char far *)MK_FP(_SS,(uint16_t)line2),
+                                 (void far *)MK_FP(Font03.seg,Font03.ofs),0x46,2,
+                                 (char far *)((char_sheet_t far *)GLeaderSheets[GUnits[unitIdx].unitType])),
+                             (uint16_t)ovr_ovc45_compute9(
+                                 (char far *)MK_FP(_SS,(uint16_t)line1),
+                                 (void far *)MK_FP(Font03.seg,Font03.ofs),0x46,3,
+                                 (char far *)((char_sheet_t far *)GLeaderSheets[owner])),
+                             (uint16_t)ovr_ovc22_className(owner));
         strcpy(outBuf,res);
       }
       else {
+        /* leaf 1: the same two renders plus the level/durability pair */
         res = ovr_fmVsprintf(
                   (char far *)"%s (%d/%d): Owned by %s. Active party is %s the %s.",
                   (uint16_t)ovr_ovc15_usesStshRealloc(
                       (char far *)MK_FP((uint16_t)((uint32_t)bld->name >> 16),
-                                        (uint16_t)bld->name)),0,0,0,0);
+                                        (uint16_t)bld->name)),
+                  (uint16_t)ovr_ovc45_compute7(GUnits[unitIdx].level,bld->durability),
+                  bld->durability,
+                  (uint16_t)ovr_ovc45_compute9(
+                      (char far *)MK_FP(_SS,(uint16_t)line2),
+                      (void far *)MK_FP(Font03.seg,Font03.ofs),0x46,2,
+                      (char far *)((char_sheet_t far *)GLeaderSheets[GUnits[unitIdx].unitType])),
+                  (uint16_t)ovr_ovc45_compute9(
+                      (char far *)MK_FP(_SS,(uint16_t)line1),
+                      (void far *)MK_FP(Font03.seg,Font03.ofs),0x46,3,
+                      (char far *)((char_sheet_t far *)GLeaderSheets[owner])),
+                  (uint16_t)ovr_ovc22_className(owner));
         strcpy(outBuf,res);
       }
     }
