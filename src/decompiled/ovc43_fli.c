@@ -165,21 +165,22 @@ ovc43_playFliFrames(uint16_t handle,uint16_t paletteOfs,uint16_t paletteSeg,byte
 
 {
   far_t handle_00;
-  uint16_t uVar1;
-  uint uVar2;
-  ulong *puVar3;
+  uint16_t keyAvail;       /* ovr_biosKeyAvail's result */
+  uint16_t keyCode;        /* ovr_gameProcessKey's result */
+  uint mouseRes;            /* ovr_init2_updateMouseButtons' result */
+  ulong *elapsed;           /* ovr_attact_usesBDADailyTimeCounter's result */
   uint16_t in_DX;
-  ulong *puVar4;
-  uint16_t unaff_DI;
-  uint uVar5;
-  int iStack_84;
-  int iStack_82;
-  char cStack_7;
+  ulong *tickPtr;           /* the BDA daily tick counter */
+  uint16_t diArg;           /* the value the image leaves in DI */
+  uint frameIdx;            /* the frame being played */
+  int readHdr;              /* the header word ovr_stshRead leaves */
+  int frameCount;           /* how many frames the header declares */
+  char exitCode;            /* 0 none, 1 confirm, 2 escape */
   ulong *puStack_6;
-  uint16_t uStack_4;
+  uint16_t tickHi;          /* the tick counter's high word */
   
   ovr_stshRead();
-  if (iStack_84 != -0x50ef) {
+  if (readHdr != -0x50ef) {
                     /* WARNING: Subroutine does not return */
     ovr_stExit(0x47);
   }
@@ -190,43 +191,43 @@ ovc43_playFliFrames(uint16_t handle,uint16_t paletteOfs,uint16_t paletteSeg,byte
   }
   ovc43_usesStExit(CONCAT22(paletteSeg,paletteOfs),handle,tempScreenOfs,tempScreenSeg);
   ovr_ovr_miceButton0PressStates_entry();
-  uStack_4 = *(uint16_t far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
-  puVar4 = *(ulong * far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs);   /* hand fix: the offset half is the address, not the far_t struct */
-  cStack_7 = '\0';
-  puStack_6 = puVar4;
-  for (uVar5 = 0; uVar5 < iStack_82 - 1U; uVar5 = uVar5 + 1) {
+  tickHi = *(uint16_t far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
+  tickPtr = *(ulong * far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs);   /* hand fix: the offset half is the address, not the far_t struct */
+  exitCode = '\0';
+  puStack_6 = tickPtr;
+  for (frameIdx = 0; frameIdx < frameCount - 1U; frameIdx = frameIdx + 1) {
     do {
-      uVar1 = ovr_biosKeyAvail();
-      if ((char)uVar1 != '\0') {
-        uVar1 = ovr_gameProcessKey();
-        if (uVar1 == 0x11b) {
-          cStack_7 = '\x02';
+      keyAvail = ovr_biosKeyAvail();
+      if ((char)keyAvail != '\0') {
+        keyCode = ovr_gameProcessKey();
+        if (keyCode == 0x11b) {
+          exitCode = '\x02';
         }
-        if (uVar1 == 0x1c0d) {
-          cStack_7 = '\x01';
+        if (keyCode == 0x1c0d) {
+          exitCode = '\x01';
         }
       }
-      uVar2 = ovr_init2_updateMouseButtons();
-      if (((uVar2 != 0) || (rightButtonLatch != '\0')) &&
-         (cStack_7 = '\x01', rightButtonLatch != '\0')) {
-        cStack_7 = '\x02';
+      mouseRes = ovr_init2_updateMouseButtons();
+      if (((mouseRes != 0) || (rightButtonLatch != '\0')) &&
+         (exitCode = '\x01', rightButtonLatch != '\0')) {
+        exitCode = '\x02';
       }
-      if (cStack_7 != '\0') goto L_OVC43_6fbe_01a9_02C7;
-      puVar3 = ovr_attact_usesBDADailyTimeCounter(puStack_6,CONCAT22(unaff_DI,uStack_4),0);
-    } while ((puVar4 == (ulong *)0x0) && (puVar4 = (ulong *)0x0, puVar3 < (ulong *)(uint)delayTicks)
+      if (exitCode != '\0') goto L_OVC43_6fbe_01a9_02C7;
+      elapsed = ovr_attact_usesBDADailyTimeCounter(puStack_6,CONCAT22(diArg,tickHi),0);
+    } while ((tickPtr == (ulong *)0x0) && (tickPtr = (ulong *)0x0, elapsed < (ulong *)(uint)delayTicks)
             );
-    uStack_4 = *(uint16_t far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
-    puVar4 = *(ulong * far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs);   /* hand fix: the offset half is the address, not the far_t struct */
-    puStack_6 = puVar4;
+    tickHi = *(uint16_t far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
+    tickPtr = *(ulong * far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs);   /* hand fix: the offset half is the address, not the far_t struct */
+    puStack_6 = tickPtr;
 L_OVC43_6fbe_01a9_02C7:
-    if (cStack_7 != '\0') break;
+    if (exitCode != '\0') break;
     ovc43_usesStExit(CONCAT22(paletteSeg,paletteOfs),handle,(uint16_t)tempScreenOfs,tempScreenSeg);
   }
   TextBlitDstSeg = 0xa000;
   handle_00.seg = tempScreenSeg;
   handle_00.ofs = (uint16_t)tempScreenOfs;
   ovr_stshFree(handle_00);
-  return cStack_7;
+  return exitCode;
 }
 
 
