@@ -23414,3 +23414,49 @@ rebuild with no visible result). `audit/overlay_segments.csv` lists 16 candidate
 
 `land_info` (7e7c, mode 0) calls this through `ovr_ovc45_buildPlacementMessage`, so the body is
 reachable from the UI; the runtime sample points are unchanged, i.e. it executes without fault.
+
+
+## `attact_usesAgntFlag1` (3f0b:0685): the three "invalidate" calls had the wrong callee
+
+The square-record half of this function was transcribed against absolute addresses that no longer
+exist (`0x24109074`, `MK_FP(0x17f8,...)`, `sub_OVC04_0001(0x1000,recOfs,0x17f8)`). Re-reading the
+426-byte listing settled it:
+
+* the array is `SquareRecs` (module segment `0x58`, stride `0x13`) - the image's `push 0x58; push
+  idx*0x13` pairs are `&SquareRecs[i]`, not absolute addresses;
+* `1000:25f6` = `memcmp`, `1000:26d7` = `_fmemmove`, `1000:261e` = `memcpy` (the exported `memcpy`
+  is near while the image passes far pairs, so the far-capable `_fmemmove` performs that one
+  19-byte copy, noted in-source);
+* **the three `call 0x1db1` are `attact_usesAlignUp43`** (`3f0b:1db1`), not `sub_OVC04_0001`. The
+  body had been calling a *different module's* stub, so the function did nothing to the agent
+  targets it exists to recompute. That mismatch also accounted for the whole `-3` census gap - the
+  census cannot see calls to `sub_OVC04_0001` because the name is not in the audit table.
+
+The restructured half now reads:
+
+    if (SquareRecIndex < SquareRecCount) {
+      if (SquareRecIndex + 1 < SquareRecCount)
+        _fmemmove(&SquareRecs[idx], &SquareRecs[idx+1], (count - idx - 1) * 0x13);
+      SquareRecCount--;
+      if (memcmp(&SquareRecX, 0x9074, 0x13) == 0) { attact_usesAlignUp43(MK_FP(_DS,0x9074)); return; }
+    } else {
+      if (memcmp(&SquareRecX, 0x9074, 0x13) == 0) { attact_usesAlignUp43(MK_FP(_DS,0x9074)); return; }
+      if (SquareRecCount >= 300) { _fmemmove(&SquareRecs[0], &SquareRecs[1], 0x1631); SquareRecCount = 299; }
+    }
+    _fmemmove(&SquareRecs[SquareRecIndex], MK_FP(_DS,0x9074), 0x13);
+    SquareRecIndex++;
+    attact_usesAlignUp43(&SquareRecs[SquareRecIndex - 1]);
+
+`0x9074` (19 bytes) still has no audit symbol, so it stays an addressed area with a GUESS note, and
+the in-source note records that the audit table calls `SquareRecX` a word although the code compares
+19 bytes from it.
+
+## Measured (HEAD c7f6d2a1 -> this commit)
+
+    structural_deficits  3f0b:0685  6/9 -> 9/9 (gone; 9 functions left, was 10)
+    grep_checks          9,798 (unchanged)
+    REBUILT.EXE          447,986 (unchanged)
+    build 65/65, LINK.LOG 0 errors
+    compare_state        identical 734 / 7 different / 889 missing (unchanged)
+    diff_dgroup          288/1,805 matched (unchanged)
+    compare_runtime      280 identical / 11 different at entry, init_game and key (unchanged)

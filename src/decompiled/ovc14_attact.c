@@ -367,32 +367,38 @@ void __cdecl16far attact_usesAgntFlag1(void)
   }
   if (SquareRecIndex < SquareRecCount) {
     if (SquareRecIndex + 1 < SquareRecCount) {
-      _fmemmove((char *)CONCAT22(0x17f8,(char *)(SquareRecIndex * 0x13)),
-                (char *)CONCAT22(0x17f8,(char *)((SquareRecIndex + 1) * 0x13)),
-                ((SquareRecCount - SquareRecIndex) + -1) * 0x13);
+      /* 0x0790..0x07bd: close the gap left by the removed entry. */
+      _fmemmove((void far *)&SquareRecs[SquareRecIndex],
+                (void far *)&SquareRecs[SquareRecIndex + 1],
+                (word)(((SquareRecCount - SquareRecIndex) - 1) * 0x13));
     }
     SquareRecCount = SquareRecCount - 1;
-    cmpResult = memcmp((char *)&SquareRecX,(char *)0x24109074,0x13);
+    /* GUESS: 0x9074 is a 19-byte record with no audit symbol; the image compares it with
+       SquareRecX at 0x086e (also 19 bytes, although the audit table calls it a word). */
+    cmpResult = memcmp((char *)&SquareRecX,(char *)(uint16_t)0x9074,0x13);
     if (cmpResult == 0) {
-      sub_OVC04_0001(0x1000,0x9074,0x2410);
+      attact_usesAlignUp43((uint16_t far *)MK_FP(_DS,0x9074));
       return;
     }
   }
   else {
-    cmpResult = memcmp((char *)&SquareRecX,(char *)0x24109074,0x13);
+    cmpResult = memcmp((char *)&SquareRecX,(char *)(uint16_t)0x9074,0x13);
     if (cmpResult == 0) {
-      sub_OVC04_0001(0x1000,0x9074,0x2410);
+      attact_usesAlignUp43((uint16_t far *)MK_FP(_DS,0x9074));
       return;
     }
-    if (299 < SquareRecCount) {
-      _fmemmove((char far *)SquareRecs,(char *)(SquareRecs + 1),0x1631);
+    if (SquareRecCount >= 300) {
+      /* 0x0765: drop the oldest record, 299 * 0x13 bytes. */
+      _fmemmove((void far *)&SquareRecs[0],(void far *)&SquareRecs[1],0x1631);
       SquareRecCount = 299;
     }
   }
-  _fmemmove((char far *)MK_FP(0x17f8,(char *)(SquareRecCount * 0x13)),(char far *)MK_FP(0x2410,0x9074),0x13);
-  recOfs = SquareRecCount * 0x13;
-  SquareRecCount = SquareRecCount + 1;
-  sub_OVC04_0001(0x1000,recOfs,0x17f8);
+  /* 0x0808: the image calls memcpy (1000:261e) with far pointers; the exported prototype is
+     near, so the far-capable _fmemmove performs the same 19-byte copy. */
+  _fmemmove((void far *)&SquareRecs[SquareRecIndex],
+            (void far *)MK_FP(_DS,0x9074),0x13);
+  SquareRecIndex = SquareRecIndex + 1;
+  attact_usesAlignUp43((uint16_t far *)&SquareRecs[SquareRecIndex - 1]);
   return;
 }
 
