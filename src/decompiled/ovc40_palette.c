@@ -503,10 +503,10 @@ ovc40_usesAlignToSeg
     ovc40_usesBlitLabel(text1_08,far_from_u32((uint32_t)(0x0)),1,0xf2);
   }
   else {
-    text1_09.seg = rankNames[11].seg;
-    text1_09.ofs = rankNames[11].ofs;
-    text2_08.seg = rankNames[11].seg;
-    text2_08.ofs = rankNames[11].ofs;
+    /* 0x08fa: row 0, both pointers rankNames[9].  (The earlier note said entry 11; that is the
+       call at 0x092a, which is row 2 and belongs to text1_11.) */
+    text1_09 = rankNames[9];
+    text2_08 = rankNames[9];
     ovc40_usesBlitLabel(text1_09,text2_08,0,0xf2);
     blitColour = 0xf2;
     labelIdx = 1;

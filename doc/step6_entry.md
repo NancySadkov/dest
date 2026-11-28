@@ -24486,3 +24486,43 @@ table entry in the *second* (16-byte) copied table and need the same treatment.
     diff_dgroup          288/1,805 matched (unchanged)
     compare_runtime      280 identical / 11 different at entry, init_game and key (unchanged)
     structural_deficits  two game bodies: 7e7c:0b9c (177/187), 77eb:0d61 (54/58)
+
+
+## Correction: `text1_09` is `rankNames[9]`, not `[11]` - the previous commit wired the wrong call
+
+Finishing the remaining label calls meant resolving the three consecutive calls at the end of the
+image's sequence, and the resolution showed that **the last commit's entry-11 wiring was wrong**:
+
+    0x08fa  row 0  [bp-0x36]:[bp-0x34]  -> rankNames[9]   <- text1_09 / text2_08
+    0x0912  row 1  [bp-0x32]:[bp-0x30]  -> rankNames[10]  <- text1_10 / text2_09
+    0x092a  row 2  [bp-0x2e]:[bp-0x2c]  -> rankNames[11]  <- text1_11 / text2_10
+
+I had taken entry 11 from the `[bp-0x2e]`/`[bp-0x2c]` pushes at `0x091d`, but those belong to the
+**row-2** call at `0x092a`, not to the row-0 call at `0x08fa`. `text1_09` is the row-0 label, so it is
+entry 9. Corrected; the comment now records which address each entry belongs to.
+
+This is the second time in this function that reading a push sequence without its owning call gave a
+one-entry error - the lesson is recorded in the log with the address of every call so the next pass
+does not repeat it.
+
+## State of this function's label calls
+
+    wired and verified:  entries 4, 5, 14/5, 6, 7, 8, 13, 9      (eight of the twelve sites)
+    still to wire:       0x07c0 -> entry 0, 0x0912 -> 10, 0x092a -> 11
+    unresolved:          the three ovr_stsprintf format pointers built from uStack_2c/58/66/68 -
+                         those are entries of the *second* copied table (ds:0x6b76, 4 x far_t at
+                         bp-0x6a), and the C body's assignments around them are also garbled
+                         (text1_11.seg = (uint16_t)format2Tab, which is an address, not a table entry)
+
+The 0x07c0 site does not correspond to any C statement in the current body: the image has a row-0
+call with `rankNames[0]` that the branch structure does not contain, so wiring it needs the branch
+disposition re-derived first - it is not a rename, it is a missing call.
+
+## Measured (HEAD 8db6d400 -> this commit)
+
+    grep_checks          8,007 (unchanged - the correction changes a constant, not a name)
+    REBUILT.EXE          447,906 (unchanged)
+    build 65/65, LINK.LOG 0 errors
+    compare_state        identical 734 / 7 different / 889 missing (unchanged)
+    diff_dgroup          288/1,805 matched (unchanged)
+    compare_runtime      280 identical / 11 different at entry, init_game and key (unchanged)
