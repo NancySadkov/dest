@@ -24068,3 +24068,43 @@ under a name that does not collide - worth recording because the same trap appli
     diff_dgroup          288/1,805 matched (unchanged)
     compare_runtime      280 identical / 11 different at entry, init_game and key (unchanged)
     structural_deficits  6 entries, unchanged
+
+
+## Renaming batch 8: `drawAgntStats` (6386:06cd) cleared, grep 8,916 -> 8,719 (-197)
+
+This was the function I had twice recorded as "reused slots, needs a rewrite". Reading it slot by slot
+showed 6 of its 14 were single-role and 3 more split cleanly, so the whole body is now named:
+
+**Single-role**
+
+    uVar23    -> colourA       0xde, the first attribute the label blit takes
+    uVar25    -> colourB       0xe0, the second
+    uVar7     -> slotProbe     result of stats_usesAlignUp4(agnt->owner)
+    uVar14    -> fontSegLow    low byte of Font02.seg
+    uVar16    -> fontSegHigh   high byte of Font02.seg
+    cVar3     -> textAttr      'V', passed alongside the two colours
+    uVar20    -> fontLowArg    copy of fontSegLow for the blit's tail arguments
+    uVar22    -> fontHighArg   copy of fontSegHigh
+    piVar8    -> namePairPtr   the (low, high) pair at shortName[3]*0x94
+    in_stack_0000000a -> paletteSeg   segment half of the palette ([bp+0xa])
+    puVar18   -> nameArg
+
+**Split, because the image reused one slot for two roles**
+
+    uVar5  -> cmapByte (low byte of the cmap pointer) + statValue (stats_compute2's result)
+    iVar10 -> attrInt (textAttr widened) + growthValue (ovc_ovc41_growthForLevel's result)
+    uVar13 -> colourC (0xe0) + entitySeg (segment half of agnt->entity)
+
+`colourA/colourB/colourC` are deliberately mechanical: the exported `blitLabel` prototype has four
+parameters while the image passes eleven, and the three 0xde/0xe0 attributes are positional in that
+call. Naming them "foreground" or "shadow" would be a guess.
+
+## Measured (HEAD 97414c13 -> this commit)
+
+    grep_checks          8,916 -> 8,719   (-197)
+    REBUILT.EXE          447,922 (unchanged)
+    build 65/65, LINK.LOG 0 errors
+    compare_state        identical 734 / 7 different / 889 missing (unchanged)
+    diff_dgroup          288/1,805 matched (unchanged)
+    compare_runtime      280 identical / 11 different at entry, init_game and key (unchanged)
+    structural_deficits  6 entries, unchanged

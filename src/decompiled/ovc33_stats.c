@@ -404,32 +404,35 @@ void __cdecl16far drawAgntStats(agnt_t far *agnt,far_t cmap,uint16_t arg3)
   far_t gfx_03;
   far_t ringValue;
   far_t palette;
-  char cVar3;
+  char textAttr;          /* 'V', passed with the two colours */
   byte value;
-  undefined1 uVar5;
+  undefined1 cmapByte;      /* low byte of the cmap far pointer */
+  char statValue;          /* result of stats_compute2(agnt) */
   char *textPtr;
-  uint uVar7;
-  int *piVar8;
+  uint slotProbe;          /* result of stats_usesAlignUp4(agnt->owner) */
+  int *namePairPtr;        /* (low, high) pair at shortName[3]*0x94 */
   uint16_t *strRef;
-  int iVar10;
+  int attrInt;             /* textAttr widened, passed to ovr_manage_compute1 */
+  int growthValue;         /* result of ovr_ovc41_growthForLevel */
   far_t *text_00;
   uint8_t *in_DX;
   uint8_t *nameOfs;
   entity_t *peVar12;
-  uint16_t uVar13;
-  char *in_stack_0000000a;
-  undefined1 uVar14;
+  uint16_t colourC;        /* 0xe0, the attribute on the second pair of blits */
+  uint16_t entitySeg;      /* segment half of agnt->entity */
+  char *paletteSeg;        /* segment half of the palette ([bp+0xa]) */
+  undefined1 fontSegLow;   /* low byte of Font02.seg */
   undefined1 segHi;
-  undefined1 uVar16;
+  undefined1 fontSegHigh;  /* high byte of Font02.seg */
   undefined1 byteLo;
-  uint8_t *puVar18;
+  uint8_t *nameArg;        /* the name pointer passed to the blit */
   uint16_t fontOfs;
-  undefined1 uVar20;
+  undefined1 fontLowArg;    /* copy of fontSegLow for the blit's tail args */
   undefined1 fontHi;
-  undefined1 uVar22;
-  uint8_t uVar23;
+  undefined1 fontHighArg;   /* copy of fontSegHigh */
+  uint8_t colourA;         /* 0xde, the first attribute the label blit takes */
   uint8_t attr;
-  uint16_t uVar25;
+  uint16_t colourB;        /* 0xe0, the second attribute */
   uint16_t blitColour;
   char palbuf [768];
   char buf [80];
@@ -441,9 +444,9 @@ void __cdecl16far drawAgntStats(agnt_t far *agnt,far_t cmap,uint16_t arg3)
   
   fVar2 = cmap;
   TextBlitDstSeg = 0xa000;
-  if (cmap.seg == 0 && in_stack_0000000a == (char *)0x0) {
+  if (cmap.seg == 0 && paletteSeg == (char *)0x0) {
     cmap.seg = (uint16_t)palbuf;
-    in_stack_0000000a = _SS;
+    paletteSeg = _SS;
   }
   if (!GameRunning) {
     stats_drawStatsPanel();
@@ -461,17 +464,17 @@ void __cdecl16far drawAgntStats(agnt_t far *agnt,far_t cmap,uint16_t arg3)
                      bStack_4,cmap.seg);
   TextBlitY = 10;
   TextBlitX = 0x87;
-  uVar25 = 0xe0;
-  uVar23 = 0xde;
+  colourB = 0xe0;
+  colourA = 0xde;
   byteLo = (undefined1)Font02.seg;
   fontHi = (undefined1)(Font02.seg >> 8);
-  uVar5 = (undefined1)fVar2.ofs;
+  cmapByte = (undefined1)fVar2.ofs;
   segHi = (*(uint8_t *)((uint8_t *)&(fVar2.ofs) + 1));
   fontOfs = Font02.ofs;
   textPtr = ovr_agnt_statusText(agnt,(char *)CONCAT13((char)((uint)&line >> 8),
-                                                     CONCAT12((char)&line,cmap.ofs)),uVar5);
-  ovr_blitLabel(textPtr,(uint8_t *)CONCAT22(fontOfs,in_DX),CONCAT11(fontHi,byteLo),uVar23,byteLo,
-                uVar23,uVar25);
+                                                     CONCAT12((char)&line,cmap.ofs)),cmapByte);
+  ovr_blitLabel(textPtr,(uint8_t *)CONCAT22(fontOfs,in_DX),CONCAT11(fontHi,byteLo),colourA,byteLo,
+                colourA,colourB);
   if ((GameRunning == false) && ((agnt->gdata->ai == 0 || (DebugVerbose != false)))) {
     TextBlitY = 0xb5;
     TextBlitX = 0x13;
@@ -495,8 +498,8 @@ void __cdecl16far drawAgntStats(agnt_t far *agnt,far_t cmap,uint16_t arg3)
                   Font01.seg,0xde,(char)Font01.seg,0xde,0xe0);
     TextBlitY = 0xb5;
     TextBlitX = 0x57;
-    uVar7 = stats_usesAlignUp4(agnt->owner);
-    if ((char)uVar7 == '\0') {
+    slotProbe = stats_usesAlignUp4(agnt->owner);
+    if ((char)slotProbe == '\0') {
       (*(uint8_t *)((uint8_t *)&(gfx_01.seg))) = (char)butt01Cut3Seg;
       gfx_01.ofs = butt01Cut3Ofs;
       (*(uint8_t *)((uint8_t *)&(gfx_01.seg) + 1)) = (char)((uint)butt01Cut3Seg >> 8);
@@ -516,8 +519,8 @@ void __cdecl16far drawAgntStats(agnt_t far *agnt,far_t cmap,uint16_t arg3)
                   FontMain.seg,0xde,(char)FontMain.seg,0xde,0xe0);
     TextBlitY = 0xb5;
     TextBlitX = 0x9b;
-    uVar7 = stats_usesAlignUp4(agnt->owner);
-    if (((uVar7 & 0xff) == 0) &&
+    slotProbe = stats_usesAlignUp4(agnt->owner);
+    if (((slotProbe & 0xff) == 0) &&
        ((*(byte *)((int)&(((entity_t *)agnt->entity)->base).flags32 + 1) & 1) == 0)) {
       (*(uint8_t *)((uint8_t *)&(gfx_02.seg))) = (char)butt01Cut4Seg;
       gfx_02.ofs = butt01Cut4Ofs;
@@ -539,121 +542,121 @@ void __cdecl16far drawAgntStats(agnt_t far *agnt,far_t cmap,uint16_t arg3)
   }
   TextBlitY = 0x11;
   TextBlitX = 0x87;
-  uVar25 = 0xe0;
-  uVar23 = 0xde;
+  colourB = 0xe0;
+  colourA = 0xde;
   byteLo = (undefined1)Font02.seg;
   fontHi = (undefined1)(Font02.seg >> 8);
   fontOfs = Font02.ofs;
   textPtr = ovr_stsprintf((char *)&line);
-  ovr_blitLabel(textPtr,(uint8_t *)CONCAT22(fontOfs,in_DX),CONCAT11(fontHi,byteLo),uVar23,byteLo,
-                uVar23,uVar25);
+  ovr_blitLabel(textPtr,(uint8_t *)CONCAT22(fontOfs,in_DX),CONCAT11(fontHi,byteLo),colourA,byteLo,
+                colourA,colourB);
   TextBlitY = 0x1b;
   TextBlitX = 0x87;
   if (*(char *)((int)&(((entity_t *)agnt->entity)->base).entity + 3) != -1) {
     strRef = (uint16_t *)
              ((uint)*(byte *)((int)&(((entity_t *)agnt->entity)->base).entity + 3) * 4);
-    uVar25 = strRef[1];
-    uVar7 = ovr_font_textWidth((char *)*strRef,
+    colourB = strRef[1];
+    slotProbe = ovr_font_textWidth((char *)*strRef,
                                (char *)CONCAT13((char)(Font02.ofs >> 8),
-                                                CONCAT12((char)Font02.ofs,uVar25)),(char)uVar25,
+                                                CONCAT12((char)Font02.ofs,colourB)),(char)colourB,
                                (char)Font02.ofs,Font02.seg);
-    uVar14 = (undefined1)Font02.seg;
-    uVar16 = (undefined1)(Font02.seg >> 8);
+    fontSegLow = (undefined1)Font02.seg;
+    fontSegHigh = (undefined1)(Font02.seg >> 8);
     byteLo = (undefined1)Font02.ofs;
     fontHi = (undefined1)(Font02.ofs >> 8);
-    if (uVar7 < 0x30) {
-      uVar13 = 0xe0;
-      uVar23 = 0xde;
-      uVar25 = 3;
-      cVar3 = 'V';
+    if (slotProbe < 0x30) {
+      colourC = 0xe0;
+      colourA = 0xde;
+      colourB = 3;
+      textAttr = 'V';
       strRef = (uint16_t *)
                ((uint)*(byte *)((int)&(((entity_t *)agnt->entity)->base).entity + 3) * 4);
       in_DX = (uint8_t *)((char *)0x2627a);
       fontOfs = Font02.ofs;
-      uVar20 = uVar14;
-      uVar22 = uVar16;
+      fontLowArg = fontSegLow;
+      fontHighArg = fontSegHigh;
       textPtr = ovr_stsprintf(text,(char *)CONCAT22(0x62fe,_SS),
                              (char *)CONCAT22(*strRef,(char *)0x26510),strRef[1]);
       textPtr = (char *)ovr_ovc45_compute9((char *)&line,(char *)CONCAT22(textPtr,_SS),
                                           (char *)CONCAT13(fontHi,CONCAT12(byteLo,in_DX)),
-                                          CONCAT11(uVar16,uVar14),cVar3,byteLo,uVar14,cVar3,uVar25);
-      ovr_blitLabel(textPtr,(uint8_t *)CONCAT22(fontOfs,in_DX),CONCAT11(uVar22,uVar20),uVar23,uVar20,
-                    uVar23,uVar13);
+                                          CONCAT11(fontSegHigh,fontSegLow),textAttr,byteLo,fontSegLow,textAttr,colourB);
+      ovr_blitLabel(textPtr,(uint8_t *)CONCAT22(fontOfs,in_DX),CONCAT11(fontHighArg,fontLowArg),colourA,fontLowArg,
+                    colourA,colourC);
     }
     else {
-      uVar13 = 0xe0;
-      uVar23 = 0xde;
-      uVar25 = 3;
-      cVar3 = 'V';
+      colourC = 0xe0;
+      colourA = 0xde;
+      colourB = 3;
+      textAttr = 'V';
       strRef = (uint16_t *)
                ((uint)*(byte *)((int)&(((entity_t *)agnt->entity)->base).entity + 3) * 4);
       in_DX = (uint8_t *)((char *)0x2627a);
       fontOfs = Font02.ofs;
-      uVar20 = uVar14;
-      uVar22 = uVar16;
+      fontLowArg = fontSegLow;
+      fontHighArg = fontSegHigh;
       textPtr = ovr_stsprintf(text,(char *)CONCAT22(0x630a,_SS),
                              (char *)CONCAT22(*strRef,(char *)0x26510),strRef[1]);
       textPtr = (char *)ovr_ovc45_compute9((char *)&line,(char *)CONCAT22(textPtr,_SS),
                                           (char *)CONCAT13(fontHi,CONCAT12(byteLo,in_DX)),
-                                          CONCAT11(uVar16,uVar14),cVar3,byteLo,uVar14,cVar3,uVar25);
-      ovr_blitLabel(textPtr,(uint8_t *)CONCAT22(fontOfs,in_DX),CONCAT11(uVar22,uVar20),uVar23,uVar20,
-                    uVar23,uVar13);
+                                          CONCAT11(fontSegHigh,fontSegLow),textAttr,byteLo,fontSegLow,textAttr,colourB);
+      ovr_blitLabel(textPtr,(uint8_t *)CONCAT22(fontOfs,in_DX),CONCAT11(fontHighArg,fontLowArg),colourA,fontLowArg,
+                    colourA,colourC);
     }
   }
   TextBlitY = 0x25;
   TextBlitX = 0x87;
   if (((agntG_t far *)agnt->gdata)->shortName[3] != -1) {
-    cVar3 = stats_compute3(agnt);
+    textAttr = stats_compute3(agnt);
     byteLo = (undefined1)Font02.seg;
     fontHi = (undefined1)(Font02.seg >> 8);
-    if (cVar3 == '\0') {
-      uVar25 = 0xe0;
-      uVar23 = 0xde;
+    if (textAttr == '\0') {
+      colourB = 0xe0;
+      colourA = 0xde;
       fontOfs = Font02.ofs;
       value = stats_compute2(agnt);
       textPtr = ovr_manage_compute1((uint)value,0);
-      uVar14 = SUB21(textPtr,0);
+      fontSegLow = SUB21(textPtr,0);
       nameOfs = in_DX;
-      uVar5 = stats_compute2(agnt);
+      statValue = stats_compute2(agnt);
       textPtr = ovr_stsprintf((char *)&line,(char *)CONCAT22(0x6323,_SS),
-                             (char *)(ulong)CONCAT12(uVar5,0x2410),0x10,uVar5,uVar14,nameOfs);
-      ovr_blitLabel(textPtr,(uint8_t *)CONCAT22(fontOfs,in_DX),CONCAT11(fontHi,byteLo),uVar23,byteLo,
-                    uVar23,uVar25);
+                             (char *)(ulong)CONCAT12(statValue,0x2410),0x10,statValue,fontSegLow,nameOfs);
+      ovr_blitLabel(textPtr,(uint8_t *)CONCAT22(fontOfs,in_DX),CONCAT11(fontHi,byteLo),colourA,byteLo,
+                    colourA,colourB);
     }
     else {
-      uVar23 = 0xde;
+      colourA = 0xde;
       fontOfs = Font02.ofs;
-      cVar3 = stats_compute1(agnt);
-      iVar10 = (int)cVar3;
+      textAttr = stats_compute1(agnt);
+      attrInt = (int)textAttr;
       value = stats_compute2(agnt);
-      textPtr = ovr_manage_compute1((uint)value,iVar10);
-      uVar16 = SUB21(in_DX,0);
-      uVar14 = SUB21(textPtr,0);
-      uVar5 = stats_compute2(agnt);
+      textPtr = ovr_manage_compute1((uint)value,attrInt);
+      fontSegHigh = SUB21(in_DX,0);
+      fontSegLow = SUB21(textPtr,0);
+      statValue = stats_compute2(agnt);
       textPtr = ovr_stsprintf((char *)&line,(char *)CONCAT22(0x6313,_SS),
-                             (char *)(ulong)CONCAT12(uVar5,0x2410),uVar5,uVar14,uVar16);
-      ovr_blitLabel(textPtr,(uint8_t *)CONCAT22(fontOfs,in_DX),CONCAT11(fontHi,byteLo),uVar23,byteLo);
+                             (char *)(ulong)CONCAT12(statValue,0x2410),statValue,fontSegLow,fontSegHigh);
+      ovr_blitLabel(textPtr,(uint8_t *)CONCAT22(fontOfs,in_DX),CONCAT11(fontHi,byteLo),colourA,byteLo);
     }
   }
   if ((((agntG_t far *)agnt->gdata)->shortName[3] == -1) ||
      (*(char *)((int)&(((entity_t *)agnt->entity)->base).entity + 3) == -1)) {
-    uVar7 = (uint)(byte)((agntG_t far *)agnt->gdata)->shortName[2];
+    slotProbe = (uint)(byte)((agntG_t far *)agnt->gdata)->shortName[2];
     nameOfs = (uint8_t *)((char *)0x26510);
-    ovr_blitLabel((char *)((far_t *)GAlignmentsNames + uVar7)->ofs,
+    ovr_blitLabel((char *)((far_t *)GAlignmentsNames + slotProbe)->ofs,
                   (uint8_t *)
                   CONCAT22(Font02.ofs,
-                           (uint8_t *)*(uint16_t *)((int)&GAlignmentsNames[0].seg + uVar7 * 4)),
+                           (uint8_t *)*(uint16_t *)((int)&GAlignmentsNames[0].seg + slotProbe * 4)),
                   Font02.seg,0xde,(char)Font02.seg,0xde,0xe0);
   }
   else {
     entPtr = *(uint32_t *)
              ((uint)*(byte *)((int)&(((entity_t *)agnt->entity)->base).entity + 3) << 2);
-    uVar7 = (uint)*(byte *)((int)entPtr + 0x33);
+    slotProbe = (uint)*(byte *)((int)entPtr + 0x33);
     nameOfs = (uint8_t *)((char *)0x26510);
-    ovr_blitLabel((char *)((far_t *)GAlignmentsNames + uVar7)->ofs,
+    ovr_blitLabel((char *)((far_t *)GAlignmentsNames + slotProbe)->ofs,
                   (uint8_t *)
                   CONCAT22(Font02.ofs,
-                           (uint8_t *)*(uint16_t *)((int)&GAlignmentsNames[0].seg + uVar7 * 4)),
+                           (uint8_t *)*(uint16_t *)((int)&GAlignmentsNames[0].seg + slotProbe * 4)),
                   Font02.seg,0xde,(char)Font02.seg,0xde,0xe0);
   }
   TextBlitY = 0x2f;
@@ -664,26 +667,26 @@ void __cdecl16far drawAgntStats(agnt_t far *agnt,far_t cmap,uint16_t arg3)
                   (char)Font02.seg,0xde,0xe0);
     TextBlitY = 0x36;
     TextBlitX = 0x87;
-    piVar8 = (int *)((uint)(byte)((agntG_t far *)agnt->gdata)->shortName[3] * 0x94 +
+    namePairPtr = (int *)((uint)(byte)((agntG_t far *)agnt->gdata)->shortName[3] * 0x94 +
                     (uint)(((entity_t *)agnt->entity)->base).level * 4);
     nameOfs = (uint8_t *)((char *)0x262b1);
-    uVar5 = (undefined1)Font02.seg;
+    statValue = (undefined1)Font02.seg;
     segHi = (undefined1)(Font02.seg >> 8);
-    if (*piVar8 == 0 && piVar8[1] == 0) {
-      uVar25 = 0xe0;
-      uVar23 = 0xde;
+    if (*namePairPtr == 0 && namePairPtr[1] == 0) {
+      colourB = 0xe0;
+      colourA = 0xde;
       fontOfs = Font02.ofs;
       textPtr = ovr_litoa10(text,0,0,0);
       textPtr = ovr_stsprintf((char *)&line,(char *)CONCAT13(99,CONCAT12(7,_SS)),
                              (char *)CONCAT13((char)((uint)textPtr >> 8),
                                               CONCAT12((char)textPtr,0x2410)),7,0x10,(char)textPtr,
                              nameOfs);
-      ovr_blitLabel(textPtr,(uint8_t *)CONCAT22(fontOfs,nameOfs),CONCAT11(segHi,uVar5),uVar23,uVar5,
-                    uVar23,uVar25);
+      ovr_blitLabel(textPtr,(uint8_t *)CONCAT22(fontOfs,nameOfs),CONCAT11(segHi,statValue),colourA,statValue,
+                    colourA,colourB);
     }
     else {
       blitColour = 0xe0;
-      uVar23 = 0xde;
+      colourA = 0xde;
       strRef = (uint16_t *)
                ((uint)(byte)((agntG_t far *)agnt->gdata)->shortName[3] * 0x94 +
                (uint)(((entity_t *)agnt->entity)->base).level * 4);
@@ -693,97 +696,97 @@ void __cdecl16far drawAgntStats(agnt_t far *agnt,far_t cmap,uint16_t arg3)
                          ((char *)CONCAT13((char)((uint)_SS >> 8),CONCAT12((char)_SS,buf))
                           ,CONCAT22(strRef[1],*strRef));
       byteLo = SUB21(textPtr,0);
-      uVar13 = (uint16_t)((ulong)agnt->entity >> 0x10);
+      entitySeg = (uint16_t)((ulong)agnt->entity >> 0x10);
       peVar12 = (entity_t *)agnt->entity;
-      uVar25 = *(uint16_t *)&(peVar12->base).frameIndex;
-      puVar18 = nameOfs;
+      colourB = *(uint16_t *)&(peVar12->base).frameIndex;
+      nameArg = nameOfs;
       textPtr = stats_formatThousands
                          (text,
-                          CONCAT13((char)((uint)uVar25 >> 8),
-                                   CONCAT12((char)uVar25,*(uint16_t *)&(peVar12->base).health)));
+                          CONCAT13((char)((uint)colourB >> 8),
+                                   CONCAT12((char)colourB,*(uint16_t *)&(peVar12->base).health)));
       textPtr = ovr_stsprintf((char *)&line,(char *)CONCAT22(0x6342,_SS),
                              (char *)CONCAT13((char)((uint)textPtr >> 8),
                                               CONCAT12((char)textPtr,0x2410)),(char)textPtr,
-                             (char)nameOfs,byteLo,puVar18);
-      ovr_blitLabel(textPtr,(uint8_t *)CONCAT22(fontOfs,nameOfs),CONCAT11(segHi,uVar5),uVar23,uVar5,
-                    uVar23,blitColour);
+                             (char)nameOfs,byteLo,nameArg);
+      ovr_blitLabel(textPtr,(uint8_t *)CONCAT22(fontOfs,nameOfs),CONCAT11(segHi,statValue),colourA,statValue,
+                    colourA,blitColour);
     }
   }
   if (agnt->gdata->ai != 0) {
-    uVar25 = 0xe0;
-    uVar23 = 0xde;
-    uVar5 = (undefined1)Font02.seg;
+    colourB = 0xe0;
+    colourA = 0xde;
+    statValue = (undefined1)Font02.seg;
     segHi = (undefined1)(Font02.seg >> 8);
     fontOfs = Font02.ofs;
-    iVar10 = ovr_ovc41_growthForLevel
+    growthValue = ovr_ovc41_growthForLevel
                        (*(agnt_t far **)&agnt->entity,*(uint16_t *)((int)&agnt->entity + 2));
     textPtr = ovr_stsprintf((char *)&line,(char *)CONCAT13(99,CONCAT12(0x48,_SS)),
-                           (char *)CONCAT13((char)((uint)iVar10 >> 8),CONCAT12((char)iVar10,0x2410))
-                           ,0x48,0x10,(char)iVar10,nameOfs);
-    ovr_blitLabel(textPtr,(uint8_t *)CONCAT22(fontOfs,nameOfs),CONCAT11(segHi,uVar5),uVar23,uVar5,
-                  uVar23,uVar25);
+                           (char *)CONCAT13((char)((uint)growthValue >> 8),CONCAT12((char)growthValue,0x2410))
+                           ,0x48,0x10,(char)growthValue,nameOfs);
+    ovr_blitLabel(textPtr,(uint8_t *)CONCAT22(fontOfs,nameOfs),CONCAT11(segHi,statValue),colourA,statValue,
+                  colourA,colourB);
   }
   TextBlitY = 0x40;
   TextBlitX = 0x87;
-  uVar25 = 0xe0;
-  uVar23 = 0xde;
-  uVar5 = (undefined1)Font02.seg;
+  colourB = 0xe0;
+  colourA = 0xde;
+  statValue = (undefined1)Font02.seg;
   segHi = (undefined1)(Font02.seg >> 8);
   fontOfs = Font02.ofs;
   textPtr = ovr_stsprintf((char *)&line,(char *)CONCAT13(99,CONCAT12(0x54,_SS)),
                          (char *)(ulong)CONCAT12(agnt->strength,0x2410),0x54,0x10,agnt->strength,
                          (uint)agnt->strengthMax);
-  ovr_blitLabel(textPtr,(uint8_t *)CONCAT22(fontOfs,nameOfs),CONCAT11(segHi,uVar5),uVar23,uVar5,
-                uVar23,uVar25);
+  ovr_blitLabel(textPtr,(uint8_t *)CONCAT22(fontOfs,nameOfs),CONCAT11(segHi,statValue),colourA,statValue,
+                colourA,colourB);
   TextBlitY = 0x4a;
   TextBlitX = 0x87;
-  iVar10 = (uint)((agntG_t far *)agnt->gdata)->type * 0x95;
+  growthValue = (uint)((agntG_t far *)agnt->gdata)->type * 0x95;
   nameOfs = (uint8_t *)((int)&BuildingTypes[0x9f].income + 1);
-  uVar23 = (uint8_t)agnt;
-  if (*(int *)((int)&AgntGs[0].wpn_name + iVar10) == 0 &&
-      *(int *)((int)&AgntGs[0].wpn_name + 2 + iVar10) == 0) {
+  colourA = (uint8_t)agnt;
+  if (*(int *)((int)&AgntGs[0].wpn_name + growthValue) == 0 &&
+      *(int *)((int)&AgntGs[0].wpn_name + 2 + growthValue) == 0) {
     damage = 0;
   }
   else {
     damage = ovr_agnt_compute9(agnt,cmap.ofs);
-    uVar5 = (undefined1)Font02.seg;
+    statValue = (undefined1)Font02.seg;
     segHi = (undefined1)(Font02.seg >> 8);
     if (damage == 0) {
-      uVar25 = 0xe0;
+      colourB = 0xe0;
       attr = 0xde;
       fontOfs = Font02.ofs;
       textPtr = agntGetWeaponName((char *)CONCAT22(CONCAT11(0x24,((agntG_t far *)agnt->gdata)->type),
-                                                  _SS),0x0,(bool)field_index,uVar23,
+                                                  _SS),0x0,(bool)field_index,colourA,
                                  CONCAT22(Font02.ofs,cmap.ofs));
-      ovr_blitLabel(textPtr,(uint8_t *)CONCAT22(fontOfs,nameOfs),CONCAT11(segHi,uVar5),attr,uVar5,
-                    attr,uVar25);
+      ovr_blitLabel(textPtr,(uint8_t *)CONCAT22(fontOfs,nameOfs),CONCAT11(segHi,statValue),attr,statValue,
+                    attr,colourB);
     }
     else if (damage < '\0') {
-      uVar25 = 0xe0;
+      colourB = 0xe0;
       attr = 0xde;
       fontOfs = Font02.ofs;
       textPtr = agntGetWeaponName((char *)CONCAT22(CONCAT11(0x24,((agntG_t far *)agnt->gdata)->type),
-                                                  _SS),damage,(bool)field_index,uVar23,
+                                                  _SS),damage,(bool)field_index,colourA,
                                  CONCAT22(Font02.ofs,cmap.ofs));
       textPtr = ovr_stsprintf((char *)&line,(char *)CONCAT13(99,CONCAT12(0x65,_SS)),
                              (char *)CONCAT13((char)((uint)textPtr >> 8),
                                               CONCAT12((char)textPtr,0x2410)),0x65,0x10,(char)textPtr,
                              nameOfs);
-      ovr_blitLabel(textPtr,(uint8_t *)CONCAT22(fontOfs,nameOfs),CONCAT11(segHi,uVar5),attr,uVar5,
-                    attr,uVar25);
+      ovr_blitLabel(textPtr,(uint8_t *)CONCAT22(fontOfs,nameOfs),CONCAT11(segHi,statValue),attr,statValue,
+                    attr,colourB);
     }
     else {
-      uVar25 = 0xe0;
+      colourB = 0xe0;
       attr = 0xde;
       fontOfs = Font02.ofs;
       textPtr = agntGetWeaponName((char *)CONCAT22(CONCAT11(0x24,((agntG_t far *)agnt->gdata)->type),
-                                                  _SS),damage,(bool)field_index,uVar23,
+                                                  _SS),damage,(bool)field_index,colourA,
                                  CONCAT22(Font02.ofs,cmap.ofs));
       textPtr = ovr_stsprintf((char *)&line,(char *)CONCAT22(0x6370,_SS),
                              (char *)CONCAT13(damage >> 7,CONCAT12(damage,0x2410)),0x10,damage,
                              (char)textPtr,nameOfs);
-      ovr_blitLabel(textPtr,(uint8_t *)CONCAT22(fontOfs,nameOfs),CONCAT11(segHi,uVar5),attr,uVar5,
-                    attr,uVar25);
+      ovr_blitLabel(textPtr,(uint8_t *)CONCAT22(fontOfs,nameOfs),CONCAT11(segHi,statValue),attr,statValue,
+                    attr,colourB);
     }
   }
   TextBlitY = 0x54;
@@ -794,23 +797,23 @@ void __cdecl16far drawAgntStats(agnt_t far *agnt,far_t cmap,uint16_t arg3)
   else {
     damage = 0;
   }
-  uVar25 = 0xe0;
-  uVar23 = 0xde;
-  uVar5 = (undefined1)Font02.seg;
+  colourB = 0xe0;
+  colourA = 0xde;
+  statValue = (undefined1)Font02.seg;
   segHi = (undefined1)(Font02.seg >> 8);
   fontOfs = Font02.ofs;
   stats_compute4(*(agnt_t far **)&agnt->entity,*(uint16_t *)((int)&agnt->entity + 2));
   textPtr = ovr_stsprintf((char *)&line);
-  ovr_blitLabel(textPtr,(uint8_t *)CONCAT22(fontOfs,nameOfs),CONCAT11(segHi,uVar5),uVar23,uVar5,
-                uVar23,uVar25);
+  ovr_blitLabel(textPtr,(uint8_t *)CONCAT22(fontOfs,nameOfs),CONCAT11(segHi,statValue),colourA,statValue,
+                colourA,colourB);
   if (agnt->gdata->ai == 0) {
     TextBlitY = 0x5e;
     TextBlitX = 0x87;
-    uVar25 = 0xe0;
-    uVar23 = 0xde;
-    uVar5 = (undefined1)Font02.seg;
+    colourB = 0xe0;
+    colourA = 0xde;
+    statValue = (undefined1)Font02.seg;
     segHi = (undefined1)(Font02.seg >> 8);
-    (*(uint8_t *)((uint8_t *)&(ringValue.seg))) = uVar5;
+    (*(uint8_t *)((uint8_t *)&(ringValue.seg))) = statValue;
     ringValue.ofs = Font02.ofs;
     (*(uint8_t *)((uint8_t *)&(ringValue.seg) + 1)) = segHi;
     fontOfs = Font02.ofs;
@@ -818,8 +821,8 @@ void __cdecl16far drawAgntStats(agnt_t far *agnt,far_t cmap,uint16_t arg3)
                                                                 _SS)),
                                  CONCAT11(0x24,((agntG_t far *)agnt->gdata)->shortName[4]),
                                  CONCAT11(0x24,damage),ringValue);
-    ovr_blitLabel((char *)text_00,(uint8_t *)CONCAT22(fontOfs,nameOfs),CONCAT11(segHi,uVar5),uVar23,
-                  uVar5,uVar23,uVar25);
+    ovr_blitLabel((char *)text_00,(uint8_t *)CONCAT22(fontOfs,nameOfs),CONCAT11(segHi,statValue),colourA,
+                  statValue,colourA,colourB);
   }
   else {
     damage = 0;
@@ -831,7 +834,7 @@ void __cdecl16far drawAgntStats(agnt_t far *agnt,far_t cmap,uint16_t arg3)
                   Font02.seg,0xde,(char)Font02.seg,0xde,0xe0);
   }
   if (GameRunning != false) {
-    palette.seg = (uint16_t)in_stack_0000000a;
+    palette.seg = (uint16_t)paletteSeg;
     palette.ofs = cmap.seg;
     ovr_setSeasonPalette(palette);
   }
