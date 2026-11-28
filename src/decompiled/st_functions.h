@@ -1014,7 +1014,7 @@ void __cdecl16far ovc50_usesBlitText(char *text,uint16_t widths);
 void __cdecl16far ovc50_usesStshLoadGfx(byte gfxIndex);
 void __cdecl16far ovc50_usesUiInputText(void);
 void manage_settlementScreen(byte partyIndex);
-undefined constrct_buildInfoText();
+void constrct_buildInfoText(int x,byte far *flag,int entityIdx,int arg4,int arg5);
 undefined ovr__FakRealCvt();
 undefined ovr_miceButtonsStates();
 undefined ovr_mkp();
