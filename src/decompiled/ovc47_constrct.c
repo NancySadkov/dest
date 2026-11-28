@@ -737,9 +737,46 @@ void constrct_buildInfoText(int x,byte far *flag,int entityIdx,int arg4,int arg5
           constrct_usesLDIV_at_((byte)entityIdx,GUnits[unitIdx].unitType);
           *flag = 1;
         }
-        /* GAP: the rest of the shared tail (0x24cd..0x278b) - the construction-record teardown,
-           the "repaired"/"upgraded" bookkeeping and the map refresh. */
-        break;
+        /* ---- shared action tail (0x24cd..0x278b) ---- */
+        if ((bld->flags2 & 0x400) != 0) {
+          ovr_createConstructionRecord(0,x,GfxRndSeed2,arg4,owner,3);
+        }
+        else {
+          ovr_createConstructionRecordFar(0,x,GfxRndSeed2,arg4,owner,3);
+        }
+        if ((bld->flags2 & 0x20) != 0) {
+          ovr_play_sfx(0,0x56);
+        }
+        else {
+          ovr_play_sfx(0,0x4f);
+        }
+        if ((bld->flags2 & 0x400) != 0) {
+          res = ovr_fmVsprintf((char far *)"%s is being filled.",
+                               (uint16_t)ovr_ovc15_usesStshRealloc(
+                                   (char far *)MK_FP((uint16_t)((uint32_t)bld->name >> 16),
+                                                     (uint16_t)bld->name)));
+          ovr_say(res);
+          ovr_inputUpdate(MessageDelay);
+        }
+        else if (cost > 0) {
+          res = ovr_fmVsprintf((char far *)"%s salvaged for %d gold.",
+                               (uint16_t)ovr_ovc15_usesStshRealloc(
+                                   (char far *)MK_FP((uint16_t)((uint32_t)bld->name >> 16),
+                                                     (uint16_t)bld->name)),cost);
+          ovr_say(res);
+          ovr_inputUpdate(MessageDelay);
+        }
+        else {
+          res = ovr_fmVsprintf((char far *)"%s is demolished.",
+                               (uint16_t)ovr_ovc15_usesStshRealloc(
+                                   (char far *)MK_FP((uint16_t)((uint32_t)bld->name >> 16),
+                                                     (uint16_t)bld->name)));
+          ovr_say(res);
+          ovr_inputUpdate(MessageDelay);
+        }
+        /* GAP: `lcall 0x1a8,0x2a` at 0x2780 - the pair has no same-module vote and the co-residency
+           anchor maps it to ovc24_checkStrongholds, a 3-byte stub of the wrong module. */
+        return;
       case 2:
         /* ---- repair (0x278b..0x291e) ---- */
         ovr_ovc45_compute3(unitIdx,entityIdx);

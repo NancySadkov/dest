@@ -22430,3 +22430,32 @@ The literals are the image's, used in place.
 Remaining in this function: the shared action tail `0x24cd..0x278b` (the construction-record teardown
 and map refresh, ~40 calls) and the few `say`/`inputUpdate` argument details that the frames still
 leave open (marked GAP/GUESS in-source).
+
+
+## 7e7c:0b9c: the shared action tail written (census 101 -> 117)
+
+The `0x24cd..0x278b` tail is now code. Its three message branches are driven by `flags2`:
+
+    if (flags2 & 0x400) createConstructionRecord(0,x,GfxRndSeed2,arg4,owner,3);
+    else                createConstructionRecordFar(0,x,GfxRndSeed2,arg4,owner,3);
+    play_sfx(0, (flags2 & 0x20) ? 0x56 : 0x4f);
+    if (flags2 & 0x400)  say(fmVsprintf("%s is being filled.", name)),      inputUpdate(MessageDelay);
+    else if (cost > 0)   say(fmVsprintf("%s salvaged for %d gold.", name, cost)), inputUpdate(...);
+    else                 say(fmVsprintf("%s is demolished.", name)),       inputUpdate(...);
+
+`0x1a8,0x2a` at 0x2780 stays a GAP: it is one of the five call sites with no same-module vote, and the
+co-residency anchor (`0x1a8,0x43` = alignUp4 -> overlay 0x2379) maps it to `ovc24_checkStrongholds`,
+a 3-byte stub entry of a module that cannot be issuing a map update here.
+
+## Measured (HEAD 65614d8d -> this commit)
+
+    screen_calls     7e7c:0b9c  C 101 -> 117  (image 187), delta -86 -> -70
+    grep_checks      11,516 (unchanged)
+    REBUILT.EXE      465,010 -> 465,408
+    build 65/65, LINK.LOG 0 errors
+    compare_state    1,628 matched / 0 different / missing 2      (unchanged)
+    diff_dgroup      1,639/1,805 matched, 5 layout runs           (unchanged)
+    compare_runtime  1,692 matched / 1,683 identical / 9 different (unchanged, all three sample points)
+
+Remaining 70 calls in this function: the pass-2 arms still marked GAP (unitType 0x13 second
+occurrence, 0, 8, 9, 0xb, 0xc, 3, 7, 0xa and the demolish/upgrade groups) and the `0x1a8,0x2a` gap.
