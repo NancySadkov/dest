@@ -23633,3 +23633,59 @@ grid section around body lines 561..610 is where the count diverges.
     grep_checks 9,798 · build 65/65 · LINK.LOG 0 errors
     compare_state 734 / 7 / 889 · diff_dgroup 288/1,805 · compare_runtime 280/11 at all three points
     (tool-only change; no code or data moved)
+
+
+## `3381:08dc`: the twelve missing `ovr_randBelow` sites are the duplicated row-parity generators
+
+Last turn's inventory said the whole deficit of this function is one target (`ovr_randBelow` 43 image
+sites, 31 in the body). Aligning the two sequences by argument shows where the difference sits.
+
+Image, in address order, with the range each call is given:
+
+    08ef 10   08ff 2    0a04 8    0a31 16   0a4f 2    0a84 17   0a9e 8    0ab8 11
+    0ad2 16   0aec 8    0b00 9    0b59 r     0c3d 16   0c6a 16   0c8a 2    0cbf 17
+    0cd9 8    0cf3 11   0d0d 16   0d27 8    0d3b 9    0d94 r    0fd5 4    1005 9
+    1044 4    1074 2    1084 6    10b4 9    10f8 9    1134 4    115c 2    116d 9
+    11ac 4    11c8 6    120c 9    1248 4    1265 6    1298 4    12b2 6    12ef 2
+    12ff 9    134d 2    1622 5
+
+The two clusters `08ef..0b00` and `0c3d..0d3b` are near-duplicates:
+
+    08ef 10, 08ff 2, 0a04 8, 0a31 16, 0a4f 2, 0a84 17, 0a9e 8, 0ab8 11, 0ad2 16, 0aec 8, 0b00 9
+    0c3d 16, 0c6a 16, 0c8a 2, 0cbf 17, 0cd9 8, 0cf3 11, 0d0d 16, 0d27 8, 0d3b 9
+
+and their guards differ in exactly the way a direction-split produces:
+
+    0a02  randBelow(8)     guard: `or si,si / je`      -> si == 0     compares [bp+si-0xa3] with [bp+si-0xa2]
+    0c3b  randBelow(0x10)  guard: `cmp si,0x93 / je`   -> si == 0x93  compares [bp+si-0xa1] with [bp+si-0xa2]
+
+The body expresses this as **one** loop with `d = (row & 1) ? -1 : 1; col = (row & 1) ? 0x93 : 0;`
+and a single ternary `randBelow((row & 1) ? 0x10 : 8)`. So one body call site stands for two image
+sites, and the same holds for the rest of the duplicated body: that is where most of the 12 come from,
+not from absent code.
+
+**Two things this exposes that are not settled:**
+
+1. The merged ternary changes the *frame* of the two calls (one site instead of two). Functionally the
+   executed draws are the same, so this is a shape difference of the same kind as `6ffe:009b` and
+   `2d63:04b7` - but it is only equivalent if the two duplicated blocks really are otherwise identical,
+   and the index bases are **not** identical: the first block pairs `-0xa3`/`-0xa2` and the second
+   `-0xa1`/`-0xa2`, i.e. the comparisons are offset by one column. With `profile` seated at `bp-0xa3`
+   that is `profile[si]` vs `profile[si+1]` in the first block and `profile[si+2]` vs `profile[si+1]`
+   in the second - consistent with the two traversal directions, which the body's `nb = col + d`
+   reproduces, but which I have not proven for every statement in the duplicated body.
+2. Seven of the twelve are still unaccounted for by the cluster comparison (the grid section
+   `0fd5..134d` has 20 sites against the body's 18, and the tail `0x1622` matches). Those need the
+   same statement-by-statement treatment the duplicated prefix just got.
+
+I am deliberately **not** de-optimising the body to match the site count: splitting the loop in two
+would raise the census without making the code more correct. What is needed first is the decision
+above - whether the merged form is faithful - and that is a read of the two blocks side by side.
+
+## Measured (HEAD e697f7e9 -> this commit)
+
+Analysis only; no code or data changed.
+
+    grep_checks 9,798 · build 65/65 · LINK.LOG 0 errors · REBUILT.EXE 447,890
+    compare_state 734 / 7 / 889 · diff_dgroup 288/1,805
+    compare_runtime 280 identical / 11 different at all three sample points
