@@ -397,18 +397,14 @@ int __cdecl16far constrct_compute1(void)
 
 /* Building information / action menu for the square under the cursor.
 
-   The structural decode (two-pass loop, all 45 text leaves, the 27-pair call map, per-leaf condition
-   paths) is in doc/7e7c_0b9c_spec.md.  This body implements the proven parts:
+   Structure (derived in doc/7e7c_0b9c_spec.md): the routine loops twice.  With `done` clear it runs
+   pass 1, which reports who owns the square (leaves 1-3) and then continues at 0x1f1a, where the cost
+   estimate and the far-pointer action list are built.  With `done` set it re-enters at 0x0f16 and
+   runs the unitType description arms (leaves 4-45), then the action menu.  `GUnits[unitIdx].unitType`
+   is rewritten from the entity between passes (0x2b20), and 0x2b23 flips `done`.
 
-     * the preamble: x, bldType (`usesGfxRndSeed2`), unitIdx (`getUnitIndex`)
-     * the two-pass loop selected by `done`
-     * pass 1's ownership preamble (leaves 1-3) and the first unitType arms (leaves 4-10)
-     * the 0x1f1a continuation: cost estimate and the far-pointer action list
-
-   GAP markers identify what is still untranscribed: the remaining pass-1 arms (unitType 0xe..0x16,
-   4, 2, 5), all of pass 2 (0x0f16.., leaves 25-45) and the menu build/dispatch (0x2000..0x2af0).
-
-   The format strings are the image's literals, used in place. */
+   GAP markers: the two unnameable calls in the pass-2 preamble (198,0057 / 198,005c), the pass-2 arms
+   whose per-arm varargs are not yet transcribed, and the menu build/dispatch 0x2000..0x2af0. */
 void constrct_buildInfoText(int x,byte far *flag,int entityIdx,int arg4,int arg5)
 
 {
@@ -419,6 +415,8 @@ void constrct_buildInfoText(int x,byte far *flag,int entityIdx,int arg4,int arg5
   byte done;
   int cost;
   int n;
+  int v16;
+  int v18;
   char far *res;
   char outBuf[0x2b0];
   far_t list[0x10];
@@ -431,54 +429,71 @@ void constrct_buildInfoText(int x,byte far *flag,int entityIdx,int arg4,int arg5
   unitIdx = (int)ovr_ovc45_getUnitIndex(GfxRndSeed2,x);
 
   do {
-    /* GUESS: +0x1a of the entity record - agnt_t names +0x1b as `owner` and +0x17 as `entity`, so the
-       byte the image reads here falls inside the `entity` pointer's segment half; kept as a raw byte
-       until the record layout is settled. */
+    /* GUESS: +0x1a of the entity record - agnt_t names +0x17 as `entity` (4 bytes) and +0x1b as
+       `owner`, so this byte falls inside the entity pointer; kept raw until the layout is settled. */
     owner = ((byte far *)&Entities[entityIdx])[0x1a];
     bldType = (byte)ovr_ovc45_usesGfxRndSeed2((void far *)MK_FP(_SS,(uint16_t)&x));
     bld = &BuildingTypes[bldType];
 
     if (done == 0) {
-      /* ---- pass 1: ownership preamble ---- */
+      /* ---- pass 1: ownership only (leaves 1-3) ---- */
       if (GUnits[unitIdx].unitType == 0xff) {
         res = ovr_fmVsprintf((char far *)"%s: Active party is %s the %s.",
                              (uint16_t)ovr_ovc15_usesStshRealloc(
-                                 (char far *)MK_FP((uint16_t)((uint32_t)bld->name >> 16),(uint16_t)bld->name)));
+                                 (char far *)MK_FP((uint16_t)((uint32_t)bld->name >> 16),
+                                                   (uint16_t)bld->name)));
         strcpy(outBuf,res);
       }
       else if (bld->durability == 0x64) {
         res = ovr_fmVsprintf((char far *)"%s: Owned by %s. Active party is %s the %s.",
                              (uint16_t)ovr_ovc15_usesStshRealloc(
-                                 (char far *)MK_FP((uint16_t)((uint32_t)bld->name >> 16),(uint16_t)bld->name)),0,0);
+                                 (char far *)MK_FP((uint16_t)((uint32_t)bld->name >> 16),
+                                                   (uint16_t)bld->name)),0,0);
         strcpy(outBuf,res);
       }
       else {
         res = ovr_fmVsprintf(
                   (char far *)"%s (%d/%d): Owned by %s. Active party is %s the %s.",
                   (uint16_t)ovr_ovc15_usesStshRealloc(
-                      (char far *)MK_FP((uint16_t)((uint32_t)bld->name >> 16),(uint16_t)bld->name)),0,0,0,0);
+                      (char far *)MK_FP((uint16_t)((uint32_t)bld->name >> 16),
+                                        (uint16_t)bld->name)),0,0,0,0);
         strcpy(outBuf,res);
       }
+    }
+    else {
+      /* ---- pass 2 preamble (0x0f16) ---- */
+      if (GUnits[unitIdx].unitType != 0xff) {
+        /* GAP: `lcall 0x198,0x57` and `lcall 0x198,0x5c`, both (bld, unitType, x, y), 4 words each.
+           Neither pair resolves to a name in this module; they feed the two %d arguments below. */
+        v16 = 0;
+        v18 = bld->housing;
+      }
+      else {
+        v16 = 0;
+        v18 = 0;
+      }
 
-      /* ---- pass 1: the unitType arms ---- */
+      /* ---- pass 2: the unitType description arms (leaves 4-23) ---- */
       if (bld->unitType == 6) {
-        /* the one stsprintf leaf: it writes straight into outBuf */
         ovr_stsprintf((char far *)MK_FP(_SS,(uint16_t)outBuf),
                       (char far *)"%s: Costs %d gold and provides training to level %d.",
                       (uint16_t)ovr_ovc15_usesStshRealloc(
-                          (char far *)MK_FP((uint16_t)((uint32_t)bld->name >> 16),(uint16_t)bld->name)),0);
+                          (char far *)MK_FP((uint16_t)((uint32_t)bld->name >> 16),
+                                            (uint16_t)bld->name)),0);
       }
       else if (bld->unitType == 1) {
         if (bld->resource == 1) {
           res = ovr_fmVsprintf(
                     (char far *)"%s: Costs %d gold of income. Replaces broken weapons.",
                     (uint16_t)ovr_ovc15_usesStshRealloc(
-                        (char far *)MK_FP((uint16_t)((uint32_t)bld->name >> 16),(uint16_t)bld->name)));
+                        (char far *)MK_FP((uint16_t)((uint32_t)bld->name >> 16),
+                                          (uint16_t)bld->name)),bld->cost);
         }
         else {
           res = ovr_fmVsprintf((char far *)"%s: Costs %d gold of income. Forges +%d weapons.",
                                (uint16_t)ovr_ovc15_usesStshRealloc(
-                                   (char far *)MK_FP((uint16_t)((uint32_t)bld->name >> 16),(uint16_t)bld->name)),0);
+                                   (char far *)MK_FP((uint16_t)((uint32_t)bld->name >> 16),
+                                                     (uint16_t)bld->name)),bld->cost,0);
         }
         strcpy(outBuf,res);
       }
@@ -486,13 +501,15 @@ void constrct_buildInfoText(int x,byte far *flag,int entityIdx,int arg4,int arg5
         if (bld->resource == 1) {
           res = ovr_fmVsprintf((char far *)"%s: Costs %d gold of income. Improves armor.",
                                (uint16_t)ovr_ovc15_usesStshRealloc(
-                                   (char far *)MK_FP((uint16_t)((uint32_t)bld->name >> 16),(uint16_t)bld->name)));
+                                   (char far *)MK_FP((uint16_t)((uint32_t)bld->name >> 16),
+                                                     (uint16_t)bld->name)),bld->cost);
         }
         else {
           res = ovr_fmVsprintf(
                     (char far *)"%s: Costs %d gold of income. Improves armor class by -%d.",
                     (uint16_t)ovr_ovc15_usesStshRealloc(
-                        (char far *)MK_FP((uint16_t)((uint32_t)bld->name >> 16),(uint16_t)bld->name)),0);
+                        (char far *)MK_FP((uint16_t)((uint32_t)bld->name >> 16),
+                                          (uint16_t)bld->name)),bld->cost,0);
         }
         strcpy(outBuf,res);
       }
@@ -500,23 +517,120 @@ void constrct_buildInfoText(int x,byte far *flag,int entityIdx,int arg4,int arg5
         if (bld->resource == 1) {
           res = ovr_fmVsprintf((char far *)"%s: Costs %d gold of income. Replaces broken bows.",
                                (uint16_t)ovr_ovc15_usesStshRealloc(
-                                   (char far *)MK_FP((uint16_t)((uint32_t)bld->name >> 16),(uint16_t)bld->name)));
+                                   (char far *)MK_FP((uint16_t)((uint32_t)bld->name >> 16),
+                                                     (uint16_t)bld->name)),bld->cost);
         }
         else {
           res = ovr_fmVsprintf(
                     (char far *)"%s: Costs %d gold of income. Creates +%d bow and arrows.",
                     (uint16_t)ovr_ovc15_usesStshRealloc(
-                        (char far *)MK_FP((uint16_t)((uint32_t)bld->name >> 16),(uint16_t)bld->name)),0);
+                        (char far *)MK_FP((uint16_t)((uint32_t)bld->name >> 16),
+                                          (uint16_t)bld->name)),bld->cost,0);
         }
         strcpy(outBuf,res);
       }
-      /* GAP: pass-1 arms for unitType 0xe, 0xf, 0x17, 0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16,
-         4, 2 and 5.  Their literals are recorded in doc/7e7c_0b9c_spec.md (0x7c33 .. 0x7fe9) and
-         their arms are proven; only the per-arm vararg expressions are still missing. */
-    }
-    else {
-      /* GAP: pass 2 (entry 0x0f16) - leaf 4's preamble plus leaves 25-45.  It re-tests the same
-         unitType field after GUnits[unitIdx].unitType is rewritten at 0x2b20. */
+      else if (bld->unitType == 0xe) {
+        /* GUESS: the trailing %d is an unproven field; the frame carries one extra word. */
+        res = ovr_fmVsprintf((char far *)"%s: Costs %d gold. Increases unit size of five units by %d.",
+                             (uint16_t)ovr_ovc15_usesStshRealloc(
+                                 (char far *)MK_FP((uint16_t)((uint32_t)bld->name >> 16),
+                                                   (uint16_t)bld->name)),bld->cost,0);
+        strcpy(outBuf,res);
+      }
+      else if (bld->unitType == 0xf) {
+        res = ovr_fmVsprintf((char far *)"%s: Costs %d gold. Increases building speed by %d0%%.",
+                             (uint16_t)ovr_ovc15_usesStshRealloc(
+                                 (char far *)MK_FP((uint16_t)((uint32_t)bld->name >> 16),
+                                                   (uint16_t)bld->name)),bld->cost,0);
+        strcpy(outBuf,res);
+      }
+      else if (bld->unitType == 0x17) {
+        res = ovr_fmVsprintf((char far *)"%s: Costs %d gold. Enhances training by %d%%.",
+                             (uint16_t)ovr_ovc15_usesStshRealloc(
+                                 (char far *)MK_FP((uint16_t)((uint32_t)bld->name >> 16),
+                                                   (uint16_t)bld->name)),bld->cost,0);
+        strcpy(outBuf,res);
+      }
+      else if (bld->unitType == 0x10) {
+        res = ovr_fmVsprintf((char far *)"%s: Costs %d gold. Produces +%d rings of protection.",
+                             (uint16_t)ovr_ovc15_usesStshRealloc(
+                                 (char far *)MK_FP((uint16_t)((uint32_t)bld->name >> 16),
+                                                   (uint16_t)bld->name)),bld->cost,0);
+        strcpy(outBuf,res);
+      }
+      else if (bld->unitType == 0x11) {
+        res = ovr_fmVsprintf(
+                  (char far *)"%s: Costs %d gold. Produces mirrors for medusae combat. Increases tower range by %d%%.",
+                  (uint16_t)ovr_ovc15_usesStshRealloc(
+                      (char far *)MK_FP((uint16_t)((uint32_t)bld->name >> 16),
+                                        (uint16_t)bld->name)),bld->cost,0);
+        strcpy(outBuf,res);
+      }
+      else if (bld->unitType == 0x12) {
+        res = ovr_fmVsprintf((char far *)"%s: Costs %d gold. Attracts new units to this location.",
+                             (uint16_t)ovr_ovc15_usesStshRealloc(
+                                 (char far *)MK_FP((uint16_t)((uint32_t)bld->name >> 16),
+                                                   (uint16_t)bld->name)),bld->cost);
+        strcpy(outBuf,res);
+      }
+      else if (bld->unitType == 0x13) {
+        res = ovr_fmVsprintf((char far *)"%s: Costs %d gold. Provides %u units of gold storage.",
+                             (uint16_t)ovr_ovc15_usesStshRealloc(
+                                 (char far *)MK_FP((uint16_t)((uint32_t)bld->name >> 16),
+                                                   (uint16_t)bld->name)),bld->cost,bld->storage);
+        strcpy(outBuf,res);
+      }
+      else if (bld->unitType == 0x14) {
+        res = ovr_fmVsprintf((char far *)"%s: Costs %d gold. Claim trees automatically.",
+                             (uint16_t)ovr_ovc15_usesStshRealloc(
+                                 (char far *)MK_FP((uint16_t)((uint32_t)bld->name >> 16),
+                                                   (uint16_t)bld->name)),bld->cost);
+        strcpy(outBuf,res);
+      }
+      else if (bld->unitType == 0x15) {
+        res = ovr_fmVsprintf((char far *)"%s: Costs %d gold. Repairs buildings at season changes.",
+                             (uint16_t)ovr_ovc15_usesStshRealloc(
+                                 (char far *)MK_FP((uint16_t)((uint32_t)bld->name >> 16),
+                                                   (uint16_t)bld->name)),bld->cost);
+        strcpy(outBuf,res);
+      }
+      else if (bld->unitType == 0x16) {
+        /* GUESS: the second %d is unproven; the frame carries one extra word (bld byte +0xa0?). */
+        res = ovr_fmVsprintf(
+                  (char far *)"%s: Trades %d food for gold. Total trade is %d food.",
+                  (uint16_t)ovr_ovc15_usesStshRealloc(
+                      (char far *)MK_FP((uint16_t)((uint32_t)bld->name >> 16),
+                                        (uint16_t)bld->name)),bld->cost,0);
+        strcpy(outBuf,res);
+      }
+      else if (bld->unitType == 4) {
+        res = ovr_fmVsprintf(
+                  (char far *)"%s: Creates %d gold of income, and accesses %d%% of the market fund.",
+                  (uint16_t)ovr_ovc15_usesStshRealloc(
+                      (char far *)MK_FP((uint16_t)((uint32_t)bld->name >> 16),
+                                        (uint16_t)bld->name)),bld->cost,0);
+        strcpy(outBuf,res);
+      }
+      else if (bld->unitType == 2) {
+        res = ovr_fmVsprintf(
+                  (char far *)"%s: Costs %d gold of income and provides visibility of %d squares n/s, %d squares e/w.",
+                  (uint16_t)ovr_ovc15_usesStshRealloc(
+                      (char far *)MK_FP((uint16_t)((uint32_t)bld->name >> 16),
+                                        (uint16_t)bld->name)),bld->cost,0,0);
+        strcpy(outBuf,res);
+      }
+      else if (bld->unitType == 5) {
+        res = ovr_fmVsprintf(
+                  (char far *)"%s: Costs %d gold of income and provides storage for %u food.",
+                  (uint16_t)ovr_ovc15_usesStshRealloc(
+                      (char far *)MK_FP((uint16_t)((uint32_t)bld->name >> 16),
+                                        (uint16_t)bld->name)),bld->cost,bld->storage);
+        strcpy(outBuf,res);
+      }
+      /* GAP: the remaining pass-2 arms (unitType 0x13 again at 0x1a19, 0, 8, 9, 0xb, 0xc, 3, 7,
+         0xa and the two demolish/upgrade groups) plus the menu build/dispatch at 0x2000..0x2af0
+         (createConstructionRecord, usesGPopulationLo, *flag = 1, inputUpdate(MessageDelay*2),
+         textChoosePartyBuild). */
     }
 
     /* ---- 0x1f1a continuation: cost estimate + the far-pointer action list ---- */
@@ -533,13 +647,7 @@ void constrct_buildInfoText(int x,byte far *flag,int entityIdx,int arg4,int arg5
       n++;
     }
   } while (done == 0);
-
-  /* GAP: the menu build and dispatch (0x2000..0x2af0): the repeated `codes[n] = N; list[n] = "...";
-     n++` action entries ("0x8093", "0x80af", ...), the fmVsprintf/strcat cost line, then
-     createConstructionRecord, ovc45_usesGPopulationLo, *flag = 1, inputUpdate(MessageDelay*2) and
-     ovc45_textChoosePartyBuild(&entityIdx,arg5,arg4). */
 }
-
 /* 7e7c:2b4c */
 void __cdecl16far constrct_usesLDIV_at_(byte partyIndex,int entityIndex)
 

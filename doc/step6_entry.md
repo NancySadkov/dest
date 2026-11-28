@@ -22307,3 +22307,48 @@ Two structural corrections came out of writing it:
     compare_state    1,628 matched / 0 different / missing 2      (unchanged)
     diff_dgroup      1,639/1,805 matched, 5 layout runs           (unchanged)
     compare_runtime  1,692 matched / 1,683 identical / 9 different (unchanged, all three sample points)
+
+
+## 7e7c:0b9c: pass-1 arms filled (census 30 -> 69) and a structural correction
+
+Writing the arms exposed a structural error in the first body: **leaves 4-45 are not pass 1**. The
+trace shows pass 1 ends at leaf 3 - each of leaves 1-3 finishes with `jmp 0x1f1a`, the continuation -
+and the unitType arms live at `0x0f16`, which is exactly the target of the `if ([bp-0x27]) goto 0xf16`
+at `0x0c03`. So the arms belong to the `else` branch, and the body now has:
+
+    if (done == 0) { leaves 1-3, ownership }        /* pass 1 */
+    else           { 0x0f16 preamble + arms }        /* pass 2 */
+
+That also explains the `0x1f1a` continuation: it runs after *either* branch, building the cost estimate
+and the action list, then loops until `0x2b23` flips `done`.
+
+Arms now written (13 new), each with its image literal used in place and `bld->cost` for the
+`%d gold` argument:
+
+    0xe   "%s: Costs %d gold. Increases unit size of five units by %d."
+    0xf   "%s: Costs %d gold. Increases building speed by %d0%%."
+    0x17  "%s: Costs %d gold. Enhances training by %d%%."
+    0x10  "%s: Costs %d gold. Produces +%d rings of protection."
+    0x11  "%s: Costs %d gold. Produces mirrors for medusae combat. Increases tower range by %d%%."
+    0x12  "%s: Costs %d gold. Attracts new units to this location."
+    0x13  "%s: Costs %d gold. Provides %u units of gold storage."      (bld->storage)
+    0x14  "%s: Costs %d gold. Claim trees automatically."
+    0x15  "%s: Costs %d gold. Repairs buildings at season changes."
+    0x16  "%s: Trades %d food for gold. Total trade is %d food."
+    4     "%s: Creates %d gold of income, and accesses %d%% of the market fund."
+    2     "%s: Costs %d gold of income and provides visibility of %d squares n/s, %d squares e/w."
+    5     "%s: Costs %d gold of income and provides storage for %u food."  (bld->storage)
+
+Where the frame carries an extra word whose field is not proven (0xe, 0xf, 0x17, 0x10, 0x11, 0x16, 4,
+2) the placeholder is `0` and the line is marked `GUESS` in-source. The pass-2 preamble's two
+unnameable calls (`198,0057` / `198,005c`) are a `GAP` with the frame that feeds them recorded.
+
+## Measured (HEAD 353a14ce -> this commit)
+
+    screen_calls     7e7c:0b9c  C 30 -> 69  (image 187), delta -157 -> -118
+    grep_checks      11,517 -> 11,516
+    REBUILT.EXE      461,258 -> 463,082
+    build 65/65, LINK.LOG 0 errors
+    compare_state    1,628 matched / 0 different / missing 2      (unchanged)
+    diff_dgroup      1,639/1,805 matched, 5 layout runs           (unchanged)
+    compare_runtime  1,692 matched / 1,683 identical / 9 different (unchanged, all three sample points)
