@@ -22096,3 +22096,20 @@ format string at 0x690b decoded first, so it is left for a pass that can verify 
     compare_state    1,628 matched / 0 different / missing 2      (unchanged)
     diff_dgroup      1,639/1,805 matched, 5 layout runs           (unchanged)
     compare_runtime  1,692 matched / 1,683 identical / 9 different (unchanged, all three sample points)
+
+
+### Addendum: what runtime segment `0x200` is
+
+A scan of every `lcall 0x0200,<ofs>` in the image finds five distinct offsets - `0x20`, `0x25`, `0x2a`,
+`0x2f`, `0x34` - i.e. the classic 5-byte VROOMM stub spacing (the same spacing the tree's
+`ovr_stubs.c` shows at `22a6:0020/0025/002a/002f/0034`). The sites live in `77eb:0d61` **and** in three
+segments the audit map does not cover at all (`78c6:000b`, `794f:0009`, `7951:0006`, `5518:0000`), where
+they sit in fragments of the same code (`les bx, es:[bx] / mov al, es:[bx+0x85] / push ax / lcall
+0x200,0x25` is byte-for-byte the sequence at `77eb:0da1`). So `0x200` is a relocated stub segment whose
+targets depend on which overlay is resident - the VROOMM directory data AGENTS.md excludes - and the
+fragment copies do not help name it either, since those segments carry no recovered bodies.
+
+`audit/summary.txt` confirms the shape: it is a runtime block map (`DS` at `0000:0000..0000:0fff`,
+`OVR01 22a6:..`, `DATA_entity.c 195d:..`, ...), so the `0x50 / 0x60 / 0x70` "segments" the building and
+sheet arrays are addressed through are per-module data selectors, not DGROUP. That is exactly why the
+tree models them as typed globals (`BuildingTypes`, `GLeaderSheets`, `GUnits`) rather than as segments.
