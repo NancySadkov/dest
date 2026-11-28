@@ -45,7 +45,9 @@ void __cdecl16far stExit(int n,...)
   }
   xmsFree();
   emsFree();
-  ovr_chpath((char *)"",0x2410);
+  /* 3168:00f4 pushes the DGROUP far pointer 0x280:0x8c28, i.e. GOriginalDir - the directory
+     init_paths saved at startup and this exit path restores. */
+  ovr_chpath((char *)GOriginalDir,(uint16_t)_DS);
   if (n != 0) {
                     /* WARNING: Subroutine does not return */
     exit(0x80);
