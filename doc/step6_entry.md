@@ -25240,3 +25240,52 @@ the new size low word at 640 within forty lines. Separating them needs the image
     compare_state        identical 734 / 7 different / 889 missing (unchanged)
     diff_dgroup          288/1,805 matched (unchanged)
     compare_runtime      280 identical / 11 different at entry, init_game and key (unchanged)
+
+
+## `ovc41_specialAttack` (6a8f:22cb): 155 hits down to 0, grep 6,567 -> 6,412 (-155)
+
+The five `ovr_ovc15_usesStshRealloc` sites all pass `(text, damage, textOfsLo, damageLo, segLo, ...)`
+but the image **rotates which byte slot carries which half** at each site, so the slots had to be
+named per role rather than per variable:
+
+    1612  (textPtr, uVar10, uVar12, uVar15, blitSegLo)   textOfsLo / dmgLo / blitSegLo
+    1634  (textPtr, uVar10, uVar13, uVar14, uVar12)      textOfsLo / dmgLo / gSavedSegLo
+    1659  (textPtr, uVar10, uVar14, uVar12, uVar13)      textOfsLo / dmgLo / gSavedSegLo
+    1714  (textPtr, (char)uVar10, uVar13, 0, ...)        gSavedSegLo only
+
+Giving, across `uVar12` / `uVar13` / `uVar14` / `uVar15`:
+
+    textOfsLo    SUB21(textPtr,0)          6 sites
+    dmgLo        (undefined1)dmgOut        6 sites
+    gSavedSegLo  (undefined1)GSavedBlitSeg 12 sites
+    targetIdxLo / targetIdxHi              (undefined1)targetIndex and its high byte
+
+`targetIdxLo`/`targetIdxHi` are read again at 1755 (`textTakesHalfDamage3`) and 1759
+(`textOnlyPlaceSingle`), **after** the slots have been reused above - so the split is only safe if those
+two reads are not reachable from the reusing block. They are not: 1755 is the `else` of
+`if (agnt->variant == 0x0)` and 1759 the `else` of `if ((agnt->flags & 8) == 0)`, and the whole
+1632..1744 run is inside the `variant == 0x0` arm. That is stated here because it is the difference
+between a correct split and a silent behaviour change.
+
+The rest of the body:
+
+    uVar5  -> turnRes / halfRes / modRes / agntSegDead / agntSeg / sfxResA / sfxResB
+    uVar9  -> panRes / randRes
+    uVar10 -> deadTgtHi / dmgOut / panOut
+    bVar4  -> strength / rollRes / compute9Res
+    in_stack_00000008 -> targetAgentIdx   (the third argument, read signed: an agent index)
+
+Two dead stores documented in place: `agntSegDead` (1595) and `deadTgtHi` (1556), both overwritten
+before any read. `sfxResB` is deliberately one name covering 1680 and 1713, because 1713 reads the
+slot that 1680 wrote - naming it twice would *change* behaviour, and the last session's
+`ovc49_drawAgents` `uVar13` is the same unresolved shape.
+
+## Measured (HEAD 59611849 -> this commit)
+
+    grep_checks          6,567 -> 6,412   (-155)
+    REBUILT.EXE          447,778 (unchanged size)
+    build 65/65, LINK.LOG 0 errors
+    compare_state        identical 734 / 7 different / 889 missing (unchanged)
+    diff_dgroup          288/1,805 matched (unchanged)
+    compare_runtime      280 identical / 11 different at entry, init_game and key (unchanged)
+    structural_deficits  two game bodies: 7e7c:0b9c (177/187), 77eb:0d61 (54/58)
