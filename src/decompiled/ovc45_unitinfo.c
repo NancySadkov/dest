@@ -997,35 +997,35 @@ void __cdecl16far
 ovc45_textDone(char foundFlag,byte bldType,int entityIndex,uint16_t x,uint16_t outFlag,uint16_t outFlagSeg,uint16_t arg7,uint16_t arg8)
 
 {
-  byte bVar1;
+  byte partyIdx;           /* AGNT_FIELD(base.entity, 3): the party index */
   far_t entries;
   far_t entries_00;
   far_t hint;
   far_t hint_00;
   uint16_t x_00;
-  char *pcVar2;
-  uint16_t *puVar3;
-  int iVar4;
+  char *msgPtr;            /* className's result, then fmVsprintf's */
+  uint16_t *sheetSlot;     /* &GLeaderSheets[partyIdx] as a word pair */
+  int nameLen;             /* ovc45_compute9's result */
   uint8_t *puVar5;
-  uint uVar6;
-  uint16_t uVar7;
+  uint randRes;            /* ovc45_usesRandBelow(entityIndex) */
+  uint16_t randPick;       /* ovr_randBelow(0x10) */
   uint16_t uVar8;
-  uint16_t uVar9;
-  int iVar10;
-  uint16_t unaff_DI;
+  uint16_t vsSeg;          /* DX returned by ovr_fmVsprintf */
+  int menuIdx;             /* 2 or 3, then the chosen item */
+  uint16_t diArg;          /* the value the image passes in DI */
   undefined1 uVar11;
-  undefined1 uVar12;
+  undefined1 ssHi;         /* high byte of _SS */
   uint8_t menuItems;
   uint16_t auStack_28e [19];
   uint8_t msg;
   uint8_t text;
-  char cStack_17;
-  char cStack_16;
-  char cStack_15;
+  char loopState;          /* (char)uVar8, -1 ends the loop */
+  char didSpend;           /* 0, set to 1 when the action is taken */
+  char menuCode;           /* the code ovc28_compute2 returns */
   uint8_t menuLabel;
-  uint16_t uStack_12;
-  uint16_t uStack_10;
-  char cStack_e;
+  uint16_t dgroupSeg;      /* 0x2410, the DATA segment argument */
+  uint16_t fmtOfs;         /* 0x77ba, a DGROUP format string */
+  char attr;               /* 0x10, the attribute passed with it */
   char acStack_d [11];
   
   x_00 = x;
@@ -1041,127 +1041,127 @@ ovc45_textDone(char foundFlag,byte bldType,int entityIndex,uint16_t x,uint16_t o
     auStack_28e[1] = BLD_WORD(&BuildingTypes[bldType], action, 0);
   }
   acStack_d[2] = 2;
-  iVar10 = 2;
+  menuIdx = 2;
   if (foundFlag != '\0') {
     auStack_28e[4] = 0x2410;
     auStack_28e[3] = 0x7716;
     acStack_d[3] = 3;
-    iVar10 = 3;
+    menuIdx = 3;
   }
-  auStack_28e[iVar10 * 2] = 0x2410;   /* hand fix: segment-half array; this function already stores 0x2410 in auStack_28e[0],[2],[4] */
-  *(char **)(&menuItems + iVar10 * 4) = (char *)"Done";
-  acStack_d[iVar10 + 1] = '\x04';
-  cStack_16 = '\0';
+  auStack_28e[menuIdx * 2] = 0x2410;   /* hand fix: segment-half array; this function already stores 0x2410 in auStack_28e[0],[2],[4] */
+  *(char **)(&menuItems + menuIdx * 4) = (char *)"Done";
+  acStack_d[menuIdx + 1] = '\x04';
+  didSpend = '\0';
   do {
     uVar11 = 0x10;
-    pcVar2 = ovr_ovc22_className(AGNT_FIELD(&(Entities)[entityIndex], base.entity, 3),0);
-    puVar3 = (uint16_t *)((uint)AGNT_FIELD(&(Entities)[entityIndex], base.entity, 3) * 4);
+    msgPtr = ovr_ovc22_className(AGNT_FIELD(&(Entities)[entityIndex], base.entity, 3),0);
+    sheetSlot = (uint16_t *)((uint)AGNT_FIELD(&(Entities)[entityIndex], base.entity, 3) * 4);
     uVar8 = _DS;
-    iVar4 = ovc45_compute9((char *)&text,(char *)CONCAT22(*puVar3,_SS),
+    nameLen = ovc45_compute9((char *)&text,(char *)CONCAT22(*sheetSlot,_SS),
                            (char *)CONCAT13((char)(Font03.ofs >> 8),
-                                            CONCAT12((char)Font03.ofs,puVar3[1])),Font03.seg,'U',
-                           (char)Font03.ofs,0x55,3,pcVar2,uVar11);
+                                            CONCAT12((char)Font03.ofs,sheetSlot[1])),Font03.seg,'U',
+                           (char)Font03.ofs,0x55,3,msgPtr,uVar11);
     puVar5 = ovr_ovc15_usesStshRealloc
-                       ((char *)BLD_WORD(&BuildingTypes[bldType], name, 0),BLD_WORD(&BuildingTypes[bldType], name, 2),(char)iVar4,uVar8,0,0,0,0);
-    pcVar2 = ovr_fmVsprintf("%s: Search this location for minerals?  Active party is %s the %s.",
-                            (char *)CONCAT22(uVar9,puVar5));
-                            asm { mov uVar9,dx };
+                       ((char *)BLD_WORD(&BuildingTypes[bldType], name, 0),BLD_WORD(&BuildingTypes[bldType], name, 2),(char)nameLen,uVar8,0,0,0,0);
+    msgPtr = ovr_fmVsprintf("%s: Search this location for minerals?  Active party is %s the %s.",
+                            (char *)CONCAT22(vsSeg,puVar5));
+                            asm { mov vsSeg,dx };
     strcpy((char *)CONCAT22(_SS,&msg),
-           (char *)CONCAT13((char)((uint)uVar9 >> 8),CONCAT12((char)uVar9,pcVar2)));
+           (char *)CONCAT13((char)((uint)vsSeg >> 8),CONCAT12((char)vsSeg,msgPtr)));
     goldPartyIndex = AGNT_FIELD(&(Entities)[entityIndex], base.entity, 3);
     uVar11 = SUB21(_SS,0);
-    uVar12 = (undefined1)((uint)_SS >> 8);
+    ssHi = (undefined1)((uint)_SS >> 8);
     puVar5 = &menuItems;
     (*(uint8_t *)((uint8_t *)&(entries.seg))) = uVar11;
     entries.ofs = (uint16_t)puVar5;
-    (*(uint8_t *)((uint8_t *)&(entries.seg) + 1)) = uVar12;
+    (*(uint8_t *)((uint8_t *)&(entries.seg) + 1)) = ssHi;
     (*(uint8_t *)((uint8_t *)&(hint.seg))) = uVar11;
     hint.ofs = (uint16_t)&msg;
-    (*(uint8_t *)((uint8_t *)&(hint.seg) + 1)) = uVar12;
-    ovr_ovc28_compute2(entries,iVar10 + 1,hint,0,0);
-    cStack_15 = (char)puVar5;
+    (*(uint8_t *)((uint8_t *)&(hint.seg) + 1)) = ssHi;
+    ovr_ovc28_compute2(entries,menuIdx + 1,hint,0,0);
+    menuCode = (char)puVar5;
     goldPartyIndex = 0xff;
-    if (cStack_15 != '\0') {
-      cStack_15 = acStack_d[(uint)puVar5 & 0xff];
+    if (menuCode != '\0') {
+      menuCode = acStack_d[(uint)puVar5 & 0xff];
     }
-    if (cStack_15 == '\x01') {
-      uVar6 = ovc45_usesRandBelow(entityIndex);
-      if ((uVar6 & 0xff) == 0) {
+    if (menuCode == '\x01') {
+      randRes = ovc45_usesRandBelow(entityIndex);
+      if ((randRes & 0xff) == 0) {
         ovr_play_sfx(47,0,0);
         ovr_say((char *)"No minerals were found.",0x10);
-        bVar1 = AGNT_FIELD(&(Entities)[entityIndex], base.entity, 3);
+        partyIdx = AGNT_FIELD(&(Entities)[entityIndex], base.entity, 3);
         ovr_createConstructionRecordFar
-                  (0,x_00,GfxRndSeed2,(uint8_t *)CONCAT22(outFlagSeg,outFlag),bVar1,(char)unaff_DI,(char)GfxRndSeed2,bVar1,0);
+                  (0,x_00,GfxRndSeed2,(uint8_t *)CONCAT22(outFlagSeg,outFlag),partyIdx,(char)diArg,(char)GfxRndSeed2,partyIdx,0);
       }
       else {
-        uVar7 = ovr_randBelow(0x10,0);
-        if ((uVar7 & 0xff) == 0) {
+        randPick = ovr_randBelow(0x10,0);
+        if ((randPick & 0xff) == 0) {
           ovr_play_sfx(42,0,0);
           ovr_say((char *)"Gems discovered.",0x10);
-          bVar1 = AGNT_FIELD(&(Entities)[entityIndex], base.entity, 3);
+          partyIdx = AGNT_FIELD(&(Entities)[entityIndex], base.entity, 3);
           ovr_createConstructionRecordFar
-                    (0x72,x_00,GfxRndSeed2,(uint8_t *)CONCAT22(outFlagSeg,outFlag),bVar1,(char)unaff_DI,(char)GfxRndSeed2,bVar1,0);
+                    (0x72,x_00,GfxRndSeed2,(uint8_t *)CONCAT22(outFlagSeg,outFlag),partyIdx,(char)diArg,(char)GfxRndSeed2,partyIdx,0);
         }
         else {
-          uVar7 = ovr_randBelow(4,0);
-          if ((char)uVar7 == '\0') {
+          randPick = ovr_randBelow(4,0);
+          if ((char)randPick == '\0') {
             ovr_play_sfx(43,0,0);
             ovr_say((char *)"Gold discovered.",0x10);
-            bVar1 = AGNT_FIELD(&(Entities)[entityIndex], base.entity, 3);
+            partyIdx = AGNT_FIELD(&(Entities)[entityIndex], base.entity, 3);
             ovr_createConstructionRecordFar
-                      (0x71,x_00,GfxRndSeed2,(uint8_t *)CONCAT22(outFlagSeg,outFlag),bVar1,(char)unaff_DI,(char)GfxRndSeed2,bVar1,0);
+                      (0x71,x_00,GfxRndSeed2,(uint8_t *)CONCAT22(outFlagSeg,outFlag),partyIdx,(char)diArg,(char)GfxRndSeed2,partyIdx,0);
           }
           else {
             ovr_play_sfx(42,0,0);
             ovr_say((char *)"Iron deposits discovered.",0x10);
-            bVar1 = AGNT_FIELD(&(Entities)[entityIndex], base.entity, 3);
+            partyIdx = AGNT_FIELD(&(Entities)[entityIndex], base.entity, 3);
             ovr_createConstructionRecordFar
-                      (0x70,x_00,GfxRndSeed2,(uint8_t *)CONCAT22(outFlagSeg,outFlag),bVar1,(char)unaff_DI,(char)GfxRndSeed2,bVar1,0);
+                      (0x70,x_00,GfxRndSeed2,(uint8_t *)CONCAT22(outFlagSeg,outFlag),partyIdx,(char)diArg,(char)GfxRndSeed2,partyIdx,0);
           }
         }
       }
       ovr_inputUpdate((ulong)((uint)MessageDelay * 2 + 0x12));
-      cStack_16 = '\x01';
+      didSpend = '\x01';
     }
-    else if (cStack_15 == '\x02') {
-      uStack_12 = 0x2410;
+    else if (menuCode == '\x02') {
+      dgroupSeg = 0x2410;
       menuLabel = 0x770f;
-      cStack_e = '\x10';
+      attr = '\x10';
       acStack_d[0] = '$';
-      uStack_10 = 0x77ba;
+      fmtOfs = 0x77ba;
       uVar8 = BLD_WORD(&BuildingTypes[bldType], name, 2);
-      pcVar2 = ovr_fmVsprintf("Remove %s permanently. Are you sure?",
+      msgPtr = ovr_fmVsprintf("Remove %s permanently. Are you sure?",
                               (char *)CONCAT13((char)((uint)uVar8 >> 8),
                                                CONCAT12((char)uVar8,
                                                         BLD_WORD(&BuildingTypes[bldType], name, 0))));
-                                                        asm { mov uVar9,dx };
+                                                        asm { mov vsSeg,dx };
       puVar5 = &menuLabel;
       (*(uint8_t *)((uint8_t *)&(entries_00.seg))) = uVar11;
       entries_00.ofs = (uint16_t)puVar5;
-      (*(uint8_t *)((uint8_t *)&(entries_00.seg) + 1)) = uVar12;
-      (*(uint8_t *)((uint8_t *)&(hint_00.seg))) = (char)uVar9;
-      hint_00.ofs = (uint16_t)pcVar2;
-      (*(uint8_t *)((uint8_t *)&(hint_00.seg) + 1)) = (char)((uint)uVar9 >> 8);
+      (*(uint8_t *)((uint8_t *)&(entries_00.seg) + 1)) = ssHi;
+      (*(uint8_t *)((uint8_t *)&(hint_00.seg))) = (char)vsSeg;
+      hint_00.ofs = (uint16_t)msgPtr;
+      (*(uint8_t *)((uint8_t *)&(hint_00.seg) + 1)) = (char)((uint)vsSeg >> 8);
       ovr_ovc28_compute2(entries_00,2,hint_00,0,0);
-      cStack_15 = (char)puVar5;
-      if (cStack_15 == '\x01') {
-        bVar1 = AGNT_FIELD(&(Entities)[entityIndex], base.entity, 3);
+      menuCode = (char)puVar5;
+      if (menuCode == '\x01') {
+        partyIdx = AGNT_FIELD(&(Entities)[entityIndex], base.entity, 3);
         ovr_createConstructionRecordFar
-                  (0,x_00,GfxRndSeed2,(uint8_t *)CONCAT22(outFlagSeg,outFlag),bVar1,(char)unaff_DI,(char)GfxRndSeed2,bVar1,0);
+                  (0,x_00,GfxRndSeed2,(uint8_t *)CONCAT22(outFlagSeg,outFlag),partyIdx,(char)diArg,(char)GfxRndSeed2,partyIdx,0);
       }
-      cStack_16 = '\x01';
+      didSpend = '\x01';
     }
-    else if (cStack_15 == '\x03') {
+    else if (menuCode == '\x03') {
       uVar8 = ovc45_textChoosePartyBuild(x_00,GfxRndSeed2,&entityIndex,0);
-      cStack_17 = (char)uVar8;
-      if (cStack_17 == -1) {
-        cStack_16 = '\x01';
+      loopState = (char)uVar8;
+      if (loopState == -1) {
+        didSpend = '\x01';
       }
     }
-    else if ((cStack_15 == '\x04') || (cStack_15 == '\0')) {
-      cStack_16 = '\x01';
+    else if ((menuCode == '\x04') || (menuCode == '\0')) {
+      didSpend = '\x01';
     }
-  } while (cStack_16 == '\0');
+  } while (didSpend == '\0');
   return;
 }
 
@@ -1192,18 +1192,18 @@ ovc45_textDone2(char foundFlag,byte bldType,int entityIndex,uint16_t x,uint16_t 
   far_t entries;
   far_t hint;
   uint16_t agnt;
-  char *pcVar4;
+  char *msgPtr;            /* className's result, then fmVsprintf's */
   uint16_t *puVar5;
   int iVar6;
-  uint8_t *puVar7;
-  uint16_t uVar8;
-  uint uVar9;
-  int iVar10;
+  uint8_t *namePtr;        /* ovr_ovc15_usesStshRealloc's result */
+  uint16_t ptrSeg;         /* the segment half of the pointer in hand */
+  uint amountLo;           /* the low word of the 32-bit amount */
+  int sheetOfs;            /* the leader sheet's offset */
   int iVar11;
-  int iVar12;
+  int menuIdx;             /* 2 or 3, then the chosen item */
   uint16_t unaff_DI;
   uint16_t uVar13;
-  undefined1 uVar14;
+  undefined1 maxWidth;     /* 0x10, compute9's width argument */
   undefined1 uVar15;
   uint8_t menuLabels;
   uint16_t auStack_290 [19];
@@ -1234,50 +1234,50 @@ ovc45_textDone2(char foundFlag,byte bldType,int entityIndex,uint16_t x,uint16_t 
     auStack_290[1] = BLD_WORD(&BuildingTypes[bldType], action, 0);
   }
   auStack_c[1] = 2;
-  iVar12 = 2;
+  menuIdx = 2;
   if (foundFlag != '\0') {
     auStack_290[4] = 0x2410;
     auStack_290[3] = 0x7716;
     auStack_c[2] = 3;
-    iVar12 = 3;
+    menuIdx = 3;
   }
-  auStack_290[iVar12 * 2] = 0x2410;   /* hand fix: segment-half array, same value as the sibling stores in this function */
-  *(char **)(&menuLabels + iVar12 * 4) = (char *)"Done";
-  auStack_c[iVar12] = 4;
+  auStack_290[menuIdx * 2] = 0x2410;   /* hand fix: segment-half array, same value as the sibling stores in this function */
+  *(char **)(&menuLabels + menuIdx * 4) = (char *)"Done";
+  auStack_c[menuIdx] = 4;
   cStack_e = '\0';
   do {
-    uVar14 = 0x10;
-    pcVar4 = ovr_ovc22_className(AGNT_FIELD(&(Entities)[entityIndex], base.entity, 3),0);
+    maxWidth = 0x10;
+    msgPtr = ovr_ovc22_className(AGNT_FIELD(&(Entities)[entityIndex], base.entity, 3),0);
     puVar5 = (uint16_t *)((uint)AGNT_FIELD(&(Entities)[entityIndex], base.entity, 3) * 4);
     uVar15 = 0x7a;
-    uVar8 = puVar5[1];
+    ptrSeg = puVar5[1];
     iVar6 = ovc45_compute9((char *)&text,(char *)CONCAT22(*puVar5,_SS),
-                           (char *)CONCAT13((char)(Font03.ofs >> 8),CONCAT12((char)Font03.ofs,uVar8)
-                                           ),Font03.seg,'U',(char)uVar8,(char)Font03.ofs,0x55,3,
-                           pcVar4,uVar14);
-    puVar7 = ovr_ovc15_usesStshRealloc
+                           (char *)CONCAT13((char)(Font03.ofs >> 8),CONCAT12((char)Font03.ofs,ptrSeg)
+                                           ),Font03.seg,'U',(char)ptrSeg,(char)Font03.ofs,0x55,3,
+                           msgPtr,maxWidth);
+    namePtr = ovr_ovc15_usesStshRealloc
                        ((char *)BLD_WORD(&BuildingTypes[bldType], name, 0),(char)BLD_WORD(&BuildingTypes[bldType], name, 2),uStack_1a,(char)iVar6,uVar15,0,0,0);
-    pcVar4 = ovr_fmVsprintf("%s: Claim this tree? Harvest value is %d gold. Active party is %s the %s."
-                            ,(char *)CONCAT13((char)((uint)uVar8 >> 8),CONCAT12((char)uVar8,puVar7))
+    msgPtr = ovr_fmVsprintf("%s: Claim this tree? Harvest value is %d gold. Active party is %s the %s."
+                            ,(char *)CONCAT13((char)((uint)ptrSeg >> 8),CONCAT12((char)ptrSeg,namePtr))
                            );
-                           asm { mov uVar8,dx };
-    uVar14 = SUB21(_SS,0);
+                           asm { mov ptrSeg,dx };
+    maxWidth = SUB21(_SS,0);
     uVar15 = (undefined1)((uint)_SS >> 8);
-    strcpy((char *)CONCAT13(uVar15,CONCAT12(uVar14,&msg)),
-           (char *)CONCAT13((char)((uint)uVar8 >> 8),CONCAT12((char)uVar8,pcVar4)));
+    strcpy((char *)CONCAT13(uVar15,CONCAT12(maxWidth,&msg)),
+           (char *)CONCAT13((char)((uint)ptrSeg >> 8),CONCAT12((char)ptrSeg,msgPtr)));
     goldPartyIndex = AGNT_FIELD(&(Entities)[entityIndex], base.entity, 3);
-    puVar7 = &menuLabels;
-    (*(uint8_t *)((uint8_t *)&(entries.seg))) = uVar14;
-    entries.ofs = (uint16_t)puVar7;
+    namePtr = &menuLabels;
+    (*(uint8_t *)((uint8_t *)&(entries.seg))) = maxWidth;
+    entries.ofs = (uint16_t)namePtr;
     (*(uint8_t *)((uint8_t *)&(entries.seg) + 1)) = uVar15;
-    (*(uint8_t *)((uint8_t *)&(hint.seg))) = uVar14;
+    (*(uint8_t *)((uint8_t *)&(hint.seg))) = maxWidth;
     hint.ofs = (uint16_t)&msg;
     (*(uint8_t *)((uint8_t *)&(hint.seg) + 1)) = uVar15;
-    ovr_ovc28_compute2(entries,iVar12 + 1U,hint,(char)(iVar12 + 1U),0);
-    menuActions = (uint8_t)puVar7;
+    ovr_ovc28_compute2(entries,menuIdx + 1U,hint,(char)(menuIdx + 1U),0);
+    menuActions = (uint8_t)namePtr;
     goldPartyIndex = 0xff;
-    if ((uint8_t)puVar7 != 0x0) {
-      menuActions = auStack_c[((uint)puVar7 & 0xff) - 1];
+    if ((uint8_t)namePtr != 0x0) {
+      menuActions = auStack_c[((uint)namePtr & 0xff) - 1];
     }
     if (menuActions == 0x1) {
       ovr_play_sfx(86,0,0);
@@ -1302,14 +1302,14 @@ ovc45_textDone2(char foundFlag,byte bldType,int entityIndex,uint16_t x,uint16_t 
       BuildingTypes[bStack_11].expinc = (undefined1)uStack_14;
       bVar3 = AGNT_FIELD(&(Entities)[entityIndex], base.entity, 3);
       pcStack_16 = ovr_ovc22_textPOPULATION(bStack_11,bVar3,(agnt_t far *)agnt,bVar3,(char)GfxRndSeed2);
-      uVar14 = 0x10;
+      maxWidth = 0x10;
       partyIndex = *(char *)((int)&(Entities)[entityIndex].base.entity + 3);
       uStack_18 = ovr_ovc22_seasonalIncome(bStack_11,partyIndex,partyIndex,agnt,(char)GfxRndSeed2);
       ovc45_compute6((uint16_t)pcStack_16);
-      pcVar4 = ovr_fmVsprintf("Forest claimed. This forest creates %d gold of income and feeds %d %s."
+      msgPtr = ovr_fmVsprintf("Forest claimed. This forest creates %d gold of income and feeds %d %s."
                               ,(char *)CONCAT13((char)((uint)pcStack_16 >> 8),
                                                 CONCAT12((char)pcStack_16,uStack_18)));
-      ovr_say(pcVar4,uVar14);
+      ovr_say(msgPtr,maxWidth);
       ovr_inputUpdate((ulong)MessageDelay << 1);
       cStack_e = '\x01';
     }
@@ -1321,37 +1321,37 @@ ovc45_textDone2(char foundFlag,byte bldType,int entityIndex,uint16_t x,uint16_t 
                  (char)GfxRndSeed2,(char)outFlag,bVar3);
       cStack_e = '\x01';
       bStack_10 = AGNT_FIELD(&(Entities)[entityIndex], base.entity, 3);
-      uVar8 = (uint16_t)((ulong)*(uint32_t *)((uint)bStack_10 << 2) >> 0x10);
+      ptrSeg = (uint16_t)((ulong)*(uint32_t *)((uint)bStack_10 << 2) >> 0x10);
       iVar6 = (int)*(uint32_t *)((uint)bStack_10 << 2);
       puVar1 = (uint *)(iVar6 + 0x56);
-      uVar9 = *puVar1;
+      amountLo = *puVar1;
       *puVar1 = *puVar1 + uStack_1a;
       piVar2 = (int *)(iVar6 + 0x58);
-      *piVar2 = *piVar2 + (uint)CARRY2(uVar9,uStack_1a);
-      uVar8 = (uint16_t)((ulong)*(uint32_t *)((uint)bStack_10 << 2) >> 0x10);
-      iVar10 = (int)*(uint32_t *)((uint)bStack_10 << 2);
-      iVar6 = *(int *)(iVar10 + 0x58);
-      uVar9 = *(uint *)(iVar10 + 0x56);
-      uVar8 = (uint16_t)((ulong)*(uint32_t *)((uint)bStack_10 << 2) >> 0x10);
+      *piVar2 = *piVar2 + (uint)CARRY2(amountLo,uStack_1a);
+      ptrSeg = (uint16_t)((ulong)*(uint32_t *)((uint)bStack_10 << 2) >> 0x10);
+      sheetOfs = (int)*(uint32_t *)((uint)bStack_10 << 2);
+      iVar6 = *(int *)(sheetOfs + 0x58);
+      amountLo = *(uint *)(sheetOfs + 0x56);
+      ptrSeg = (uint16_t)((ulong)*(uint32_t *)((uint)bStack_10 << 2) >> 0x10);
       iVar11 = (int)*(uint32_t *)((uint)bStack_10 << 2);
-      iVar10 = *(int *)(iVar11 + 0x8c);
-      if ((iVar10 <= iVar6) && ((iVar10 < iVar6 || (*(uint *)(iVar11 + 0x8a) < uVar9)))) {
-        uVar8 = (uint16_t)((ulong)*(uint32_t *)((uint)bStack_10 << 2) >> 0x10);
+      sheetOfs = *(int *)(iVar11 + 0x8c);
+      if ((sheetOfs <= iVar6) && ((sheetOfs < iVar6 || (*(uint *)(iVar11 + 0x8a) < amountLo)))) {
+        ptrSeg = (uint16_t)((ulong)*(uint32_t *)((uint)bStack_10 << 2) >> 0x10);
         iVar6 = (int)*(uint32_t *)((uint)bStack_10 << 2);
-        uVar9 = *(uint *)(iVar6 + 0x8a);
+        amountLo = *(uint *)(iVar6 + 0x8a);
         uVar13 = (uint16_t)((ulong)*(uint32_t *)((uint)bStack_10 << 2) >> 0x10);
-        iVar10 = (int)*(uint32_t *)((uint)bStack_10 << 2);
-        *(uint16_t *)(iVar10 + 0x58) = *(uint16_t *)(iVar6 + 0x8c);
-        *(uint *)(iVar10 + 0x56) = uVar9;
+        sheetOfs = (int)*(uint32_t *)((uint)bStack_10 << 2);
+        *(uint16_t *)(sheetOfs + 0x58) = *(uint16_t *)(iVar6 + 0x8c);
+        *(uint *)(sheetOfs + 0x56) = amountLo;
       }
-      uVar14 = (undefined1)uVar9;
-      pcVar4 = ovr_stsprintf((char *)&text);
-      ovr_say(pcVar4,uVar14);
+      maxWidth = (undefined1)amountLo;
+      msgPtr = ovr_stsprintf((char *)&text);
+      ovr_say(msgPtr,maxWidth);
       ovr_inputUpdate((ulong)MessageDelay << 1);
     }
     else if (menuActions == 0x3) {
-      uVar8 = ovc45_textChoosePartyBuild(agnt,GfxRndSeed2,&entityIndex,(char)GfxRndSeed2);
-      cStack_f = (char)uVar8;
+      ptrSeg = ovc45_textChoosePartyBuild(agnt,GfxRndSeed2,&entityIndex,(char)GfxRndSeed2);
+      cStack_f = (char)ptrSeg;
       if (cStack_f == -1) {
         cStack_e = '\x01';
       }

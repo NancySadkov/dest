@@ -24268,3 +24268,45 @@ Next pockets, measured after this batch: `ovc45_textDone2` (137 hits / 21 slots)
 have the same far-pointer-half structure as `ovc40_usesAlignToSeg` (segments and offsets stored as
 separate scalars, then recombined with CONCAT13/CONCAT22), so the honest fix there is the same
 collapse-into-`far_t` rewrite rather than a rename.
+
+
+## Renaming batch 12: the two `ovc45_textDone` bodies, grep 8,347 -> 8,160 (-187)
+
+**`ovc45_textDone` (77eb:1754, 116 hits over 19 slots)** - sixteen single-role names:
+
+    bVar1    -> partyIdx    AGNT_FIELD(base.entity, 3)
+    pcVar2   -> msgPtr      className's result, then fmVsprintf's
+    puVar3   -> sheetSlot   &GLeaderSheets[partyIdx] as a word pair
+    iVar4    -> nameLen     ovc45_compute9's result
+    uVar6    -> randRes     ovc45_usesRandBelow(entityIndex)
+    uVar7    -> randPick    ovr_randBelow(0x10)
+    uVar9    -> vsSeg       the DX half ovr_fmVsprintf returns
+    iVar10   -> menuIdx     2 or 3, then the chosen item
+    unaff_DI -> diArg       the value the image passes in DI
+    uVar12   -> ssHi        high byte of _SS
+    cStack_17-> loopState   (char)uVar8, -1 ends the loop
+    cStack_16-> didSpend    0, set to 1 when the action is taken
+    cStack_15-> menuCode    ovc28_compute2's result
+    uStack_12-> dgroupSeg   0x2410, the DATA segment argument
+    uStack_10-> fmtOfs      0x77ba, a DGROUP format string
+    cStack_e -> attr        0x10
+
+**`ovc45_textDone2` (77eb:1bb3, 137 hits over 21 slots)** - seven:
+
+    pcVar4  -> msgPtr ; puVar7 -> namePtr ; uVar8 -> ptrSeg ; uVar9 -> amountLo
+    iVar10  -> sheetOfs ; iVar12 -> menuIdx ; uVar14 -> maxWidth (0x10, compute9's width)
+
+**Left alone in both bodies:** `puVar5` (the realloc'd name, then `&menuItems`, then a menu code) and
+`iVar6` (compute9's result, then a sheet field) each carry two or three roles, and the `entries.seg` /
+`hint.seg` byte-by-byte stores are the far-pointer-halves pattern that needs the `far_t` collapse
+rewrite rather than names.
+
+## Measured (HEAD 7dfe3dcc -> this commit)
+
+    grep_checks          8,347 -> 8,160   (-187)
+    REBUILT.EXE          447,906 (unchanged)
+    build 65/65, LINK.LOG 0 errors
+    compare_state        identical 734 / 7 different / 889 missing (unchanged)
+    diff_dgroup          288/1,805 matched (unchanged)
+    compare_runtime      280 identical / 11 different at entry, init_game and key (unchanged)
+    structural_deficits  two game bodies: 7e7c:0b9c (177/187), 77eb:0d61 (54/58)
