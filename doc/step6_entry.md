@@ -24657,3 +24657,46 @@ the current body does not contain.
     compare_state        identical 734 / 7 different / 889 missing (unchanged)
     diff_dgroup          288/1,805 matched (unchanged)
     compare_runtime      280 identical / 11 different at entry, init_game and key (unchanged)
+
+
+## `ovc40_usesAlignToSeg`: the last two format pointers wired, and the indexed-table defect identified
+
+Applied the recorded mappings:
+
+    0x07dd  fmt = [bp-0x66]:[bp-0x64]  ->  groupNames[1]
+    0x07f9  fmt = [bp-0x56]:[bp-0x54]  ->  rankNames[1]
+
+Both were `CONCAT22(uStack_68,_SS)` / `CONCAT22(uStack_58,_SS)` - entry 0's *segment* paired with
+`_SS` rather than the entry's own ofs/seg pair. They now read
+`MK_FP(groupNames[1].seg, groupNames[1].ofs)` and `MK_FP(rankNames[1].seg, rankNames[1].ofs)`.
+`REBUILT.EXE` falls 96 bytes, which is the expected consequence of two far-word pairs replacing four
+stack loads.
+
+**The run-time-indexed sites (0x0831 / 0x085d) are the same width defect as `at`.** The image reads
+the format as a far pointer from the stack table:
+
+    mov bx, ax ; push ss:[bx+2] ; push ss:[bx]     -> {ofs at +0, seg at +2}
+
+while the body has
+
+    uint8_t format1;                                     /* ONE byte */
+    uint8_t *format1Tab = &format1;
+    (char *)CONCAT22(*(uint16_t *)(format1Tab + formatIndex * 4), _SS)
+
+so it indexes a 1-byte object at a 4-byte stride and takes the entry's *offset* as a near word,
+pairing it with `_SS` instead of the entry's own segment. The adjacent declarations
+`auStack_62[3]` and `auStack_52[4]` are almost certainly the storage (`format1`/`format2` are
+overlapping views of them), so the fix is to declare them as `far_t` arrays and index those.
+
+I stopped there rather than guess the array extents: `formatIndex` runs to at least 1 (`* 4` stride,
+two entries used), and a wrong size would overlap a neighbouring local - the same trap that made me
+leave `textDone`'s buffers alone last turn.
+
+## Measured (HEAD 414324bc -> this commit)
+
+    grep_checks          7,972 -> 7,970
+    REBUILT.EXE          447,906 -> 447,810
+    build 65/65, LINK.LOG 0 errors
+    compare_state        identical 734 / 7 different / 889 missing (unchanged)
+    diff_dgroup          288/1,805 matched (unchanged)
+    compare_runtime      280 identical / 11 different at entry, init_game and key (unchanged)

@@ -510,14 +510,14 @@ ovc40_usesAlignToSeg
     ovc40_usesBlitLabel(text1_09,text2_08,0,0xf2);
     blitColour = 0xf2;
     labelIdx = 1;
-    msgPtr = ovr_stsprintf((char *)&text1,(char *)CONCAT22(uStack_68,_SS),
+    msgPtr = ovr_stsprintf((char *)&text1,(char far *)MK_FP(groupNames[1].seg,groupNames[1].ofs),
                            (char *)CONCAT13((char)((uint)capTextOfs >> 8),
                                             CONCAT12((char)capTextOfs,uStack_66)),(char)capTextOfs,
                            capTextSeg);
     ofsLo = SUB21(msgPtr,0);
     ofsHi = (undefined1)((uint)msgPtr >> 8);
     segTmp = dxIn;
-    msgPtr = ovr_stsprintf((char *)&text2,(char *)CONCAT22(uStack_58,_SS),
+    msgPtr = ovr_stsprintf((char *)&text2,(char far *)MK_FP(rankNames[1].seg,rankNames[1].ofs),
                            (char *)CONCAT22(capTextOfs,capTextShownSeg),capTextSeg);
     /* 0x0912: row 1, both pointers rankNames[10]. */
     text1_10 = rankNames[10];
