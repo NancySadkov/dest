@@ -22883,3 +22883,33 @@ variant (0x1c8c..0x1cb6) computes the noun twice, which is the missing site; res
 
 Remaining 14 = the two `1f8,2a` and one `1a8,2a` (unnameable) plus 11 in the type-9 variant details
 (compute6 x1 now resolved; costOrIncomeLabel x1, fmVsprintf x1, strcpy x4 still abridged there).
+
+
+## 7e7c:0b9c: the unconditional opening block of the type-9 arm (census 173 -> 178)
+
+The type-9 arm does not start with the `v16/v18` dispatch: `0x1c87..0x1f02` runs first and
+unconditionally, building the plain "Feeds" form -
+
+    compute6(v18, storage) -> noun table          (0x1c8c)
+    costOrIncomeLabel(v16, abs(v16)) -> gold      (0x1cb6)
+    fmVsprintf("%s: %s %d gold. Feeds %d %s.", name, noun, gold, v16, noun)   (0x1ce9)
+    strcpy(outBuf, res)                           (0x1cf9)
+
+- and only then does `0x1d04` test `[bp-0x16]` / `[bp-0x18]` to refine the message (both / feeds /
+housing / gold-only). My body had the four refined variants but not this opening write.
+
+That single block accounts for the five missing calls (compute6, costOrIncomeLabel, usesStshRealloc,
+fmVsprintf, strcpy).
+
+## Measured (HEAD 539ae8d6 -> this commit)
+
+    screen_calls     7e7c:0b9c  C 173 -> 178  (image 187), delta -14 -> -9
+    grep_checks      9,798 (unchanged)
+    REBUILT.EXE      446,728 -> 446,872
+    build 65/65, LINK.LOG 0 errors
+    compare_state    292 matched / 7 different / missing 889 (unchanged)
+    diff_dgroup      288/1,805 matched (unchanged)
+    compare_runtime  280 identical / 11 different (unchanged, all three sample points)
+
+Remaining 9: `1f8,2a` x2 and `1a8,2a` x1 (all three unnameable), and 6 more in the type-9 refined
+variants and the menu path.
