@@ -26018,3 +26018,31 @@ visible without inventing a value.
       6fbe:01a9 (FLI frame player)          -53
       ovc15_textArena (4207:2301)           -53
       5943:112e (leader's season step)      -47
+
+
+## `3f0b:2a09` (arena bar meter): 47 hits down to 0, grep 4,954 -> 4,907 (-47)
+
+The two-bar meter drawn beside the arena: it computes how full each side's bar should be and fills it.
+
+    uVar5  -> haveHi   (uint)(lVar8 >> 16), the wanted total's high word
+              barLen   the bar height computed for this frame
+    iVar6  -> divHi    the divisor's high word
+              lenB     the second bar height
+    iStack_1e -> wantHi  the second half of the wanted total
+    uVar4  -> numHi    the high word of the LDIV numerator, always 0
+    unaff_SI -> argLo ;  in_stack_0000ffde -> argWord   the 32-bit argument pair
+    unaff_DI -> mulHi  the value the image leaves in DI for LXMUL_at_
+
+`divHi` holds the denominator's high word in **both** branches (1791 and 1811), so it is one name even
+though the surrounding comparison uses a different low-word source (`uVar5`/`sum` vs `longHi`/`sum` in
+the two arms). `barLen`/`lenB` are the two halves that 1820 averages into the final height.
+
+## Measured (HEAD 861fe0d5 -> this commit)
+
+    grep_checks          4,954 -> 4,907   (-47)
+    REBUILT.EXE          448,002 -> 448,018   (+16: frame reshuffle)
+    build 65/65, LINK.LOG 0 errors
+    compare_state        identical 734 / 7 different / 889 missing (unchanged)
+    diff_dgroup          288/1,805 matched (unchanged)
+    compare_runtime      280 identical / 11 different at entry, init_game and key (unchanged)
+    structural_deficits  two game bodies: 7e7c:0b9c (177/187), 77eb:0d61 (54/58)

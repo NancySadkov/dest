@@ -1723,24 +1723,26 @@ void __cdecl16far attact_usesLDIV_at_2(void)
   bool arenaResult;
   long *plVar2;
   long *plVar3;
-  uint16_t uVar4;
-  uint16_t unaff_SI;
-  uint uVar5;
-  uint16_t unaff_DI;
-  int iVar6;
+  uint16_t numHi;           /* the high word of the LDIV numerator, always 0 */
+  uint16_t argLo;           /* argWord's low word, left in SI */
+  uint haveHi;             /* (uint)(lVar8 >> 16), the wanted total's high word */
+  uint barLen;             /* the bar height computed for this frame */
+  uint16_t mulHi;           /* the value the image leaves in DI for LXMUL_at_ */
+  int divHi;               /* the divisor's high word */
+  int lenB;                /* the second bar height */
   long lVar7;
   long lVar8;
   far_t gfx;
   far_t gfx_00;
-  uint32_t in_stack_0000ffde;
+  uint32_t argWord;         /* the caller's 32-bit argument at [bp-0x22] */
   uint longHi;
-  int iStack_1e;
+  int wantHi;               /* the second half of the wanted total */
   uint32_t sum;
   char miceIdle;
   uint8_t rect;
   uint8_t rect2;
   
-  lVar8 = CONCAT22((uint16_t)((ulong)in_stack_0000ffde >> 0x10),unaff_SI);
+  lVar8 = CONCAT22((uint16_t)((ulong)argWord >> 0x10),argLo);
   dst.seg = _SS;
   dst.ofs = (uint16_t)&rect2;
   F_SCOPY(far_from_u32((uint32_t)(0x2410088d)),dst,10);
@@ -1754,7 +1756,7 @@ void __cdecl16far attact_usesLDIV_at_2(void)
       attact_usesEntityCount2
                 ((uint16_t *)CONCAT22(_SS,&sum),(uint16_t *)CONCAT22(_SS,&stk_ffe0));
       if (((uint)sum == 0 && (*(uint16_t *)((uint8_t *)&(sum) + 2)) == 0) ||
-         ((uint16_t)((ulong)lVar8 >> 0x10) == 0 && iStack_1e == 0)) {
+         ((uint16_t)((ulong)lVar8 >> 0x10) == 0 && wantHi == 0)) {
         if (miceIdle != '\0') {
           ovr_miceRestoreArea((brect_t *)&rect,0);
         }
@@ -1782,49 +1784,49 @@ void __cdecl16far attact_usesLDIV_at_2(void)
           ovr_miceRestoreArea((brect_t *)&rect2,0);
         }
         mapViewActive = '\0';
-        uVar5 = (uint)((ulong)lVar8 >> 0x10);
-        if (((uint)sum == 0 && (*(uint16_t *)((uint8_t *)&(sum) + 2)) == 0) && (uVar5 != 0 || iStack_1e != 0)) {
-          uVar5 = 0;
+        haveHi = (uint)((ulong)lVar8 >> 0x10);
+        if (((uint)sum == 0 && (*(uint16_t *)((uint8_t *)&(sum) + 2)) == 0) && (haveHi != 0 || wantHi != 0)) {
+          haveHi = 0;
         }
-        else if (((uint)sum == 0 && (*(uint16_t *)((uint8_t *)&(sum) + 2)) == 0) || (uVar5 != 0 || iStack_1e != 0)) {
-          plVar3 = (long *)(uVar5 + (uint)sum);
-          iVar6 = iStack_1e + (*(uint16_t *)((uint8_t *)&(sum) + 2)) + (uint)CARRY2(uVar5,(uint)sum);
-          uVar4 = 0;
-          plVar2 = LXMUL_at_(plVar3,CONCAT22(unaff_DI,iVar6),lVar8);
-          lVar7 = LDIV_at_((long)CONCAT22(uVar4,plVar2),(long)CONCAT22(iVar6,plVar3));
-          uVar5 = (int)lVar7 + 1;
+        else if (((uint)sum == 0 && (*(uint16_t *)((uint8_t *)&(sum) + 2)) == 0) || (haveHi != 0 || wantHi != 0)) {
+          plVar3 = (long *)(haveHi + (uint)sum);
+          divHi = wantHi + (*(uint16_t *)((uint8_t *)&(sum) + 2)) + (uint)CARRY2(haveHi,(uint)sum);
+          numHi = 0;
+          plVar2 = LXMUL_at_(plVar3,CONCAT22(mulHi,divHi),lVar8);
+          lVar7 = LDIV_at_((long)CONCAT22(numHi,plVar2),(long)CONCAT22(divHi,plVar3));
+          barLen = (int)lVar7 + 1;
         }
         else {
-          uVar5 = 0x26;
+          barLen = 0x26;
         }
         if (AgntFlag1 != false) {
           attact_usesAgntCount2
                     ((uint16_t *)CONCAT22(_SS,&sum),(uint16_t *)CONCAT22(_SS,&stk_ffe0)
                     );
           longHi = (uint)((ulong)lVar8 >> 0x10);
-          if (((uint)sum != 0 || (*(uint16_t *)((uint8_t *)&(sum) + 2)) != 0) || (longHi != 0 || iStack_1e != 0)) {
-            if (((uint)sum == 0 && (*(uint16_t *)((uint8_t *)&(sum) + 2)) == 0) && (longHi != 0 || iStack_1e != 0)) {
-              iVar6 = 0;
+          if (((uint)sum != 0 || (*(uint16_t *)((uint8_t *)&(sum) + 2)) != 0) || (longHi != 0 || wantHi != 0)) {
+            if (((uint)sum == 0 && (*(uint16_t *)((uint8_t *)&(sum) + 2)) == 0) && (longHi != 0 || wantHi != 0)) {
+              divHi = 0;
             }
-            else if (((uint)sum == 0 && (*(uint16_t *)((uint8_t *)&(sum) + 2)) == 0) || (longHi != 0 || iStack_1e != 0)) {
+            else if (((uint)sum == 0 && (*(uint16_t *)((uint8_t *)&(sum) + 2)) == 0) || (longHi != 0 || wantHi != 0)) {
               plVar3 = (long *)(longHi + (uint)sum);
-              iVar6 = iStack_1e + (*(uint16_t *)((uint8_t *)&(sum) + 2)) + (uint)CARRY2(longHi,(uint)sum);
-              uVar4 = 0;
-              plVar2 = LXMUL_at_(plVar3,CONCAT22(unaff_DI,iVar6),lVar8);
-              lVar8 = LDIV_at_((long)CONCAT22(uVar4,plVar2),(long)CONCAT22(iVar6,plVar3));
-              iVar6 = (int)lVar8 + 1;
+              divHi = wantHi + (*(uint16_t *)((uint8_t *)&(sum) + 2)) + (uint)CARRY2(longHi,(uint)sum);
+              numHi = 0;
+              plVar2 = LXMUL_at_(plVar3,CONCAT22(mulHi,divHi),lVar8);
+              lVar8 = LDIV_at_((long)CONCAT22(numHi,plVar2),(long)CONCAT22(divHi,plVar3));
+              lenB = (int)lVar8 + 1;
             }
             else {
-              iVar6 = 0x26;
+              lenB = 0x26;
             }
-            uVar5 = uVar5 + iVar6 >> 1;
+            barLen = barLen + lenB >> 1;
           }
         }
-        if (0x9e < 0xc4 - uVar5) {
-          ovr_driver_fillRect(0xdf,0x9f,0xe2,0xc4 - uVar5,0x24,0xa000,0x24,0,0,0,0);
+        if (0x9e < 0xc4 - barLen) {
+          ovr_driver_fillRect(0xdf,0x9f,0xe2,0xc4 - barLen,0x24,0xa000,0x24,0,0,0,0);
         }
-        if (uVar5 != 0) {
-          ovr_driver_fillRect(0xdf,0xc5 - uVar5,0xe2,0xc4,0x7,0xa000,7,0,0,0,0);
+        if (barLen != 0) {
+          ovr_driver_fillRect(0xdf,0xc5 - barLen,0xe2,0xc4,0x7,0xa000,7,0,0,0,0);
         }
         if (miceIdle != '\0') {
           ovr_miceBlitRect((brect_t *)&rect2,0);
