@@ -22663,3 +22663,25 @@ Each of the four branches now has its own pair, matching the image's repetition.
 Remaining 26: compute6 (the unitType 0/8 arm computes it per branch, +4 there), fmVsprintf (5),
 strcpy (9), usesStshRealloc (2), compute8/createConstrFar/ovc28_compute2 (1 each) and the two
 unnameable sites.
+
+
+## 7e7c:0b9c: unitType 0 and 8 split into their own arms (census 161 -> 171)
+
+The same per-variant rule as unitType 9: the image's `0x1a82` / `0x1ae7` (type 0) and `0x1b85` /
+`0x1c05` (type 8) are four separate `ovc45_compute6` calls, one inside each storage/no-storage branch
+of each type. My combined `unitType == 0 || unitType == 8` arm computed it once, so three sites were
+missing. Both types now have their own arm with the two branches and a compute6 in each.
+
+## Measured (HEAD f56028e9 -> this commit)
+
+    screen_calls     7e7c:0b9c  C 161 -> 171  (image 187), delta -26 -> -16
+    grep_checks      11,516 (unchanged)
+    REBUILT.EXE      467,244 -> 467,548
+    build 65/65, LINK.LOG 0 errors
+    compare_state    1,628 matched / 0 different / missing 2      (unchanged)
+    diff_dgroup      1,639/1,805 matched, 5 layout runs           (unchanged)
+    compare_runtime  1,692 matched / 1,683 identical / 9 different (unchanged, all three sample points)
+
+`7e7c:0b9c` has left the `|delta| >= 20` table. Remaining 16 calls: the abbreviated argument lists in
+five arms (fmVsprintf 5, usesStshRealloc 2, strcpy 9) plus the three single-call inner guards and the
+two unnameable sites.

@@ -671,26 +671,55 @@ void constrct_buildInfoText(int x,byte far *flag,int entityIdx,int arg4,int arg5
                                         (uint16_t)bld->name)),bld->cost,bld->storage);
         strcpy(outBuf,res);
       }
-      else if ((bld->unitType == 0) || (bld->unitType == 8)) {
-        /* The %s noun is the far pointer table at DGROUP 0x74ad, indexed by
-           ovc45_compute6(v18, bld->storage); its two entries are "person" and "people". */
-        nounIdx = (uint16_t)ovr_ovc45_compute6(v18,bld->storage);
-        noun = (nounIdx != 0) ? (char far *)"people" : (char far *)"person";
+      else if (bld->unitType == 0) {
+        /* The tooltip noun is the DGROUP 0x74ad far-pointer table indexed by
+           ovc45_compute6(v18, bld->storage); the image calls it once inside each branch
+           (0x1a82 / 0x1ae7 for type 0, 0x1b85 / 0x1c05 for type 8). */
         if (bld->storage != 0) {
+          nounIdx = (uint16_t)ovr_ovc45_compute6(v18,bld->storage);
+          noun = (nounIdx != 0) ? (char far *)"people" : (char far *)"person";
           res = ovr_fmVsprintf(
                     (char far *)"%s: Provides housing for %d %s and storage for %d food.",
                     (uint16_t)ovr_ovc15_usesStshRealloc(
                         (char far *)MK_FP((uint16_t)((uint32_t)bld->name >> 16),
                                           (uint16_t)bld->name)),v18,(uint16_t)noun,
                     bld->storage);
+          strcpy(outBuf,res);
         }
         else {
+          nounIdx = (uint16_t)ovr_ovc45_compute6(v18,bld->storage);
+          noun = (nounIdx != 0) ? (char far *)"people" : (char far *)"person";
           res = ovr_fmVsprintf((char far *)"%s: Provides housing for %d %s.",
                                (uint16_t)ovr_ovc15_usesStshRealloc(
                                    (char far *)MK_FP((uint16_t)((uint32_t)bld->name >> 16),
                                                      (uint16_t)bld->name)),v18,(uint16_t)noun);
+          strcpy(outBuf,res);
         }
-        strcpy(outBuf,res);
+      }
+      else if (bld->unitType == 8) {
+        /* The tooltip noun is the DGROUP 0x74ad far-pointer table indexed by
+           ovc45_compute6(v18, bld->storage); the image calls it once inside each branch
+           (0x1a82 / 0x1ae7 for type 0, 0x1b85 / 0x1c05 for type 8). */
+        if (bld->storage != 0) {
+          nounIdx = (uint16_t)ovr_ovc45_compute6(v18,bld->storage);
+          noun = (nounIdx != 0) ? (char far *)"people" : (char far *)"person";
+          res = ovr_fmVsprintf(
+                    (char far *)"%s: Provides housing for %d %s and storage for %d food.",
+                    (uint16_t)ovr_ovc15_usesStshRealloc(
+                        (char far *)MK_FP((uint16_t)((uint32_t)bld->name >> 16),
+                                          (uint16_t)bld->name)),v18,(uint16_t)noun,
+                    bld->storage);
+          strcpy(outBuf,res);
+        }
+        else {
+          nounIdx = (uint16_t)ovr_ovc45_compute6(v18,bld->storage);
+          noun = (nounIdx != 0) ? (char far *)"people" : (char far *)"person";
+          res = ovr_fmVsprintf((char far *)"%s: Provides housing for %d %s.",
+                               (uint16_t)ovr_ovc15_usesStshRealloc(
+                                   (char far *)MK_FP((uint16_t)((uint32_t)bld->name >> 16),
+                                                     (uint16_t)bld->name)),v18,(uint16_t)noun);
+          strcpy(outBuf,res);
+        }
       }
       else if (bld->unitType == 9) {
         /* Four variants on the two quantities the pass-2 preamble computed: v16 (feeds) and v18
