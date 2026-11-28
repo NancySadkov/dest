@@ -26046,3 +26046,63 @@ the two arms). `barLen`/`lenB` are the two halves that 1820 averages into the fi
     diff_dgroup          288/1,805 matched (unchanged)
     compare_runtime      280 identical / 11 different at entry, init_game and key (unchanged)
     structural_deficits  two game bodies: 7e7c:0b9c (177/187), 77eb:0d61 (54/58)
+
+
+## `3f0b:2a09` and `5b66:131f`: grep 4,954 -> 4,873, plus ~100 `unaff_BP` that the gate does not count
+
+### `3f0b:2a09` (arena bar meter): 47 hits to 0
+
+    uVar5  -> haveHi / barLen    the wanted total's high word; the bar height for this frame
+    iVar6  -> divHi / lenB       the divisor's high word (both arms) ; the second bar height
+    iStack_1e -> wantHi          the second half of the wanted total
+    uVar4  -> numHi              the high word of the LDIV numerator, always 0
+    unaff_SI -> argLo ;  in_stack_0000ffde -> argWord ;  unaff_DI -> mulHi
+
+### `5b66:131f`: the shared frame, reconstructed
+
+`uVar6`/`uVar2`/`uVar7` were named (`startIdx`/`entIdx`/`alignedX2`, `targetX`/`deadIdx`/`candIdx`,
+`entSeg`/`unitsRes`), but the real work was `unaff_BP`: **the decompiler failed to materialise this
+body's own locals**, so every one of them was reached as `*(T *)(unaff_BP + -N)`. All are 16-bit or
+8-bit slots, so the reconstruction is mechanical and byte-identical:
+
+    -0x10 -> seenCount   how many entities matched the claim
+    -0xe  -> flagByte    a second flag tested at the guard
+    -0xd  -> aiByte      the AI byte the scan matches
+    -0xc  -> classByte   the class byte used to pick the table
+    -0xb  -> byteB       a caller-frame byte read once
+    -10   -> dirCopy     a copy of dirByte      (decimal 10, a different slot from -0x10)
+    -9    -> dirByte     the random direction 0..3
+    -8    -> destY ;  -6 -> destX ;  -4 -> srcIdx ;  -2 -> candRec
+
+`5b66:131f` is **one source body that the decompiler split into four C functions**
+(`ovc25_usesAlignUp47`, `ovc25_usesEntities`, `ovc25_usesAlignUp48`, `OVC25_5b66_131f_entry`), which is
+why all four read the same `bp-relative` slots. Each now declares the slots it uses, with the shared
+frame recorded in the declarations. That split is a structural artefact of the same kind as
+`3381:08dc`'s duplicated row generator, and is noted here as such.
+
+### The measurement worth recording
+
+`scripts/grep_checks.py` implements the AGENTS step-5 list exactly, and that list contains
+`unaff_SS`, `unaff_ES`, `unaff_DI`, `unaff_SI` - **but not `unaff_BP`**. So resolving ~100 `unaff_BP`
+occurrences in this file moved the headline by **0**. The `-34` below is from the `uVar` renames alone.
+
+That matters for the plan: `unaff_BP` is the single largest remaining *decompiler artefact* class in the
+tree (an unmaterialised local frame), and it is invisible to the gate. `5b66:131f` was the biggest single
+instance at 87 occurrences.
+
+## Measured (HEAD b3f78a06 -> this commit)
+
+    grep_checks          4,907 -> 4,873   (-34)
+    REBUILT.EXE          448,018 -> 447,938   (-80: the four split bodies now have real frames)
+    build 65/65, LINK.LOG 0 errors
+    compare_state        identical 734 / 7 different / 889 missing (unchanged)
+    diff_dgroup          288/1,805 matched (unchanged)
+    compare_runtime      280 identical / 11 different at entry, init_game and key (unchanged)
+    structural_deficits  two game bodies: 7e7c:0b9c (177/187), 77eb:0d61 (54/58)
+
+## Turn total (HEAD 861fe0d5 -> here)
+
+    grep_checks          4,954 -> 4,873   (-81)
+      3f0b:2a09 (arena bar meter)          -47
+      5b66:131f (uVar renames)             -34
+      5b66:131f (unaff_BP reconstruction)    0 for the gate, ~100 artefacts resolved

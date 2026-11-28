@@ -671,111 +671,126 @@ void ovc25_usesAlignUp47(void)
 
 {
   uint32_t tablePtr;
-  uint uVar2;
+  uint targetX;            /* the entity's aligned x, the destination */
+  uint deadIdx;            /* the source index, overwritten before any read */
+  uint candIdx;            /* the candidate entity, 0xffff until one is chosen */
   uint alignedX;
   uint16_t randDir;
   int result46;
-  int unaff_BP;
-  uint uVar6;
-  uint16_t uVar7;
+  uint seenCount;          /* how many entities matched the claim */
+  char flagByte;            /* a second flag tested at 775 */
+  char aiByte;              /* the faction/AI byte the scan matches */
+  byte classByte;           /* the class byte used to pick the table */
+  byte byteB;               /* a byte of the caller's frame, read once */
+  undefined1 dirCopy;         /* a copy of dirByte */
+  byte dirByte;              /* the random direction 0..3 */
+  uint destY;                /* the destination y */
+  uint destX;                /* the destination x */
+  uint srcIdx;               /* the entity the scan starts from */
+  uint candRec;              /* the record the chosen direction found */
+  uint startIdx;           /* where the scan starts */
+  uint entIdx;             /* the entity scan index */
+  uint alignedX2;          /* the chosen entity's aligned x */
+  uint16_t entSeg;         /* SEG_OF(Entities) */
+  uint16_t unitsRes;       /* ovr_attact_usesGUnits' result */
   uint16_t curSeg = _SS;
-  uint16_t in_stack_00000000;
+  uint16_t segArg;         /* the segment handed to the trailing call */
   
-  uVar7 = (uint16_t)((ulong)Entities >> 0x10);
-  if (*(char *)((int)Entities + *(int *)(unaff_BP + -4) * 0x37 + 0x19) != '\0') {
+  entSeg = (uint16_t)((ulong)Entities >> 0x10);
+  if (*(char *)((int)Entities + srcIdx * 0x37 + 0x19) != '\0') {
     OVC25_5b66_131f_entry();
     return;
   }
-  *(undefined1 *)((int)Entities + *(int *)(unaff_BP + -4) * 0x37 + 0x19) = 1;
-  *(undefined1 *)(unaff_BP + -0xc) =
-       *(undefined1 *)((int)Entities + *(int *)(unaff_BP + -4) * 0x37 + 0x1a);
-  *(undefined1 *)(unaff_BP + -0xb) =
-       *(undefined1 *)((int)Entities + *(int *)(unaff_BP + -4) * 0x37 + 0xd);
-  *(undefined1 *)(unaff_BP + -0xd) =
-       AgntGs[(uint)*(byte *)(unaff_BP + -0xb)].ai;
-  uVar7 = (uint16_t)((ulong)Entities >> 0x10);
-  if ((*(char *)((int)Entities + *(int *)(unaff_BP + -4) * 0x37 + 0x18) != '\0') ||
-     (*(char *)(unaff_BP + -0xd) != '\0')) {
-    if (*(char *)(unaff_BP + -0xd) == '\0') {
+  *(undefined1 *)((int)Entities + srcIdx * 0x37 + 0x19) = 1;
+  classByte =
+       *(undefined1 *)((int)Entities + srcIdx * 0x37 + 0x1a);
+  byteB =
+       *(undefined1 *)((int)Entities + srcIdx * 0x37 + 0xd);
+  aiByte =
+       AgntGs[(uint)byteB].ai;
+  entSeg = (uint16_t)((ulong)Entities >> 0x10);
+  if ((*(char *)((int)Entities + srcIdx * 0x37 + 0x18) != '\0') ||
+     (aiByte != '\0')) {
+    if (aiByte == '\0') {
       OVC25_5b66_131f_entry();
       return;
     }
-    tablePtr = *(uint32_t *)((uint)*(byte *)(unaff_BP + -0xc) << 2);
+    tablePtr = *(uint32_t *)((uint)classByte << 2);
     if (*(char *)((int)tablePtr + 0x4a) != '\0') {
       OVC25_5b66_131f_entry();
       return;
     }
   }
-  uVar2 = ovr_alignUp4(*(int *)((int)Entities + *(int *)(unaff_BP + -4) * 0x37),0,0);
-  *(uint *)(unaff_BP + -6) = uVar2;
-  uVar7 = (uint16_t)((ulong)Entities >> 0x10);
-  if (((*(int *)(result46 + *(int *)(unaff_BP + -4) * 0x37 + 8) == 0) &&
-      (*(int *)(result46 + *(int *)(unaff_BP + -4) * 0x37 + 10) == 0)) &&
-     ((*(byte *)(result46 + *(int *)(unaff_BP + -4) * 0x37 + 0x33) & 3) == 0)) {
-    uVar2 = *(uint *)(unaff_BP + -4);
+  targetX = ovr_alignUp4(*(int *)((int)Entities + srcIdx * 0x37),0,0);
+  destX = targetX;
+  entSeg = (uint16_t)((ulong)Entities >> 0x10);
+  if (((*(int *)(result46 + srcIdx * 0x37 + 8) == 0) &&
+      (*(int *)(result46 + srcIdx * 0x37 + 10) == 0)) &&
+     ((*(byte *)(result46 + srcIdx * 0x37 + 0x33) & 3) == 0)) {
+    deadIdx = srcIdx;
   }
   else {
-    uVar2 = 0xffff;
+    candIdx = 0xffff;
   }
-  *(uint16_t *)(unaff_BP + -0x10) = 1;
-  uVar6 = *(uint *)(unaff_BP + -4);
-  while (uVar6 = uVar6 + 1, uVar6 < EntityCount) {
-    alignedX = ovr_alignUp4((Entities)[uVar6].base.x,0,0);
-    if (alignedX == *(uint *)(unaff_BP + -6)) {
-      uVar7 = (uint16_t)((ulong)Entities >> 0x10);
-      if (((entity_t far *)Entities)[uVar6].base.y == *(int *)(result46 + *(int *)(unaff_BP + -4) * 0x37 + 2)
+  seenCount = 1;
+  startIdx = srcIdx;
+  while (entIdx = entIdx + 1, entIdx < EntityCount) {
+    alignedX = ovr_alignUp4((Entities)[entIdx].base.x,0,0);
+    if (alignedX == destX) {
+      entSeg = (uint16_t)((ulong)Entities >> 0x10);
+      if (((entity_t far *)Entities)[entIdx].base.y == *(int *)(result46 + srcIdx * 0x37 + 2)
          ) {
-        AGNT_FIELD(&(Entities)[uVar6], base.entity, 2) = 1;
-        uVar7 = (uint16_t)((ulong)Entities >> 0x10);
-        if (((((entity_t far *)Entities)[uVar6].base.destX == 0) && (((entity_t far *)Entities)[uVar6].base.destY == 0)
-            ) && ((AGNT_FIELD(&(Entities)[uVar6], base.entity, 1) == '\0' &&
-                  ((AgntGs[(uint)((entity_t far *)Entities)[uVar6].base.gindex].ai ==
-                    *(char *)(unaff_BP + -0xd) &&
-                   (*(int *)(unaff_BP + -0x10) = *(int *)(unaff_BP + -0x10) + 1,
-                   (*((uint8_t far *)&(Entities)[uVar6].base.flags32 + 1) & 3) == 0)))))) {
-          uVar2 = uVar6;
+        AGNT_FIELD(&(Entities)[entIdx], base.entity, 2) = 1;
+        entSeg = (uint16_t)((ulong)Entities >> 0x10);
+        if (((((entity_t far *)Entities)[entIdx].base.destX == 0) && (((entity_t far *)Entities)[entIdx].base.destY == 0)
+            ) && ((AGNT_FIELD(&(Entities)[entIdx], base.entity, 1) == '\0' &&
+                  ((AgntGs[(uint)((entity_t far *)Entities)[entIdx].base.gindex].ai ==
+                    aiByte &&
+                   (seenCount = seenCount + 1,
+                   (*((uint8_t far *)&(Entities)[entIdx].base.flags32 + 1) & 3) == 0)))))) {
+          candIdx = entIdx;
         }
       }
     }
   }
-  if (uVar2 == 0xffff) {
+  if (candIdx == 0xffff) {
     OVC25_5b66_131f_entry();
     return;
   }
-  if (*(uint *)(unaff_BP + -0x10) < 2) {
+  if (seenCount < 2) {
     OVC25_5b66_131f_entry();
     return;
   }
   randDir = ovr_randBelow(4,0);
-  *(undefined1 *)(unaff_BP + -9) = (char)randDir;
-  *(undefined1 *)(unaff_BP + -10) = *(undefined1 *)(unaff_BP + -9);
-  uVar6 = ovr_alignUp4((Entities)[uVar2].base.x +
-                       *(char *)(*(byte *)(unaff_BP + -9) + 0x885) * 4,0,0);
-  *(uint *)(unaff_BP + -6) = uVar6;
-  *(int *)(unaff_BP + -8) =
-       (Entities)[uVar2].base.y +
-       (int)*(char *)(*(byte *)(unaff_BP + -9) + 0x889);
-  uVar7 = ovr_attact_usesGUnits(*(int *)(unaff_BP + -6),*(int *)(unaff_BP + -8));
-  if ((char)uVar7 != '\0') {
-    result46 = ovc25_usesAlignUp46(*(uint16_t *)(unaff_BP + -6),*(uint16_t *)(unaff_BP + -8),
-                                *(char *)(unaff_BP + -0xd),
-                                (uint8_t *)CONCAT22(in_stack_00000000,curSeg));
-    *(int *)(unaff_BP + -2) = result46;
-    if (*(uint *)(unaff_BP + -0x10) <= *(uint *)(unaff_BP + -2)) {
+  dirByte = (char)randDir;
+  dirCopy = dirByte;
+  alignedX2 = ovr_alignUp4((Entities)[candIdx].base.x +
+                       *(char *)(dirByte + 0x885) * 4,0,0);
+  destX = alignedX2;
+  destY =
+       (Entities)[candIdx].base.y +
+       (int)*(char *)(dirByte + 0x889);
+  unitsRes = ovr_attact_usesGUnits(destX,destY);
+  if ((char)unitsRes != '\0') {
+    result46 = ovc25_usesAlignUp46(destX,destY,
+                                aiByte,
+                                (uint8_t *)CONCAT22(segArg,curSeg));
+    candRec = result46;
+    if (seenCount <= candRec) {
       OVC25_5b66_131f_entry();
       return;
     }
-    (Entities)[uVar2].base.destX = *(uint16_t *)(unaff_BP + -6);
-    (Entities)[uVar2].base.destY = *(uint16_t *)(unaff_BP + -8);
-    if ((*(char *)(unaff_BP + -0xd) == '\0') && (*(char *)(unaff_BP + -0xe) == '\0')) {
-      (Entities)[uVar2].base.targetX = *(uint16_t *)(unaff_BP + -6);
-      (Entities)[uVar2].base.targetY = *(uint16_t *)(unaff_BP + -8);
-      AGNT_FIELD(&(Entities)[uVar2], base.flags32, 1) = 2;
+    (Entities)[candIdx].base.destX = destX;
+    (Entities)[candIdx].base.destY = destY;
+    if ((aiByte == '\0') && (flagByte == '\0')) {
+      (Entities)[candIdx].base.targetX = destX;
+      (Entities)[candIdx].base.targetY = destY;
+      AGNT_FIELD(&(Entities)[candIdx], base.flags32, 1) = 2;
       OVC25_5b66_131f_entry();
       return;
     }
-    *(int *)(unaff_BP + -4) = *(int *)(unaff_BP + -4) + 1;
-    if (EntityCount <= *(uint *)(unaff_BP + -4)) {
+    srcIdx = srcIdx + 1;
+    if (EntityCount <= srcIdx) {
       return;
     }
     ovc25_usesAlignUp47();
@@ -797,26 +812,32 @@ void ovc25_usesEntities(void)
 
 {
   uint16_t in_AX;
-  int unaff_BP;
+  uint seenCount;          /* shared frame: how many entities matched */
+  char flagByte;            /* shared frame: a second flag */
+  char aiByte;              /* shared frame: the AI byte */
+  uint destY;                /* shared frame: the destination y */
+  uint destX;                /* shared frame: the destination x */
+  uint srcIdx;               /* shared frame: the scan index */
+  uint candRec;              /* shared frame: the record the direction found */
   int unaff_DI;
   uint16_t curSeg = _SS;
   
-  *(uint16_t *)(unaff_BP + -2) = in_AX;
-  if (*(uint *)(unaff_BP + -0x10) <= *(uint *)(unaff_BP + -2)) {
+  candRec = in_AX;
+  if (seenCount <= candRec) {
     OVC25_5b66_131f_entry();
     return;
   }
-  (Entities)[unaff_DI].base.destX = *(uint16_t *)(unaff_BP + -6);
-  (Entities)[unaff_DI].base.destY = *(uint16_t *)(unaff_BP + -8);
-  if ((*(char *)(unaff_BP + -0xd) == '\0') && (*(char *)(unaff_BP + -0xe) == '\0')) {
-    (Entities)[unaff_DI].base.targetX = *(uint16_t *)(unaff_BP + -6);
-    (Entities)[unaff_DI].base.targetY = *(uint16_t *)(unaff_BP + -8);
+  (Entities)[unaff_DI].base.destX = destX;
+  (Entities)[unaff_DI].base.destY = destY;
+  if ((aiByte == '\0') && (flagByte == '\0')) {
+    (Entities)[unaff_DI].base.targetX = destX;
+    (Entities)[unaff_DI].base.targetY = destY;
     AGNT_FIELD(&(Entities)[unaff_DI], base.flags32, 1) = 2;
     OVC25_5b66_131f_entry();
     return;
   }
-  *(int *)(unaff_BP + -4) = *(int *)(unaff_BP + -4) + 1;
-  if (*(uint *)(unaff_BP + -4) < EntityCount) {
+  srcIdx = srcIdx + 1;
+  if (srcIdx < EntityCount) {
     ovc25_usesAlignUp47();
     return;
   }
@@ -837,44 +858,52 @@ void ovc25_usesAlignUp48(void)
   uint alignedX;
   uint16_t unitsResult;
   int result46;
-  int unaff_BP;
+  uint srcIdx;              /* shared frame: the scan index */
+  uint destX;               /* shared frame: the destination x */
+  uint destY;               /* shared frame: the destination y */
+  uint candRec;             /* shared frame: the record the direction found */
+  uint seenCount;           /* shared frame: how many entities matched */
+  byte dirByte;             /* shared frame: the direction being tried */
+  byte dirCopy;             /* shared frame: the direction tried before */
+  char aiByte;              /* shared frame: the AI byte */
+  char flagByte;            /* shared frame: a second flag */
   int unaff_DI;
   uint16_t curSeg = _SS;
   uint16_t in_stack_00000000;
   
-  *(byte *)(unaff_BP + -9) = *(char *)(unaff_BP + -9) + 1U & 3;
-  if (*(char *)(unaff_BP + -9) != *(char *)(unaff_BP + -10)) {
+  dirByte = dirByte + 1U & 3;
+  if (dirByte != dirCopy) {
     alignedX = ovr_alignUp4((Entities)[unaff_DI].base.x +
-                         *(char *)(*(byte *)(unaff_BP + -9) + 0x885) * 4,0,0);
-    *(uint *)(unaff_BP + -6) = alignedX;
-    *(int *)(unaff_BP + -8) =
+                         *(char *)(dirByte + 0x885) * 4,0,0);
+    destX = alignedX;
+    destY =
          (Entities)[unaff_DI].base.y +
-         (int)*(char *)(*(byte *)(unaff_BP + -9) + 0x889);
-    unitsResult = ovr_attact_usesGUnits(*(int *)(unaff_BP + -6),*(int *)(unaff_BP + -8));
+         (int)*(char *)(dirByte + 0x889);
+    unitsResult = ovr_attact_usesGUnits(destX,destY);
     if ((char)unitsResult == '\0') {
       ovc25_usesAlignUp48();
       return;
     }
-    result46 = ovc25_usesAlignUp46(*(uint16_t *)(unaff_BP + -6),*(uint16_t *)(unaff_BP + -8),
-                                *(char *)(unaff_BP + -0xd),
+    result46 = ovc25_usesAlignUp46(destX,destY,
+                                aiByte,
                                 (uint8_t *)CONCAT22(in_stack_00000000,curSeg));
-    *(int *)(unaff_BP + -2) = result46;
-    if (*(uint *)(unaff_BP + -0x10) <= *(uint *)(unaff_BP + -2)) {
+    candRec = result46;
+    if (seenCount <= candRec) {
       OVC25_5b66_131f_entry();
       return;
     }
-    (Entities)[unaff_DI].base.destX = *(uint16_t *)(unaff_BP + -6);
-    (Entities)[unaff_DI].base.destY = *(uint16_t *)(unaff_BP + -8);
-    if ((*(char *)(unaff_BP + -0xd) == '\0') && (*(char *)(unaff_BP + -0xe) == '\0')) {
-      (Entities)[unaff_DI].base.targetX = *(uint16_t *)(unaff_BP + -6);
-      (Entities)[unaff_DI].base.targetY = *(uint16_t *)(unaff_BP + -8);
+    (Entities)[unaff_DI].base.destX = destX;
+    (Entities)[unaff_DI].base.destY = destY;
+    if ((aiByte == '\0') && (flagByte == '\0')) {
+      (Entities)[unaff_DI].base.targetX = destX;
+      (Entities)[unaff_DI].base.targetY = destY;
       AGNT_FIELD(&(Entities)[unaff_DI], base.flags32, 1) = 2;
       OVC25_5b66_131f_entry();
       return;
     }
   }
-  *(int *)(unaff_BP + -4) = *(int *)(unaff_BP + -4) + 1;
-  if (*(uint *)(unaff_BP + -4) < EntityCount) {
+  srcIdx = srcIdx + 1;
+  if (srcIdx < EntityCount) {
     ovc25_usesAlignUp47();
     return;
   }
@@ -890,11 +919,11 @@ void ovc25_usesAlignUp48(void)
 void __cdecl16far OVC25_5b66_131f_entry(void)
 
 {
-  int unaff_BP;
+  uint srcIdx;              /* shared frame: the scan index */
   uint16_t curSeg = _SS;
   
-  *(int *)(unaff_BP + -4) = *(int *)(unaff_BP + -4) + 1;
-  if (*(uint *)(unaff_BP + -4) < EntityCount) {
+  srcIdx = srcIdx + 1;
+  if (srcIdx < EntityCount) {
     ovc25_usesAlignUp47();
     return;
   }
