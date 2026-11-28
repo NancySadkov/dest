@@ -24108,3 +24108,39 @@ call. Naming them "foreground" or "shadow" would be a guess.
     diff_dgroup          288/1,805 matched (unchanged)
     compare_runtime      280 identical / 11 different at entry, init_game and key (unchanged)
     structural_deficits  6 entries, unchanged
+
+
+## Renaming batch 9: `at` (6386:1c9f), grep 8,719 -> 8,668
+
+The other body I had twice called rewrite-first. Eight of its thirty-four slots are single-role:
+
+    iVar14 -> ownerIdx    Agnts[agntIndex].owner, an entity index
+    uVar10 -> timeNow     BDA_DailyTimeCounter, compared with InputEventTime
+    cVar2  -> otherAgnt   stats_prev/nextAgentByOwner's result
+    uVar8  -> limit       5 while leading, then AgntCount
+    cStack_5 -> flagA ; cStack_6 -> flagB    the two loop flags
+    uVar17/uVar18 -> slotLo/slotHi           the low and high bytes of the alignUp4 result
+
+**Left alone (118 names remain in this body):** `uVar5` (39 hits) is genuinely reused - it is the
+alignUp4 result in one place and the entity index compared against `AgntCount` in another - and the
+`uStack_28..36`, `uStack_c..10` runs are, as in `ovc40_usesAlignToSeg`, the halved segments and
+offsets of far pointers. Those need the same collapse-into-`far_t` rewrite, not names.
+
+## Measured (HEAD 23380675 -> this commit)
+
+    grep_checks          8,719 -> 8,668   (-51; -248 for the turn)
+    REBUILT.EXE          447,922 (unchanged)
+    build 65/65, LINK.LOG 0 errors
+    compare_state        identical 734 / 7 different / 889 missing (unchanged)
+    diff_dgroup          288/1,805 matched (unchanged)
+    compare_runtime      280 identical / 11 different at entry, init_game and key (unchanged)
+    structural_deficits  6 entries, unchanged
+
+Current buckets (measured):
+
+    [iusbc]Var   5,131   ovc22_classes 332, ovc44_strong_dat 284, ovc21_manage 275
+    [iusc]Stack_   908   ovc45_unitinfo 90, ovc06_blit 79, ovc40_palette 77
+    p[iusbc]Var    856   ovc01_driver 94, ovc20_stash 69, ovc45_unitinfo 68
+    bStack_        452 ; in_stack_ 447 ; in_REG 358
+
+`ovc33_stats.c` has fallen out of the top three entirely (408 when this work began).

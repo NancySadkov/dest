@@ -1237,23 +1237,23 @@ stats_usesAlignUp42(byte agntIndex,byte gfxIndex,int16_t x,int16_t y,brect_t *re
   far_t gfx_02;
   far_t gfx_03;
   far_t gfx_04;
-  char cVar2;
+  char otherAgnt;          /* stats_prev/nextAgentByOwner's result */
   byte bVar3;
   bool bVar4;
   uint uVar5;
   char *pcVar6;
   ulong *puVar7;
-  uint uVar8;
+  uint limit;              /* 5 while leading, then AgntCount */
   uint8_t *puVar9;
-  uint16_t uVar10;
+  uint16_t timeNow;        /* BDA_DailyTimeCounter, compared with InputEventTime */
   uint16_t *puVar11;
   int *piVar12;
   uint16_t *puVar13;
-  int iVar14;
+  int ownerIdx;            /* Agnts[agntIndex].owner, an entity index */
   uint16_t uVar15;
   uint16_t uVar16;
-  undefined1 uVar17;
-  undefined1 uVar18;
+  undefined1 slotLo;       /* low byte of the alignUp4 result */
+  undefined1 slotHi;       /* high byte of it */
   uint8_t entries;
   uint16_t uStack_36;
   uint16_t uStack_34;
@@ -1270,8 +1270,8 @@ stats_usesAlignUp42(byte agntIndex,byte gfxIndex,int16_t x,int16_t y,brect_t *re
   undefined1 uStack_e;
   undefined1 uStack_d;
   undefined1 uStack_c;
-  char cStack_6;
-  char cStack_5;
+  char flagB;              /* the other */
+  char flagA;              /* one of the two loop flags */
   byte bStack_4;
   byte bStack_3;
   
@@ -1307,21 +1307,21 @@ L_stats_6386_1c9f_1E1D:
                                            AGNT_WORD(&Agnts[agntIndex], entity, 0))));
     }
   }
-  iVar14 = Agnts[agntIndex].owner;
+  ownerIdx = Agnts[agntIndex].owner;
   stats_openAgentDetail((uint)agntIndex);
   uVar16 = (uint16_t)((ulong)Entities >> 0x10);
-  if ((Entities)[iVar14].base.targetY == GfxRndSeed2) {
-    uVar5 = ovr_alignUp4((Entities)[iVar14].base.targetX,0,0);
-    uVar17 = (undefined1)uVar5;
-    uVar18 = (undefined1)(uVar5 >> 8);
+  if ((Entities)[ownerIdx].base.targetY == GfxRndSeed2) {
+    uVar5 = ovr_alignUp4((Entities)[ownerIdx].base.targetX,0,0);
+    slotLo = (undefined1)uVar5;
+    slotHi = (undefined1)(uVar5 >> 8);
     uVar5 = ovr_alignUp4(GfxRndSeed,0,0);
-    if (CONCAT11(uVar18,uVar17) == uVar5) {
+    if (CONCAT11(slotHi,slotLo) == uVar5) {
       ovr_ovc39_textHalflingCastle(AGNT_FIELD(Agnts[agntIndex].entity, base.entity, 3));
     }
   }
 L_stats_6386_1c9f_1ECD:
-  cVar2 = stats_prevAgentByOwner(agntIndex);
-  if (cVar2 == -1) {
+  otherAgnt = stats_prevAgentByOwner(agntIndex);
+  if (otherAgnt == -1) {
     uStack_36 = 0;
     entries = 0;
   }
@@ -1330,8 +1330,8 @@ L_stats_6386_1c9f_1ECD:
     entries = 0x6473;
   }
   uStack_10 = 4;
-  cVar2 = stats_nextAgentByOwner(agntIndex);
-  if (cVar2 == -1) {
+  otherAgnt = stats_nextAgentByOwner(agntIndex);
+  if (otherAgnt == -1) {
     uStack_32 = 0;
     uStack_34 = 0;
   }
@@ -1368,15 +1368,15 @@ L_stats_6386_1c9f_1ECD:
     puVar9 = &permTable;
     bStack_4 = puVar9[(uint)pcVar6 & 0xff];
   }
-  cStack_5 = '\0';
-  cStack_6 = '\0';
+  flagA = '\0';
+  flagB = '\0';
   uVar5 = (uint)bStack_4;
   if (uVar5 == 6) {
-    cStack_6 = '\x01';
-    cStack_5 = '\x01';
+    flagB = '\x01';
+    flagA = '\x01';
   }
   else if (uVar5 < 7) {
-    uVar8 = 5;
+    limit = 5;
     switch(uVar5) {
     case 0:
       menuBarShown = 0;
@@ -1387,16 +1387,16 @@ L_stats_6386_1c9f_1ECD:
         bStack_3 = 1;
         while( true ) {
           uVar5 = uVar5 + 1;
-          uVar8 = (uint)AgntCount;
-          if ((int)uVar8 <= (int)uVar5) {
+          limit = (uint)AgntCount;
+          if ((int)limit <= (int)uVar5) {
             ovr_agnt_usesAlignToSeg();
-            bVar3 = (byte)uVar8;
+            bVar3 = (byte)limit;
             ovr_agnt_usesAlignToSeg();
             ovr_agnt_usesAlignToSeg();
             ovr_agnt_usesAlignToSeg();
             return bVar3;
           }
-          uVar8 = uVar5;
+          limit = uVar5;
           if (Agnts[uVar5].gdata->type == '\x02') break;
           if (Agnts[uVar5].gdata->type == '\x01') {
             Agnts[uVar5].x = 0x3d;
@@ -1411,8 +1411,8 @@ L_stats_6386_1c9f_1ECD:
         }
 switchD_6000_58bf_caseD_5:
         Agnts[uVar5].x = 0x6e;
-        Agnts[uVar8].y = 0xb;
-        uVar5 = uVar8;
+        Agnts[limit].y = 0xb;
+        uVar5 = limit;
       } while( true );
     case 1:
                     /* WARNING: Bad instruction - Truncating control flow here */
@@ -1430,28 +1430,28 @@ switchD_6000_58bf_caseD_5:
       GAnimPlaying = 1;
       return bStack_3 + 1;
     case 3:
-      uVar17 = 0x10;
-      uVar18 = 0x24;
+      slotLo = 0x10;
+      slotHi = 0x24;
       bStack_3 = '\0';
       do {
         bVar4 = ovr_draw_textProvidesMoreHousing();
       } while (bVar4);
       while( true ) {
-        uVar10 = *(uint16_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs);
+        timeNow = *(uint16_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs);
         if ((*(uint16_t far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2) != InputEventTime.hi) ||
-           (uVar10 != InputEventTime.lo)) {
+           (timeNow != InputEventTime.lo)) {
           InputEventTime.hi = *(uint16_t far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
-          uVar10 = *(uint16_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs);
-          InputEventTime.lo = uVar10;
+          timeNow = *(uint16_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs);
+          InputEventTime.lo = timeNow;
           ovr_draw_usesPrintf();
         }
         bStack_4 = ovr_draw_textProvidesMoreHousing();
         if ((bool)bStack_4) break;
         puVar7 = ovr_attact_usesBDADailyTimeCounter
                            ((ulong *)TextBlitCycle,
-                            CONCAT13(uVar18,CONCAT12(uVar17,(*(uint16_t *)((uint8_t *)&(TextBlitCycle) + 2)))),
+                            CONCAT13(slotHi,CONCAT12(slotLo,(*(uint16_t *)((uint8_t *)&(TextBlitCycle) + 2)))),
                             (char)(*(uint16_t *)((uint8_t *)&(TextBlitCycle) + 2)));
-        if ((uVar10 != 0) || ((ulong *)(uint)agntIndex <= puVar7)) break;
+        if ((timeNow != 0) || ((ulong *)(uint)agntIndex <= puVar7)) break;
       }
       if (bStack_3 != '\0') {
         ovr_miceRestoreArea((brect_t *)(BlitRects + 1),0x10);
@@ -1495,21 +1495,21 @@ switchD_6000_58bf_caseD_5:
         CurMusicType = 0xff;
         ovr_manage_settlementScreen(AGNT_FIELD(Agnts[agntIndex].entity, base.entity, 3));
         if (Cancelled == 0) {
-          iVar14 = Agnts[agntIndex].owner;
+          ownerIdx = Agnts[agntIndex].owner;
           stats_openAgentDetail((uint)agntIndex);
           uVar16 = (uint16_t)((ulong)Entities >> 0x10);
-          if ((Entities)[iVar14].base.targetY == GfxRndSeed2) {
-            uVar5 = ovr_alignUp4((Entities)[iVar14].base.targetX,0,0);
-            uVar17 = (undefined1)uVar5;
-            uVar18 = (undefined1)(uVar5 >> 8);
+          if ((Entities)[ownerIdx].base.targetY == GfxRndSeed2) {
+            uVar5 = ovr_alignUp4((Entities)[ownerIdx].base.targetX,0,0);
+            slotLo = (undefined1)uVar5;
+            slotHi = (undefined1)(uVar5 >> 8);
             uVar5 = ovr_alignUp4(GfxRndSeed,0,0);
-            if (CONCAT11(uVar18,uVar17) == uVar5) {
+            if (CONCAT11(slotHi,slotLo) == uVar5) {
               ovr_ovc39_textHalflingCastle(AGNT_FIELD(Agnts[agntIndex].entity, base.entity, 3));
             }
           }
         }
         else {
-          cStack_5 = '\x01';
+          flagA = '\x01';
         }
       }
     }
@@ -1517,7 +1517,7 @@ switchD_6000_58bf_caseD_5:
       if (uVar5 == 8) goto L_stats_6386_1c9f_20C5;
       if (uVar5 == 9) {
         ovr_ovc50_usesUiInputText();
-        cStack_6 = '\x01';
+        flagB = '\x01';
       }
     }
   }
@@ -1537,10 +1537,10 @@ L_stats_6386_1c9f_20C5:
       stats_calledAwayNotice(agntIndex);
     }
   }
-  if ((cStack_5 != '\0') || (cStack_6 != '\0')) goto L_stats_6386_1c9f_22C8;
+  if ((flagA != '\0') || (flagB != '\0')) goto L_stats_6386_1c9f_22C8;
   goto L_stats_6386_1c9f_1ECD;
 L_stats_6386_1c9f_22C8:
-  if (cStack_5 != '\0') {
+  if (flagA != '\0') {
     if (Cancelled != 0) {
       return Cancelled;
     }
