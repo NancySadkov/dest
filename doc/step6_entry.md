@@ -24144,3 +24144,52 @@ Current buckets (measured):
     bStack_        452 ; in_stack_ 447 ; in_REG 358
 
 `ovc33_stats.c` has fallen out of the top three entirely (408 when this work began).
+
+
+## Attempted: delete the two "supplied" files (`crtl.c`, `ovl.c`) - not possible, and they are
+   already outside the TOTAL
+
+The request was to delete `src/decompiled/crtl.c` and `src/decompiled/ovl.c` because "~1,300" of the
+grep residue is theirs. Two measured facts came out of trying it:
+
+**1. They are not part of the headline number.** `grep_checks.py` keeps a `SUPPLIED = {"crtl.c",
+"ovl.c"}` set and reports them separately:
+
+    TOTAL 8553   (game code; 4025 more in the compiler-supplied crtl.c/ovl.c)
+
+so the 4,025 hits in those two files are already excluded from the 8,553. Deleting them would not
+move the gate at all.
+
+**2. They cannot be deleted, because `crtl.c` is not only the Turbo C runtime.** With both files
+removed the compile still succeeded (64/64) but the link did not:
+
+    Error: Undefined symbol _EMS_REALLOC in module O17.C
+    Error: Undefined symbol _STSHINIT_SCAN in module O17.C
+    Error: Undefined symbol _EMS_INIT in module O17.C
+    Error: Undefined symbol _XMS_INIT in module O17.C
+    Error: Undefined symbol _EMS_MEMMOVE2 in module O17.C
+    Error: Undefined symbol _IOERRORHNDLRINSTALL in module O17.C
+    Error: Undefined symbol _RAND8 in module O17.C
+    Error: Undefined symbol _LXRSH_AT_ in module O17.C
+    Error: Undefined symbol _LXLSH_AT_ in module O20.C
+    Error: Undefined symbol ___FSTRNCPY in module O21.C
+    Error: Undefined symbol _LMOD_AT_ in module O21.C
+    WARNING: _STARTX not found in the map; entry left at C0's _startup
+    REBUILT.EXE exists: True 429396        (was 447,906)
+
+Those symbols are the game's own low-level routines (EMS/XMS setup, the stsh pointer scan, the
+shift/add helpers the compiler emits, `rand8`, `fstrncpy`, the IO-error handler installer) that the
+resident modules call. Turbo C's `CL.LIB` supplies the *C runtime*, but not these, so the "the
+compiler supplies it" argument holds for `strcpy`/`malloc` and not for this file. The startup patch
+also fails without it (`_STARTX not found`), i.e. the produced EXE would not even enter the game.
+
+Both files were restored (`git checkout HEAD -- ...`) and the tree is back to:
+
+    build 65/65 · LINK.LOG 0 errors · REBUILT.EXE 447,906 · grep_checks 8,553
+    compare_state 734 / 7 / 889 · diff_dgroup 288/1,805
+    compare_runtime 280 identical / 11 different at all three sample points
+
+**What removing them would actually require:** the symbols above would have to come from somewhere
+else first - either recovered into a smaller stand-in module (they are ~4,000 lines of CRT/overlay
+code in total) or stubbed, which would change the runtime behaviour the gates measure. That is a
+project decision, not a cleanup, and the headline number would not move either way.
