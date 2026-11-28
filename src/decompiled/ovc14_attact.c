@@ -148,7 +148,7 @@ uint16_t __cdecl16far attact_usesGUnits(int x,int y)
 
 /* [R6] touches SCARRY2, GMapFlags */
 
-uint __cdecl16far attact_usesSCARRY2(int x,int y,byte dir,char ignoreBlocked,uint16_t arg5,uint16_t arg6)
+uint __cdecl16far attact_usesSCARRY2(int x,int y,byte dir,char ignoreBlocked)
 
 {
   /* Re-derived: bounds-checks the cell reached through the direction tables at +0x885 (dx)
@@ -547,7 +547,7 @@ void __cdecl16far attact_usesAlignUp4(uint16_t x,uint16_t y,char partyIndex,uint
 /* [R6] touches Entities, destX */
 
 void __cdecl16far
-attact_usesEntities(int entityIndex,uint16_t destX,uint16_t destY,uint16_t flagsOfs,uint16_t flagsSeg,uint16_t arg6,uint16_t arg7,uint16_t arg8,uint16_t arg9)
+attact_usesEntities(int entityIndex,uint16_t destX,uint16_t destY,uint16_t flagsOfs,uint16_t flagsSeg)
 
 {
   uint16_t x;
@@ -792,7 +792,11 @@ void __cdecl16far attact_usesAlignUp42(void)
     segArg = 0x2379;
     alignedX = ovr_alignUp4((destEnt->base).x,0,0);
     if ((alignedDest == alignedX) && ((peVar14->base).destY == (peVar14->base).y)) {
-      manage_usesCurSfxType32(0x2379,index,(peVar14->base).destX,(peVar14->base).destY);
+      /* 0x1151: call 0xade -> attact_usesEntities(index, destX, destY, &zeroScratch).
+         The frame pushes five words, not the nine the prototype used to declare. */
+      attact_usesEntities((int)index,(uint16_t)(peVar14->base).destX,
+                          (uint16_t)(peVar14->base).destY,
+                          (uint16_t)&zeroScratch,(uint16_t)_SS);
     }
     if (((peVar14->base).destX != 0 || (peVar14->base).destY != 0) &&
        (*(char *)((int)&(peVar14->base).entity + 1) == '\0')) {
@@ -807,8 +811,10 @@ void __cdecl16far attact_usesAlignUp42(void)
                 (((peVar14->base).faction & 3) << 1) & 0xff03;
         (peVar14->base).target = (uint8_t)ownerByte;
         valHi = (undefined1)(ownerByte >> 8);
-        ok = func_0x0004f32d(0x2379,(destEnt->base).x,(peVar14->base).y,
-                                CONCAT11(valHi,(peVar14->base).target),CONCAT11(valHi,animByte));
+        /* 0x1231: call 0x27d -> attact_usesSCARRY2(x, y, target, animByte).  The frame
+           pushes four words, not the six the exported prototype used to declare. */
+        ok = (char)attact_usesSCARRY2((int)(peVar14->base).x,(int)(peVar14->base).y,
+                                     (byte)(peVar14->base).target,(char)animByte);
         if (ok == '\0') {
           (destEnt->base).x = (destEnt->base).x + (int)*(char *)((peVar14->base).target + 0x885)
           ;
@@ -830,8 +836,11 @@ void __cdecl16far attact_usesAlignUp42(void)
           segArg = 0x2337;
           coinFlip = ovr_randBelow(2,0);
           if ((char)coinFlip != '\0') {
-            ok = sub_OVC21_manage_c_23C2(0x2337,startX,startY,'\x02' - (char)dxSign,animByte,
-                                    flag4000);
+            /* 0x12e6: call 0x362 -> attact_usesSCARRY22(startX, startY, dir, animByte,
+               flag4000); five words, matching its declaration. */
+            ok = (char)attact_usesSCARRY22((int)startX,(int)startY,
+                                          (char)('\x02' - (char)dxSign),
+                                          (char)animByte,(char)flag4000);
             if (ok == '\0') {
               (destEnt->base).x = (destEnt->base).x + dxSign;
               (peVar14->base).target = 0x2 - (char)dxSign;
@@ -840,8 +849,9 @@ void __cdecl16far attact_usesAlignUp42(void)
           }
         }
         if (dySign != 0) {
-          ok = sub_OVC21_manage_c_23C2(segArg,startX,startY,(char)dySign + '\x01',animByte,
-                                  flag4000);
+          ok = (char)attact_usesSCARRY22((int)startX,(int)startY,
+                                        (char)((char)dySign + '\x01'),
+                                        (char)animByte,(char)flag4000);
           if (ok == '\0') {
             yPtr = &(peVar14->base).y;
             *yPtr = *yPtr + dySign;
@@ -850,8 +860,9 @@ void __cdecl16far attact_usesAlignUp42(void)
           }
         }
         if (dxSign != 0) {
-          ok = sub_OVC21_manage_c_23C2(segArg,startX,startY,'\x02' - (char)dxSign,animByte,
-                                  flag4000);
+          ok = (char)attact_usesSCARRY22((int)startX,(int)startY,
+                                        (char)('\x02' - (char)dxSign),
+                                        (char)animByte,(char)flag4000);
           if (ok == '\0') {
             (destEnt->base).x = (destEnt->base).x + dxSign;
             (peVar14->base).target = 0x2 - (char)dxSign;
@@ -865,7 +876,10 @@ void __cdecl16far attact_usesAlignUp42(void)
           if (((randResult & 0xff) == 0) &&
              (AgntGs[(uint)(peVar14->base).gindex].ai ==
               '\0')) {
-            manage_usesCurSfxType32(0x2386,index,(peVar14->base).targetX,(peVar14->base).targetY);
+            /* 0x1471: the same five-word form, with the entity's requested target. */
+            attact_usesEntities((int)index,(uint16_t)(peVar14->base).targetX,
+                                (uint16_t)(peVar14->base).targetY,
+                                (uint16_t)&zeroScratch,(uint16_t)_SS);
           }
         }
         else {
@@ -874,8 +888,9 @@ void __cdecl16far attact_usesAlignUp42(void)
                   (((peVar14->base).faction & 3) << 1) & 0xff03;
           (peVar14->base).target = (uint8_t)ownerByte;
           valHi = (undefined1)(ownerByte >> 8);
-          ok = func_0x0004f32d(0x2386,startX,startY,CONCAT11(valHi,(peVar14->base).target),
-                                  CONCAT11(valHi,animByte));
+          /* 0x13dc: the same four-word form, from the entity's start cell. */
+          ok = (char)attact_usesSCARRY2((int)startX,(int)startY,
+                                       (byte)(peVar14->base).target,(char)animByte);
           if (ok == '\0') {
             (destEnt->base).x =
                  (destEnt->base).x + (int)*(char *)((peVar14->base).target + 0x885);
@@ -939,7 +954,7 @@ L_attact_3f0b_1082_1477:
         if (startNearSeed || destNearSeed) {
           if (startNearSeed) {
             if (destNearSeed) {
-              for (rowsLeft = manage_usesLitoa103(); rowsLeft != '\0'; rowsLeft = rowsLeft + -1) {
+              for (rowsLeft = (char)attact_usesAgntCount(index); rowsLeft != '\0'; rowsLeft = rowsLeft + -1) {
                 if (((peVar14->base).target & 1) == 0) {
                   targetSrc = 0;
                 }
@@ -947,7 +962,7 @@ L_attact_3f0b_1082_1477:
                   targetSrc = (peVar14->base).target - 2;
                 }
                 segArg = 0x2322;
-                pcVar12 = ovr_ovc15_textArena(index,0,0);
+                pcVar12 = ovr_ovc15_textArena(index,targetSrc,0);
                 if (((uint)pcVar12 & 0xff) == 0) break;
               }
             }
@@ -972,7 +987,7 @@ L_attact_3f0b_1082_1477:
             while( true ) {
               segArg = 0x2322;
               if (rowsLeft == '\0') break;
-              ovr_ovc15_textArena(index,0,0);
+              ovr_ovc15_textArena(index,targetSrc,0);
               rowsLeft = rowsLeft + -1;
             }
           }

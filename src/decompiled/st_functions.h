@@ -493,7 +493,7 @@ uint __cdecl16far attact_usesGMapFlags(uint x,int y,uint16_t arg3);
 uint __cdecl16far attact_usesGMapFlags2(int x,int y);
 uint __cdecl16far attact_isTerrainFlat(int x,int y);
 uint16_t __cdecl16far attact_usesGUnits(int x,int y);
-uint __cdecl16far attact_usesSCARRY2(int x,int y,byte dir,char ignoreBlocked,uint16_t arg5,uint16_t arg6);
+uint __cdecl16far attact_usesSCARRY2(int x,int y,byte dir,char ignoreBlocked);
 uint __cdecl16far attact_usesSCARRY22(int x,int y,byte dir,char ignoreBlocked,char directionOnly);
 int __cdecl16far attact_countPartyUnits(byte menuIndex);
 uint16_t __cdecl16far attact_textAbnormalProgramTermination(uint16_t value,uint8_t partyIndex);
@@ -505,7 +505,7 @@ ulong * __cdecl16far attact_usesBDADailyTimeCounter(ulong *__return_storage_ptr_
 void __cdecl16far attact_decrementCounter(char far *counter);
 int __cdecl16far attact_usesAgntCount(int ownerIndex);
 void __cdecl16far attact_usesAlignUp4(uint16_t x,uint16_t y,char partyIndex,uint32_t flags,uint16_t arg5);
-void __cdecl16far attact_usesEntities(int entityIndex,uint16_t destX,uint16_t destY,uint16_t flagsOfs,uint16_t flagsSeg,uint16_t arg6,uint16_t arg7,uint16_t arg8,uint16_t arg9);
+void __cdecl16far attact_usesEntities(int entityIndex,uint16_t destX,uint16_t destY,uint16_t flagsOfs,uint16_t flagsSeg);
 void __stdcall16far attact_usesGMapFlags3(void);
 void __cdecl16far attact_usesAlignUp42(void);
 void __cdecl16far attact_updateAttractEntry(int itemIndex,int force);

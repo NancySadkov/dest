@@ -23543,3 +23543,54 @@ push lists above pin down for the next pass.
 
 Two of the four `func_0x0004xxxx` stubs are no longer called anywhere in the tree, so the rebuild no
 longer links those dead paths into this function.
+
+
+## `attact_usesAlignUp42` (3f0b:1082) finished: 28/40 -> 40/40, and two prototypes were too long
+
+The remaining eight sites all came good once the argument counts were settled *from the callee's own
+frame* rather than from the exported prototypes. A scan of each callee for its highest `[bp+N]`
+reference gives the truth:
+
+    attact_usesSCARRY2  max [bp+0xc]  ->  4 words     declared with 6
+    attact_usesSCARRY22 max [bp+0xe]  ->  5 words     matches
+    attact_usesEntities max [bp+0xe]  ->  5 words     declared with 9
+    attact_usesAgntCount max [bp+6]   ->  1 word      matches
+
+So `attact_usesSCARRY2` and `attact_usesEntities` had two and four phantom parameters. That is the
+same defect class the log records for `exename` (a wrong signature hides the real frame), and it is
+why the image pushes fewer words than the prototypes imply. Both prototypes and both definitions are
+trimmed to what the callees actually read; the only near callers are this function's, and the other
+call sites in the tree go through the unprototyped `ovr_*` thunks and are unaffected.
+
+The eight sites, each now with the frame its push list pins down:
+
+    0x1231  attact_usesSCARRY2(x, y, target, animByte)
+    0x13dc  attact_usesSCARRY2(startX, startY, target, animByte)
+    0x12e6  attact_usesSCARRY22(startX, startY, 2 - dxSign, animByte, flag4000)
+    0x1325  attact_usesSCARRY22(startX, startY, dySign + 1, animByte, flag4000)
+    0x1365  attact_usesSCARRY22(startX, startY, 2 - dxSign, animByte, flag4000)
+    0x1151  attact_usesEntities(index, destX, destY, &zeroScratch, _SS)
+    0x1471  attact_usesEntities(index, targetX, targetY, &zeroScratch, _SS)
+    0x173c  attact_usesAgntCount(index)          (the loop count at 0x1742)
+
+The frame names are read off the listing, not assumed: `[bp-4]`/`[bp-6]` are the entity's start x/y
+loaded at 0x11a7/0x11b0, `[bp-0xd]` is `AgntGs[gindex].byte[0x26d6]` (the animation byte) loaded at
+0x11cc, `[bp-1]` is the 0x4000 flag test at 0x1191, and `[bp-0x10]`/`[bp-0x12]` are the two
+`ovr_ovc07_signum` deltas.
+
+One real bug surfaced with the last site: the loop body called `ovr_ovc15_textArena(index,0,0)` while
+computing `targetSrc` and never passing it. The image pushes `(di, targetSrc, 0)`, so both call sites
+now pass it.
+
+Three of the calls at those sites were to functions in *other modules* (`sub_OVC21_manage_c_23C2`,
+`manage_usesCurSfxType32`, `manage_usesLitoa103`) - the same mis-attribution the 0x1db1 case showed.
+
+## Measured (HEAD cfa1c7cb -> this commit)
+
+    structural_deficits  3f0b:1082  32/40 -> 40/40  (gone; 7 functions left, was 8)
+    grep_checks          9,798 (unchanged)
+    REBUILT.EXE          447,954 -> 447,890
+    build 65/65, LINK.LOG 0 errors
+    compare_state        identical 734 / 7 different / 889 missing (unchanged)
+    diff_dgroup          288/1,805 matched (unchanged)
+    compare_runtime      280 identical / 11 different at entry, init_game and key (unchanged)
