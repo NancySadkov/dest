@@ -25939,3 +25939,45 @@ header field and frame count is the reading the code supports; the pre-existing 
       ovc45_textDone2 (77eb:1bb3)          -81
       bldng_selectBuildingType (676c:03dd) -57
       6fbe:01a9 (FLI frame player)         -53
+
+
+## `ovc15_textArena` (4207:2301): 47 hits down to 0, grep 5,054 -> 5,001 (-53)
+
+The arena spectator-round routine: it snapshots an agent, picks a sprite set from the frame word's low
+bit, randomises the stance, and runs the round.
+
+    uStack_8 -> agntIdx     0 .. AgntCount (the visited-agent scan)
+    bVar1    -> alignRes    ovc15_usesAlignUp42's result
+                frameFlag   the low bit of the frame word: which sprite set to use
+    pcVar4   -> randPtr     ovc15_usesRandBelow's result inside the scan
+                retPtr      the value returned to the caller
+    uVar2    -> compute1Res ovr_ovc49_compute1(Agnts[i].x)
+                stExitRes   ovc15_usesStExit2's result
+    uVar9    -> entitySeg   DAT_2000_d190, stored as the entity's segment
+                framesSegDead  agntCopy.frames' segment: stored, never read
+    uVar8    -> gdataSegDead   agntCopy.gdata's segment: stored, never read
+
+**`in_stack_00000006`/`in_stack_00000008` were the parameters re-read.** The signature is
+`ovc15_textArena(int owner, uint16_t arg2, uint16_t arg3)`, and the two `in_stack_` slots are `[bp+6]`
+and `[bp+8]` - i.e. `owner` and `arg2`. They now use those names and the duplicate declarations are
+deleted, which is the correct fix rather than a rename; the compiler caught my first attempt because
+the new name `arg2` collided with the parameter, which is exactly the evidence that they are the same
+variable.
+
+## Measured (HEAD 8f99bf25 -> this commit)
+
+    grep_checks          5,054 -> 5,001   (-53)
+    REBUILT.EXE          448,002 (unchanged size)
+    build 65/65, LINK.LOG 0 errors
+    compare_state        identical 734 / 7 different / 889 missing (unchanged)
+    diff_dgroup          288/1,805 matched (unchanged)
+    compare_runtime      280 identical / 11 different at entry, init_game and key (unchanged)
+    structural_deficits  two game bodies: 7e7c:0b9c (177/187), 77eb:0d61 (54/58)
+
+## Turn total (HEAD 907d3e6b -> here)
+
+    grep_checks          5,245 -> 5,001   (-244)
+      ovc45_textDone2 (77eb:1bb3)          -81
+      bldng_selectBuildingType (676c:03dd) -57
+      6fbe:01a9 (FLI frame player)         -53
+      ovc15_textArena (4207:2301)          -53
