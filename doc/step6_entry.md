@@ -24616,3 +24616,44 @@ No source change in this commit; the gates are the ones the previous commit left
     compare_state        identical 734 / 7 different / 889 missing
     diff_dgroup          288/1,805 matched
     compare_runtime      280 identical / 11 different at entry, init_game and key
+
+
+## `ovc40_usesAlignToSeg`: the last two label entries wired, and the format table located
+
+**Label calls 0x0912 and 0x092a wired** (both pointers per call are the same table entry, as the
+image pushes them twice):
+
+    text1_10 = text2_09 = rankNames[10];    /* 0x0912, row 1 */
+    text1_11 = text2_10 = rankNames[11];    /* 0x092a, row 2 */
+
+Eleven of the twelve label sites are now table reads; only `0x07c0` remains, and it is the one with no
+counterpart in the branch structure.
+
+**The three `ovr_stsprintf` format pointers resolved.** Scanning this function for `lcall 0x170,0x7a`
+gives each call's real arguments:
+
+    0x073b  dst ss:[bp-0x16a]  fmt [bp-0x2a]:[bp-0x28]  src ss:[bp-0x26a]
+    0x0784  dst ss:[bp-0x16a]  fmt [bp-0x2a]:[bp-0x28]  src ss:[bp-0x26a]
+    0x07dd  dst ss:[bp-0x26a]  fmt [bp-0x66]:[bp-0x64]  src [bp+8]/[bp+0xa]
+    0x07f9  dst ss:[bp-0x16a]  fmt [bp-0x56]:[bp-0x54]  src ...
+    0x0831  dst ss:[bp-0x26a]  fmt ss:[bx+2]:[bx]       (table indexed at run time)
+    0x085d  dst ss:[bp-0x16a]  same dynamic form
+
+So `[bp-0x2a]:[bp-0x28]` is **rankNames[12]**, and the body's `CONCAT22(uStack_2c,_SS)` was taking
+entry 11's *segment* as a pointer and `_SS` as its offset. Both sites (the `formatIndex` 4/6 and 5
+arms) now read `MK_FP(rankNames[12].seg, rankNames[12].ofs)`.
+
+The remaining formats, mapped but not yet applied: `0x07dd` -> **groupNames[1]**, `0x07f9` ->
+**rankNames[1]** (the body currently pairs `uStack_58`, which is entry 0's segment, with `_SS`), and
+`0x0831`/`0x085d` index a table at run time. The two output buffers are `bp-0x16a` and `bp-0x26a`.
+`0x07c0` still needs the branch disposition re-derived: it is a row-0 label with `rankNames[0]` that
+the current body does not contain.
+
+## Measured (HEAD 1a975161 -> this commit)
+
+    grep_checks          7,974 -> 7,972
+    REBUILT.EXE          447,906 (unchanged)
+    build 65/65, LINK.LOG 0 errors
+    compare_state        identical 734 / 7 different / 889 missing (unchanged)
+    diff_dgroup          288/1,805 matched (unchanged)
+    compare_runtime      280 identical / 11 different at entry, init_game and key (unchanged)

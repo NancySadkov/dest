@@ -474,7 +474,7 @@ ovc40_usesAlignToSeg
     segTmp = 0;
     ofsLo = 0;
     ofsHi = 0;
-    msgPtr = ovr_stsprintf((char *)&text2,(char *)CONCAT22(uStack_2c,_SS),
+    msgPtr = ovr_stsprintf((char *)&text2,(char far *)MK_FP(rankNames[12].seg,rankNames[12].ofs),
                            (char *)CONCAT22(&text1,text1Seg));
     text1_06.seg = dxIn;
     text1_06.ofs = (uint16_t)msgPtr;
@@ -490,7 +490,7 @@ ovc40_usesAlignToSeg
     segTmp = 0;
     ofsLo = 0;
     ofsHi = 0;
-    msgPtr = ovr_stsprintf((char *)&text2,(char *)CONCAT22(uStack_2c,_SS),
+    msgPtr = ovr_stsprintf((char *)&text2,(char far *)MK_FP(rankNames[12].seg,rankNames[12].ofs),
                            (char *)CONCAT22(&text1,text1Seg));
     text1_07.seg = dxIn;
     text1_07.ofs = (uint16_t)msgPtr;
@@ -519,11 +519,9 @@ ovc40_usesAlignToSeg
     segTmp = dxIn;
     msgPtr = ovr_stsprintf((char *)&text2,(char *)CONCAT22(uStack_58,_SS),
                            (char *)CONCAT22(capTextOfs,capTextShownSeg),capTextSeg);
-    text1_10.seg = dxIn;
-    text1_10.ofs = (uint16_t)msgPtr;
-    (*(uint8_t *)((uint8_t *)&(text2_09.ofs) + 1)) = ofsHi;
-    (*(uint8_t *)((uint8_t *)&(text2_09.ofs))) = ofsLo;
-    text2_09.seg = segTmp;
+    /* 0x0912: row 1, both pointers rankNames[10]. */
+    text1_10 = rankNames[10];
+    text2_09 = rankNames[10];
     ovc40_usesBlitLabel(text1_10,text2_09,labelIdx,blitColour);
     blitColour = 0xf2;
     labelIdx = 2;
@@ -542,11 +540,9 @@ ovc40_usesAlignToSeg
                                            ),
                            (char *)CONCAT22(textOfs,(char *)auStack_52[(uint)formatIndex * 2]),
                            textSeg);
-    text1_11.seg = (uint16_t)format2Tab;
-    text1_11.ofs = (uint16_t)msgPtr;
-    (*(uint8_t *)((uint8_t *)&(text2_10.ofs) + 1)) = ofsHi;
-    (*(uint8_t *)((uint8_t *)&(text2_10.ofs))) = ofsLo;
-    text2_10.seg = (uint16_t)format1Tab;
+    /* 0x092a: row 2, both pointers rankNames[11]. */
+    text1_11 = rankNames[11];
+    text2_10 = rankNames[11];
     ovc40_usesBlitLabel(text1_11,text2_10,labelIdx,blitColour);
   }
   ovc40_flushInput();
