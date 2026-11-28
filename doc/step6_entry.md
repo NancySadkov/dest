@@ -23235,3 +23235,38 @@ This was the last place in the tree that used a string literal as a **write dest
     compare_state        identical 734 / 7 different / 889 missing (unchanged)
     diff_dgroup          288/1,805 matched (unchanged)
     compare_runtime      280 identical / 11 different (unchanged, all three sample points)
+
+
+## `write_game_cfg` (6257:009f) now matches the image's call sequence (10/13 -> 13/13)
+
+The body was functionally equivalent but structurally short: it measured the scratch line once and
+reused the length for the comparison, while the image measures it **after** the write as well. Per
+value (`0x00d9`/`0x00ef`/`0x00fd`):
+
+    strlen(line) -> n
+    write(h, line, n)
+    strlen(line)            <- recomputed
+    compare write result with that second strlen
+
+so there are six `strlen` calls, not three. The rewrite repeats the call, which is what the source
+did; the `write` results are now folded into the single `fail` byte the image keeps at `[bp-1]`
+(`or [bp-1], al` from `close` at `0x01b1`), and `close`'s result is OR'd in the same way instead of
+reusing its return as the handle.
+
+The string arguments were verified against the DGROUP image rather than taken on trust:
+
+    0x5e2c  "0\r\n"                    the scratch line the body already mirrors
+    0x5e30  "strong.sav"               mkdir argument
+    0x5e3b  "strong.sav\\game.cfg"     creat_wait_unlock argument
+
+## Measured (HEAD 4c16904a -> this commit)
+
+    structural_deficits  6257:009f  10/13 -> 13/13 (gone; 10 functions left, was 11)
+    grep_checks          9,798 (unchanged)
+    build 65/65, LINK.LOG 0 errors
+    compare_state        identical 734 / 7 different / 889 missing (unchanged)
+    diff_dgroup          288/1,805 matched (unchanged)
+    compare_runtime      280 identical / 11 different (unchanged, all three sample points)
+
+`write_game_cfg` is not on any of the three runtime sample paths (it runs only when the audio
+settings are written), so the runtime gate is unchanged by construction.

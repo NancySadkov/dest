@@ -89,7 +89,7 @@ bool __cdecl16far write_game_cfg(char sfx,char mus,char irq)
      to be DGROUP-resident. */
   int h;
   size_t n;
-  size_t w;
+  char fail;
   static char line[4] = { '0', '\r', '\n', '\0' };
 
   mkdir("strong.sav");
@@ -97,23 +97,27 @@ bool __cdecl16far write_game_cfg(char sfx,char mus,char irq)
   if (h < 0) {
     return false;
   }
+  /* The image measures each line *after* the write as well: per value it is
+     `strlen`, `write`, `strlen`, compare (0x00d9/0x00ef/0x00fd).  The second strlen is what the
+     return value is checked against, so the three comparisons below repeat the call rather than
+     reuse `n`. */
   line[0] = sfx;
   n = strlen(line);
-  w = write(h,line,n);
-  if (w != n) {
+  fail = (write(h,line,n) != strlen(line)) ? 1 : 0;
+  if (fail) {
     return false;
   }
   line[0] = mus;
   n = strlen(line);
-  w = write(h,line,n);
-  if (w != n) {
+  fail = (write(h,line,n) != strlen(line)) ? 1 : 0;
+  if (fail) {
     return false;
   }
   line[0] = irq;
   n = strlen(line);
-  w = write(h,line,n);
-  h = close(h);
-  if (w != n || (char)h != '\0') {
+  fail = (write(h,line,n) != strlen(line)) ? 1 : 0;
+  fail = (char)(fail | ((close(h) != 0) ? 1 : 0));
+  if (fail) {
     return false;
   }
   clrscr();
