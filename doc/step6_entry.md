@@ -23984,3 +23984,55 @@ Current per-file buckets (measured after this batch):
     p[iusbc]Var    946   ovc01_driver 94, ovc20_stash 69, ovc45_unitinfo 68
     bStack_        451   ovc34_unit 114, ovc10_constr 59, ovc09_init 48
     in_stack_      447   ovc23_bldrec 37, ovc12_agnt 33, ovc21_manage 31
+
+
+## Renaming batch 6: `ovc40_usesAlignToSeg` (69c8:04c6), grep 9,283 -> 9,071 (-212)
+
+The largest body left in the tree (429 lines, 227 hits over 47 slots). I took the slots whose role is
+provable from a single line of use, and split the one that changed role.
+
+**Two slots carried two roles:**
+
+    bVar3   a label selector (0/1/2) passed to ovc40_usesBlitLabel, then later the result of
+            ovr_init2_usesCFGMice  -> split into `labelIdx` and `mouseCfg`
+    uVar5   the segment half of the far pointer being assembled (text2_06.seg etc.), used with
+            uVar10/uVar11 as the offset halves  -> `segTmp`, `ofsLo`, `ofsHi`
+
+**Single-role slots (26 in all):**
+
+    cStack_1d -> result        the value the function returns (0 or 2)
+    cStack_1e -> waitTicks     the 0x77-tick wait loop
+    cStack_1f -> backKind      2 or -2, from backdropIndex
+    pcVar4    -> msgPtr        the string ovr_stsprintf returns
+    iVar9     -> timeStamp     BDA_DailyTimeCounter's value
+    iStack_a  -> waitStart     the timestamp that loop started from
+    iStack_8  -> tickMark      the counter sampled in the loop
+    bVar13    -> blitColour    0xf2 throughout
+    uVar12/14 -> ssLo/ssHi     the split _SS halves
+    in_DX     -> dxIn          DX on entry, a graphic's segment
+    uVar6     -> mouseButtons  ovr_init2_updateMouseButtons's result
+    puVar7/8  -> format1Tab / format2Tab
+    uStack_1a -> palSeg        stored into palette.seg
+    uStack_16 -> handleSeg     stored into handle.seg
+    psStack_1c-> palRec        the record ovc40_usesStshLoadGfx returns
+    pvStack_18-> stashMem      the ovr_stshAlloc block
+    pcStack_2a-> text1Seg      segment half of the &text1 pointer
+    pcStack_56-> capTextShownSeg
+    cVar1     -> waitTmp ; bVar2 -> waiting ; extraout_AH -> axHigh
+
+**Left alone (67 names remain in the body):** the `uStack_2c..0x4a` run and `uStack_58/5a/66/68` are
+the *offset and segment halves* of the `text1_NN` / `text2_NN` far pointers, stored as separate
+scalars by the decompiler (`text1_01.seg = uStack_46; text1_01.ofs = uStack_48;`). Naming them
+individually would invent a meaning per half; the honest fix is to collapse each pair into its
+`far_t`, which is a rewrite of those statements rather than a rename. Also left: `auStack_52[4]` and
+`auStack_62[3]`, which are already arrays.
+
+## Measured (HEAD 1574d658 -> this commit)
+
+    grep_checks          9,283 -> 9,071   (-212)
+    REBUILT.EXE          447,922 (unchanged)
+    build 65/65, LINK.LOG 0 errors
+    compare_state        identical 734 / 7 different / 889 missing (unchanged)
+    diff_dgroup          288/1,805 matched (unchanged)
+    compare_runtime      280 identical / 11 different at entry, init_game and key (unchanged)
+    structural_deficits  6 entries, unchanged
