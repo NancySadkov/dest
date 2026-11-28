@@ -741,8 +741,6 @@ void constrct_buildInfoText(int x,byte far *flag,int entityIdx,int arg4,int arg5
         }
         else if (v16 > 0) {
           if (v18 > 0) {
-            /* the image computes the noun twice in this variant (0x1c8c and 0x1cb6 region) */
-            (void)ovr_ovc45_compute6(v18,bld->storage);
             nounIdx = (uint16_t)ovr_ovc45_compute6(v18,bld->storage);
             noun = (nounIdx != 0) ? (char far *)"people" : (char far *)"person";
             gold = (uint16_t)ovr_ovc45_costOrIncomeLabel(v16,(uint16_t)(v16 < 0 ? -v16 : v16));
@@ -917,6 +915,8 @@ void constrct_buildInfoText(int x,byte far *flag,int entityIdx,int arg4,int arg5
         /* shared action tail (0x2451): a rodent-free demolish calls the next function in this module */
         if ((bld->flags2 & 4) != 0) {
           constrct_usesLDIV_at_((byte)entityIdx,GUnits[unitIdx].unitType);
+          /* 0x24bd: the demolish path also creates the record, before the flags2&0x400 pair below */
+          ovr_createConstructionRecordFar(0,x,GfxRndSeed2,arg4,arg5,owner);
           *flag = 1;
         }
         /* ---- shared action tail (0x24cd..0x278b) ---- */

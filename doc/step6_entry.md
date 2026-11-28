@@ -22913,3 +22913,35 @@ fmVsprintf, strcpy).
 
 Remaining 9: `1f8,2a` x2 and `1a8,2a` x1 (all three unnameable), and 6 more in the type-9 refined
 variants and the menu path.
+
+
+## 7e7c:0b9c: the demolish path's second createConstructionRecordFar (census 177 -> 178)
+
+Two corrections this pass, both from reading the tail region rather than the per-arm table:
+
+**Removed a spurious call.** Last pass I added a second `compute6` to the type-9 "both" variant on the
+theory that `0x1c8c`/`0x1cb6` were both noun computations - they are not: the block I later wrote
+(`0x1c87..0x1f02`, the unconditional opening "Feeds" write) already contains the first, so the arm had
+one compute6 too many. Removed (census 178 -> 177, which is the correct direction).
+
+**Added the missing one.** The demolish path (`flags2 & 4`) does more than call `constrct_usesLDIV_at_`
+at `0x2489`: at `0x24bd` it also creates the record -
+
+    createConstructionRecordFar(0, x, GfxRndSeed2, arg4, arg5, owner)      /* 6 words */
+
+which is the second `1a0,0x2a` site (the first is the `flags2 & 0x400` else-branch at `0x254f`). The
+three construction-record calls in this region are therefore:
+
+    0x24bd  Far   demolish path, after constrct_usesLDIV_at_
+    0x2517  normal 7-argument form, flags2 & 0x400 set
+    0x254f  Far   flags2 & 0x400 clear
+
+## Measured (HEAD af291009 -> this commit)
+
+    screen_calls     7e7c:0b9c  C 178 -> 177 -> 178  (image 187)
+    grep_checks      9,798 (unchanged)
+    REBUILT.EXE      446,872 -> 446,888
+    build 65/65, LINK.LOG 0 errors
+    compare_state    292 matched / 7 different / missing 889 (unchanged)
+    diff_dgroup      288/1,805 matched (unchanged)
+    compare_runtime  280 identical / 11 different (unchanged, all three sample points)
