@@ -25011,3 +25011,36 @@ rejects them exactly as it did `upd_usesAlignUp4`'s big four.
     diff_dgroup          288/1,805 matched (unchanged)
     compare_runtime      280 identical / 11 different at entry, init_game and key (unchanged)
     structural_deficits  two game bodies: 7e7c:0b9c (177/187), 77eb:0d61 (54/58)
+
+
+## `upd_usesAlignUp4`'s tail split, and what the main block actually is - grep 7,498 -> 7,491
+
+I took the only separable part of the four interleaved slots. The tail block gives `uVar23` three
+lifetimes that do not overlap:
+
+    1773  uVar23 = ovc22_usesEntities(idx);  ... (uVar23 & 0xff) == 0     -> entStatus
+    1788  uVar23 = 0;  1792  (uVar23 & 1) != 0                           -> carryBit
+    1797  uVar23 = *(uint *)&peVar22[idx].base.health;  1800/1801         -> healthWord
+
+Three names, because within six statements the image's slot holds three unrelated temporaries.
+
+**The main block is not separable and I did not pretend otherwise.** `uVar23`'s remaining 48 uses sit
+in `1221..1466`, where it is, in order: a gold amount (`*((uint far *)GLeaderSheets[idx] + 0x54)`),
+the high word of a 32-bit add (`(int)uVar23 >> 0xf` with `CARRY2`), and an entity index
+(`&(Entities)[uVar23].base.animFrame`). Those lifetimes *interleave* with `iVar17`, `iVar21` and
+`uVar12` across 245 lines, so no assignment-before-read boundary separates them - the compiler reused
+one slot because the source variables' lifetimes did not overlap, and recovering their names means
+recovering the source's variable set, i.e. rewriting the block against the image.
+
+That is a 245-line derivation against ~1,100 image bytes. It is the right next job, but it is not
+something I can do honestly by line-range surgery, and a "plausible" split here would be exactly the
+kind of wrong-but-tidy code I have been refusing all session.
+
+## Measured (HEAD e2e92d9d -> this commit)
+
+    grep_checks          7,498 -> 7,491   (-7)
+    REBUILT.EXE          447,858 (unchanged)
+    build 65/65, LINK.LOG 0 errors
+    compare_state        identical 734 / 7 different / 889 missing (unchanged)
+    diff_dgroup          288/1,805 matched (unchanged)
+    compare_runtime      280 identical / 11 different at entry, init_game and key (unchanged)

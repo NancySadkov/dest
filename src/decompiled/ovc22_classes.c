@@ -1105,6 +1105,9 @@ void __cdecl16far upd_usesAlignUp4(void)
   uint16_t unaff_SI;
   uint16_t unaff_DI;
   uint uVar23;
+  byte entStatus;           /* ovc22_usesEntities(idx)'s status byte (1773) */
+  byte carryBit;            /* the carry out of the LXMUL result (1788/1792) */
+  uint healthWord;          /* the entity's health word (1797..1801) */
   uint leaderIdxB;   /* the 0..GLeaderCount loop at 3529 only */
   uint unitIdx;   /* the 0xf8..GUnitCount loops only */
   uint16_t unitsSeg;
@@ -1770,7 +1773,7 @@ void __cdecl16far upd_usesAlignUp4(void)
             }
           }
         }
-        if ((bVar27) && (uVar23 = ovc22_usesEntities(idx), (uVar23 & 0xff) == 0)) {
+        if ((bVar27) && (entStatus = ovc22_usesEntities(idx), (entStatus & 0xff) == 0)) {
           bVar9 = true;
         }
         if (bVar9) {
@@ -1785,20 +1788,20 @@ void __cdecl16far upd_usesAlignUp4(void)
                                   CONCAT13((char)((ulong)Entities >> 0x18),
                                            CONCAT12((char)((ulong)Entities >> 0x10),
                                                     Entities + idx)));
-              uVar23 = 0;
+              carryBit = 0;
               plVar15 = LXMUL_at_((long *)CONCAT11(uVar33,uVar34),a,in_stack_0000ffd2);
               peVar20 = Entities + idx;
               valueLo = ovr_ovc15_textError((entity_t *)CONCAT22(DAT_2000_d190,peVar20),
-                                            (agnt_t far *)(CONCAT12((uVar23 & 1) != 0,plVar15) >> 1));
+                                            (agnt_t far *)(CONCAT12((carryBit & 1) != 0,plVar15) >> 1));
               uVar12 = ovc22_usesLUDIV_at_2
                                  ((uint16_t)valueLo,(uint16_t)peVar20,CONCAT11(uVar33,uVar34));
               unitsSeg = (uint16_t)((ulong)Entities >> 0x10);
               peVar22 = Entities;
-              uVar23 = *(uint *)&peVar22[idx].base.health;
+              healthWord = *(uint *)&peVar22[idx].base.health;
               *(uint *)&peVar22[idx].base.frameIndex =
                    (int)&(peVar20->base).x +
-                   (uint)CARRY2(uVar23,uVar12) + *(int *)&peVar22[idx].base.frameIndex;
-              *(uint *)&peVar22[idx].base.health = uVar23 + uVar12;
+                   (uint)CARRY2(healthWord,uVar12) + *(int *)&peVar22[idx].base.frameIndex;
+              *(uint *)&peVar22[idx].base.health = healthWord + uVar12;
               ovr_ovc41_compute3(CONCAT13((char)((ulong)Entities >> 0x18),
                                           CONCAT12((char)((ulong)Entities >> 0x10),
                                                    Entities + idx)));
