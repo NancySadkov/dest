@@ -177,25 +177,25 @@ uint16_t __cdecl16far ovc45_textChoosePartyBuild(uint16_t x,uint16_t y,int *enti
   far_t entries;
   far_t hint;
   uint x_00;
-  int iVar1;
-  uint16_t *puVar2;
-  char *pcVar3;
+  int clsOfs;              /* the class record offset, bldIdx * 0x95 */
+  uint16_t *sheetSlot;     /* &GLeaderSheets[party] as a word pair */
+  char *msgPtr;            /* ovr_fmVsprintf's result */
   uint8_t *puVar4;
   uint16_t uVar5;
   uint16_t count;
-  uint16_t unaff_DI;
+  uint16_t diArg;          /* the segment the image passes in DI */
   uint slotMin;
   uint8_t foundEntities;
   uint8_t menuItems;
   int aiStack_2c [19];
   uint8_t entityIndex;
-  char cStack_3;
+  char choice;             /* the menu's answer */
   
   x_00 = ovr_alignUp4(x,0,0);
   entityIndex = *entityIndexPtr;
   slotMin = 0xffff;
   for (count = 0; (int)count < 10; count = count + 1) {
-    slotMin = ovc45_usesAlignUp4(slotMin,x_00,y,(uint *)CONCAT22(unaff_DI,_SS));
+    slotMin = ovc45_usesAlignUp4(slotMin,x_00,y,(uint *)CONCAT22(diArg,_SS));
     if (slotMin == 0xffff) break;
     *(int *)(&foundEntities + count * 2) = entityIndex;
     uVar5 = *(uint16_t *)(slotMin * 4);
@@ -204,24 +204,24 @@ uint16_t __cdecl16far ovc45_textChoosePartyBuild(uint16_t x,uint16_t y,int *enti
   }
   if ((int)count < 2) {
     *entityIndexPtr = entityIndex;
-    iVar1 = (uint)*(byte *)((int)Entities + *entityIndexPtr * 0x37 + 0xd) * 0x95;
-    uVar5 = CONCAT11((char)((uint)iVar1 >> 8),
-                     '\x01' << (*(byte *)((int)&worldMenuLabels[9].ofs + 1 + iVar1) & 0x1f));
+    clsOfs = (uint)*(byte *)((int)Entities + *entityIndexPtr * 0x37 + 0xd) * 0x95;
+    uVar5 = CONCAT11((char)((uint)clsOfs >> 8),
+                     '\x01' << (*(byte *)((int)&worldMenuLabels[9].ofs + 1 + clsOfs) & 0x1f));
   }
   else {
     ovr_ovc22_className(*(byte *)((int)Entities + *entityIndexPtr * 0x37 + 0x1a),0);
-    puVar2 = (uint16_t *)((uint)*(byte *)((int)Entities + *entityIndexPtr * 0x37 + 0x1a) * 4);
+    sheetSlot = (uint16_t *)((uint)*(byte *)((int)Entities + *entityIndexPtr * 0x37 + 0x1a) * 4);
     uVar5 = _DS;
-    pcVar3 = ovr_fmVsprintf("Choose party to build for.  Now building for %s the %s.",
-                            (char *)CONCAT22(puVar2[1],(char *)*puVar2));
+    msgPtr = ovr_fmVsprintf("Choose party to build for.  Now building for %s the %s.",
+                            (char *)CONCAT22(sheetSlot[1],(char *)*sheetSlot));
     puVar4 = &menuItems;
     entries.seg = (uint16_t)_SS;
     entries.ofs = (uint16_t)puVar4;
     (*(uint8_t *)((uint8_t *)&(hint.seg))) = (char)uVar5;
-    hint.ofs = (uint16_t)pcVar3;
+    hint.ofs = (uint16_t)msgPtr;
     (*(uint8_t *)((uint8_t *)&(hint.seg) + 1)) = (char)((uint)uVar5 >> 8);
     ovr_ovc28_compute2(entries,count,hint,0,0);
-    cStack_3 = (char)puVar4;
+    choice = (char)puVar4;
     if ((char)puVar4 == '\0') {
       uVar5 = 0xff;
     }
@@ -229,9 +229,9 @@ uint16_t __cdecl16far ovc45_textChoosePartyBuild(uint16_t x,uint16_t y,int *enti
       *entityIndexPtr = aiStack_2c[((uint)puVar4 & 0xff) - 0xc];
       uVar5 = (uint16_t)((ulong)Entities >> 0x10);
       selectedPartyIndex = *(undefined1 *)((int)Entities + *entityIndexPtr * 0x37 + 0x1a);
-      iVar1 = (uint)*(byte *)((int)Entities + *entityIndexPtr * 0x37 + 0xd) * 0x95;
-      uVar5 = CONCAT11((char)((uint)iVar1 >> 8),
-                       '\x01' << (*(byte *)((int)&worldMenuLabels[9].ofs + 1 + iVar1) & 0x1f));
+      clsOfs = (uint)*(byte *)((int)Entities + *entityIndexPtr * 0x37 + 0xd) * 0x95;
+      uVar5 = CONCAT11((char)((uint)clsOfs >> 8),
+                       '\x01' << (*(byte *)((int)&worldMenuLabels[9].ofs + 1 + clsOfs) & 0x1f));
     }
   }
   return uVar5;

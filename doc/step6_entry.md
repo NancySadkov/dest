@@ -24346,3 +24346,47 @@ row y / span length; y1 scratch / swap temp / decoder bytes consumed) - the same
     diff_dgroup          288/1,805 matched (unchanged)
     compare_runtime      280 identical / 11 different at entry, init_game and key (unchanged)
     structural_deficits  two game bodies: 7e7c:0b9c (177/187), 77eb:0d61 (54/58)
+
+
+## The `far_t` collapse is not possible in `ovc40_usesAlignToSeg`: those halves are never written
+
+Before starting the collapse I checked where the `uStack_XX` halves get their values. **Nothing in the
+body writes any of them:**
+
+    $ grep -E '(auStack_[0-9]+|uStack_[0-9a-f]+)\s*(\[[^]]*\])?\s*='   # over the whole function
+    (no matches)
+
+Twenty-four stack words are read and never assigned - `uStack_46`/`uStack_48` as `text1_01`'s
+segment/offset, `uStack_3e`/`uStack_40` as `text1_04`'s, and so on - and `uStack_2c`, `uStack_58`,
+`uStack_66`, `uStack_68` are passed straight into `ovr_stsprintf` as far pointers:
+
+    msgPtr = ovr_stsprintf((char *)&text2, (char *)CONCAT22(uStack_2c,_SS), ...)
+
+So this is not "two halves of a pointer that should be joined"; the exported function **reads
+uninitialised stack and passes it as pointers**. Three consequences:
+
+1. The promoted fix is not a collapse - it is reconstructing each site from the image (what buffer the
+   pointer should address, and with which segment). That needs the listing for `69c8:04c6`, which was
+   never dumped; `tmp/dump_seg.py` produces it in one command, so the next pass starts there.
+2. It also means the same class of defect is present wherever the pattern appears: `ovc33_stats.c`'s
+   `at`, `ovc45_unitinfo.c`'s two `textDone` bodies and `ovc44_strong_dat.c`'s `stshInitPtrs` all show
+   the same `uStack_XX`-into-far-pointer shape. None of them are covered by the runtime sample points,
+   which is why the gates have never flagged them.
+3. Renaming cannot touch it, which is why the number has stopped falling as fast.
+
+## Renaming batch 14 (small): `ovc45_textChoosePartyBuild`, grep 8,060 -> 8,035
+
+    iVar1    -> clsOfs     the class record offset, bldIdx * 0x95
+    puVar2   -> sheetSlot  &GLeaderSheets[party] as a word pair
+    pcVar3   -> msgPtr     ovr_fmVsprintf's result
+    unaff_DI -> diArg      the segment the image passes in DI
+    cStack_3 -> choice     the menu's answer
+
+## Measured (HEAD b4b6b00d -> this commit)
+
+    grep_checks          8,060 -> 8,035
+    REBUILT.EXE          447,906 (unchanged)
+    build 65/65, LINK.LOG 0 errors
+    compare_state        identical 734 / 7 different / 889 missing (unchanged)
+    diff_dgroup          288/1,805 matched (unchanged)
+    compare_runtime      280 identical / 11 different at entry, init_game and key (unchanged)
