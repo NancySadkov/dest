@@ -23778,3 +23778,54 @@ reason, the same treatment `6ffe:009b` and `2d63:04b7` get.
     compare_state        identical 734 / 7 different / 889 missing (unchanged)
     diff_dgroup          288/1,805 matched (unchanged)
     compare_runtime      280 identical / 11 different at entry, init_game and key (unchanged)
+
+
+## Renaming batch in `ovc22_classes.c`: grep 9,798 -> 9,718 (-80), four functions cleared
+
+Back to the rename mass, which needs no inference. Chose functions whose Ghidra slots each carry one
+role, and split the one slot that carried two.
+
+**`ovc22_usesRandBelow2` (5087:4975) - 33 hits, now 0 Ghidra names in the body.**
+
+    uVar7   carried TWO roles: the status byte of ovc22_searchCellsAround, then the BuildingTypes
+            index returned by ovc22_usesRandBelow.  Split into `searchStatus` and `bldPick`.
+    puVar1  -> goldLoPtr    &sheet->+0x56, the low word of the 32-bit treasury
+    piVar2  -> goldHiPtr    &sheet->+0x58, the high word (the borrow target)
+    uVar3   -> oldLo        the low word before the subtract, used for the borrow
+    bStack_3-> blockFlags   built from AgntGs[..].flags&0x80, then flags5d&2 and &4 OR'd in
+    unaff_SI-> siArg        the value the image passes in SI (its register-passed trailing argument)
+
+**`ovc22_usesGMapFlags2` (5087:3f8d) - 13 hits.**
+
+    uVar1  -> result   it is the returned value on all three paths
+    in_AX  -> axIn     AX on entry, as the image's caller left it
+
+**`ovc22_usesGUnits` (5087:1674) - 11 hits.** The body's own comment already identified both
+residues as the far out-pointer's segment and the unmodelled fourth argument, so they are now named
+that way rather than by stack offset:
+
+    in_stack_00000006 -> outFlagSeg   segment half of the out pointer ([bp+0xa] in the image)
+    unaff_DI          -> diArg        the fourth argument at [bp+0xc], passed through DI
+
+**`ovc22_usesLUDIV_at_` (5087:18b6) and `ovc22_textArena` (5087:0000).**
+
+    piVar4 -> divPair    the (low, high) word pair at classId*0x94 + lvlIdx*4 fed to LUDIV_at_
+    bVar1  -> result     the boolean the function returns
+
+`siArg` and `diArg` are deliberately mechanical names: they record *where* the value comes from
+(register SI / DI) rather than claiming a role the model cannot establish, which is the same choice
+already made for `in_DX` in the log.
+
+## Measured (HEAD 5f579f9d -> this commit)
+
+    grep_checks          9,798 -> 9,718   (-80)
+      [iusbc]Var         5,788 (ovc22_classes 332, was 434 at turn start of the renaming work)
+      p[iusbc]Var          977
+    REBUILT.EXE          447,922 (unchanged size)
+    build 65/65, LINK.LOG 0 errors
+    compare_state        identical 734 / 7 different / 889 missing (unchanged)
+    diff_dgroup          288/1,805 matched (unchanged)
+    compare_runtime      280 identical / 11 different at entry, init_game and key (unchanged)
+
+Four functions now read as ordinary C with no Ghidra slot names; the builds and all three runtime
+dumps confirm the renaming changed nothing but identifiers.

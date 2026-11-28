@@ -14,14 +14,14 @@
 bool __cdecl16far ovc22_textArena(int x,int y)
 
 {
-  bool bVar1;
+  bool result;
   int cellB;
   int cellMin;
   int cellA;
   
   if ((((x < 0) || (y < 0)) || (0x93 < x + 1)) || (0x3b < y + 1)) {
     placementStatus = 2;
-    bVar1 = false;
+    result = false;
   }
   else {
     if ((((*(short (*) [60] [148])GMapFlags)[y][x] & 3U) == 0) &&
@@ -37,18 +37,18 @@ bool __cdecl16far ovc22_textArena(int x,int y)
       }
       if (cellA - cellMin < 9) {
         placementStatus = 3;
-        bVar1 = true;
+        result = true;
       }
       else {
-        bVar1 = false;
+        result = false;
       }
     }
     else {
       placementStatus = 1;
-      bVar1 = false;
+      result = false;
     }
   }
-  return bVar1;
+  return result;
 }
 
 
@@ -816,7 +816,9 @@ void __cdecl16far ovc22_usesGUnits(int unitIndex,uint8_t *outFlag)
      Remaining defect, deliberately not changed here: the original takes `outFlag` as a
      FAR pointer (offset at [bp+8], segment at [bp+0xa]) and a fourth argument at
      [bp+0xc], then stores through ES:BX.  Our 2-argument prototype reads the caller's
-     stack for both, which is what `in_stack_00000006` and `unaff_DI` below really are. */
+     stack for both, which is what `outFlagSeg` and `diArg` below really are. */
+  uint16_t outFlagSeg;     /* segment half of the out pointer: [bp+0xa] in the image */
+  uint16_t diArg;          /* the fourth argument at [bp+0xc], passed through DI */
   unit_t *u;
   uint16_t bldType;
   int i;
@@ -830,19 +832,19 @@ void __cdecl16far ovc22_usesGUnits(int unitIndex,uint8_t *outFlag)
   bldType = u->bldType;
   if ((BuildingTypes[bldType].flags2 & 4) == 0) {
     if ((char)ovc22_usesGOngoingBattle(*(byte *)&u->x,*(byte *)&u->y) != '\0') {
-      *(uint8_t *)CONCAT22((uint8_t *)outFlag,in_stack_00000006) = 0x1;
+      *(uint8_t *)CONCAT22((uint8_t *)outFlag,outFlagSeg) = 0x1;
     }
     ovr_createConstructionRecordFar
-              (0,u->x,u->y,(uint8_t *)CONCAT22((uint8_t *)outFlag,in_stack_00000006),(*(uint8_t *)((uint8_t *)&(outFlag) + 2)),unaff_DI,0,0,0)
+              (0,u->x,u->y,(uint8_t *)CONCAT22((uint8_t *)outFlag,outFlagSeg),(*(uint8_t *)((uint8_t *)&(outFlag) + 2)),diArg,0,0,0)
     ;
     if (1 < BuildingTypes[bldType].size) {
       ovr_createConstructionRecordFar
-                (0,u->x + 1,u->y,(uint8_t *)CONCAT22((uint8_t *)outFlag,in_stack_00000006),(*(uint8_t *)((uint8_t *)&(outFlag) + 2)),unaff_DI,0,0,0);
+                (0,u->x + 1,u->y,(uint8_t *)CONCAT22((uint8_t *)outFlag,outFlagSeg),(*(uint8_t *)((uint8_t *)&(outFlag) + 2)),diArg,0,0,0);
       if (3 < BuildingTypes[bldType].size) {
         ovr_createConstructionRecordFar
-                  (0,u->x + 2,u->y,(uint8_t *)CONCAT22((uint8_t *)outFlag,in_stack_00000006),(*(uint8_t *)((uint8_t *)&(outFlag) + 2)),unaff_DI,0,0,0);
+                  (0,u->x + 2,u->y,(uint8_t *)CONCAT22((uint8_t *)outFlag,outFlagSeg),(*(uint8_t *)((uint8_t *)&(outFlag) + 2)),diArg,0,0,0);
         ovr_createConstructionRecordFar
-                  (0,u->x + 3,u->y,(uint8_t *)CONCAT22((uint8_t *)outFlag,in_stack_00000006),(*(uint8_t *)((uint8_t *)&(outFlag) + 2)),unaff_DI,0,0,0);
+                  (0,u->x + 3,u->y,(uint8_t *)CONCAT22((uint8_t *)outFlag,outFlagSeg),(*(uint8_t *)((uint8_t *)&(outFlag) + 2)),diArg,0,0,0);
       }
     }
   }
@@ -861,7 +863,7 @@ void __cdecl16far ovc22_usesLUDIV_at_(entity_t *entity)
   char_sheet_t far *sheet;
   uint partySlot;
   uint lvlIdx;
-  int *piVar4;
+  int *divPair;            /* (low, high) word pair at classId*0x94 + lvlIdx*4 */
   byte classId;
 
   /* 0008-001D: the leader sheet for this slot.  The original loads it from a far-pointer array at
@@ -883,11 +885,11 @@ void __cdecl16far ovc22_usesLUDIV_at_(entity_t *entity)
   }
   /* The per-class table these two indices walk lives at segment 0x80 and stays a near read: no symbol
      in the tree or in audit/symbols.tsv identifies that segment. */
-  for (; (piVar4 = (int *)((uint)classId * 0x94 + lvlIdx * 4), *piVar4 == 0 && piVar4[1] == 0 &&
+  for (; (divPair = (int *)((uint)classId * 0x94 + lvlIdx * 4), *divPair == 0 && divPair[1] == 0 &&
          (lvlIdx != 0)); lvlIdx = lvlIdx - 1) {
   }
-  piVar4 = (int *)((uint)classId * 0x94 + lvlIdx * 4);
-  LUDIV_at_(*piVar4,piVar4[1],0x1e,0);
+  divPair = (int *)((uint)classId * 0x94 + lvlIdx * 4);
+  LUDIV_at_(*divPair,divPair[1],0x1e,0);
   return;
 }
 
@@ -2117,8 +2119,8 @@ int __cdecl16far ovc22_testMapFlags(int x,int y,uint mask)
 uint16_t __cdecl16far ovc22_usesGMapFlags2(char skipCheck,int x1,int y1,int x2,int y2)
 
 {
-  uint16_t in_AX;
-  uint16_t uVar1;
+  uint16_t axIn;           /* AX on entry, as the image's caller passed it */
+  uint16_t result;
   int iVar2;
   byte bVar3;
   int dy;
@@ -2135,7 +2137,7 @@ uint16_t __cdecl16far ovc22_usesGMapFlags2(char skipCheck,int x1,int y1,int x2,i
       while( true ) {
         dx = stepX;
         dy = stepY;
-        uVar1 = (uint16_t)((ulong)GMapFlags >> 0x10);
+        result = (uint16_t)((ulong)GMapFlags >> 0x10);
         iVar2 = stepY;
         if ((stepX != 0) &&
            (iVar2 = (x1 + stepX) * 2,
@@ -2171,12 +2173,12 @@ uint16_t __cdecl16far ovc22_usesGMapFlags2(char skipCheck,int x1,int y1,int x2,i
       }
       return (uint)bVar3 << 8;
     }
-    uVar1 = 1;
+    result = 1;
   }
   else {
-    uVar1 = CONCAT11((char)((uint)in_AX >> 8),1);
+    result = CONCAT11((char)((uint)axIn >> 8),1);
   }
-  return uVar1;
+  return result;
 }
 
 
@@ -2538,16 +2540,17 @@ uint __cdecl16far ovc22_usesRandBelow(byte partyIndex,uint16_t x,uint16_t y)
 void __cdecl16far ovc22_usesRandBelow2(byte partyIndex,uint16_t outFlag,uint16_t outFlagSeg)
 
 {
-  uint *puVar1;
-  int *piVar2;
-  uint uVar3;
+  uint *goldLoPtr;
+  int *goldHiPtr;
+  uint oldLo;
   uint bldWord23;
   uint32_t sheetPtr;
   uint16_t randPick;
-  uint uVar7;
+  uint16_t searchStatus;   /* status byte returned by ovc22_searchCellsAround */
+  uint16_t bldPick;        /* BuildingTypes index returned by ovc22_usesRandBelow */
   int sheetOfs;
   int unitCount;
-  char unaff_SI;
+  char siArg;              /* value passed in SI; the image's register-passed trailing argument */
   uint16_t unitsSeg;
   byte bldType;
   uint16_t y;
@@ -2557,7 +2560,7 @@ void __cdecl16far ovc22_usesRandBelow2(byte partyIndex,uint16_t outFlag,uint16_t
   char matchIdx;
   char targetIdx;
   byte hasUnits;
-  byte bStack_3;
+  byte blockFlags;
   
   listIndex = ListCount;
   if (*((char far *)GLeaderSheets[partyIndex] + 0xa8) != '\0') {
@@ -2599,59 +2602,59 @@ void __cdecl16far ovc22_usesRandBelow2(byte partyIndex,uint16_t outFlag,uint16_t
   }
   if ((AgntGs[(uint)(GLeaderSheets[partyIndex])->classStr].flags & 0x80)
       == 0) {
-    bStack_3 = 0;
+    blockFlags = 0;
   }
   else {
-    bStack_3 = 3;
+    blockFlags = 3;
   }
   if (((GLeaderSheets[partyIndex])->flags5d & 2) != 0) {
-    bStack_3 = bStack_3 | 1;
+    blockFlags = blockFlags | 1;
   }
   sheetPtr = (uint32_t)GLeaderSheets[partyIndex];
   if ((*(byte *)((int)sheetPtr + 0x5d) & 4) != 0) {
-    bStack_3 = bStack_3 | 2;
+    blockFlags = blockFlags | 2;
   }
-  uVar7 = ovc22_searchCellsAround
+  searchStatus = ovc22_searchCellsAround
                     ((uint *)CONCAT22(&y,_SS),
                      (uint *)CONCAT13((char)(((uint)partyIndex << 2) >> 8),
-                                      CONCAT12(partyIndex,_SS)),bStack_3,hasUnits,unaff_SI);
-  if ((uVar7 & 0xff) != 0) {
-    if ((uVar7 & 0xff) != 1) {
+                                      CONCAT12(partyIndex,_SS)),blockFlags,hasUnits,siArg);
+  if ((searchStatus & 0xff) != 0) {
+    if ((searchStatus & 0xff) != 1) {
       return;
     }
-    uVar7 = ovc22_usesRandBelow(partyIndex,x,y);
-    if (uVar7 == 0) {
+    bldPick = ovc22_usesRandBelow(partyIndex,x,y);
+    if (bldPick == 0) {
       x = (GLeaderSheets[partyIndex])->x;
       y = (GLeaderSheets[partyIndex])->y;
     }
     else {
-      if ((*(uint *)((uint8_t *)&BuildingTypes[uVar7] + 19) & 0x60) == 0) {
+      if ((*(uint *)((uint8_t *)&BuildingTypes[bldPick] + 19) & 0x60) == 0) {
         unitsSeg = (uint16_t)((ulong)(uint32_t)GLeaderSheets[partyIndex] >> 0x10);
         sheetOfs = (int)(uint32_t)GLeaderSheets[partyIndex];
         unitCount = *(int *)(sheetOfs + 0x58);
         if ((unitCount < 0) ||
-           ((unitCount == 0 && (*(uint *)(sheetOfs + 0x56) < *(uint *)((uint8_t *)&BuildingTypes[uVar7] + 23))))) {
+           ((unitCount == 0 && (*(uint *)(sheetOfs + 0x56) < *(uint *)((uint8_t *)&BuildingTypes[bldPick] + 23))))) {
           unitsSeg = (uint16_t)((ulong)(uint32_t)GLeaderSheets[partyIndex] >> 0x10);
           unitCount = (int)(uint32_t)GLeaderSheets[partyIndex];
           *(uint16_t *)(unitCount + 0x58) = 0;
           *(uint16_t *)(unitCount + 0x56) = 0;
         }
         else {
-          bldWord23 = *(uint *)((uint8_t *)&BuildingTypes[uVar7] + 23);
+          bldWord23 = *(uint *)((uint8_t *)&BuildingTypes[bldPick] + 23);
           unitsSeg = (uint16_t)((ulong)(uint32_t)GLeaderSheets[partyIndex] >> 0x10);
           unitCount = (int)(uint32_t)GLeaderSheets[partyIndex];
-          puVar1 = (uint *)(unitCount + 0x56);
-          uVar3 = *puVar1;
-          *puVar1 = *puVar1 - bldWord23;
-          piVar2 = (int *)(unitCount + 0x58);
-          *piVar2 = *piVar2 - (uint)(uVar3 < bldWord23);
+          goldLoPtr = (uint *)(unitCount + 0x56);
+          oldLo = *goldLoPtr;
+          *goldLoPtr = *goldLoPtr - bldWord23;
+          goldHiPtr = (int *)(unitCount + 0x58);
+          *goldHiPtr = *goldHiPtr - (uint)(oldLo < bldWord23);
         }
       }
-      bldType = (byte)uVar7;
+      bldType = (byte)bldPick;
       ovr_createConstructionRecordFar
                 (bldType,x,y,
                  (uint8_t *)CONCAT13((char)(outFlagSeg >> 8),CONCAT12((char)outFlagSeg,outFlag)),
-                 partyIndex,unaff_SI,(char)y,(char)outFlag,(char)outFlagSeg);
+                 partyIndex,siArg,(char)y,(char)outFlag,(char)outFlagSeg);
     }
   }
   if (*((char far *)GLeaderSheets[partyIndex] + 0x3f) == '\0') {
