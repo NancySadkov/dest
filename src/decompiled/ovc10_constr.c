@@ -450,7 +450,7 @@ void __cdecl16far constr_usesAgnt_clear(void)
   int sqRight2;
   int iVar8;
   char *text;
-  uint16_t uVar9;
+  uint16_t segWord;         /* a segment half (the far pointer's, or 0x2410) */
   uint16_t unaff_SI;
   int row;
   uint unaff_DI;
@@ -481,9 +481,9 @@ void __cdecl16far constr_usesAgnt_clear(void)
   uint shadeBias;
   int bldIndex;
   byte bStack_b;
-  int iStack_a;
-  int iStack_8;
-  int iStack_6;
+  int blockedCount;         /* squares whose flags & 3 are set */
+  int openCount;            /* squares that take the else branch */
+  int step;                 /* the 0..5 interpolation step */
   uint16_t savedDstSeg;
   
   (*(uint8_t *)((uint8_t *)&(dst.seg))) = (char)_SS;
@@ -723,10 +723,10 @@ void __cdecl16far constr_usesAgnt_clear(void)
                       sqRight = (uint)*(byte *)(row + 0x728) - avgDy;
                       squareX = *(int16_t *)(&mapSquareLeftX[sq]);
                       iVar8 = bldIndex * 0xc + *(int *)(sq * 2) * 4;
-                      uVar9 = *(uint16_t *)(iVar8 + 0x4232);
-                      (*(uint8_t *)((uint8_t *)&(gfx_09.seg))) = (char)uVar9;
+                      segWord = *(uint16_t *)(iVar8 + 0x4232);
+                      (*(uint8_t *)((uint8_t *)&(gfx_09.seg))) = (char)segWord;
                       gfx_09.ofs = *(uint16_t *)(iVar8 + 0x4230);
-                      (*(uint8_t *)((uint8_t *)&(gfx_09.seg) + 1)) = (char)((uint)uVar9 >> 8);
+                      (*(uint8_t *)((uint8_t *)&(gfx_09.seg) + 1)) = (char)((uint)segWord >> 8);
                       ovr_blitGfxRect(gfx_09,squareX,sqRight,(brect_t *)BlitRects,0x10,
                                       (bool)abStack_17[row + -1],(char)squareX,(char)sqRight,0x40,
                                       0x10,abStack_17[row + -1],0);
@@ -763,12 +763,12 @@ void __cdecl16far constr_usesAgnt_clear(void)
                 }
                 else {
                   if ((*(byte *)((uint8_t *)&BuildingTypes[bldIndex] + 16) & 0x10) != 0) {
-                    for (iStack_6 = 0; iStack_6 < 6; iStack_6 = iStack_6 + 1) {
-                      sqRight = (int)(((uint)*(byte *)(row + 0x729) - smoothBL) * (5 - iStack_6))
-                              / 5 + (int)(((uint)*(byte *)(row + 0x729) - smoothBR) * iStack_6)
+                    for (step = 0; step < 6; step = step + 1) {
+                      sqRight = (int)(((uint)*(byte *)(row + 0x729) - smoothBL) * (5 - step))
+                              / 5 + (int)(((uint)*(byte *)(row + 0x729) - smoothBR) * step)
                                     / 5;
-                      iVar8 = (*(int *)((int)&AgntAnms[0x5d].sx + 1 + sq * 2) * (5 - iStack_6))
-                              / 5 + (*(int *)(&mapSquareBottomY[sq]) * iStack_6) / 5;
+                      iVar8 = (*(int *)((int)&AgntAnms[0x5d].sx + 1 + sq * 2) * (5 - step))
+                              / 5 + (*(int *)(&mapSquareBottomY[sq]) * step) / 5;
                       gfx.seg = *(uint16_t *)
                                  ((char *)0x28ed6 + bldIndex * 0xc);
                       gfx.ofs = *(uint16_t *)
@@ -777,11 +777,11 @@ void __cdecl16far constr_usesAgnt_clear(void)
                       gfx_00_00.ofs = ((bld_inst_t *)BldInstances + bldIndex)->ofs;
                       ovr_blit_usesBlitGfxN2
                                 (gfx,gfx_00_00,
-                                 (*(int *)(&mapSquareLeftX[sq]) * (5 - iStack_6)) / 5 +
-                                 (*(int *)(&mapSquareRightX[sq]) * iStack_6) / 5,
+                                 (*(int *)(&mapSquareLeftX[sq]) * (5 - step)) / 5 +
+                                 (*(int *)(&mapSquareRightX[sq]) * step) / 5,
                                  (int)(((uint)*(byte *)(row + 0x728) - smoothTL) *
-                                      (5 - iStack_6)) / 5 +
-                                 (int)(((uint)*(byte *)(row + 0x728) - smoothTR) * iStack_6) / 5
+                                      (5 - step)) / 5 +
+                                 (int)(((uint)*(byte *)(row + 0x728) - smoothTR) * step) / 5
                                  ,abStack_17[row + -1],iVar8,sqRight,abStack_17[row],
                                  (brect_t *)BlitRects,0x2410,(byte)HighlightLevel,
                                  abStack_17[row + -1],(char)iVar8,(char)sqRight,abStack_17[row],
@@ -876,8 +876,8 @@ void __cdecl16far constr_usesAgnt_clear(void)
       printf("%d \r",GGameState);
     }
     constr_usesScreenOriginY(0x440,0x2410,0x10);
-    iStack_8 = 0;
-    iStack_a = 0;
+    openCount = 0;
+    blockedCount = 0;
     for (sq = rowMapSquareFirst[0]; (int)sq < (int)rowMapSquareEnd[0]; sq = sq + 1)
     {
       if ((0xb < *(int *)(&mapSquareRightX[sq])) && (*(int *)(&mapSquareLeftX[sq]) < 0xdf)) {
@@ -902,9 +902,9 @@ void __cdecl16far constr_usesAgnt_clear(void)
             else {
               *(uint16_t *)((drawX + -0xc) * 2) = 0;
               if ((uVar4 & 3) != 0) {
-                iStack_a = iStack_a + 1;
+                blockedCount = blockedCount + 1;
               }
-              iStack_8 = iStack_8 + 1;
+              openCount = openCount + 1;
             }
           }
         }
@@ -920,7 +920,7 @@ void __cdecl16far constr_usesAgnt_clear(void)
       printf("%d \r",GGameState);
     }
     savedDstSeg = TextBlitDstSeg;
-    uVar9 = 0x2410;
+    segWord = 0x2410;
     TextBlitDstSeg = BlitRects[0].seg;
     TextBlitX = 0xb6;
     TextBlitY = 10;
@@ -934,8 +934,8 @@ void __cdecl16far constr_usesAgnt_clear(void)
       uVar4 = ovr_alignUp4(GfxRndSeed,(char)GfxRndSeed2,0);
       text = ovr_stsprintf(buf,(char *)CONCAT22(0x76b,_SS),
                            (char *)CONCAT13((char)(uVar4 >> 8),CONCAT12((char)uVar4,0x2410)),0x10);
-      ovr_blitText(text,(byte *)CONCAT13(fontOfsHi,CONCAT12(uVar12,uVar9)),CONCAT11(fontSegHi,fontSegLo),term
-                   ,(char)uVar9,uVar12,fontSegLo,term,blitColour);
+      ovr_blitText(text,(byte *)CONCAT13(fontOfsHi,CONCAT12(uVar12,segWord)),CONCAT11(fontSegHi,fontSegLo),term
+                   ,(char)segWord,uVar12,fontSegLo,term,blitColour);
     }
     TextBlitDstSeg = savedDstSeg;
     ovr_agnt_usesFmFreeAudio();

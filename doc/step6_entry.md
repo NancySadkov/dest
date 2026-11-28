@@ -24983,3 +24983,31 @@ not a split.
     diff_dgroup          288/1,805 matched (unchanged)
     compare_runtime      280 identical / 11 different at entry, init_game and key (unchanged)
     structural_deficits  two game bodies: 7e7c:0b9c (177/187), 77eb:0d61 (54/58)
+
+
+## `constr_usesAgnt_clear` (36ce:0995): four single-region slots, grep 7,526 -> 7,498
+
+    iStack_6  (766-788)  -> step          the 0..5 interpolation step in the smooth-shading loop
+    uVar9     (726,923,937) -> segWord    a segment half: the far pointer's, then 0x2410
+    iStack_a  (880,905)  -> blockedCount  squares whose flags & 3 are set
+    iStack_8  (879,907)  -> openCount     squares that take the else branch
+
+`uVar9`'s three regions are the same role - a segment word - so they share one name; the two counters
+are incremented in opposite arms of the same `if`, which is what distinguishes them.
+
+**Not touched:** `iVar8` (48), `uVar4` (35), `iVar6` (25), `uVar12` (14). Those interleave across the
+whole 538-line body (iVar8 appears in eight or more separate ranges), so the disjoint-region test
+rejects them exactly as it did `upd_usesAlignUp4`'s big four.
+
+`ovc34_unit.c` needed nothing: the only hits left there are two in `unit_usesEntities` and two in
+`ui_textDefineRegionCommand`, both already handled or one-use.
+
+## Measured (HEAD 4d155229 -> this commit)
+
+    grep_checks          7,526 -> 7,498   (-28)
+    REBUILT.EXE          447,858 (unchanged)
+    build 65/65, LINK.LOG 0 errors
+    compare_state        identical 734 / 7 different / 889 missing (unchanged)
+    diff_dgroup          288/1,805 matched (unchanged)
+    compare_runtime      280 identical / 11 different at entry, init_game and key (unchanged)
+    structural_deficits  two game bodies: 7e7c:0b9c (177/187), 77eb:0d61 (54/58)
