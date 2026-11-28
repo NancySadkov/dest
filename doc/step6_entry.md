@@ -25669,3 +25669,42 @@ declaration comments rather than in a guess.
     compare_state        identical 734 / 7 different / 889 missing (unchanged)
     diff_dgroup          288/1,805 matched (unchanged)
     compare_runtime      280 identical / 11 different at entry, init_game and key (unchanged)
+
+
+## `constrct_usesLDIV_at_` (7e7c:2b4c): 66 hits down to 0, grep 5,491 -> 5,416 (-75)
+
+The training-cost routine: it counts idle agents at the cursor, divides the class cost by that count,
+charges the party's food and bumps the sheet's gold.
+
+    iVar9  -> trainCost  AgntGs[class].shortName[5]
+              entRecA    (int)Entities[entityIdx], the sheet pointer
+              goldHiA    sheet->gold's high word
+    iVar13 -> trainCount how many idle agents are at the cursor
+              foodHiA    sheet's +0x8c word
+              entRecB    a second copy of the sheet pointer
+    uVar12 -> scanIdx    0 .. EntityCount ;  oldGoldLo  gold's low word before the add
+    uVar14 -> entSegTmp / atCursor / costHi / recSeg / foodLoA
+    uVar7  -> countHi / recSeg2
+    puVar1 -> goldLoPtr ;  piVar2 -> goldHiPtr
+    in_stack_0000ff5e -> argWord ;  unaff_SI -> argLo ;  in_stack_0000ff62 -> mulRet
+    unaff_DI -> mulOperand
+
+`entSegTmp` is the fourth never-written-before-use hoist found in this campaign: 1051 assigns
+`SEG_OF(Entities)` and 1052 immediately overwrites it with `isCursorAt`'s result. Naming it keeps the
+dead store visible instead of pretending it is part of the segment arithmetic.
+
+## Measured (HEAD 70662a3a -> this commit)
+
+    grep_checks          5,491 -> 5,416   (-75)
+    REBUILT.EXE          447,970 (unchanged size)
+    build 65/65, LINK.LOG 0 errors
+    compare_state        identical 734 / 7 different / 889 missing (unchanged)
+    diff_dgroup          288/1,805 matched (unchanged)
+    compare_runtime      280 identical / 11 different at entry, init_game and key (unchanged)
+    structural_deficits  two game bodies: 7e7c:0b9c (177/187), 77eb:0d61 (54/58)
+
+## Turn total (HEAD e850b68b -> here)
+
+    grep_checks          5,549 -> 5,416   (-133)
+      init_usesRandBelow (3381:24c3)      -58
+      constrct_usesLDIV_at_ (7e7c:2b4c)   -75

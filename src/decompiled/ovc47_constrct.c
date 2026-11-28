@@ -1016,83 +1016,93 @@ void __cdecl16far constrct_usesLDIV_at_(byte partyIndex,int entityIndex)
 
 {
   undefined1 stk_ff60;   /* stack slot ff60 */
-  uint *puVar1;
-  int *piVar2;
+  uint *goldLoPtr;          /* &sheet->gold, the low word */
+  int *goldHiPtr;           /* &sheet->gold + 2, the high word */
   byte entityIdx;
   byte classStrVal;
   uint classCost;
   long *plVar6;
   char *msg;
-  uint16_t uVar7;
+  uint16_t countHi;         /* the high half of (trainCost * 0xf) / count */
+  uint16_t recSeg2;         /* the sheet's segment, hoisted before a 32-bit read */
   uint costRemainder;
-  int iVar9;
+  int trainCost;           /* AgntGs[class].shortName[5], the class cost */
+  int entRecA;             /* (int)Entities[entityIdx], the sheet pointer */
+  int goldHiA;             /* sheet->gold's high word */
   int entPtr;
   int entPtrB;
-  uint16_t unaff_SI;
-  uint uVar12;
-  long *unaff_DI;
-  int iVar13;
-  uint16_t uVar14;
+  uint16_t argLo;           /* argWord's low word, left in SI */
+  uint scanIdx;            /* 0 .. EntityCount */
+  uint oldGoldLo;          /* sheet->gold's low word before the add */
+  long *mulOperand;         /* the left operand the image leaves in DI */
+  int trainCount;          /* how many idle agents are at the cursor */
+  int foodHiA;             /* sheet's +0x8c word */
+  int entRecB;             /* a second copy of the sheet pointer */
+  uint16_t entSegTmp;       /* SEG_OF(Entities), overwritten before use */
+  uint16_t atCursor;        /* ovr_ovc23_isCursorAt's result */
+  uint16_t costHi;          /* the high half of the training cost */
+  uint16_t recSeg;          /* the sheet's segment */
+  uint16_t foodLoA;         /* sheet's +0x8a word */
   uint16_t entSeg;
   long lVar16;
   long lVar17;
-  uint32_t in_stack_0000ff5e;
-  long in_stack_0000ff62;
+  uint32_t argWord;         /* the caller's 32-bit argument at [bp-0xa2] */
+  long mulRet;              /* LXMUL_at_'s return storage */
   uint16_t count;
   
-  lVar17 = CONCAT22((int)((ulong)in_stack_0000ff5e >> 0x10),unaff_SI);
+  lVar17 = CONCAT22((int)((ulong)argWord >> 0x10),argLo);
   entityIdx = AGNT_FIELD(&(Entities)[entityIndex], base.entity, 3);
   if ((partyIndex != 0xff) && (entityIdx != 0xff)) {
     classStrVal = (GLeaderSheets[partyIndex])->classStr;
-    iVar9 = AGNT_WORD(&AgntGs[(uint)classStrVal], shortName, 5);
+    trainCost = AGNT_WORD(&AgntGs[(uint)classStrVal], shortName, 5);
     classCost = AGNT_WORD(&AgntGs[(uint)classStrVal], shortName, 5) * 0xf;
-    iVar13 = 0;
-    for (uVar12 = 0; uVar12 < EntityCount; uVar12 = uVar12 + 1) {
-      uVar14 = (uint16_t)((ulong)Entities >> 0x10);
-      uVar14 = ovr_ovc23_isCursorAt
-                         ((Entities)[uVar12].base.x,(Entities)[uVar12].base.y,0);
-      if (((char)uVar14 != '\0') &&
-         (AgntGs[(uint)(Entities)[uVar12].base.gindex].ai == '\0')) {
-        iVar13 = iVar13 + 1;
+    trainCount = 0;
+    for (scanIdx = 0; scanIdx < EntityCount; scanIdx = scanIdx + 1) {
+      entSegTmp = (uint16_t)((ulong)Entities >> 0x10);
+      atCursor = ovr_ovc23_isCursorAt
+                         ((Entities)[scanIdx].base.x,(Entities)[scanIdx].base.y,0);
+      if (((char)atCursor != '\0') &&
+         (AgntGs[(uint)(Entities)[scanIdx].base.gindex].ai == '\0')) {
+        trainCount = trainCount + 1;
       }
     }
-    lVar16 = LDIV_at_((ulong)(uint)(iVar9 * 0xf),(long)iVar13);
-    uVar7 = (uint16_t)((ulong)(lVar16 + 1) >> 0x10);
-    uVar14 = uVar7;
-    plVar6 = LXMUL_at_(unaff_DI,lVar17,in_stack_0000ff62);
+    lVar16 = LDIV_at_((ulong)(uint)(trainCost * 0xf),(long)trainCount);
+    countHi = (uint16_t)((ulong)(lVar16 + 1) >> 0x10);
+    costHi = countHi;
+    plVar6 = LXMUL_at_(mulOperand,lVar17,mulRet);
     count = (uint16_t)(lVar16 + 1);
     msg = ovr_stsprintf(&stk_ff60,(char *)CONCAT22(0x81dc,_SS),
-                        (char *)CONCAT22(plVar6,(char *)0x2410),uVar14,count,uVar7,
+                        (char *)CONCAT22(plVar6,(char *)0x2410),costHi,count,countHi,
                         classCost);
     ovr_say(msg,0);
     lVar17 = LDIV_at_((ulong)classCost,10);
-    uVar14 = (uint16_t)((ulong)*(uint32_t *)((uint)entityIdx << 2) >> 0x10);
-    iVar9 = (int)*(uint32_t *)((uint)entityIdx << 2);
+    recSeg = (uint16_t)((ulong)*(uint32_t *)((uint)entityIdx << 2) >> 0x10);
+    entRecA = (int)*(uint32_t *)((uint)entityIdx << 2);
     costRemainder = classCost - (uint)lVar17;
-    puVar1 = (uint *)(iVar9 + 0x56);
-    uVar12 = *puVar1;
-    *puVar1 = *puVar1 + costRemainder;
-    piVar2 = (int *)(iVar9 + 0x58);
-    *piVar2 = *piVar2 + (-(uint)(classCost < (uint)lVar17) - (int)((ulong)lVar17 >> 0x10)) +
-              (uint)CARRY2(uVar12,costRemainder);
+    goldLoPtr = (uint *)(entRecA + 0x56);
+    oldGoldLo = *goldLoPtr;
+    *goldLoPtr = *goldLoPtr + costRemainder;
+    goldHiPtr = (int *)(entRecA + 0x58);
+    *goldHiPtr = *goldHiPtr + (-(uint)(classCost < (uint)lVar17) - (int)((ulong)lVar17 >> 0x10)) +
+              (uint)CARRY2(oldGoldLo,costRemainder);
     lVar17 = lVar17 + CONCAT22(GPopulationHi,GPopulationLo);
     GPopulationLo = (uint16_t)lVar17;
     GPopulationHi = (uint16_t)((ulong)lVar17 >> 0x10);
-    uVar14 = (uint16_t)((ulong)*(uint32_t *)((uint)entityIdx << 2) >> 0x10);
+    recSeg = (uint16_t)((ulong)*(uint32_t *)((uint)entityIdx << 2) >> 0x10);
     entPtr = (int)*(uint32_t *)((uint)entityIdx << 2);
-    iVar9 = *(int *)(entPtr + 0x58);
-    uVar7 = (uint16_t)((ulong)*(uint32_t *)((uint)entityIdx << 2) >> 0x10);
+    goldHiA = *(int *)(entPtr + 0x58);
+    recSeg2 = (uint16_t)((ulong)*(uint32_t *)((uint)entityIdx << 2) >> 0x10);
     entPtrB = (int)*(uint32_t *)((uint)entityIdx << 2);
-    iVar13 = *(int *)(entPtrB + 0x8c);
-    if ((iVar13 <= iVar9) &&
-       ((iVar13 < iVar9 || (*(uint *)(entPtrB + 0x8a) < *(uint *)(entPtr + 0x56))))) {
-      uVar7 = (uint16_t)((ulong)*(uint32_t *)((uint)entityIdx << 2) >> 0x10);
-      iVar9 = (int)*(uint32_t *)((uint)entityIdx << 2);
-      uVar14 = *(uint16_t *)(iVar9 + 0x8a);
+    foodHiA = *(int *)(entPtrB + 0x8c);
+    if ((foodHiA <= goldHiA) &&
+       ((foodHiA < goldHiA || (*(uint *)(entPtrB + 0x8a) < *(uint *)(entPtr + 0x56))))) {
+      recSeg2 = (uint16_t)((ulong)*(uint32_t *)((uint)entityIdx << 2) >> 0x10);
+      entRecA = (int)*(uint32_t *)((uint)entityIdx << 2);
+      foodLoA = *(uint16_t *)(entRecA + 0x8a);
       entSeg = (uint16_t)((ulong)*(uint32_t *)((uint)entityIdx << 2) >> 0x10);
-      iVar13 = (int)*(uint32_t *)((uint)entityIdx << 2);
-      *(uint16_t *)(iVar13 + 0x58) = *(uint16_t *)(iVar9 + 0x8c);
-      *(uint16_t *)(iVar13 + 0x56) = uVar14;
+      entRecB = (int)*(uint32_t *)((uint)entityIdx << 2);
+      *(uint16_t *)(entRecB + 0x58) = *(uint16_t *)(entRecA + 0x8c);
+      *(uint16_t *)(entRecB + 0x56) = foodLoA;
       lVar17 = CONCAT22(GPopulationHi,GPopulationLo);
     }
     GPopulationHi = (uint16_t)((ulong)lVar17 >> 0x10);
