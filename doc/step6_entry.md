@@ -22818,3 +22818,37 @@ from their provable roles in the ring scan:
     screen_calls     unchanged
 
 Cumulative renaming: 10,057 -> 9,822 (-235 in two batches).
+
+
+## Renaming batch 3: upd_usesAlignUp4 - only 2 of 31 variables are safely nameable
+
+`upd_usesAlignUp4` (5087:1d7d, 824 lines, 376 Ghidra-name hits, 31 distinct variables) is dominated by
+**slot reuse**: Ghidra assigns several unrelated roles to the same local, so one new name would be
+wrong in some scopes. Measured from the body:
+
+    uVar23   both an amount (`*((uint far *)GLeaderSheets[idx] + 0x54)`) and an entity index
+             (`&(Entities)[uVar23].base.animFrame`)
+    bVar27   both a carry (`CARRY2(GPopulationLo,uStack_10)`) and a boolean flag set true/false
+             and tested in `if ((bVar27) && ...)`
+    iVar17   a gold accumulator in one scope, a plain field value in another
+
+Only two have a single consistent role across all their uses:
+
+    uVar25    every one of its 10 assignments is
+              `(uint16_t)((ulong)(uint32_t)GLeaderSheets[idx] >> 0x10)`   -> sheetSeg
+    uStack_a  every use is a trade/food amount (maxTrade, gold+0x56, +0x60, stored into foodSold)
+                                                                           -> tradeAmount
+
+Renaming the other 29 requires splitting the reused slots into distinct variables first, which is a
+rewrite of the body rather than a rename.
+
+## Measured (HEAD ec03d2e4 -> this commit)
+
+    grep_checks      9,822 -> 9,798    (-24)
+    REBUILT.EXE      446,712 (unchanged)
+    build 65/65, LINK.LOG 0 errors
+    compare_state    292 matched / 7 different / missing 889 (unchanged)
+    diff_dgroup      288/1,805 matched (unchanged)
+    compare_runtime  280 identical / 11 different (unchanged, all three sample points)
+
+Cumulative renaming: 10,057 -> 9,798 (-259 in three batches).

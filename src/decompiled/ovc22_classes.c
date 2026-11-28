@@ -1119,7 +1119,7 @@ void __cdecl16far upd_usesAlignUp4(void)
   uint leaderIdxB;   /* the 0..GLeaderCount loop at 3529 only */
   uint unitIdx;   /* the 0xf8..GUnitCount loops only */
   uint16_t unitsSeg;
-  uint16_t uVar25;
+  uint16_t sheetSeg;
   uint16_t uVar26;
   bool bVar27;
   far_t table;
@@ -1149,7 +1149,7 @@ void __cdecl16far upd_usesAlignUp4(void)
   uint uStack_10;
   int iStack_e;
   int iStack_c;
-  uint uStack_a;
+  uint tradeAmount;
   uint16_t uStack_8;
   byte gindex;
   byte firstLeader;
@@ -1241,7 +1241,7 @@ void __cdecl16far upd_usesAlignUp4(void)
             if ((units[unitIdx].unitType == idx) &&
                (BuildingTypes[bldType].income < 0)) {
               uVar12 = BuildingTypes[bldType].income;
-              uVar25 = (uint16_t)((ulong)(uint32_t)GLeaderSheets[idx] >> 0x10);
+              sheetSeg = (uint16_t)((ulong)(uint32_t)GLeaderSheets[idx] >> 0x10);
               iVar17 = *(int far *)((uint8_t far *)GLeaderSheets[idx] + 0x58) + ((int)uVar12 >> 0xf) +
                        (uint)CARRY2(*(uint far *)((uint8_t far *)GLeaderSheets[idx] + 0x56),uVar12);
               if ((iVar17 < 1) && (iVar17 < 0)) {
@@ -1334,24 +1334,24 @@ void __cdecl16far upd_usesAlignUp4(void)
               *accHi = *accHi - (uint)(uVar23 < uStack_14);
             }
             if (popAcc != 0) {
-              uStack_a = popAcc;
+              tradeAmount = popAcc;
               if ((GLeaderSheets[idx])->maxTrade < popAcc) {
-                uStack_a = (GLeaderSheets[idx])->maxTrade;
+                tradeAmount = (GLeaderSheets[idx])->maxTrade;
               }
               unitsSeg = (uint16_t)((ulong)(uint32_t)GLeaderSheets[idx] >> 0x10);
               uVar23 = *(uint far *)((uint8_t far *)GLeaderSheets[idx] + 0x58);
-              if (((int)uVar23 < 1) && ((0x7fff < uVar23 || (*(uint far *)((uint8_t far *)GLeaderSheets[idx] + 0x56) < uStack_a))))
+              if (((int)uVar23 < 1) && ((0x7fff < uVar23 || (*(uint far *)((uint8_t far *)GLeaderSheets[idx] + 0x56) < tradeAmount))))
               {
-                uStack_a = *((uint far *)GLeaderSheets[idx] + 0x56);
+                tradeAmount = *((uint far *)GLeaderSheets[idx] + 0x56);
               }
               unitsSeg = (uint16_t)((ulong)(uint32_t)GLeaderSheets[idx] >> 0x10);
               accLo = (uint far *)((uint8_t far *)GLeaderSheets[idx] + 0x56);
               uVar23 = *accLo;
-              *accLo = *accLo - uStack_a;
+              *accLo = *accLo - tradeAmount;
               accHi = (int far *)((uint8_t far *)GLeaderSheets[idx] + 0x58);
-              *accHi = *accHi - (uint)(uVar23 < uStack_a);
-              popAcc = popAcc - uStack_a;
-              (GLeaderSheets[idx])->foodSold = uStack_a;
+              *accHi = *accHi - (uint)(uVar23 < tradeAmount);
+              popAcc = popAcc - tradeAmount;
+              (GLeaderSheets[idx])->foodSold = tradeAmount;
             }
             if (sheetFaction == '\0') {
               for (iVar17 = 0; (popAcc != 0 && (iVar17 < (int)(uint)GLeaderCount));
@@ -1418,14 +1418,14 @@ void __cdecl16far upd_usesAlignUp4(void)
         unitsSeg = (uint16_t)((ulong)(uint32_t)GLeaderSheets[idx] >> 0x10);
         iVar18 = (int)(uint32_t)GLeaderSheets[idx];
         iVar17 = *(int *)(iVar18 + 0x62);
-        uVar25 = (uint16_t)((ulong)(uint32_t)GLeaderSheets[idx] >> 0x10);
+        sheetSeg = (uint16_t)((ulong)(uint32_t)GLeaderSheets[idx] >> 0x10);
         sheetOfs = (int)(uint32_t)GLeaderSheets[idx];
         iVar21 = *(int *)(sheetOfs + 0x80);
         if ((iVar21 <= iVar17) &&
            ((iVar21 < iVar17 || (*(uint *)(sheetOfs + 0x7e) < *(uint *)(iVar18 + 0x60))))) {
           unitsSeg = (uint16_t)((ulong)(uint32_t)GLeaderSheets[idx] >> 0x10);
           uVar23 = *(uint far *)((uint8_t far *)GLeaderSheets[idx] + 0x60);
-          uVar25 = (uint16_t)((ulong)(uint32_t)GLeaderSheets[idx] >> 0x10);
+          sheetSeg = (uint16_t)((ulong)(uint32_t)GLeaderSheets[idx] >> 0x10);
           iVar21 = (int)(uint32_t)GLeaderSheets[idx];
           accLo = (uint *)(iVar21 + 0x7e);
           uVar12 = (uint)(uVar23 < *accLo);
@@ -1433,20 +1433,20 @@ void __cdecl16far upd_usesAlignUp4(void)
           if (((int)(uVar36 - uVar12) < 0) ||
              ((uVar36 == uVar12 &&
               (uVar23 - *accLo <= (GLeaderSheets[idx])->maxTrade)))) {
-            uStack_a = *((int far *)GLeaderSheets[idx] + 0x60) -
+            tradeAmount = *((int far *)GLeaderSheets[idx] + 0x60) -
                        *((int far *)GLeaderSheets[idx] + 0x7e);
           }
           else {
-            uStack_a = (GLeaderSheets[idx])->maxTrade;
+            tradeAmount = (GLeaderSheets[idx])->maxTrade;
           }
-          (GLeaderSheets[idx])->foodSold = -uStack_a;
+          (GLeaderSheets[idx])->foodSold = -tradeAmount;
           unitsSeg = (uint16_t)((ulong)(uint32_t)GLeaderSheets[idx] >> 0x10);
           accLo = (uint far *)((uint8_t far *)GLeaderSheets[idx] + 0x56);
           uVar23 = *accLo;
-          *accLo = *accLo + uStack_a;
+          *accLo = *accLo + tradeAmount;
           accHi = (int far *)((uint8_t far *)GLeaderSheets[idx] + 0x58);
-          *accHi = *accHi + (uint)CARRY2(uVar23,uStack_a);
-          uVar25 = (uint16_t)((ulong)(uint32_t)GLeaderSheets[idx] >> 0x10);
+          *accHi = *accHi + (uint)CARRY2(uVar23,tradeAmount);
+          sheetSeg = (uint16_t)((ulong)(uint32_t)GLeaderSheets[idx] >> 0x10);
           unitsSeg = *(uint16_t far *)((uint8_t far *)GLeaderSheets[idx] + 0x7e);
           uVar26 = (uint16_t)((ulong)(uint32_t)GLeaderSheets[idx] >> 0x10);
           iVar21 = (int)(uint32_t)GLeaderSheets[idx];
@@ -1545,7 +1545,7 @@ void __cdecl16far upd_usesAlignUp4(void)
             unitsSeg = (uint16_t)((ulong)(uint32_t)GLeaderSheets[idx] >> 0x10);
             iVar18 = (int)(uint32_t)GLeaderSheets[idx];
             iVar17 = *(int *)(iVar18 + 0x58);
-            uVar25 = (uint16_t)((ulong)(uint32_t)GLeaderSheets[idx] >> 0x10);
+            sheetSeg = (uint16_t)((ulong)(uint32_t)GLeaderSheets[idx] >> 0x10);
             sheetOfs = (int)(uint32_t)GLeaderSheets[idx];
             iVar21 = *(int *)(sheetOfs + 0x8c);
             if ((iVar21 <= iVar17) &&
@@ -1560,7 +1560,7 @@ void __cdecl16far upd_usesAlignUp4(void)
                    0xffffU) / 100;
               unitsSeg = (uint16_t)((ulong)(uint32_t)GLeaderSheets[idx] >> 0x10);
               uVar12 = *(uint far *)((uint8_t far *)GLeaderSheets[idx] + 0x8a);
-              uVar25 = (uint16_t)((ulong)(uint32_t)GLeaderSheets[idx] >> 0x10);
+              sheetSeg = (uint16_t)((ulong)(uint32_t)GLeaderSheets[idx] >> 0x10);
               iVar21 = (int)(uint32_t)GLeaderSheets[idx];
               accLo = (uint *)(iVar21 + 0x56);
               iVar17 = (*(int far *)((uint8_t far *)GLeaderSheets[idx] + 0x8c) - *(int *)(iVar21 + 0x58)) -
@@ -1568,7 +1568,7 @@ void __cdecl16far upd_usesAlignUp4(void)
               if ((iVar17 < 1) && ((iVar17 < 0 || (uVar12 - *accLo < (uint)in_stack_0000ffd2)))) {
                 unitsSeg = (uint16_t)((ulong)(uint32_t)GLeaderSheets[idx] >> 0x10);
                 uVar12 = *(uint far *)((uint8_t far *)GLeaderSheets[idx] + 0x8a);
-                uVar25 = (uint16_t)((ulong)(uint32_t)GLeaderSheets[idx] >> 0x10);
+                sheetSeg = (uint16_t)((ulong)(uint32_t)GLeaderSheets[idx] >> 0x10);
                 iVar21 = (int)(uint32_t)GLeaderSheets[idx];
                 accLo = (uint *)(iVar21 + 0x56);
                 in_stack_0000ffd2 =
@@ -1613,12 +1613,12 @@ void __cdecl16far upd_usesAlignUp4(void)
         unitsSeg = (uint16_t)((ulong)(uint32_t)GLeaderSheets[idx] >> 0x10);
         iVar18 = (int)(uint32_t)GLeaderSheets[idx];
         iVar17 = *(int *)(iVar18 + 0x58);
-        uVar25 = (uint16_t)((ulong)(uint32_t)GLeaderSheets[idx] >> 0x10);
+        sheetSeg = (uint16_t)((ulong)(uint32_t)GLeaderSheets[idx] >> 0x10);
         sheetOfs = (int)(uint32_t)GLeaderSheets[idx];
         iVar21 = *(int *)(sheetOfs + 0x8c);
         if ((iVar21 <= iVar17) &&
            ((iVar21 < iVar17 || (*(uint *)(sheetOfs + 0x8a) < *(uint *)(iVar18 + 0x56))))) {
-          uVar25 = (uint16_t)((ulong)(uint32_t)GLeaderSheets[idx] >> 0x10);
+          sheetSeg = (uint16_t)((ulong)(uint32_t)GLeaderSheets[idx] >> 0x10);
           unitsSeg = *(uint16_t far *)((uint8_t far *)GLeaderSheets[idx] + 0x8a);
           uVar26 = (uint16_t)((ulong)(uint32_t)GLeaderSheets[idx] >> 0x10);
           iVar21 = (int)(uint32_t)GLeaderSheets[idx];
