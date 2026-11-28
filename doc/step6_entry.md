@@ -25179,3 +25179,41 @@ identical.
     diff_dgroup          288/1,805 matched (unchanged)
     compare_runtime      280 identical / 11 different at entry, init_game and key (unchanged)
     structural_deficits  two game bodies: 7e7c:0b9c (177/187), 77eb:0d61 (54/58)
+
+
+## `ovc07_usesLDIV_at_` (32c9:0466): the Cohen-Sutherland clipper named, grep 6,753 -> 6,615 (-138)
+
+145 lines, and the slots are the routine's real variables rather than reuses:
+
+    puVar1 -> clipX0   rect->x, the left clip edge        iVar2 -> clipY0   rect->y, the top
+    puVar3 -> clipX1   rect->w, the right clip edge       iVar4 -> clipY1   rect->h, the bottom
+    uVar14 -> outpack   both endpoints' outcodes packed 4 bits each
+    uVar13 -> out2      the second endpoint's packed outcodes
+    bStack_e -> outcodeA ;  bVar15 -> outcodeB ;  bVar11 -> anyOut
+    iVar8  -> deltaHi   the high word of a 32-bit delta
+    iVar9  -> divHi     the high word of the division numerator
+    puVar5 -> curOfs    the endpoint the loop is working on
+
+`iVar10` (12 hits) is left: it alternates inside one straight-line block between the current row
+scratch (`iVar10 = row1` / `iVar10 = row2`) and the numerator's high word
+(`iVar10 = iVar4 - iVar10 >> 0xf`), and the same value is then read by both roles at 347/367 - the
+copy that would have to be inserted to separate them is not visible in the statement text.
+
+## Measured (HEAD 8367e78f -> this commit)
+
+    grep_checks          6,753 -> 6,615   (-138)
+    REBUILT.EXE          447,778 (unchanged size)
+    build 65/65, LINK.LOG 0 errors
+    compare_state        identical 734 / 7 different / 889 missing (unchanged)
+    diff_dgroup          288/1,805 matched (unchanged)
+    compare_runtime      280 identical / 11 different at entry, init_game and key (unchanged)
+    structural_deficits  two game bodies: 7e7c:0b9c (177/187), 77eb:0d61 (54/58)
+
+## Session total (HEAD f82077c8 -> here)
+
+    grep_checks          7,491 -> 6,615   (-876)
+      upd_usesAlignUp4 (5087:1d7d)        -304
+      ovc49_drawAgents (8699:1e09)        -257
+      run_demo (6d7a:08df)                -177
+      ovc_07_usesLDIV_at_ (32c9:0466)     -138
+    every batch built 65/65, linked with 0 errors, and moved no other gate.

@@ -255,136 +255,136 @@ void __cdecl16far
 ovc07_usesLDIV_at_(int ofs1,int row1,int ofs2,int row2,uint8_t colour,brect_t *rect,uint16_t arg7)
 
 {
-  uint8_t *puVar1;
-  int iVar2;
-  uint8_t *puVar3;
-  int iVar4;
-  uint8_t *puVar5;
+  uint8_t *clipX0;          /* rect->x, the left clip edge */
+  int clipY0;               /* rect->y, the top clip edge */
+  uint8_t *clipX1;          /* rect->w, the right clip edge */
+  int clipY1;               /* rect->h, the bottom clip edge */
+  uint8_t *curOfs;          /* the endpoint the loop is working on */
   long *plVar6;
   long *plVar7;
-  int iVar8;
-  int iVar9;
+  int deltaHi;               /* the high word of a 32-bit delta */
+  int divHi;                /* the high word of the division numerator */
   int iVar10;
   uint unaff_SI;
   uint16_t unaff_DI;
-  bool bVar11;
+  bool anyOut;              /* either endpoint is still outside */
   long lVar12;
   uint16_t in_stack_00000010;
-  uint3 uVar13;
-  byte bVar15;
+  uint3 out2;                /* the second endpoint's packed outcodes */
+  byte outcodeB;            /* the second endpoint's outcode byte */
   ulong b;
-  byte bStack_e;
-  ulong uVar14;
+  byte outcodeA;            /* the first endpoint's outcode byte */
+  ulong outpack;            /* both endpoints' outcodes, packed 4 bits each */
   
-  puVar1 = (uint8_t *)rect->x;
-  iVar2 = rect->y;
-  puVar3 = (uint8_t *)rect->w;
-  iVar4 = rect->h;
-  uVar14 = (ulong)unaff_SI;
-  if (ofs1 < (int)puVar1) {
-    uVar14 = CONCAT13(1,(uint3)unaff_SI);
+  clipX0 = (uint8_t *)rect->x;
+  clipY0 = rect->y;
+  clipX1 = (uint8_t *)rect->w;
+  clipY1 = rect->h;
+  outpack = (ulong)unaff_SI;
+  if (ofs1 < (int)clipX0) {
+    outpack = CONCAT13(1,(uint3)unaff_SI);
   }
-  if ((int)puVar3 < ofs1) {
-    uVar14 = CONCAT13((char)(uVar14 >> 0x18) + '\x04',(int3)uVar14);
+  if ((int)clipX1 < ofs1) {
+    outpack = CONCAT13((char)(outpack >> 0x18) + '\x04',(int3)outpack);
   }
-  if (row1 < iVar2) {
-    uVar14 = CONCAT13((char)(uVar14 >> 0x18) + '\x02',(int3)uVar14);
+  if (row1 < clipY0) {
+    outpack = CONCAT13((char)(outpack >> 0x18) + '\x02',(int3)outpack);
   }
-  if (iVar4 < row1) {
-    uVar14 = CONCAT13((char)(uVar14 >> 0x18) + '\b',(int3)uVar14);
+  if (clipY1 < row1) {
+    outpack = CONCAT13((char)(outpack >> 0x18) + '\b',(int3)outpack);
   }
-  bStack_e = (byte)(uVar14 >> 0x18);
-  uVar13 = (uint3)(uint)uVar14;
-  if (ofs2 < (int)puVar1) {
-    uVar13 = CONCAT12(1,(uint)uVar14);
+  outcodeA = (byte)(outpack >> 0x18);
+  out2 = (uint3)(uint)outpack;
+  if (ofs2 < (int)clipX0) {
+    out2 = CONCAT12(1,(uint)outpack);
   }
-  if ((int)puVar3 < ofs2) {
-    uVar13 = CONCAT12((char)(uVar13 >> 0x10) + '\x04',(int)uVar13);
+  if ((int)clipX1 < ofs2) {
+    out2 = CONCAT12((char)(out2 >> 0x10) + '\x04',(int)out2);
   }
-  if (row2 < iVar2) {
-    uVar13 = CONCAT12((char)(uVar13 >> 0x10) + '\x02',(int)uVar13);
+  if (row2 < clipY0) {
+    out2 = CONCAT12((char)(out2 >> 0x10) + '\x02',(int)out2);
   }
-  if (iVar4 < row2) {
-    uVar13 = CONCAT12((char)(uVar13 >> 0x10) + '\b',(int)uVar13);
+  if (clipY1 < row2) {
+    out2 = CONCAT12((char)(out2 >> 0x10) + '\b',(int)out2);
   }
-  uVar14 = CONCAT13(bStack_e,uVar13);
-  bVar15 = (byte)(uVar13 >> 0x10);
-  bVar11 = bStack_e != 0 || bVar15 != 0;
-  bStack_e = bStack_e & bVar15;
-  while ((bStack_e == 0 && (bVar11))) {
-    puVar5 = (uint8_t *)ofs1;
+  outpack = CONCAT13(outcodeA,out2);
+  outcodeB = (byte)(out2 >> 0x10);
+  anyOut = outcodeA != 0 || outcodeB != 0;
+  outcodeA = outcodeA & outcodeB;
+  while ((outcodeA == 0 && (anyOut))) {
+    curOfs = (uint8_t *)ofs1;
     iVar10 = row1;
-    b = uVar14;
-    if ((char)(uVar14 >> 0x18) == '\0') {
-      b = CONCAT13((char)(uVar14 >> 0x10),(uint3)(uint)uVar14);
-      puVar5 = (uint8_t *)ofs2;
+    b = outpack;
+    if ((char)(outpack >> 0x18) == '\0') {
+      b = CONCAT13((char)(outpack >> 0x10),(uint3)(uint)outpack);
+      curOfs = (uint8_t *)ofs2;
       iVar10 = row2;
       ofs2 = ofs1;
       row2 = row1;
     }
-    ofs1 = (int)puVar5;
+    ofs1 = (int)curOfs;
     if ((b & 0x1000000) == 0) {
       if ((b & 0x2000000) == 0) {
         if ((b & 0x4000000) == 0) {
           row1 = iVar10;
           if ((b & 0x8000000) != 0) {
             plVar6 = (long *)(row2 - iVar10);
-            iVar8 = (int)plVar6 >> 0xf;
-            iVar10 = iVar4 - iVar10 >> 0xf;
-            plVar7 = LXMUL_at_(plVar6,CONCAT22(unaff_DI,iVar8),b);
-            lVar12 = LDIV_at_((long)CONCAT22(iVar10,plVar7),(long)CONCAT22(iVar8,plVar6));
+            deltaHi = (int)plVar6 >> 0xf;
+            iVar10 = clipY1 - iVar10 >> 0xf;
+            plVar7 = LXMUL_at_(plVar6,CONCAT22(unaff_DI,deltaHi),b);
+            lVar12 = LDIV_at_((long)CONCAT22(iVar10,plVar7),(long)CONCAT22(deltaHi,plVar6));
             ofs1 = ofs1 + (int)lVar12;
-            row1 = iVar4;
+            row1 = clipY1;
           }
         }
         else {
           plVar6 = (long *)(ofs2 - ofs1);
-          iVar8 = (int)plVar6 >> 0xf;
-          iVar9 = (int)puVar3 - ofs1 >> 0xf;
-          plVar7 = LXMUL_at_(plVar6,CONCAT22(unaff_DI,iVar8),b);
-          lVar12 = LDIV_at_((long)CONCAT22(iVar9,plVar7),(long)CONCAT22(iVar8,plVar6));
-          ofs1 = (int)puVar3;
+          deltaHi = (int)plVar6 >> 0xf;
+          divHi = (int)clipX1 - ofs1 >> 0xf;
+          plVar7 = LXMUL_at_(plVar6,CONCAT22(unaff_DI,deltaHi),b);
+          lVar12 = LDIV_at_((long)CONCAT22(divHi,plVar7),(long)CONCAT22(deltaHi,plVar6));
+          ofs1 = (int)clipX1;
           row1 = iVar10 + (int)lVar12;
         }
       }
       else {
         plVar6 = (long *)(row2 - iVar10);
-        iVar8 = (int)plVar6 >> 0xf;
-        iVar10 = iVar2 - iVar10 >> 0xf;
-        plVar7 = LXMUL_at_(plVar6,CONCAT22(unaff_DI,iVar8),b);
-        lVar12 = LDIV_at_((long)CONCAT22(iVar10,plVar7),(long)CONCAT22(iVar8,plVar6));
+        deltaHi = (int)plVar6 >> 0xf;
+        iVar10 = clipY0 - iVar10 >> 0xf;
+        plVar7 = LXMUL_at_(plVar6,CONCAT22(unaff_DI,deltaHi),b);
+        lVar12 = LDIV_at_((long)CONCAT22(iVar10,plVar7),(long)CONCAT22(deltaHi,plVar6));
         ofs1 = (int)(ofs1 + (int)lVar12);
-        row1 = iVar2;
+        row1 = clipY0;
       }
     }
     else {
       plVar6 = (long *)(ofs2 - ofs1);
-      iVar8 = (int)plVar6 >> 0xf;
-      iVar9 = (int)puVar1 - ofs1 >> 0xf;
-      plVar7 = LXMUL_at_(plVar6,CONCAT22(unaff_DI,iVar8),b);
-      lVar12 = LDIV_at_((long)CONCAT22(iVar9,plVar7),(long)CONCAT22(iVar8,plVar6));
-      ofs1 = (int)puVar1;
+      deltaHi = (int)plVar6 >> 0xf;
+      divHi = (int)clipX0 - ofs1 >> 0xf;
+      plVar7 = LXMUL_at_(plVar6,CONCAT22(unaff_DI,deltaHi),b);
+      lVar12 = LDIV_at_((long)CONCAT22(divHi,plVar7),(long)CONCAT22(deltaHi,plVar6));
+      ofs1 = (int)clipX0;
       row1 = iVar10 + (int)lVar12;
     }
-    uVar14 = b & 0xffffff;
-    if (ofs1 < (int)puVar1) {
-      uVar14 = CONCAT13(1,(int3)b);
+    outpack = b & 0xffffff;
+    if (ofs1 < (int)clipX0) {
+      outpack = CONCAT13(1,(int3)b);
     }
-    if ((int)puVar3 < ofs1) {
-      uVar14 = CONCAT13((char)(uVar14 >> 0x18) + '\x04',(int3)uVar14);
+    if ((int)clipX1 < ofs1) {
+      outpack = CONCAT13((char)(outpack >> 0x18) + '\x04',(int3)outpack);
     }
-    if (row1 < iVar2) {
-      uVar14 = CONCAT13((char)(uVar14 >> 0x18) + '\x02',(int3)uVar14);
+    if (row1 < clipY0) {
+      outpack = CONCAT13((char)(outpack >> 0x18) + '\x02',(int3)outpack);
     }
-    if (iVar4 < row1) {
-      uVar14 = CONCAT13((char)(uVar14 >> 0x18) + '\b',(int3)uVar14);
+    if (clipY1 < row1) {
+      outpack = CONCAT13((char)(outpack >> 0x18) + '\b',(int3)outpack);
     }
-    bStack_e = (byte)(uVar14 >> 0x18);
-    bVar15 = (byte)(uVar14 >> 0x10);
-    bVar11 = bStack_e != 0 || bVar15 != 0;
-    bStack_e = bStack_e & bVar15;
+    outcodeA = (byte)(outpack >> 0x18);
+    outcodeB = (byte)(outpack >> 0x10);
+    anyOut = outcodeA != 0 || outcodeB != 0;
+    outcodeA = outcodeA & outcodeB;
   }
-  if (!bVar11) {
+  if (!anyOut) {
     ovr_driver_drawLine((uint8_t *)ofs1,row1,(uint8_t *)ofs2,row2,colour,colour,rect->seg,0,0);
   }
   return;
