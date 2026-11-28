@@ -418,7 +418,7 @@ int __cdecl16far stSave(byte slot)
 
   ovr_drawTextAt((char far *)"Saving...",0xa000);
   ovr_stop_audio();
-  name = ovr_fmVsprintf((char far *)MK_FP(_DS,(uint16_t)&s_ssave_03d_2410_47a9[0]),
+  name = ovr_fmVsprintf((char far *)MK_FP(_DS,(uint16_t)"%ssave.%03d"),
                         (char far *)MK_FP(_DS,(uint16_t)&GWorkDir[0]),(uint16_t)slot);
   handle = (int)ovr_creat_wait_unlock_and_disk(name);
   if (handle < 0) {
@@ -594,7 +594,7 @@ int __cdecl16far stSave(byte slot)
 
 werror:
   close(handle);
-  name = ovr_fmVsprintf((char far *)MK_FP(_DS,(uint16_t)&s_ssave_03d_2410_47a9[0]),
+  name = ovr_fmVsprintf((char far *)MK_FP(_DS,(uint16_t)"%ssave.%03d"),
                         (char far *)MK_FP(_DS,(uint16_t)&GWorkDir[0]),(uint16_t)slot);
   unlink((char *)name);
 nofile:

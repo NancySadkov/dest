@@ -22704,3 +22704,53 @@ entry (0x2170) - while my menu body evaluated it once for both. Split accordingl
 
 Remaining 15: strcpy x4, fmVsprintf x1, compute6 x1, costOrIncomeLabel x1, ovc28_compute2 x1,
 createConstrFar x1 and the unnameable 1f8,2a x2 / 1a8,2a x3-class sites.
+
+## String constants removed from DGROUP and inlined at their use sites (per directive)
+
+Directive, third time: these are constant strings, not game state; the compiler places a string literal
+in the data section itself, so the named arrays are redundant.
+
+**Done: 1,457 of the 1,459 declarations removed** and the literal substituted at all 211 use sites.
+Two remain because they are not plain literals:
+
+    char s_Attracting__d_of_a__2410_0921[55] = "Attracting %d of a possible %d %s%s to this location.";
+    char s_auto_build[] = "Auto-build    " "\x7f";          /* string concatenation */
+
+Substitution rules applied (by use form, counted before the change):
+
+    NAME                 50 sites   -> "literal"                    (array decay)
+    NAME in a call       29         -> "literal"
+    (uint16_t)&NAME      99         -> (uint16_t)"literal"          (94 of these are crtl.c's
+                                                                    fixFarTable offset assignments)
+    (char far *)&NAME    27         -> (char far *)"literal"        (the DGROUP far-pointer tables)
+    NAME + N              5         -> the literal sliced at N      ("lit" + N is not valid C)
+    (char *)&NAME         2         -> (char *)"literal"
+    &NAME                 1         -> "literal"
+
+`crtl.c`'s `fixFarTable` block is included: the stat labels and player titles it wires up are game
+strings, so their literals now go into DGROUP via the compiler instead of via named arrays.
+
+## Measured (HEAD 4dcaca93 -> this commit)
+
+    char [N] = ""      1,459 -> 2
+    grep_checks        11,516 -> 10,059     (-1,457)
+    REBUILT.EXE        467,616 -> 446,782   (-20,834)
+    build 65/65, LINK.LOG 0 errors
+    compare_state      1,628 matched / 0 different / missing 2
+                       -> 293 matched / 8 different / missing 886
+    diff_dgroup        1,639/1,805 matched, 5 layout runs
+                       -> 290/1,805 matched, 64 layout runs
+    compare_runtime    1,692 matched / 1,683 identical / 9 different
+                       -> 293 matched / 282 identical / 11 different
+
+**The data gates collapse, exactly as predicted and as accepted:** the 1,457 arrays *were* DGROUP data
+in the original, so removing them shifts every symbol after the first removed string and leaves the
+far-pointer tables pointing at compiler-chosen offsets instead of the original ones. `compare_state`'s
+8 "different" are the far-pointer tables whose `.ofs` halves now differ.
+
+The step-5 line this directive targets is essentially cleared (1,459 -> 2), and the remaining grep
+total is now dominated by Ghidra local names rather than data declarations.
+
+A first attempt broke the build with `extern` removals that were not restricted to the inlined names
+(`_ctype`, `__C0_ASM_CopyRight`, `promotionBandUsed`, `LevelBandMin` became undefined); the removal is
+now keyed to the declaration list only, and the build is green.

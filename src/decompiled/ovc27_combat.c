@@ -903,7 +903,7 @@ void __cdecl16far ovc27_textTakesHalfDamage3(agnt_t far *agnt,uint16_t agntIndex
       halves = (uint16_t)(halves >> 1);
       name = ovr_agnt_statusText(victim,bufMid,GSavedBlitSeg);
       name2 = ovr_ovc15_usesStshRealloc(name);
-      msg = ovr_stsprintf(bufMsg,s_s_takes_half_dam_2410_5c0a,name2);
+      msg = ovr_stsprintf(bufMsg,"%s takes half damage from lightning.",name2);
       ovr_uiNotify(msg,0);
       return;
     }
@@ -936,7 +936,7 @@ void __cdecl16far ovc27_textTakesHalfDamage3(agnt_t far *agnt,uint16_t agntIndex
       }
       name = ovr_agnt_statusText(agnt,bufBig,GSavedBlitSeg);
       name2 = ovr_agnt_statusText(victim,bufMid,GSavedBlitSeg);
-      msg = ovr_stsprintf(bufMsg,s_s_is_charmed_by_s,ovr_ovc15_usesStshRealloc(name2),name);
+      msg = ovr_stsprintf(bufMsg,"%s is charmed by %s.",ovr_ovc15_usesStshRealloc(name2),name);
       ovr_uiNotify(msg,0);
       ovr_OVC41_6a8f_01e7_entry(victim);
       victim->faction = agnt->faction;
@@ -947,7 +947,7 @@ void __cdecl16far ovc27_textTakesHalfDamage3(agnt_t far *agnt,uint16_t agntIndex
   charmFails:
     name = ovr_agnt_statusText(victim,bufBig,GSavedBlitSeg);
     name2 = ovr_agnt_statusText(agnt,bufMid,GSavedBlitSeg);
-    msg = ovr_stsprintf(bufMsg,s_s_fails_to_charm_s,ovr_ovc15_usesStshRealloc(name2),name);
+    msg = ovr_stsprintf(bufMsg,"%s fails to charm %s.",ovr_ovc15_usesStshRealloc(name2),name);
     ovr_uiNotify(msg,0);
     victim->flags = (uint16_t)(victim->flags | 0x400);
     return;
@@ -962,7 +962,7 @@ void __cdecl16far ovc27_textTakesHalfDamage3(agnt_t far *agnt,uint16_t agntIndex
     }
     name = ovr_agnt_statusText(agnt,bufBig,GSavedBlitSeg);
     name2 = ovr_agnt_statusText(victim,bufMid,GSavedBlitSeg);
-    msg = ovr_stsprintf(bufMsg,s_s_is_charmed_by_s,ovr_ovc15_usesStshRealloc(name2),name);
+    msg = ovr_stsprintf(bufMsg,"%s is charmed by %s.",ovr_ovc15_usesStshRealloc(name2),name);
     ovr_uiNotify(msg,0);
     victim->faction = agnt->faction;
     ovr_OVC41_6a8f_01e7_entry(victim);
@@ -978,7 +978,7 @@ void __cdecl16far ovc27_textTakesHalfDamage3(agnt_t far *agnt,uint16_t agntIndex
     ovr_play_sfxU(0x4c,0,ovr_audio_panFromX(victim));
     if ((victim->gdata->flags3 & 0x20) != 0) {
       name = ovr_agnt_statusText(victim,bufMid,GSavedBlitSeg);
-      msg = ovr_stsprintf(bufMsg,s_s_is_immune_to_fire,ovr_ovc15_usesStshRealloc(name));
+      msg = ovr_stsprintf(bufMsg,"%s is immune to fire.",ovr_ovc15_usesStshRealloc(name));
       ovr_uiNotify(msg,0);
       return;
     }
@@ -992,7 +992,7 @@ void __cdecl16far ovc27_textTakesHalfDamage3(agnt_t far *agnt,uint16_t agntIndex
     }
     if ((victim->gdata->flags2 & 0x200) != 0) {
       name = ovr_agnt_statusText(victim,bufMid,GSavedBlitSeg);
-      msg = ovr_stsprintf(bufMsg,s_s_takes_half_damage_from_fire,ovr_ovc15_usesStshRealloc(name));
+      msg = ovr_stsprintf(bufMsg,"%s takes half damage from fire.",ovr_ovc15_usesStshRealloc(name));
       ovr_uiNotify(msg,0);
       halves = (uint16_t)(halves >> 1);
     }
@@ -1013,7 +1013,7 @@ void __cdecl16far ovc27_textTakesHalfDamage3(agnt_t far *agnt,uint16_t agntIndex
     }
     name = ovr_agnt_statusText(agnt,bufBig,GSavedBlitSeg);
     name2 = ovr_agnt_statusText(victim,bufMid,GSavedBlitSeg);
-    msg = ovr_stsprintf(bufMsg,s_s_is_held_by_s,ovr_ovc15_usesStshRealloc(name2),name);
+    msg = ovr_stsprintf(bufMsg,"%s is held by %s.",ovr_ovc15_usesStshRealloc(name2),name);
     ovr_uiNotify(msg,0);
     ovr_OVC41_6a8f_01e7_entry(victim);
     victim->flags = (uint16_t)(victim->flags | 0x40);
@@ -1034,7 +1034,7 @@ void __cdecl16far ovc27_textTakesHalfDamage3(agnt_t far *agnt,uint16_t agntIndex
     }
     name = ovr_agnt_statusText(agnt,bufBig,GSavedBlitSeg);
     name2 = ovr_agnt_statusText(victim,bufMid,GSavedBlitSeg);
-    msg = ovr_stsprintf(bufMsg,s_s_is_put_to_sleep_by_s,ovr_ovc15_usesStshRealloc(name2),name);
+    msg = ovr_stsprintf(bufMsg,"%s is put to sleep by %s.",ovr_ovc15_usesStshRealloc(name2),name);
     ovr_uiNotify(msg,0);
     ovr_OVC41_6a8f_01e7_entry(victim);
     victim->flags = (uint16_t)(victim->flags | 0x80);
@@ -1052,7 +1052,7 @@ void __cdecl16far ovc27_textTakesHalfDamage3(agnt_t far *agnt,uint16_t agntIndex
     }
     name = ovr_agnt_statusText(agnt,bufBig,GSavedBlitSeg);
     name2 = ovr_agnt_statusText(victim,bufMid,GSavedBlitSeg);
-    msg = ovr_stsprintf(bufMsg,s_s_is_entangled_i_2410_5cbc,ovr_ovc15_usesStshRealloc(name2),name);
+    msg = ovr_stsprintf(bufMsg,"%s is entangled in a web created by %s.",ovr_ovc15_usesStshRealloc(name2),name);
     ovr_uiNotify(msg,0);
     /* the image copies agnt byte +0x32 into victim byte +0x33 (the high half of flags32) */
     ((uint8_t far *)victim)[0x33] = ((uint8_t far *)agnt)[0x32];
@@ -1071,7 +1071,7 @@ void __cdecl16far ovc27_textTakesHalfDamage3(agnt_t far *agnt,uint16_t agntIndex
     }
     name = ovr_agnt_statusText(agnt,bufBig,GSavedBlitSeg);
     name2 = ovr_agnt_statusText(victim,bufMid,GSavedBlitSeg);
-    msg = ovr_stsprintf(bufMsg,s_s_is_held_by_s,ovr_ovc15_usesStshRealloc(name2),name);
+    msg = ovr_stsprintf(bufMsg,"%s is held by %s.",ovr_ovc15_usesStshRealloc(name2),name);
     ovr_uiNotify(msg,0);
     ovr_OVC41_6a8f_01e7_entry(victim);
     victim->flags = (uint16_t)(victim->flags | 0x40);
@@ -1134,7 +1134,7 @@ void __cdecl16far ovc27_textTakesHalfDamage3(agnt_t far *agnt,uint16_t agntIndex
         if (ovc27_rollToHitEntity(*(uint32_t far *)&victim,3) == 0) {
           name = ovr_agnt_statusText(agnt,bufBig,GSavedBlitSeg);
           name2 = ovr_agnt_statusText(victim,bufMid,GSavedBlitSeg);
-          msg = ovr_stsprintf(bufMsg,s_s_is_charmed_by_s,ovr_ovc15_usesStshRealloc(name2),name);
+          msg = ovr_stsprintf(bufMsg,"%s is charmed by %s.",ovr_ovc15_usesStshRealloc(name2),name);
           ovr_uiNotify(msg,0);
           ovr_OVC41_6a8f_01e7_entry(victim);
           victim->faction = agnt->faction;

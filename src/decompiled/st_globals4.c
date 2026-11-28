@@ -192,10 +192,6 @@ uint8_t far far miceTileTail[15] = { 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0
 /* __SEGTABLE__: owned by OVERLAY.LIB (VROOMM manager). */
 /* __SEGTABEND__: owned by OVERLAY.LIB (VROOMM manager). */
 /* data_OVR01_0000: owned by OVERLAY.LIB (VROOMM manager). */
-char s__2410_0094[] = "";
-char s__d_2410_0095[] = "%d \r";
-char s_sorry_you_may_not_pass_t_059e[] = "Sorry, you may not pass time during a battle.";
-char s_time_passes[16] = "Time passes...";
 undefined1 bigcompFrame = 0x00;
 undefined1 TextBlitFlag = 0x00;
 /* GUESS: 0x0da, 5 words with no references in the image; emitted so the
@@ -221,74 +217,26 @@ undefined1 destroyLatchSide1 = 0x00;
 undefined1 destroyLatchSide0 = 0x00;
 undefined1 GTimeHi = 0x00;
 uint16_t VideoFlag_2410_0167 = 0x0000;
-char s_Fighter_2410_0169[] = "Fighter";
-char s_mage[] = "Mage";
-char s_cleric[] = "Cleric";
-char s_Thief_2410_017d[] = "Thief";
-char s_dwarf[] = "Dwarf";
-char s_elf[] = "Elf";
-char s_halfling[] = "Halfling";
-char s_fighters[] = "fighters";
-char s_mages[] = "mages";
-char s_clerics[] = "clerics";
-char s_thieves[] = "thieves";
-char s_dwarves[] = "dwarves";
-char s_elves[] = "elves";
-char s_halflings[] = "halflings";
-char s_fighter[] = "fighter";
 /* 01d5/01da: the lower-case table repeats mage/cleric, which the export
    dropped because the names collided with 0x171/0x176. */
-char s_mage_2410_01d5[] = "mage";
-char s_cleric_2410_01da[] = "cleric";
-char s_thief[] = "thief";
 /* 01e7/01ed/01f1: same for dwarf/elf/halfling. */
-char s_dwarf_2410_01e7[] = "dwarf";
-char s_elf_2410_01ed[] = "elf";
-char s_halfling_2410_01f1[] = "halfling";
-char s_fighter_unit_2410_01fa[] = "fighter unit";
-char s_mage_unit_2410_0207[] = "mage unit";
-char s_clerical_unit[] = "clerical unit";
-char s_thief_unit_2410_021f[] = "thief unit";
-char s_dwarf_unit_2410_022a[] = "dwarf unit";
-char s_elf_unit_2410_0235[] = "elf unit";
-char s_halfling_unit_2410_023e[] = "halfling unit";
-char s_d[] = "%d \r";
-char s_wwwwwwwwwwwwwwwwwwwwwwww_b900[] = "WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW";
-char s_archduchess[] = "Archduchess";
-char s_the_seed_is_lx[] = "The seed is %lx.";
-char s_increase_by_d_levels_cli_b760[] = "Increase by %d levels.  Click on character for higher levels.";
-char s_movement[] = "Movement";
-char s_recruit[] = "Recruit";
-char s_train[] = "Train";
-char s_build[] = "Build";
 undefined1 BlitLetterType = 0x00;
 undefined1 MessageDelay = 0x03;
 undefined1 messageDelayTicks = 0x0F;
-char s_Error_4__d_2410_02f5[] = "Error 4 %d \r";
 DW IdFORM = { 0x4F46, 0x4D52 };
 DW IdILBM = { 0x4C49, 0x4D42 };
 DW IdBMHD = { 0x4D42, 0x4448 };
 DW IdBODY = { 0x4F42, 0x5944 };
 DW IdCMAP = { 0x4D43, 0x5041 };
 DW IdPBM_ = { 0x4250, 0x204D };
-char s_n_d_w_u_s_u[] = "N %d W %u s %u \r";
 /* 032b: 19 bytes - the image carries one padding NUL after the literal */
-char s_Filename__d__s_2410_032b[19] = "Filename %d %s  \r";
-char far *GErrorStrings[5] = { (char far *)&s_Bad_game_cfg_2410_0352[0], (char far *)&s_Cannot_find_sound_2410_037b[0], (char far *)&s_Cannot_find_music_2410_0393[0], (char far *)&s_Cannot_create_confi_2410_03ab[0], (char far *)&s_Mouse_error_2410_03e2[0] };
+char far *GErrorStrings[5] = { (char far *)"Bad 'game.cfg' file. Please reconfigure.", (char far *)"Cannot find sound card.", (char far *)"Cannot find music card.", (char far *)"Cannot create configuration file.  Stronghold aborted.", (char far *)"Mouse error." };
 /* 0352: "Bad 'game.cfg' file. Please reconfigure." (41 bytes) */
-char s_Bad_game_cfg_2410_0352[] = "Bad 'game.cfg' file. Please reconfigure.";
 /* 037b: "Cannot find sound card." (24 bytes) */
-char s_Cannot_find_sound_2410_037b[] = "Cannot find sound card.";
 /* 0393: "Cannot find music card." (24 bytes) */
-char s_Cannot_find_music_2410_0393[] = "Cannot find music card.";
-char s_Cannot_create_confi_2410_03ab[] = "Cannot create configuration file.  Stronghold aborted.";
 /* 03e2: "Mouse error." (13 bytes) */
-char s_Mouse_error_2410_03e2[] = "Mouse error.";
-char s_Error__d_2410_03ef[] = "\n\rError %d\n";
-char s_s[] = "%s\n";
 /* 03ff: "Error %d %d.  (Give Cathryn BOTH numbers.)\n" plus the
    padding NUL the image carries (45 bytes) */
-char s_Error_d_d_Give_2410_03ff[45] = "Error %d %d.  (Give Cathryn BOTH numbers.)\n";
 uint16_t TextBlitX = 0x0;
 uint16_t TextBlitY = 0x0;
 uint16_t TextBlitDstSeg = 0xA000;
@@ -307,9 +255,7 @@ brect_t BlitRects[5] = { { 12, 7, 222, 150, 0xA000 }, { 0, 0, 319, 199, 0xA000 }
    addresses of s_error_27 and everything after stay exact. */
 uint16_t lineMaskTable[16] = { 0x0001, 0x0101, 0x0821, 0x1111, 0x2249, 0x4545,
     0x2A55, 0x5555, 0xAAD5, 0xB5B5, 0xDB6D, 0xDDDD, 0xDEF7, 0xEFEF, 0xFEFF, 0xFFFF };
-char s_error_27__2410_0492[] = "error(27) \r";
 /* 049e: 26 bytes - the image carries two terminating NULs */
-char s_y1_d_yn_d_y3_d_yx_d[26] = "y1 %d yn %d y3 %d yx %d ";
 uint16_t MiceFlag = 0x0000;
 /* GUESS: 0x4ba, ten words with no symbol of their own; emitted so MiceOfsX
    and everything after stay at the original addresses. */
@@ -320,7 +266,6 @@ int16_t MiceOfsY[4] = { 0, 15, 3, 5 };
 uint16_t MiceIndex = 0x0000;
 undefined1 MiceUnkState = 0x00;
 /* 04e1: 3 bytes - "\r" plus two NULs */
-char s__2410_04e1[3] = "\r";
 int StshStrongDatHnd = 0xFFFF;
 uint16_t GCrLf = 0x0A0D;
 /* 04e8: ten scale bytes */
@@ -344,42 +289,9 @@ far_t CPKeys[25] = { { 0x5F9, 0x2410 }, { 0x600, 0x2410 }, { 0x609, 0x2410 }, { 
      { 0x690, 0x2410 }, { 0x695, 0x2410 }, { 0x69D, 0x2410 }, { 0x6A4, 0x2410 } };
 undefined GSaveFileName[] = "strong.sav\\";
 undefined GCfgFileName[] = "%sgame.cfg";
-char s_debug_2410_05c7[] = "debug";
-char s_grab_2410_05cd[] = "grab";
-char s_new_maxsquare_d[] = "NEW MAXSQUARE %d \r";
-char s_new_smaxsquare_d[] = "NEW SMAXSQUARE %d \r";
-char s_choose_2410_05f9[] = "choose";
-char s_movement_2410_0600[] = "movement";
-char s_button_2410_0609[] = "button";
-char s_gold_2410_0610[] = "gold";
-char s_plan_2410_0615[] = "plan";
-char s_hit_2410_061a[] = "hit";
-char s_squares_2410_061e[] = "squares";
-char s_swamps_2410_0626[] = "swamps";
-char s_would_2410_062d[] = "would";
-char s_repair_2410_0633[] = "repair";
-char s_controlling_2410_063a[] = "controlling";
-char s_setting_2410_0646[] = "setting";
-char s_sage_2410_064e[] = "sage";
-char s_when_2410_0653[] = "when";
-char s_home_2410_0658[] = "home";
-char s_needed_2410_065d[] = "needed";
-char s_screen_2410_0664[] = "screen";
-char s_spellcasting_2410_066b[] = "spellcasting";
-char s_opponents_2410_0678[] = "opponents";
-char s_expense_2410_0682[] = "expense";
-char s_after_2410_068a[] = "after";
-char s_dots_2410_0690[] = "dots";
-char s_longbow_2410_0695[] = "longbow";
-char s_spells_2410_069d[] = "spells";
-char s_constructing_2410_06a4[] = "constructing";
 /* 06b1: "Stronghold copy protection." (28 bytes) */
-char s_Stronghold_copy_pro_2410_06b1[] = "Stronghold copy protection.";
 /* 06cd: "Turn to page #%d of the manual." (32 bytes) */
-char s_Turn_to_page_d_of_th_2410_06cd[] = "Turn to page #%d of the manual.";
-char s_Including_titles__c_2410_06ed[] = "Including titles, count to line #%d.";
 /* 0712: 22 bytes - the image carries one padding NUL */
-char s_enter_the_first_word[22] = "Enter the first word.";
 uint8_t bandOrigin[10] = { 0x4E, 0x49, 0x47, 0x45, 0x43, 0x41, 0x40, 0x3F, 0x3E, 0x3D };
 /* GUESS: 0x732, a ten-byte shade ramp with no symbol of its own;
    emitted so cornerShadeBias and everything after stay at the original
@@ -392,10 +304,6 @@ undefined1 seasonGroupBase = 0x00;
 uint8_t shadeTable[6] = { 0x10, 0x0C, 0x06, 0x04, 0x02, 0x01 };
 uint8_t rowBandOrigin[10] = { 0x1F, 0x1C, 0x19, 0x16, 0x10, 0xC, 0x6, 0x4, 0x2, 0x1 };
 /* 0755: second "%d \\r" copy (the tree has another one elsewhere) */
-char s_d_2410_0755[] = "%d \r";
-char s_bad_house_d[] = "Bad House # %d \r";
-char s_d_d[] = "(%d, %d)";
-char s_x_d_y_d_x_x_x_x_x_x_x_x[] = "x:%d y:%d  %x %x %x %x   %x %x %x %x    \r";
 far_t DIGHandle = { 0x0, 0x0 };
 far_t MUSHandle = { 0x0, 0x0 };
 undefined1 CurMusicType = 0xFF;
@@ -431,7 +339,6 @@ uint16_t MusDrvSeg = 0x0000;
 /* GUESS: 0x7d2, four unnamed bytes after MusDrvSeg; emitted so the
    addresses after 0x7d6 stay exact. */
 uint8_t musDrvExtra[4] = { 0x00, 0x00, 0x00, 0x00 };
-char s_midi_error[] = "Midi error\r";
 undefined1 animBranchCode = 0x00;
 uint16_t audioSaveCut1Ofs = 0x0000;
 uint16_t audioSaveCut1Seg = 0x0000;
@@ -441,13 +348,6 @@ bool AgntFlag2 = 0;
 /* 07ec: a mouse save rectangle (10-byte brect_t) */
 brect_t mouseSaveRect4 = { 12, 7, 222, 150, 0xA000 };
 uint16_t BattleDelay = 0x0000;
-char s_charmed_s[] = "charmed %s";
-char s_turned_s[] = "turned %s";
-char s_stoned_s[] = "stoned %s";
-char s_diseased_s[] = "diseased %s";
-char s_paralyzed_s[] = "paralyzed %s";
-char s_sleeping_s[] = "sleeping %s";
-char s_held_s[] = "held %s";
 undefined1 GMenuFlag = 0x00;
 uint8_t noAnimBlit = 0x0;
 /* 0846: eighteen palette bytes */
@@ -461,7 +361,6 @@ undefined1 Highlight1 = 0xFF;
 uint8_t highlight1Extra = 0xFF;
 /* 0864: a second "(%d, %d)" copy */
 /* 0864: 10 bytes - "(%d, %d)" plus a padding NUL */
-char s_d_d_2410_0864[10] = "(%d, %d)";
 uint16_t SquareRecX = 0x0000;
 /* 0870: the code uses SquareRecY as a scalar; the original symbol spans 17
    bytes, so the remaining 15 are kept as unnamed data. */
@@ -476,10 +375,5 @@ uint8_t squareRecIndexExtra[8] = { 0x00, 0x01, 0x00, 0xFF, 0xFF, 0x00, 0x01, 0x0
 brect_t mouseSaveRect3 = { 223, 159, 226, 196, 0xA000 };
 /* 0897: a mouse save rectangle (10-byte brect_t) */
 brect_t mouseSaveRect2 = { 208, 157, 226, 196, 0xA000 };
-char s_intelligence_reports_s_u_11b5[] = "Intelligence reports %s unit engaged in combat. (%d, %d)";
 /* 08da: a third "%d \\r" copy */
-char s_d_2410_08da[] = "%d \r";
-char s_d_d_d[] = "%d %d %d \r";
-char s__d__d__d_2410_08ea[] = "%d %d %d  \r";
-char s_You_cannot_attract__2410_08f6[] = "You cannot attract units to this location.";
 char s_Attracting__d_of_a__2410_0921[55] = "Attracting %d of a possible %d %s%s to this location.";

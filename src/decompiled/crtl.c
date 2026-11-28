@@ -49,105 +49,105 @@ void st_fix_far_tables(void)
   _exitfopen.seg = _CS;
   _exitopen.seg = _CS;
   fixFarTable(GUnitDescriptions, 28);
-  GUnitDescriptions[0].ofs = (uint16_t)&s_Fighter_2410_0169;
-  GUnitDescriptions[1].ofs = (uint16_t)&s_mage;
-  GUnitDescriptions[2].ofs = (uint16_t)&s_cleric;
-  GUnitDescriptions[3].ofs = (uint16_t)&s_Thief_2410_017d;
-  GUnitDescriptions[4].ofs = (uint16_t)&s_dwarf;
-  GUnitDescriptions[5].ofs = (uint16_t)&s_elf;
-  GUnitDescriptions[6].ofs = (uint16_t)&s_halfling;
-  GUnitDescriptions[7].ofs = (uint16_t)&s_fighters;
-  GUnitDescriptions[8].ofs = (uint16_t)&s_mages;
-  GUnitDescriptions[9].ofs = (uint16_t)&s_clerics;
-  GUnitDescriptions[10].ofs = (uint16_t)&s_thieves;
-  GUnitDescriptions[11].ofs = (uint16_t)&s_dwarves;
-  GUnitDescriptions[12].ofs = (uint16_t)&s_elves;
-  GUnitDescriptions[13].ofs = (uint16_t)&s_halflings;
-  GUnitDescriptions[14].ofs = (uint16_t)&s_fighter;
-  GUnitDescriptions[15].ofs = (uint16_t)&s_mage_2410_01d5;
-  GUnitDescriptions[16].ofs = (uint16_t)&s_cleric_2410_01da;
-  GUnitDescriptions[17].ofs = (uint16_t)&s_thief;
-  GUnitDescriptions[18].ofs = (uint16_t)&s_dwarf_2410_01e7;
-  GUnitDescriptions[19].ofs = (uint16_t)&s_elf_2410_01ed;
-  GUnitDescriptions[20].ofs = (uint16_t)&s_halfling_2410_01f1;
-  GUnitDescriptions[21].ofs = (uint16_t)&s_fighter_unit_2410_01fa;
-  GUnitDescriptions[22].ofs = (uint16_t)&s_mage_unit_2410_0207;
-  GUnitDescriptions[23].ofs = (uint16_t)&s_clerical_unit;
-  GUnitDescriptions[24].ofs = (uint16_t)&s_thief_unit_2410_021f;
-  GUnitDescriptions[25].ofs = (uint16_t)&s_dwarf_unit_2410_022a;
-  GUnitDescriptions[26].ofs = (uint16_t)&s_elf_unit_2410_0235;
-  GUnitDescriptions[27].ofs = (uint16_t)&s_halfling_unit_2410_023e;
+  GUnitDescriptions[0].ofs = (uint16_t)"Fighter";
+  GUnitDescriptions[1].ofs = (uint16_t)"Mage";
+  GUnitDescriptions[2].ofs = (uint16_t)"Cleric";
+  GUnitDescriptions[3].ofs = (uint16_t)"Thief";
+  GUnitDescriptions[4].ofs = (uint16_t)"Dwarf";
+  GUnitDescriptions[5].ofs = (uint16_t)"Elf";
+  GUnitDescriptions[6].ofs = (uint16_t)"Halfling";
+  GUnitDescriptions[7].ofs = (uint16_t)"fighters";
+  GUnitDescriptions[8].ofs = (uint16_t)"mages";
+  GUnitDescriptions[9].ofs = (uint16_t)"clerics";
+  GUnitDescriptions[10].ofs = (uint16_t)"thieves";
+  GUnitDescriptions[11].ofs = (uint16_t)"dwarves";
+  GUnitDescriptions[12].ofs = (uint16_t)"elves";
+  GUnitDescriptions[13].ofs = (uint16_t)"halflings";
+  GUnitDescriptions[14].ofs = (uint16_t)"fighter";
+  GUnitDescriptions[15].ofs = (uint16_t)"mage";
+  GUnitDescriptions[16].ofs = (uint16_t)"cleric";
+  GUnitDescriptions[17].ofs = (uint16_t)"thief";
+  GUnitDescriptions[18].ofs = (uint16_t)"dwarf";
+  GUnitDescriptions[19].ofs = (uint16_t)"elf";
+  GUnitDescriptions[20].ofs = (uint16_t)"halfling";
+  GUnitDescriptions[21].ofs = (uint16_t)"fighter unit";
+  GUnitDescriptions[22].ofs = (uint16_t)"mage unit";
+  GUnitDescriptions[23].ofs = (uint16_t)"clerical unit";
+  GUnitDescriptions[24].ofs = (uint16_t)"thief unit";
+  GUnitDescriptions[25].ofs = (uint16_t)"dwarf unit";
+  GUnitDescriptions[26].ofs = (uint16_t)"elf unit";
+  GUnitDescriptions[27].ofs = (uint16_t)"halfling unit";
   fixFarTable(CPKeys, 25);
   /* The initialiser holds the original image's offsets; address the rebuild's
      own copies of those strings instead.  Verified by running the post-init_cfg
      checkpoint. */
-  CPKeys[0].ofs = (uint16_t)&s_choose_2410_05f9;
-  CPKeys[1].ofs = (uint16_t)&s_movement_2410_0600;
-  CPKeys[2].ofs = (uint16_t)&s_button_2410_0609;
-  CPKeys[3].ofs = (uint16_t)&s_gold_2410_0610;
-  CPKeys[4].ofs = (uint16_t)&s_plan_2410_0615;
-  CPKeys[5].ofs = (uint16_t)&s_hit_2410_061a;
-  CPKeys[6].ofs = (uint16_t)&s_squares_2410_061e;
-  CPKeys[7].ofs = (uint16_t)&s_swamps_2410_0626;
-  CPKeys[8].ofs = (uint16_t)&s_would_2410_062d;
-  CPKeys[9].ofs = (uint16_t)&s_repair_2410_0633;
-  CPKeys[10].ofs = (uint16_t)&s_controlling_2410_063a;
-  CPKeys[11].ofs = (uint16_t)&s_setting_2410_0646;
-  CPKeys[12].ofs = (uint16_t)&s_sage_2410_064e;
-  CPKeys[13].ofs = (uint16_t)&s_when_2410_0653;
-  CPKeys[14].ofs = (uint16_t)&s_home_2410_0658;
-  CPKeys[15].ofs = (uint16_t)&s_needed_2410_065d;
-  CPKeys[16].ofs = (uint16_t)&s_screen_2410_0664;
-  CPKeys[17].ofs = (uint16_t)&s_spellcasting_2410_066b;
-  CPKeys[18].ofs = (uint16_t)&s_opponents_2410_0678;
-  CPKeys[19].ofs = (uint16_t)&s_expense_2410_0682;
-  CPKeys[20].ofs = (uint16_t)&s_after_2410_068a;
-  CPKeys[21].ofs = (uint16_t)&s_dots_2410_0690;
-  CPKeys[22].ofs = (uint16_t)&s_longbow_2410_0695;
-  CPKeys[23].ofs = (uint16_t)&s_spells_2410_069d;
-  CPKeys[24].ofs = (uint16_t)&s_constructing_2410_06a4;
+  CPKeys[0].ofs = (uint16_t)"choose";
+  CPKeys[1].ofs = (uint16_t)"movement";
+  CPKeys[2].ofs = (uint16_t)"button";
+  CPKeys[3].ofs = (uint16_t)"gold";
+  CPKeys[4].ofs = (uint16_t)"plan";
+  CPKeys[5].ofs = (uint16_t)"hit";
+  CPKeys[6].ofs = (uint16_t)"squares";
+  CPKeys[7].ofs = (uint16_t)"swamps";
+  CPKeys[8].ofs = (uint16_t)"would";
+  CPKeys[9].ofs = (uint16_t)"repair";
+  CPKeys[10].ofs = (uint16_t)"controlling";
+  CPKeys[11].ofs = (uint16_t)"setting";
+  CPKeys[12].ofs = (uint16_t)"sage";
+  CPKeys[13].ofs = (uint16_t)"when";
+  CPKeys[14].ofs = (uint16_t)"home";
+  CPKeys[15].ofs = (uint16_t)"needed";
+  CPKeys[16].ofs = (uint16_t)"screen";
+  CPKeys[17].ofs = (uint16_t)"spellcasting";
+  CPKeys[18].ofs = (uint16_t)"opponents";
+  CPKeys[19].ofs = (uint16_t)"expense";
+  CPKeys[20].ofs = (uint16_t)"after";
+  CPKeys[21].ofs = (uint16_t)"dots";
+  CPKeys[22].ofs = (uint16_t)"longbow";
+  CPKeys[23].ofs = (uint16_t)"spells";
+  CPKeys[24].ofs = (uint16_t)"constructing";
 
   fixFarTable(worldMenuLabels, 13);
   fixFarTable(GStatsLabels, 6);
-  GStatsLabels[0].ofs = (uint16_t)&s_str;
-  GStatsLabels[1].ofs = (uint16_t)&s_int;
-  GStatsLabels[2].ofs = (uint16_t)&s_wis;
-  GStatsLabels[3].ofs = (uint16_t)&s_dex;
-  GStatsLabels[4].ofs = (uint16_t)&s_con;
-  GStatsLabels[5].ofs = (uint16_t)&s_cha;
+  GStatsLabels[0].ofs = (uint16_t)"STR";
+  GStatsLabels[1].ofs = (uint16_t)"INT";
+  GStatsLabels[2].ofs = (uint16_t)"WIS";
+  GStatsLabels[3].ofs = (uint16_t)"DEX";
+  GStatsLabels[4].ofs = (uint16_t)"CON";
+  GStatsLabels[5].ofs = (uint16_t)"CHA";
   fixFarTable(GPlayerTitles, 32);
-  GPlayerTitles[0].ofs = (uint16_t)&s_baron;
-  GPlayerTitles[1].ofs = (uint16_t)&s_baroness;
-  GPlayerTitles[2].ofs = (uint16_t)&s_viscount;
-  GPlayerTitles[3].ofs = (uint16_t)&s_viscountess;
-  GPlayerTitles[4].ofs = (uint16_t)&s_count;
-  GPlayerTitles[5].ofs = (uint16_t)&s_countess;
-  GPlayerTitles[6].ofs = (uint16_t)&s_marquis;
-  GPlayerTitles[7].ofs = (uint16_t)&s_marquise;
-  GPlayerTitles[8].ofs = (uint16_t)&s_duke;
-  GPlayerTitles[9].ofs = (uint16_t)&s_duchess;
-  GPlayerTitles[10].ofs = (uint16_t)&s_archduke;
-  GPlayerTitles[11].ofs = (uint16_t)&s_Archduchess_2410_4c1b;
-  GPlayerTitles[12].ofs = (uint16_t)&s_prince;
-  GPlayerTitles[13].ofs = (uint16_t)&s_princess;
-  GPlayerTitles[14].ofs = (uint16_t)&s_king;
-  GPlayerTitles[15].ofs = (uint16_t)&s_queen;
-  GPlayerTitles[16].ofs = (uint16_t)&s_emperor;
-  GPlayerTitles[17].ofs = (uint16_t)&s_emperess;
-  GPlayerTitles[18].ofs = (uint16_t)&s_lord;
-  GPlayerTitles[19].ofs = (uint16_t)&s_lady;
-  GPlayerTitles[20].ofs = (uint16_t)&s_wizard;
-  GPlayerTitles[21].ofs = (uint16_t)&s_maga;
-  GPlayerTitles[22].ofs = (uint16_t)&s_patriarch;
-  GPlayerTitles[23].ofs = (uint16_t)&s_matriarch;
-  GPlayerTitles[24].ofs = (uint16_t)&s_master_thief;
-  GPlayerTitles[25].ofs = (uint16_t)&s_master_thief;
-  GPlayerTitles[26].ofs = (uint16_t)&s_dwarf_lord;
-  GPlayerTitles[27].ofs = (uint16_t)&s_dwarf_lady;
-  GPlayerTitles[28].ofs = (uint16_t)&s_lord_wizard;
-  GPlayerTitles[29].ofs = (uint16_t)&s_lady_maga;
-  GPlayerTitles[30].ofs = (uint16_t)&s_Sheriff_2410_4cc8;
-  GPlayerTitles[31].ofs = (uint16_t)&s_Sheriff_2410_4cc8;
+  GPlayerTitles[0].ofs = (uint16_t)"Baron ";
+  GPlayerTitles[1].ofs = (uint16_t)"Baroness ";
+  GPlayerTitles[2].ofs = (uint16_t)"Viscount ";
+  GPlayerTitles[3].ofs = (uint16_t)"Viscountess ";
+  GPlayerTitles[4].ofs = (uint16_t)"Count ";
+  GPlayerTitles[5].ofs = (uint16_t)"Countess ";
+  GPlayerTitles[6].ofs = (uint16_t)"Marquis ";
+  GPlayerTitles[7].ofs = (uint16_t)"Marquise ";
+  GPlayerTitles[8].ofs = (uint16_t)"Duke ";
+  GPlayerTitles[9].ofs = (uint16_t)"Duchess ";
+  GPlayerTitles[10].ofs = (uint16_t)"Archduke ";
+  GPlayerTitles[11].ofs = (uint16_t)"Archduchess ";
+  GPlayerTitles[12].ofs = (uint16_t)"Prince ";
+  GPlayerTitles[13].ofs = (uint16_t)"Princess ";
+  GPlayerTitles[14].ofs = (uint16_t)"King ";
+  GPlayerTitles[15].ofs = (uint16_t)"Queen ";
+  GPlayerTitles[16].ofs = (uint16_t)"Emperor ";
+  GPlayerTitles[17].ofs = (uint16_t)"Emperess ";
+  GPlayerTitles[18].ofs = (uint16_t)"Lord ";
+  GPlayerTitles[19].ofs = (uint16_t)"Lady ";
+  GPlayerTitles[20].ofs = (uint16_t)"Wizard ";
+  GPlayerTitles[21].ofs = (uint16_t)"Maga ";
+  GPlayerTitles[22].ofs = (uint16_t)"Patriarch ";
+  GPlayerTitles[23].ofs = (uint16_t)"Matriarch ";
+  GPlayerTitles[24].ofs = (uint16_t)"Master Thief ";
+  GPlayerTitles[25].ofs = (uint16_t)"Master Thief ";
+  GPlayerTitles[26].ofs = (uint16_t)"Dwarf Lord ";
+  GPlayerTitles[27].ofs = (uint16_t)"Dwarf Lady ";
+  GPlayerTitles[28].ofs = (uint16_t)"Lord Wizard ";
+  GPlayerTitles[29].ofs = (uint16_t)"Lady Maga ";
+  GPlayerTitles[30].ofs = (uint16_t)"Sheriff ";
+  GPlayerTitles[31].ofs = (uint16_t)"Sheriff ";
   fixFarTable(menuHighlightTable, 5);
   fixFarTable(GAlignmentsNames, 3);
   fixFarTable(ManageResultPtrs, 5);
@@ -156,9 +156,9 @@ void st_fix_far_tables(void)
   /* The initialiser carries the original image's offsets (0x54BF..); the
      rebuild's copies of those strings live elsewhere, so address them by
      symbol.  Entry 3 is { 0, 0 } in the original and stays null. */
-  LevelRangeLabels[0].ofs = (uint16_t)&s_levels_6_8c_2410_54bf;
-  LevelRangeLabels[1].ofs = (uint16_t)&s_levels_8d_8h_2410_54cb;
-  LevelRangeLabels[2].ofs = (uint16_t)&s_levels_8i_8k_2410_54d8;
+  LevelRangeLabels[0].ofs = (uint16_t)"levels 6-8c";
+  LevelRangeLabels[1].ofs = (uint16_t)"levels 8d-8h";
+  LevelRangeLabels[2].ofs = (uint16_t)"levels 8i-8k";
 
   fixFarTable(RampTables, 7);
   fixFarTable(GStrangeTable, 98);
@@ -175,7 +175,7 @@ void st_fix_far_tables(void)
        Lengths in declaration order (help0-7, text1-6, house1-5, hung1-5, incom1-5, cflow1-5)
        sum to 355, the original span 0x82b4..0x842c. */
     uint16_t gi;
-    uint16_t acc = (uint16_t)(&s_help0_txt_2410_82b4[0]);
+    uint16_t acc = (uint16_t)("help0.txt");
     for (gi = 0; gi < 34; gi++) {
       GTxtFiles[gi].ofs = acc;
       acc = acc + (uint16_t)strlen((char *)acc) + 1;
@@ -4447,7 +4447,7 @@ uint16_t __cdecl16far setvbuf(FILE *stream, uint8_t *bufOfs, uint mode,
    MEDIUM model, so its FILE is 16 bytes with near pointers, while _streams here is the
    original's LARGE-model layout: 20 bytes per record with far pointers.  The library's printf
    therefore walks the wrong shape of record - it left _streams[1].bsize at 0x0206 and wrote six
-   bytes into s_fighter_unit_2410_01fa.  Formatting into the CRT's own stream buffer and writing
+   bytes into "fighter unit".  Formatting into the CRT's own stream buffer and writing
    the bytes out directly keeps the same formatter and touches no FILE record at all. */
 void __cdecl16far printf(char *fmt,...)
 

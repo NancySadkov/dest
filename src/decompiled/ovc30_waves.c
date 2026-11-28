@@ -87,11 +87,11 @@ void __cdecl16far ovc30_nextWave(byte flags)
         ovc30_textDivideError((byte)ovc30_usesRandBelow(4),1,1,0,0,0);
       }
       if ((flags & 1) != 0) {
-        ovr_uiNotify((char far *)s_all_enemies_destroyed,0xa000,0);
+        ovr_uiNotify((char far *)"All enemies destroyed.",0xa000,0);
         ovr_inputUpdate((ulong)((uint)MessageDelay * 2 + 0x36));
       }
       line = ((stsprintf_far_t *)ovr_stsprintf)
-                 (msg,(char far *)s_next_wave_of_enemies_appear,PlayerIndex + 1);
+                 (msg,(char far *)"Next wave of enemies appear.",PlayerIndex + 1);
       ovr_uiNotify(line,0xa000,0);
       ovr_inputUpdate((ulong)((uint)MessageDelay * 2 + 0x36));
     }

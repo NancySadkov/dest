@@ -1449,12 +1449,12 @@ void __cdecl16far manage_settlementScreen(byte partyIndex)
     if (titleKept == 0) {
       if (found == partyIndex) {
         if (GHighScoreSaved == 0) {
-          ovr_stsprintf((char far *)MK_FP(_SS,title),(char far *)MK_FP(_DS,s_year_d_s),
+          ovr_stsprintf((char far *)MK_FP(_SS,title),(char far *)MK_FP(_DS,"Year %d. %s"),
                         (uint16_t)(GYear + 1),RankReqMsgPtrs[sheet->alignment]);
         }
         else {
           ovr_stsprintf((char far *)MK_FP(_SS,title),
-                        (char far *)MK_FP(_DS,s_year_d_this_leader_s),
+                        (char far *)MK_FP(_DS,"Year %d. This leader %s"),
                         (uint16_t)(GYear + 1),
                         (char far *)MK_FP(menuHighlightTable[sheet->alignment].seg,
                                           menuHighlightTable[sheet->alignment].ofs));
@@ -1481,7 +1481,7 @@ void __cdecl16far manage_settlementScreen(byte partyIndex)
 
     if ((sheet->faction == 0) && (manage_usesGLeaderCount3(partyIndex) != 0xff)) {
       items[n].seg = (uint16_t)_DS;
-      items[n].ofs = (uint16_t)s_next_leader;
+      items[n].ofs = (uint16_t)"Next Leader";
     }
     else {
       items[n].seg = 0;
@@ -1497,7 +1497,7 @@ void __cdecl16far manage_settlementScreen(byte partyIndex)
       }
       else {
         items[n].seg = (uint16_t)_DS;
-        items[n].ofs = (uint16_t)s_auto_build_2410_50c1;
+        items[n].ofs = (uint16_t)"Auto-build";
       }
     }
     else {
@@ -1508,33 +1508,33 @@ void __cdecl16far manage_settlementScreen(byte partyIndex)
     n++;
 
     items[n].seg = (uint16_t)_DS;
-    items[n].ofs = (uint16_t)s_census;
+    items[n].ofs = (uint16_t)"Census";
     codes[n] = 4;
     n++;
 
     items[n].seg = (uint16_t)_DS;
-    items[n].ofs = (uint16_t)s_property;
+    items[n].ofs = (uint16_t)"Property";
     codes[n] = 5;
     n++;
 
     if ((sheet->faction == 0) && (found == partyIndex)) {
       items[n].seg = (uint16_t)_DS;
-      items[n].ofs = (uint16_t)s_total_census;
+      items[n].ofs = (uint16_t)"Total Census";
       codes[n] = 6;
       n++;
       items[n].seg = (uint16_t)_DS;
-      items[n].ofs = (uint16_t)s_all_property;
+      items[n].ofs = (uint16_t)"All Property";
       codes[n] = 7;
       n++;
     }
 
     items[n].seg = (uint16_t)_DS;
-    items[n].ofs = (uint16_t)s_help;
+    items[n].ofs = (uint16_t)"Help";
     codes[n] = 0xa;
     n++;
 
     items[n].seg = (uint16_t)_DS;
-    items[n].ofs = (uint16_t)s_Done_2410_50fb;
+    items[n].ofs = (uint16_t)"Done";
     codes[n] = 1;
     n++;
 
@@ -1596,12 +1596,12 @@ void __cdecl16far manage_settlementScreen(byte partyIndex)
       sheet->flags5d = (byte)(sheet->flags5d ^ 2);
       if ((sheet->flags5d & 2) == 0) {
         ovr_stsprintf((char far *)MK_FP(_SS,title),
-                      (char far *)MK_FP(_DS,s_s_will_now_build_2410_5100),
+                      (char far *)MK_FP(_DS,"%s will now build homes automatically."),
                       ovr_ovc15_capitalize((char far *)MK_FP(_SS,nameBuf),sheet));
       }
       else {
         ovr_stsprintf((char far *)MK_FP(_SS,title),
-                      (char far *)MK_FP(_DS,s_s_will_no_longer_2410_5127),
+                      (char far *)MK_FP(_DS,"%s will no longer build houses automatically."),
                       ovr_ovc15_capitalize((char far *)MK_FP(_SS,nameBuf),sheet));
       }
       titleKept = 1;
@@ -2532,11 +2532,11 @@ char * __cdecl16far manage_textTotalPopulation(byte charIndex)
       extraBands = 1;
     }
   }
-  items[0].ofs = (uint16_t)s_Done_2410_50fb;
+  items[0].ofs = (uint16_t)"Done";
   items[0].seg = _DS;
-  items[1].ofs = (uint16_t)s_summary;
+  items[1].ofs = (uint16_t)"Summary";
   items[1].seg = _DS;
-  items[2].ofs = (uint16_t)s_all_levels;
+  items[2].ofs = (uint16_t)"All levels";
   items[2].seg = _DS;
   itemCount = 3;
   for (n = 0; n < count; n++) {
@@ -2559,13 +2559,13 @@ char * __cdecl16far manage_textTotalPopulation(byte charIndex)
       TextBlitY = 0xc;
       TextBlitX = 0x11;
       if (charIndex == 0xff) {
-        ovr_blitLabel((char far *)MK_FP(_DS,(uint16_t)s_total_population),
+        ovr_blitLabel((char far *)MK_FP(_DS,(uint16_t)"Total population."),
                       (byte far *)MK_FP(Font02.seg,Font02.ofs),0xde,0x50);
       }
       else {
         sheetPtr = GLeaderSheets[charIndex];
         ovr_stsprintf((char far *)MK_FP(_SS,textBuf),
-                      (char far *)MK_FP(_DS,(uint16_t)s_s_population_loyal_to_s_s),
+                      (char far *)MK_FP(_DS,(uint16_t)"%s population, loyal to %s%s"),
                       (char far *)MK_FP(GUnitDescriptions[cls].seg,GUnitDescriptions[cls].ofs),
                       (char far *)MK_FP(_DS,(uint16_t)manage_playerTitle(sheetPtr)),
                       (char far *)ovr_ovc45_compute9((char far *)MK_FP(_SS,bandBuf),
@@ -2577,14 +2577,14 @@ char * __cdecl16far manage_textTotalPopulation(byte charIndex)
       }
       TextBlitY = TextBlitY + 0xc;
       TextBlitX = (uint16_t)(0x89 -
-                  (int)ovr_font_textWidth((char far *)MK_FP(_DS,(uint16_t)s_units),
+                  (int)ovr_font_textWidth((char far *)MK_FP(_DS,(uint16_t)"UNITS"),
                                           (char far *)MK_FP(Font02.seg,Font02.ofs)));
-      ovr_blitLabel((char far *)MK_FP(_DS,(uint16_t)s_units),
+      ovr_blitLabel((char far *)MK_FP(_DS,(uint16_t)"UNITS"),
                     (byte far *)MK_FP(Font02.seg,Font02.ofs),0xde,0xe0);
       TextBlitX = (uint16_t)(0xd4 -
-                  (int)ovr_font_textWidth((char far *)MK_FP(_DS,(uint16_t)s_population),
+                  (int)ovr_font_textWidth((char far *)MK_FP(_DS,(uint16_t)"POPULATION"),
                                           (char far *)MK_FP(Font02.seg,Font02.ofs)));
-      ovr_blitLabel((char far *)MK_FP(_DS,(uint16_t)s_population),
+      ovr_blitLabel((char far *)MK_FP(_DS,(uint16_t)"POPULATION"),
                     (byte far *)MK_FP(Font02.seg,Font02.ofs),0xde,0xe0);
       TextBlitY = TextBlitY + 0xc;
       for (n = 0; n < count; n++) {
@@ -2600,14 +2600,14 @@ char * __cdecl16far manage_textTotalPopulation(byte charIndex)
         manage_4d05_22cf_entry(charIndex,LevelRangeMin[n],LevelRangeMax[n],
                                &units,&population);
         ovr_stsprintf((char far *)MK_FP(_SS,textBuf),
-                      (char far *)MK_FP(_DS,(uint16_t)s__d_2410_4cd1),(uint16_t)units);
+                      (char far *)MK_FP(_DS,(uint16_t)"%d"),(uint16_t)units);
         TextBlitX = (uint16_t)(0x89 -
                     (int)ovr_font_textWidth((char far *)MK_FP(_SS,textBuf),
                                             (char far *)MK_FP(Font02.seg,Font02.ofs)));
         ovr_blitLabel((char far *)MK_FP(_SS,textBuf),
                       (byte far *)MK_FP(Font02.seg,Font02.ofs),0xde,0x50);
         ovr_stsprintf((char far *)MK_FP(_SS,textBuf),
-                      (char far *)MK_FP(_DS,(uint16_t)s__d_2410_4cd1),(uint16_t)population);
+                      (char far *)MK_FP(_DS,(uint16_t)"%d"),(uint16_t)population);
         TextBlitX = (uint16_t)(0xd4 -
                     (int)ovr_font_textWidth((char far *)MK_FP(_SS,textBuf),
                                             (char far *)MK_FP(Font02.seg,Font02.ofs)));

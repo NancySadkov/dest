@@ -1596,7 +1596,7 @@ void __cdecl16far init_assets2(bool grab)
     sky06FliOfs = ovr_stshStoreFile_2((far_t far *)(char *)StshNames[0x19f],
                                       (char *)(ulong)(*(uint16_t *)((uint8_t *)&(StshNames[0x19f]) + 2)),(uint16_t)unaff_DI);
     sky06FliSeg = (uint16_t)(segArg);
-    l9Cut4Ofs = ovr_stshStoreFile_2((far_t far *)s_bolt12_fli_2410_8417,(char *)0x2410,(uint16_t)unaff_DI);
+    l9Cut4Ofs = ovr_stshStoreFile_2((far_t far *)"bolt12.fli",(char *)0x2410,(uint16_t)unaff_DI);
     l9Cut4Seg = (uint16_t)(segArg);
     lbmTmp = ovr_grabLbm(417,0,0);
     tmpSeg = (uint16_t)(segArg);
@@ -1653,7 +1653,7 @@ void __cdecl16far init_assets2(bool grab)
     cred03Cut2Ofs = ovr_stshStoreFile((uint8_t *)pfVar2,(char)tmpSeg);
     cred03Cut2Seg = (uint16_t)(tmpSeg);
     ovr_stgFreeTmp(lbmTmp);
-    cred03Cut3Ofs = ovr_stshStoreFile_2((far_t far *)s_save_999_2410_8422,(char *)0x2410,(uint16_t)unaff_DI);
+    cred03Cut3Ofs = ovr_stshStoreFile_2((far_t far *)"save.999",(char *)0x2410,(uint16_t)unaff_DI);
     cred03Cut3Seg = (uint16_t)(tmpSeg);
   }
   else {
