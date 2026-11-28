@@ -25375,3 +25375,48 @@ the gap in the comment - substituting a value would be a guess, exactly as with 
     diff_dgroup          288/1,805 matched (unchanged)
     compare_runtime      280 identical / 11 different at entry, init_game and key (unchanged)
     structural_deficits  two game bodies: 7e7c:0b9c (177/187), 77eb:0d61 (54/58)
+
+
+## `ovc27_spellNotice` (5ded:0a05): 87 hits down to 0, grep 6,184 -> 6,090 (-94)
+
+The "%s casts a %s spell %s %s." notice. Roles, read from the statements:
+
+    bVar1  -> agntOfsHi    the high byte of the agnt pointer, returned << 8 in both early exits
+              compute9Res  ovr_agnt_compute9(agnt,0)'s result inside the compound condition
+    uVar2  -> randRes      ovr_randBelow(2,0)
+              textWidth    0x90, the notification width
+              panRes       ovr_audio_panFromX
+              destXVal     the destination x the spell frame puts the agent at
+    uVar3  -> spellRes     ovc27_usesRandBelow5's result, the spell chosen
+              panRes2      the cast sound's pan
+    uVar4  -> retVal       the value every return path produces
+    iVar5  -> spellOfs     spell * 0x21 ;  framesSeg  sprEntry[1]
+    iVar6  -> spellOfs (assigned at 611 alongside iVar5 - same expression) ; recOfs
+    uVar11 -> segA / framesHi ;  uVar12 -> segB / gdataSeg ;  uStack_8 -> segTmp
+    piVar10 -> sprEntry    &frames[frameIndex]
+    puVar7 -> builtName    ovr_ovc15_usesStshRealloc's assembled caster/target text
+    iStack_12 -> framesLongDead ;  iStack_e -> sprEntryLongDead   (both stored, never read)
+
+`segA`/`segB`/`segTmp` are kept as three names rather than collapsed into `SEG_OF(Agnts)`, even though
+all three hold that same value: the image really does hoist the same segment through three slots inside
+the condition at 590..601, and collapsing them would be a rewrite of an expression I have not read from
+the image - the names at least make the juggling visible instead of hiding it behind `uVar11`/`uVar12`.
+
+## Measured (HEAD 14f350f6 -> this commit)
+
+    grep_checks          6,184 -> 6,090   (-94)
+    REBUILT.EXE          447,778 -> 447,810   (+32: frame reshuffle, same as the run_demo note)
+    build 65/65, LINK.LOG 0 errors
+    compare_state        identical 734 / 7 different / 889 missing (unchanged)
+    diff_dgroup          288/1,805 matched (unchanged)
+    compare_runtime      280 identical / 11 different at entry, init_game and key (unchanged)
+    structural_deficits  two game bodies: 7e7c:0b9c (177/187), 77eb:0d61 (54/58)
+
+## Turn total (HEAD 59611849 -> here)
+
+    grep_checks          6,567 -> 6,090   (-477)
+      ovc41_specialAttack (6a8f:22cb)     -155
+      55fe:184e                           -104
+      agnt_computeFrameExtents (3b1d:00ce) -91
+      ovc27_spellNotice (5ded:0a05)       -94
+      ovc48_assets2.c 81b9:0086            -33

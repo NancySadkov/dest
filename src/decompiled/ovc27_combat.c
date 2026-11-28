@@ -559,111 +559,119 @@ uint __cdecl16far ovc27_usesRandBelow5(agnt_t far *agnt)
 uint __cdecl16far ovc27_spellNotice(int agntIndex)
 
 {
-  byte bVar1;
-  uint16_t uVar2;
-  uint uVar3;
-  uint uVar4;
-  int iVar5;
-  int iVar6;
-  uint8_t *puVar7;
+  byte compute9Res;        /* ovr_agnt_compute9(agnt,0)'s result */
+  byte agntOfsHi;          /* the high byte of the agnt pointer, returned << 8 */
+  uint16_t randRes;         /* ovr_randBelow(2,0)'s result */
+  uint16_t textWidth;       /* 0x90, the notification width */
+  uint16_t panRes;          /* ovr_audio_panFromX's result */
+  uint16_t destXVal;        /* the destination x the spell frame puts the agent at */
+  uint spellRes;            /* ovc27_usesRandBelow5's result, the spell chosen */
+  uint panRes2;             /* ovr_audio_panFromX's result for the cast sound */
+  uint retVal;              /* the value every return path produces */
+  int spellOfs;             /* spell * 0x21, an index into the spell table */
+  int framesSeg;            /* sprEntry[1] */
+  int recOfs;               /* the frame record's offset, *sprEntry */
+  uint8_t *builtName;        /* ovr_ovc15_usesStshRealloc: the assembled caster/target text */
   char *msg;
   agntG_t far *paVar9;
-  int *piVar10;
-  uint16_t uVar11;
-  uint16_t uVar12;
+  int *sprEntry;            /* &frames[frameIndex] */
+  uint16_t segA;            /* SEG_OF(Agnts), juggled through the condition */
+  uint16_t framesHi;        /* the high word of agnt->frames */
+  uint16_t segB;            /* the same segment value, second copy */
+  uint16_t gdataSeg;        /* agnt->gdata's segment */
   long lVar13;
   static char text[64];   /* DGROUP-backed formatting buffer */
   byte variant;
-  int iStack_12;
-  int iStack_e;
-  uint16_t uStack_8;
+  int framesLongDead;       /* frames as a 32-bit word: stored, never read */
+  int sprEntryLongDead;     /* {framesSeg, recOfs}: stored, never read */
+  uint16_t segTmp;          /* SEG_OF(Agnts) staging, written and re-read in place */
   agnt_t far *agnt;
   uint16_t agntSeg;
   
   agnt = (agnt_t far *)&Agnts[agntIndex].x;
   agntSeg = SEG_OF(Agnts);
-  bVar1 = (byte)((uint)agnt >> 8);
+  agntOfsHi = (byte)((uint)agnt >> 8);
   if ((((agntG_t far *)agnt->gdata)->flags & 0x803) == 0) {
-    return (uint)bVar1 << 8;
+    return (uint)agntOfsHi << 8;
   }
   if (agnt->animFrame == 0xff) {
-    uStack_8 = SEG_OF(Agnts);
-    uVar11 = uStack_8;
-    uStack_8 = SEG_OF(Agnts);
-    uVar12 = uVar11;
+    segTmp = SEG_OF(Agnts);
+    segA = segTmp;
+    segTmp = SEG_OF(Agnts);
+    segB = segA;
     if (((((((agntG_t far *)agnt->gdata)->flags & 0x1000) != 0) &&
-         (uVar12 = uStack_8, (Agnts[agnt->target].gdata->flags2 & 0x10) == 0))
-        && ((uStack_8 = uVar11, (Agnts[agnt->target].gdata->flags2 & 8) == 0
-            || (bVar1 = ovr_agnt_compute9(agnt,0), uVar12 = uStack_8, '\0' < (char)bVar1)))) &&
-       (uVar2 = ovr_randBelow(2,0), uVar12 = uStack_8, (uVar2 & 0xff) == 0)) {
+         (segB = segTmp, (Agnts[agnt->target].gdata->flags2 & 0x10) == 0))
+        && ((segTmp = segA, (Agnts[agnt->target].gdata->flags2 & 8) == 0
+            || (compute9Res = ovr_agnt_compute9(agnt,0), segB = segTmp, '\0' < (char)compute9Res)))) &&
+       (randRes = ovr_randBelow(2,0), segB = segTmp, (randRes & 0xff) == 0)) {
       return 0;
     }
-    uStack_8 = uVar12;
-    uVar3 = ovc27_usesRandBelow5((agnt_t far *)MK_FP(agntSeg,agnt));
-    variant = (byte)uVar3;
-    uVar4 = uVar3 & 0xff;
-    if (uVar4 == 0) {
+    segTmp = segB;
+    spellRes = ovc27_usesRandBelow5((agnt_t far *)MK_FP(agntSeg,agnt));
+    variant = (byte)spellRes;
+    retVal = spellRes & 0xff;
+    if (retVal == 0) {
       ovr_agnt_usesAnimFrame(agnt);
-      uVar4 = uVar4 & 0xff00;
+      retVal = retVal & 0xff00;
     }
     else {
-      iVar5 = (uVar3 & 0xff) * 0x21;
-      iVar6 = (uVar3 & 0xff) * 0x21;
-      uVar2 = 0x90;
-      uVar12 = (uint16_t)((ulong)agnt->gdata >> 0x10);
+      spellOfs = (spellRes & 0xff) * 0x21;
+      spellOfs = (spellRes & 0xff) * 0x21;
+      textWidth = 0x90;
+      gdataSeg = (uint16_t)((ulong)agnt->gdata >> 0x10);
       paVar9 = (agntG_t far *)agnt->gdata;
                     /* WARNING: Load size is inaccurate */
-      puVar7 = ovr_ovc15_usesStshRealloc
+      builtName = ovr_ovc15_usesStshRealloc
                          (paVar9->name,*(uint16_t *)((int)&paVar9->name + 2),
-                          *(uint16_t *)(iVar6 + -0x21),*(uint16_t *)(iVar6 + -0x1f),
-                          *(uint16_t *)(iVar5 + -0x1d),*(uint16_t *)(iVar5 + -0x1b),
+                          *(uint16_t *)(spellOfs + -0x21),*(uint16_t *)(spellOfs + -0x1f),
+                          *(uint16_t *)(spellOfs + -0x1d),*(uint16_t *)(spellOfs + -0x1b),
                           far_ofs_u32(Agnts[agnt->target].gdata->name),(uint16_t)SEG_OF(Agnts[agnt->target].gdata->name));
       msg = ovr_stsprintf(text,(char *)CONCAT22(0x5ba4,_SS),
-                          (char *)CONCAT22(puVar7,(char *)0x26510),uVar2);
-      ovr_uiNotify(msg,uVar2,0);
+                          (char *)CONCAT22(builtName,(char *)0x26510),textWidth);
+      ovr_uiNotify(msg,textWidth,0);
       agnt->variant = variant;
       if (*(char *)((uint)variant * 0x21 + -0x17) == '9') {
-        uVar3 = ovr_audio_panFromX(agnt,0);
-        lVar13 = (ulong)uVar3 << 0x10;
-        uVar2 = ovr_randBelow(2,0);
-        ovr_play_sfxU((char)uVar2 + 0x39,(int)lVar13,(uint16_t)((ulong)lVar13 >> 0x10),0,0);
+        panRes2 = ovr_audio_panFromX(agnt,0);
+        lVar13 = (ulong)panRes2 << 0x10;
+        randRes = ovr_randBelow(2,0);
+        ovr_play_sfxU((char)randRes + 0x39,(int)lVar13,(uint16_t)((ulong)lVar13 >> 0x10),0,0);
       }
       else {
-        uVar2 = ovr_audio_panFromX(agnt,0);
-        ovr_play_sfxU(*(byte *)((uint)variant * 0x21 + -0x17),0,uVar2,0,0);
+        panRes = ovr_audio_panFromX(agnt,0);
+        ovr_play_sfxU(*(byte *)((uint)variant * 0x21 + -0x17),0,panRes,0,0);
       }
       if (*(char *)((uint)variant * 0x21 + -0x16) == '\0') {
         agnt->animFrame = 0xf5;
-        uVar4 = 1;
+        retVal = 1;
       }
       else {
-        uVar11 = *(uint16_t *)((int)&agnt->frames + 2);
-        iStack_12 = CONCAT22(uVar11,*(int *)&agnt->frames);
-        piVar10 = (int *)(*(int *)&agnt->frames + (uint)agnt->frameIndex * 4);
-        iVar5 = piVar10[1];
-        iVar6 = *piVar10;
-        iStack_e = CONCAT22(iVar5,iVar6);
-        if (iVar6 == 0 && iVar5 == 0) {
+        framesHi = *(uint16_t *)((int)&agnt->frames + 2);
+        framesLongDead = CONCAT22(framesHi,*(int *)&agnt->frames);
+        sprEntry = (int *)(*(int *)&agnt->frames + (uint)agnt->frameIndex * 4);
+        framesSeg = sprEntry[1];
+        recOfs = *sprEntry;
+        sprEntryLongDead = CONCAT22(framesSeg,recOfs);
+        if (recOfs == 0 && framesSeg == 0) {
                     /* WARNING: Subroutine does not return */
           ovr_stExit(0x42);
         }
         agnt->animFrame = 0x0;
-        *(char *)&agnt->destY = *(char *)(iVar6 + 0x15) + (char)agnt->screenY;
+        *(char *)&agnt->destY = *(char *)(recOfs + 0x15) + (char)agnt->screenY;
         if (agnt->level == 0x0) {
-          uVar2 = *(int *)(iVar6 + 0x13) + agnt->screenX;
-          agnt->destX = uVar2;
+          destXVal = *(int *)(recOfs + 0x13) + agnt->screenX;
+          agnt->destX = destXVal;
         }
         else {
-          uVar2 = agnt->screenX - *(int *)(iVar6 + 0x13);
-          agnt->destX = uVar2;
+          destXVal = agnt->screenX - *(int *)(recOfs + 0x13);
+          agnt->destX = destXVal;
         }
         *(uint8_t *)((int)&agnt->destY + 1) = agnt->level;
-        uVar4 = CONCAT11((char)(uVar2 >> 8),1);
+        retVal = CONCAT11((char)(destXVal >> 8),1);
       }
     }
-    return uVar4;
+    return retVal;
   }
-  return (uint)bVar1 << 8;
+  return (uint)agntOfsHi << 8;
 }
 
 
