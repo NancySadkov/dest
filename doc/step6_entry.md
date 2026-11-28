@@ -23594,3 +23594,42 @@ Three of the calls at those sites were to functions in *other modules* (`sub_OVC
     compare_state        identical 734 / 7 different / 889 missing (unchanged)
     diff_dgroup          288/1,805 matched (unchanged)
     compare_runtime      280 identical / 11 different at entry, init_game and key (unchanged)
+
+
+## `scripts/callsite_diff.py`: per-target call inventory, and what it says about `3381:08dc`
+
+The instrument that finished `3f0b:1082` is now committed. `structural_deficits.py` reports one delta
+per function, which hides *which* target is short; this tool resolves the image's `call`/`lcall`
+instructions to names through `functions_real.tsv` and groups the body's counted callees the same way,
+so the gap is visible per target. `--offsets` prints every image site with its address, which is what
+pins a body statement to one of several same-target calls.
+
+    $ python scripts/callsite_diff.py 3f0b:1082 ovc14_attact.c
+    image: attact_usesSCARRY22 3, attact_usesSCARRY2 2, attact_usesEntities 2, ...
+    body:  (before this turn) sub_OVC21_manage_c_23C2 3, func_0x0004f32d 2, manage_usesCurSfxType32 2
+
+**`3381:08dc` (init), the next target, inventoried:**
+
+    image calls (58)
+      init_getMapFlags 3        body 3     ok
+      init_rebuildMapFlags 2    body 2     ok
+      init_rebuildAllDirectionFlags 1  body 1  ok
+      init_usesRandBelow2 1     body 1     ok
+      window138:002a 6          body constr_usesGMapFlags 6        ok
+      window138:0061 2          body constr_usesGMapFlags2 2       ok
+      window170:005c 43         body ovr_randBelow 31              <-- 12 short
+
+    body also calls, and the image does not at these sites:
+      _fsetmem 2, init_textFilename 1
+
+So this function's -12 is a single target: twelve `ovr_randBelow` sites are absent from the body, and
+three calls exist that the image does not make there. The 43 sites are spread in clusters across
+0x08ef..0x134d (five consecutive at 0x0a84..0x0b00, five more at 0x0cbf..0x0d3b), which is the
+unrolled per-cell map generator the body renders as a mix of loops and straight-line stores - the
+grid section around body lines 561..610 is where the count diverges.
+
+## Measured (HEAD 142521eb -> this commit)
+
+    grep_checks 9,798 · build 65/65 · LINK.LOG 0 errors
+    compare_state 734 / 7 / 889 · diff_dgroup 288/1,805 · compare_runtime 280/11 at all three points
+    (tool-only change; no code or data moved)
