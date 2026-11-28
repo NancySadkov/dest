@@ -167,38 +167,38 @@ void __cdecl16far blitGfx10(far_t gfx,uint16_t x,uint16_t y,brect_t *dst,bool ty
 {
   far_t dst_00;
   far_t src;
-  int iVar1;
-  uint16_t in_DX;
-  int iVar2;
-  uint16_t uVar4;
-  undefined1 uStack000f;
+  int rowBytes;            /* bytes the row decoder consumed */
+  uint16_t dxIn;           /* DX on entry: the decoded graphic's segment */
+  int row;                 /* destination row counter */
+  uint16_t ovlSeg;         /* overlay segment selector for the calls */
+  undefined1 dstHighByte;  /* high byte of the split destination pointer */
   far_t dst_01;
   uint8_t rowBuf;
   uint16_t dst_h;
   uint16_t dst_w;
   uint16_t dst_y;
   uint16_t dst_x;
-  int iStack_1c;
+  int srcOfs;             /* source data offset, advanced by rowBytes */
   uint16_t gfxSeg;
-  uint16_t uStack_18;
+  uint16_t dstOfs;         /* running destination offset */
   uint16_t savedDstSeg;
   int spanH;
   uint16_t spanW;
-  int iStack_10;
-  uint16_t uStack_e;
-  uint16_t uStack_c;
-  uint16_t uStack_a;
-  uint16_t uStack_8;
+  int srcX;                /* column offset of the span inside the row */
+  uint16_t bottomY;        /* clipped span bottom */
+  uint16_t rightX;         /* clipped span right edge */
+  uint16_t topY;           /* clipped span top */
+  uint16_t leftX;          /* clipped span left edge */
   uint16_t pfn;
-  uint16_t uStack_4;
+  uint16_t dstSegSel;      /* destination segment selector (0x22a6) */
   
-  dst = (uint16_t *)CONCAT13(uStack000f,CONCAT12(type,dst));
-  uVar4 = 0x317e;
+  dst = (uint16_t *)CONCAT13(dstHighByte,CONCAT12(type,dst));
+  ovlSeg = 0x317e;
   if (gfx.ofs != 0 || gfx.seg != 0) {
     if (*(char *)MK_FP(gfx.seg, gfx.ofs) == '\0') {
-      uVar4 = 0x2337;
+      ovlSeg = 0x2337;
       gfx.ofs = (uint16_t)ovr_stshLoadGfx(gfx);
-      gfx.seg = in_DX;
+      gfx.seg = dxIn;
     }
     if (*(char *)MK_FP(gfx.seg, gfx.ofs) != '\x01') {
                     /* WARNING: Subroutine does not return */
@@ -217,46 +217,46 @@ void __cdecl16far blitGfx10(far_t gfx,uint16_t x,uint16_t y,brect_t *dst,bool ty
       else {
         pfn = 0x129;
       }
-      uStack_4 = 0x22a6;
+      dstSegSel = 0x22a6;
       if (((int)dst_x <= (int)(x + *(int *)(gfx.ofs + 5) + -1)) && ((int)x <= (int)dst_w)) {
         if ((int)x < (int)dst_x) {
-          iStack_10 = dst_x - x;
-          uStack_8 = dst_x;
+          srcX = dst_x - x;
+          leftX = dst_x;
         }
         else {
-          uStack_8 = x;
-          iStack_10 = 0;
+          leftX = x;
+          srcX = 0;
         }
-        uStack_c = dst_w;
+        rightX = dst_w;
         if ((int)(x + *(int *)(gfx.ofs + 5) + -1) <= (int)dst_w) {
-          uStack_c = (x + *(int *)(gfx.ofs + 5)) - 1;
+          rightX = (x + *(int *)(gfx.ofs + 5)) - 1;
         }
-        spanW = (uStack_c - uStack_8) + 1;
-        uStack_a = dst_y;
+        spanW = (rightX - leftX) + 1;
+        topY = dst_y;
         if ((int)dst_y <= (int)y) {
-          uStack_a = y;
+          topY = y;
         }
-        uStack_e = dst_h;
+        bottomY = dst_h;
         if ((int)(y + *(int *)(gfx.ofs + 7) + -1) <= (int)dst_h) {
-          uStack_e = (y + *(int *)(gfx.ofs + 7)) - 1;
+          bottomY = (y + *(int *)(gfx.ofs + 7)) - 1;
         }
-        spanH = (uStack_e - y) + 1;
-        uStack_18 = uStack_8 + uStack_a * 0x140;
+        spanH = (bottomY - y) + 1;
+        dstOfs = leftX + topY * 0x140;
         savedDstSeg = dst->seg;
-        iStack_1c = gfx.ofs + 9;
+        srcOfs = gfx.ofs + 9;
         gfxSeg = gfx.seg;
-        for (iVar2 = 0; (iVar2 < spanH && ((int)(iVar2 + y) <= (int)dst_h)); iVar2 = iVar2 + 1)
+        for (row = 0; (row < spanH && ((int)(row + y) <= (int)dst_h)); row = row + 1)
         {
-          iVar1 = (*(code *)pfn)(uVar4,iStack_1c,gfxSeg,&rowBuf);
-          iStack_1c = iStack_1c + iVar1;
-          if ((int)dst_y <= (int)(iVar2 + y)) {
+          rowBytes = (*(code *)pfn)(ovlSeg,srcOfs,gfxSeg,&rowBuf);
+          srcOfs = srcOfs + rowBytes;
+          if ((int)dst_y <= (int)(row + y)) {
             dst_01.seg = savedDstSeg;
-            dst_01.ofs = uStack_18;
-            uVar4 = 0x138e;
+            dst_01.ofs = dstOfs;
+            ovlSeg = 0x138e;
             src.seg = _SS;
-            src.ofs = (uint16_t)(&rowBuf + iStack_10);
+            src.ofs = (uint16_t)(&rowBuf + srcX);
             blitTillAlpha(dst_01,src,spanW);
-            uStack_18 = uStack_18 + 0x140;
+            dstOfs = dstOfs + 0x140;
           }
         }
       }
@@ -500,38 +500,38 @@ void __cdecl16far gfxRlePrepare(far_t gfx,int x,int y,int *rectOfs,char scale,ch
 
 {
   far_t buf;
-  uint uVar1;
-  int iVar2;
-  uint16_t in_DX;
-  uint uVar3;
+  uint dstRow;             /* destination row, advanced per emitted row */
+  int rowBytes;            /* bytes the row decoder consumed */
+  uint16_t gfxSegIn;       /* DX on entry: the loaded graphic's segment */
+  uint bitMask;            /* rotated 1, 2, 4 ... 0x8000 per row */
   uint16_t uVar4;
-  uint16_t uVar5;
-  undefined1 uStack000f;
+  uint16_t ovlSeg;         /* overlay segment selector for the calls */
+  undefined1 ptrHighByte;  /* high byte of the split rectOfs pointer */
   uint8_t in_stack_00000016;
   byte in_stack_00000018;
   uint8_t skip;
-  int iStack_1e;
+  int srcOfs;              /* source data offset, advanced by rowBytes */
   uint16_t gfxSeg;
-  char *pcStack_1a;
+  char *dstPtr;            /* running destination pointer */
   char *srcPtr;
   uint rectBottom;
   int rectRight;
   uint rectTop;
   int rectLeft;
-  char *pcStack_e;
+  char *colCursor;         /* the span's left column */
   uint spanW;
-  uint uStack_a;
-  uint uStack_8;
-  far_t *pfStack_6;
-  far_t *pfStack_4;
+  uint clipLeft;           /* columns clipped off the left edge */
+  uint row;                /* row counter within the graphic */
+  far_t *rowDecode;        /* the row decoder selected by `scale` */
+  far_t *unusedSel;        /* 0x22a6, stored and never read */
   
-  rectOfs = (int *)CONCAT13(uStack000f,CONCAT12(scale,rectOfs));
-  uVar5 = 0x317e;
+  rectOfs = (int *)CONCAT13(ptrHighByte,CONCAT12(scale,rectOfs));
+  ovlSeg = 0x317e;
   if ((gfx.ofs != 0 || gfx.seg != 0) && (flip != '\0')) {
     if (*(char *)MK_FP(gfx.seg, gfx.ofs) == '\0') {
-      uVar5 = 0x2337;
+      ovlSeg = 0x2337;
       gfx.ofs = (uint16_t)ovr_stshLoadGfx(gfx);
-      gfx.seg = in_DX;
+      gfx.seg = gfxSegIn;
     }
     if (*(char *)MK_FP(gfx.seg, gfx.ofs) != '\x02') {
                     /* WARNING: Subroutine does not return */
@@ -543,93 +543,93 @@ void __cdecl16far gfxRlePrepare(far_t gfx,int x,int y,int *rectOfs,char scale,ch
     rectRight = rectOfs[2];
     rectBottom = rectOfs[3];
     if (scale == '\0') {
-      uVar1 = (int)((uint)(byte)flip * *(int *)(gfx.ofs + 1)) >> 4;
+      dstRow = (int)((uint)(byte)flip * *(int *)(gfx.ofs + 1)) >> 4;
     }
     else {
-      uVar1 = (uint)(byte)flip * ((*(int *)(gfx.ofs + 10) + -1) - *(int *)(gfx.ofs + 1)) >> 4;
+      dstRow = (uint)(byte)flip * ((*(int *)(gfx.ofs + 10) + -1) - *(int *)(gfx.ofs + 1)) >> 4;
     }
-    x = x - uVar1;
-    uVar1 = y - ((int)((uint)(byte)flip * *(int *)(gfx.ofs + 3)) >> 4);
+    x = x - dstRow;
+    dstRow = y - ((int)((uint)(byte)flip * *(int *)(gfx.ofs + 3)) >> 4);
     if (x < rectLeft) {
-      uStack_a = rectLeft - x;
-      pcStack_e = (char *)rectLeft;
-      if (*(uint *)(gfx.ofs + 10) <= uStack_a) {
+      clipLeft = rectLeft - x;
+      colCursor = (char *)rectLeft;
+      if (*(uint *)(gfx.ofs + 10) <= clipLeft) {
         return;
       }
     }
     else {
-      pcStack_e = (char *)x;
-      uStack_a = 0;
+      colCursor = (char *)x;
+      clipLeft = 0;
     }
-    spanW = (rectRight - (int)pcStack_e) + 1;
+    spanW = (rectRight - (int)colCursor) + 1;
     if (0 < (int)spanW) {
-      pcStack_1a = (char *)((int)pcStack_e + uVar1 * 0x140);
+      dstPtr = (char *)((int)colCursor + dstRow * 0x140);
       srcPtr = (char *)rectOfs[4];
-      uVar3 = 1;
+      bitMask = 1;
       if (scale == '\0') {
-        pfStack_6 = (far_t *)(GUnitDescriptions + 0x12);
+        rowDecode = (far_t *)(GUnitDescriptions + 0x12);
       }
       else {
-        pfStack_6 = (far_t *)&GUnitDescriptions[0xf].seg;
+        rowDecode = (far_t *)&GUnitDescriptions[0xf].seg;
       }
-      pfStack_4 = (far_t *)0x22a6;
-      iStack_1e = gfx.ofs + 0xe;
+      unusedSel = (far_t *)0x22a6;
+      srcOfs = gfx.ofs + 0xe;
       gfxSeg = gfx.seg;
-      pcStack_e = pcStack_1a;
+      colCursor = dstPtr;
       if (flip == 0xff) {
-        uStack_8 = 0;
-        while ((uStack_8 < *(uint *)(gfx.ofs + 0xc) && (uVar1 <= rectBottom))) {
-          iVar2 = (*(code *)pfStack_6)(uVar5,iStack_1e,gfxSeg,&skip);
-          iStack_1e = iStack_1e + iVar2;
-          if ((*(uint *)((uint)(byte)flip * 2 + 0x470) & uVar3) != 0) {
-            if (rectTop <= uVar1) {
+        row = 0;
+        while ((row < *(uint *)(gfx.ofs + 0xc) && (dstRow <= rectBottom))) {
+          rowBytes = (*(code *)rowDecode)(ovlSeg,srcOfs,gfxSeg,&skip);
+          srcOfs = srcOfs + rowBytes;
+          if ((*(uint *)((uint)(byte)flip * 2 + 0x470) & bitMask) != 0) {
+            if (rectTop <= dstRow) {
               copyGrayscalePalette
-                        ((uint8_t *)CONCAT22(_SS,&skip + uStack_a),
-                         *(int *)(gfx.ofs + 10) - uStack_a);
-              uVar5 = 0x22a6;
-              ovr_masked_memcpy(pcStack_1a,(char *)CONCAT22(&skip,srcPtr),_SS,uStack_a,
+                        ((uint8_t *)CONCAT22(_SS,&skip + clipLeft),
+                         *(int *)(gfx.ofs + 10) - clipLeft);
+              ovlSeg = 0x22a6;
+              ovr_masked_memcpy(dstPtr,(char *)CONCAT22(&skip,srcPtr),_SS,clipLeft,
                                 *(int *)(gfx.ofs + 10),spanW,
                                 *(uint16_t *)((uint)(byte)flip * 2 + 0x470));
             }
-            pcStack_1a = pcStack_1a + 0x140;
-            uVar1 = uVar1 + 1;
+            dstPtr = dstPtr + 0x140;
+            dstRow = dstRow + 1;
           }
-          if (uVar3 == 0x8000) {
-            uVar3 = 1;
+          if (bitMask == 0x8000) {
+            bitMask = 1;
           }
           else {
-            uVar3 = uVar3 << 1;
+            bitMask = bitMask << 1;
           }
-          uStack_8 = uStack_8 + 1;
+          row = row + 1;
         }
       }
       else {
-        uStack_8 = 0;
-        while ((uStack_8 < *(uint *)(gfx.ofs + 0xc) && (uVar1 <= rectBottom))) {
-          iVar2 = (*(code *)pfStack_6)(uVar5,iStack_1e,gfxSeg,&skip);
-          iStack_1e = iStack_1e + iVar2;
-          if ((*(uint *)((uint)(byte)flip * 2 + 0x470) & uVar3) != 0) {
-            if (rectTop <= uVar1) {
+        row = 0;
+        while ((row < *(uint *)(gfx.ofs + 0xc) && (dstRow <= rectBottom))) {
+          rowBytes = (*(code *)rowDecode)(ovlSeg,srcOfs,gfxSeg,&skip);
+          srcOfs = srcOfs + rowBytes;
+          if ((*(uint *)((uint)(byte)flip * 2 + 0x470) & bitMask) != 0) {
+            if (rectTop <= dstRow) {
               buf.seg = _SS;
-              buf.ofs = (uint16_t)(&skip + uStack_a);
-              ovr_driver_scan1(buf,*(int *)(gfx.ofs + 10) - uStack_a,flip,
+              buf.ofs = (uint16_t)(&skip + clipLeft);
+              ovr_driver_scan1(buf,*(int *)(gfx.ofs + 10) - clipLeft,flip,
                                in_stack_00000016,far_from_u32((uint32_t)(0x15290000)),(uint)in_stack_00000018);
-              in_stack_00000018 = in_stack_00000018 + (*(char *)(gfx.ofs + 10) - (char)uStack_a);
-              uVar5 = 0x22a6;
-              ovr_masked_memcpy(pcStack_1a,(char *)CONCAT22(&skip,srcPtr),_SS,uStack_a,
+              in_stack_00000018 = in_stack_00000018 + (*(char *)(gfx.ofs + 10) - (char)clipLeft);
+              ovlSeg = 0x22a6;
+              ovr_masked_memcpy(dstPtr,(char *)CONCAT22(&skip,srcPtr),_SS,clipLeft,
                                 *(int *)(gfx.ofs + 10),spanW,
                                 *(uint16_t *)((uint)(byte)flip * 2 + 0x470));
             }
-            pcStack_1a = pcStack_1a + 0x140;
-            uVar1 = uVar1 + 1;
+            dstPtr = dstPtr + 0x140;
+            dstRow = dstRow + 1;
           }
-          if (uVar3 == 0x8000) {
-            uVar3 = 1;
+          if (bitMask == 0x8000) {
+            bitMask = 1;
           }
           else {
-            uVar3 = uVar3 << 1;
+            bitMask = bitMask << 1;
           }
-          uStack_8 = uStack_8 + 1;
+          row = row + 1;
         }
       }
     }
@@ -777,49 +777,49 @@ blit_compute1(uint16_t dstSeg,int16_t y,int16_t x,far_t src,uint16_t imgWidth,ui
              ,int16_t clipTop,int16_t clipBottom)
 
 {
-  int iVar1;
-  uint uVar2;
-  uint uStack_c;
-  uint uStack_a;
-  uint uStack_8;
-  int16_t iStack_6;
+  int yAcc;                /* y accumulator advanced by yStep */
+  uint bitMask;            /* rotated 1, 2, 4 ... 0x8000 across dx */
+  uint drawn;              /* pixels written for the current mask bit */
+  uint srcCol;             /* source column counter */
+  uint dstCol;             /* destination column counter */
+  int16_t screenOfs;       /* running screen offset, +1 per emitted pixel */
   
-  iVar1 = ySlope >> 1;
-  uVar2 = 1;
-  iStack_6 = x;
-  uStack_a = 0;
-  uStack_c = 0;
-  uStack_8 = 0;
+  yAcc = ySlope >> 1;
+  bitMask = 1;
+  screenOfs = x;
+  srcCol = 0;
+  drawn = 0;
+  dstCol = 0;
   do {
-    if (clipWidth <= uStack_8) {
+    if (clipWidth <= dstCol) {
       return;
     }
-    if ((dx & uVar2) != 0) {
-      if (imgWidth <= uStack_a) {
-        if (((*(char *)(src.ofs + uStack_8) != '\0') && (clipTop <= y)) && (y <= clipBottom)) {
-          *(undefined1 *)(iStack_6 + y * 0x140) = *(undefined1 *)(src.ofs + uStack_8);
+    if ((dx & bitMask) != 0) {
+      if (imgWidth <= srcCol) {
+        if (((*(char *)(src.ofs + dstCol) != '\0') && (clipTop <= y)) && (y <= clipBottom)) {
+          *(undefined1 *)(screenOfs + y * 0x140) = *(undefined1 *)(src.ofs + dstCol);
         }
-        iStack_6 = iStack_6 + 1;
-        uStack_c = uStack_c + 1;
-        if (mask <= uStack_c) {
+        screenOfs = screenOfs + 1;
+        drawn = drawn + 1;
+        if (mask <= drawn) {
           return;
         }
       }
-      uStack_a = uStack_a + 1;
-      iVar1 = iVar1 + yStep;
+      srcCol = srcCol + 1;
+      yAcc = yAcc + yStep;
       y = y + yRemainder;
-      if (ySlope <= iVar1) {
+      if (ySlope <= yAcc) {
         y = y + yJump;
-        iVar1 = iVar1 - ySlope;
+        yAcc = yAcc - ySlope;
       }
     }
-    if (uVar2 == 0x8000) {
-      uVar2 = 1;
+    if (bitMask == 0x8000) {
+      bitMask = 1;
     }
     else {
-      uVar2 = uVar2 << 1;
+      bitMask = bitMask << 1;
     }
-    uStack_8 = uStack_8 + 1;
+    dstCol = dstCol + 1;
   } while( true );
 }
 

@@ -128,7 +128,7 @@ stg_tmp_t * __cdecl16far ovc40_usesStshLoadGfx(byte backdropIndex)
   far_t handle_00;
   far_t handle_01;
   far_t handle_02;
-  uint16_t in_DX;
+  uint16_t gfxSeg;         /* segment of the record ovr_stshLoadGfx returns */
   uint16_t uVar1;
   static char cmapBackupB[64];   /* DGROUP-backed formatting buffer */
   static char cmapBackupA[64];   /* DGROUP-backed formatting buffer */
@@ -138,18 +138,18 @@ stg_tmp_t * __cdecl16far ovc40_usesStshLoadGfx(byte backdropIndex)
   handle.seg = marbleCut1Seg;
   handle.ofs = marbleCut1Ofs;
   gfxRec = ovr_stshLoadGfx(handle);
-  _fmemmove(cmapBackupB,(char far *)MK_FP(in_DX,gfxRec->cmap + 0x231),
+  _fmemmove(cmapBackupB,(char far *)MK_FP(gfxSeg,gfxRec->cmap + 0x231),
             0xcf);
   handle_00.seg = Lbm_nwpanel1.seg;
   handle_00.ofs = Lbm_nwpanel1.ofs;
   gfxRec = ovr_stshLoadGfx(handle_00);
-  _fmemmove(cmapBackupA,(char far *)MK_FP(in_DX,gfxRec->cmap + 0x2ac),
+  _fmemmove(cmapBackupA,(char far *)MK_FP(gfxSeg,gfxRec->cmap + 0x2ac),
             0xc);
   if (backdropIndex == 4) {
     handle_01.seg = youlose1Cut1Seg;
     handle_01.ofs = youlose1Cut1Ofs;
     gfxRec = ovr_stshLoadGfx(handle_01);
-    uStack_4 = in_DX;
+    uStack_4 = gfxSeg;
   }
   else {
     uVar1 = 0x2410;
@@ -172,7 +172,7 @@ stg_tmp_t * __cdecl16far ovc40_usesStshLoadGfx(byte backdropIndex)
 void __cdecl16far ovc40_usesCalcSeasonPalette(char useVgaPalette)
 
 {
-  uint16_t in_DX;
+  uint16_t inDX;           /* DX on entry, used as the palette segment */
   far_t handle;
   far_t palette;
   far_t palette_00;
@@ -182,7 +182,7 @@ void __cdecl16far ovc40_usesCalcSeasonPalette(char useVgaPalette)
   handle.seg = Lbm_nwpanel1.seg;
   handle.ofs = Lbm_nwpanel1.ofs;
   palRec = ovr_stshLoadGfx(handle);
-  ovr_calcSeasonPalette(palRec->cmap,in_DX,&pal,_SS,0,0);
+  ovr_calcSeasonPalette(palRec->cmap,inDX,&pal,_SS,0,0);
   if (useVgaPalette == '\0') {
     palette_00.seg = _SS;
     palette_00.ofs = (uint16_t)&pal;
@@ -243,18 +243,18 @@ void __cdecl16far ovc40_usesBlitGfx10(byte backdropIndex,int scrollOffset,brect_
 void __cdecl16far ovc40_flushInput(void)
 
 {
-  uint16_t uVar1;
-  bool bStack_3;
+  uint16_t keyOrMouse;     /* biosKeyAvail then miceButtonsStates */
+  bool pending;            /* either source still has input */
   
   do {
-    uVar1 = ovr_biosKeyAvail();
-    bStack_3 = (char)uVar1 != '\0';
-    if (bStack_3) {
+    keyOrMouse = ovr_biosKeyAvail();
+    pending = (char)keyOrMouse != '\0';
+    if (pending) {
       ovr_gameProcessKey();
     }
-    uVar1 = ovr_miceButtonsStates();
-    bStack_3 = uVar1 != 0 || bStack_3;
-  } while (bStack_3);
+    keyOrMouse = ovr_miceButtonsStates();
+    pending = keyOrMouse != 0 || pending;
+  } while (pending);
   rightButtonLatch = 0;
   middleButtonLatch = 0;
   return;

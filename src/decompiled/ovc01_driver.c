@@ -683,52 +683,52 @@ void __cdecl16far
 driver_scan1(far_t buf,uint16_t count,uint8_t fill,uint8_t threshold,far_t pattern,uint16_t index)
 
 {
-  byte *pbVar1;
-  uint8_t *puVar2;
-  uint8_t uVar3;
-  uint8_t *puVar4;
-  uint16_t uVar5;
+  byte *patternPtr;        /* &pattern[index & 0xff] */
+  uint8_t *dstPtr;         /* scratch store target */
+  uint8_t pixel;           /* the byte read from the buffer */
+  uint8_t *cursor;         /* running position in the buffer */
+  uint16_t bufSeg;         /* segment half of buf */
   
-  uVar5 = buf.seg;
-  puVar4 = (uint8_t *)buf.ofs;
+  bufSeg = buf.seg;
+  cursor = (uint8_t *)buf.ofs;
   if (fill == 0x0) {
     do {
-      while (uVar3 = *puVar4, uVar3 == 0x0) {
-        puVar4 = puVar4 + 1;
+      while (pixel = *cursor, pixel == 0x0) {
+        cursor = cursor + 1;
         count = count - 1;
         if (count == 0) {
           return;
         }
       }
-      pbVar1 = (byte *)(index + pattern.ofs);
+      patternPtr = (byte *)(index + pattern.ofs);
       index = index + 1 & 0xff;
-      if (threshold <= *pbVar1) {
-        uVar3 = 0x0;
+      if (threshold <= *patternPtr) {
+        pixel = 0x0;
       }
-      puVar2 = puVar4;
-      puVar4 = puVar4 + 1;
-      *puVar2 = uVar3;
+      dstPtr = cursor;
+      cursor = cursor + 1;
+      *dstPtr = pixel;
       count = count - 1;
     } while (count != 0);
   }
   else {
     do {
-      while (*puVar4 != 0x0) {
+      while (*cursor != 0x0) {
         index = index + 1 & 0xff;
         if (*(byte *)(index + pattern.ofs) < threshold) {
-          *puVar4 = fill;
+          *cursor = fill;
           break;
         }
-        puVar2 = puVar4;
-        puVar4 = puVar4 + 1;
-        *puVar2 = 0x0;
+        dstPtr = cursor;
+        cursor = cursor + 1;
+        *dstPtr = 0x0;
         count = count - 1;
         if (count == 0) {
           return;
         }
       }
       count = count - 1;
-      puVar4 = puVar4 + 1;
+      cursor = cursor + 1;
     } while (count != 0);
   }
   return;

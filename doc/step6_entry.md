@@ -23934,3 +23934,53 @@ locals makes that record readable, and `dotMode` is the argument that explains w
     diff_dgroup          288/1,805 matched (unchanged)
     compare_runtime      280 identical / 11 different at entry, init_game and key (unchanged)
     structural_deficits  6 entries, unchanged
+
+
+## Renaming batch 5: grep 9,536 -> 9,283 (-253)
+
+Four files, all bodies whose slots each carry one role.
+
+**`ovc06_blit.c` — `blit_compute1` (317e:0ebe), 36 hits, 6 slots.** A Bresenham span writer:
+
+    iVar1   -> yAcc       y accumulator advanced by yStep
+    uVar2   -> bitMask    rotated 1, 2, 4 ... 0x8000 across the dx bitset
+    uStack_c-> drawn      pixels written for the current mask bit
+    uStack_a-> srcCol     source column counter
+    uStack_8-> dstCol     destination column counter
+    iStack_6-> screenOfs  running screen offset, +1 per emitted pixel
+
+**`ovc06_blit.c` — `blitGfx10` (317e:02a9), 50 hits, 12 slots.** `rowBytes`, `dxIn`, `row`, `ovlSeg`,
+`dstHighByte`, `srcOfs`, `dstOfs`, `srcX`, `bottomY`, `rightX`, `topY`, `leftX`, `dstSegSel` - the
+clipped-span edges and the two running offsets, named from their use in both branches.
+
+**`ovc06_blit.c` — `gfxRlePrepare` (317e:08ed), 76 hits.** Renamed 13 of its slots; the two
+`in_stack_00000016/18` remain because one of them is written by the body itself (line 617 increments
+`[bp+0x18]`), which means it is not a plain argument and I will not guess what it holds:
+
+    dstRow, rowBytes, gfxSegIn, bitMask, ovlSeg, ptrHighByte, srcOfs, dstPtr, colCursor,
+    clipLeft, row, rowDecode, unusedSel   (`pfStack_4` is stored as 0x22a6 and never read)
+
+**`ovc01_driver.c` — `driver_scan1` (2d63:044e), 30 hits.** `patternPtr`, `dstPtr`, `pixel`,
+`cursor`, `bufSeg`.
+
+**`ovc40_palette.c`** — `ovc40_usesStshLoadGfx` (11) `in_DX -> gfxSeg`;
+`ovc40_usesCalcSeasonPalette` (2) `in_DX -> inDX`; `ovc40_flushInput` (5) `uVar1 -> keyOrMouse`,
+`bStack_3 -> pending`.
+
+## Measured (HEAD 583d4a8f -> this commit)
+
+    grep_checks          9,536 -> 9,283   (-253)
+    REBUILT.EXE          447,922 (unchanged)
+    build 65/65, LINK.LOG 0 errors
+    compare_state        identical 734 / 7 different / 889 missing (unchanged)
+    diff_dgroup          288/1,805 matched (unchanged)
+    compare_runtime      280 identical / 11 different at entry, init_game and key (unchanged)
+    structural_deficits  6 entries, unchanged
+
+Current per-file buckets (measured after this batch):
+
+    [iusbc]Var   5,567   ovc33_stats 351, ovc22_classes 332, ovc44_strong_dat 284
+    [iusc]Stack_   973   ovc40_palette 126, ovc45_unitinfo 90, ovc06_blit 79
+    p[iusbc]Var    946   ovc01_driver 94, ovc20_stash 69, ovc45_unitinfo 68
+    bStack_        451   ovc34_unit 114, ovc10_constr 59, ovc09_init 48
+    in_stack_      447   ovc23_bldrec 37, ovc12_agnt 33, ovc21_manage 31
