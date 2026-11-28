@@ -25420,3 +25420,41 @@ the image - the names at least make the juggling visible instead of hiding it be
       agnt_computeFrameExtents (3b1d:00ce) -91
       ovc27_spellNotice (5ded:0a05)       -94
       ovc48_assets2.c 81b9:0086            -33
+
+
+## `constr_usesAgnt_clear` (36ce:0995) finished: 126 hits down to 0, grep 6,090 -> 5,969 (-121)
+
+The four slots that had defeated the earlier passes are the tile-drawing routine's real variables, and
+they separate cleanly once each is read with its statements:
+
+    uVar4  -> flagsHere   constr_getFlagsAtOffset(sqCol,row)
+              shadeVal    constr_compute1's shade for the corner being drawn (24 sites)
+              flagsBelow  constr_getFlagsAtOffset(sqCol,-1)
+              alignRes    ovr_alignUp4(GfxRndSeed,...), the cursor position
+    iVar6  -> topY        ScreenOriginY[row] - smoothTL
+              brX         ScreenOriginX[row] - smoothBR
+    uVar12 -> rowLo       (undefined1)row, the row byte handed to every callee
+              fontOfsLo   (undefined1)Font02.ofs
+    iVar8  -> sqLeftX / sqBottomY      the two square edges from the map arrays
+              bldOfs               bldIndex * 0xc + *(int *)(sq * 2) * 4
+              blendY               the vertical smooth-shade interpolation
+              topLeftEdge / leftEdgeX / topRightEdge / rightEdgeX / bottomEdgeY
+                                   the five smoothing deltas, one per blit
+              interpBase           ScreenOriginY[0] - cornerBLval
+
+Ten distinct lifetimes in `iVar8` alone, all with an assignment before the first read and no value
+carried across a role change - which is why this one could be split where `upd_usesAlignUp4`'s block
+needed a full derivation.
+
+The body is now down to `unaff_SI` (2) and `unaff_DI` (2), the register-passed arguments it reads on
+entry.
+
+## Measured (HEAD dbb7af4e -> this commit)
+
+    grep_checks          6,090 -> 5,969   (-121)
+    REBUILT.EXE          447,810 -> 447,954   (+144: frame reshuffle, 4 slots became 18 locals)
+    build 65/65, LINK.LOG 0 errors
+    compare_state        identical 734 / 7 different / 889 missing (unchanged)
+    diff_dgroup          288/1,805 matched (unchanged)
+    compare_runtime      280 identical / 11 different at entry, init_game and key (unchanged)
+    structural_deficits  two game bodies: 7e7c:0b9c (177/187), 77eb:0d61 (54/58)
