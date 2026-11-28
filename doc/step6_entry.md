@@ -24390,3 +24390,55 @@ uninitialised stack and passes it as pointers**. Three consequences:
     compare_state        identical 734 / 7 different / 889 missing (unchanged)
     diff_dgroup          288/1,805 matched (unchanged)
     compare_runtime      280 identical / 11 different at entry, init_game and key (unchanged)
+
+
+## The `uStack_XX` "halves" are entries of a copied **table of far pointers** - plus a real
+   stack-overflow fix
+
+Dumping `69c8:04c6` settles what those words are. The image opens with three `lcall 0, 0x94f`
+(F_SCOPY) calls that copy DGROUP data onto the stack:
+
+    0x04cf  ss:[bp-0x5a] <- ds:0x6b3a, 60 bytes
+    0x04e0  ss:[bp-0x6a] <- ds:0x6b76, 16 bytes
+    0x04f1  ss:[bp-0x12] <- ds:0x6b86, 10 bytes
+
+and the DGROUP content is a **table of far pointers**, verified byte for byte:
+
+    ds:0x6b3a  15 x far_t, every entry {ofs 0x6b90.., seg 0x2410}
+    ds:0x6b76   4 x far_t
+    ds:0x6b86   a 10-byte rectangle (0,0,0x13f,0x8f,...)
+
+So `[bp-0x4a]`/`[bp-0x48]` are entry 4 of the first table, `[bp-0x46]`/`[bp-0x44]` entry 5,
+`[bp-0x42]`/`[bp-0x40]` entry 6, `[bp-0x2e]`/`[bp-0x2c]` entry 11, and so on - the whole
+`uStack_XX` set is `rankNames[0..14]`. They were never "uninitialised": the decompiler modelled the
+60-byte buffer as a 1-byte scalar, so its entries became separate locals with no writer.
+
+**That 1-byte model was also a live bug.** The exported body declared
+
+    uint8_t dst;       /* F_SCOPY writes 16 bytes into &dst */
+    uint8_t rankMsg;   /* F_SCOPY writes 60 bytes into &rankMsg */
+    uint8_t rect;      /* F_SCOPY writes 10 bytes; then used as a brect_t* */
+
+so the function scribbled 86 bytes over its own neighbours on that path. The declarations are now the
+shapes the image copies in:
+
+    far_t groupNames[4];   /* 16 bytes from ds:0x6b76 */
+    far_t rankNames[15];   /* 60 bytes from ds:0x6b3a */
+    uint8_t rect[10];
+
+and `text1_09`/`text2_08` - which the image builds twice from `[bp-0x2e]`/`[bp-0x2c]` at `0x091d` -
+now read `rankNames[11]` instead of a one-byte local.
+
+**Remaining mapping for the next pass** (image site -> table entry): `0x0669` -> 4, `0x067c` -> 5,
+`0x06ba` -> 6, `0x072f` -> 12, `0x0778` -> 12, `0x079e` -> 13, `0x091d` -> 11 (done). Each of those
+replaces a pair of `uStack_XX` assignments with one `text1_NN = rankNames[k]`, which is both shorter
+and true.
+
+## Measured (HEAD 5b34e68d -> this commit)
+
+    grep_checks          8,035 -> 8,033
+    REBUILT.EXE          447,906 (unchanged)
+    build 65/65, LINK.LOG 0 errors
+    compare_state        identical 734 / 7 different / 889 missing (unchanged)
+    diff_dgroup          288/1,805 matched (unchanged)
+    compare_runtime      280 identical / 11 different at entry, init_game and key (unchanged)

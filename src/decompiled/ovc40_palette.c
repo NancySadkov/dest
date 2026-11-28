@@ -328,12 +328,12 @@ ovc40_usesAlignToSeg
   undefined1 ssHi;         /* high byte of _SS */
   uint8_t text1;
   uint8_t text2;
-  uint8_t dst;
+  far_t groupNames[4];     /* 16 bytes copied from ds:0x6b76: four far pointers */
   uint16_t uStack_68;
   uint16_t uStack_66;
   uint8_t format1;
   uint16_t auStack_62 [3];
-  uint8_t rankMsg;
+  far_t rankNames[15];    /* 60 bytes copied from ds:0x6b3a: fifteen far pointers */
   uint16_t uStack_5a;
   uint16_t uStack_58;
   char *capTextShownSeg;   /* segment half of the caption's text pointer */
@@ -367,7 +367,7 @@ ovc40_usesAlignToSeg
   uint16_t palSeg;         /* segment stored into palette.seg */
   void *stashMem;          /* the ovr_stshAlloc scratch block */
   uint16_t handleSeg;      /* segment stored into handle.seg */
-  uint8_t rect;
+  uint8_t rect[10];        /* the 10-byte rectangle copied from ds:0x6b86 */
   int waitStart;           /* the timestamp the wait loop started from */
   int tickMark;            /* the BDA counter value sampled in the loop */
   uint8_t clickY;
@@ -376,15 +376,15 @@ ovc40_usesAlignToSeg
   ssLo = SUB21(_SS,0);
   ssHi = (undefined1)((uint)_SS >> 8);
   (*(uint8_t *)((uint8_t *)&(dst_00.seg))) = ssLo;
-  dst_00.ofs = (uint16_t)&rankMsg;
+  dst_00.ofs = (uint16_t)&rankNames;
   (*(uint8_t *)((uint8_t *)&(dst_00.seg) + 1)) = ssHi;
   F_SCOPY(far_from_u32((uint32_t)(0x24106b3a)),dst_00,60);
   (*(uint8_t *)((uint8_t *)&(dst_01.seg))) = ssLo;
-  dst_01.ofs = (uint16_t)&dst;
+  dst_01.ofs = (uint16_t)&groupNames;
   (*(uint8_t *)((uint8_t *)&(dst_01.seg) + 1)) = ssHi;
   F_SCOPY(far_from_u32((uint32_t)(0x24106b76)),dst_01,16);
   (*(uint8_t *)((uint8_t *)&(dst_02.seg))) = ssLo;
-  dst_02.ofs = (uint16_t)&rect;
+  dst_02.ofs = (uint16_t)&rect[0];
   (*(uint8_t *)((uint8_t *)&(dst_02.seg) + 1)) = ssHi;
   F_SCOPY(far_from_u32((uint32_t)(0x24106b86)),dst_02,10);
   result = '\0';
@@ -509,10 +509,10 @@ ovc40_usesAlignToSeg
     ovc40_usesBlitLabel(text1_08,far_from_u32((uint32_t)(0x0)),1,0xf2);
   }
   else {
-    text1_09.seg = uStack_5a;
-    text1_09.ofs = rankMsg;
-    text2_08.seg = uStack_5a;
-    text2_08.ofs = rankMsg;
+    text1_09.seg = rankNames[11].seg;
+    text1_09.ofs = rankNames[11].ofs;
+    text2_08.seg = rankNames[11].seg;
+    text2_08.ofs = rankNames[11].ofs;
     ovc40_usesBlitLabel(text1_09,text2_08,0,0xf2);
     blitColour = 0xf2;
     labelIdx = 1;
