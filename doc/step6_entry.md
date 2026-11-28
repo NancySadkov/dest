@@ -23160,3 +23160,53 @@ that already exist.
 ## Committed
 
     scripts/structural_deficits.py     the census with both corrections, artefacts listed explicitly
+
+
+## `init_paths` (3381:01c8) rewritten from the image - and a real buffer restored
+
+The body had been reduced to a "recovered shape" with two `""` placeholders, which was not just
+incomplete but wrong: `getcwd((char *)"", 68)` wrote 68 bytes of the current directory **over a
+string constant**, and the last three calls of the image were missing entirely.
+
+Decoded call by call from the 116-byte listing:
+
+    0x01cb  getcwd(GOriginalDir, 0x44)                    lcall 0,0x2568   buf 0x280:0x8c28
+    0x01db  strcpy(GWorkDir, GOriginalDir)                lcall 0,0x2d31
+    0x01ef  ensure_tail_slash(GWorkDir)                   call  3381:0132
+    0x01fc  strcat(GWorkDir, "strong.sav\\")              lcall 0,0x2cc2   src _DS:0x5b0
+    0x020e  append_name_to_path(GGameExe, "%sgame.cfg")   call  3381:009a   name _DS:0x5bb
+    0x0228  path_strip_tail_slash(<that result>)          call  3381:00fe
+    0x0231  chpath(<that result>)                         call  3381:016c
+
+**The buffer had to come back.** `GOriginalDir` (0x8c28, 68 bytes - exactly the size `getcwd` is
+given, and 0x8c28 + 68 = 0x8c6c = `GWorkDir`) no longer existed in the tree: it was one of the
+`char NAME[N] = ""` zero buffers removed by the string-inlining pass, and its uses had been rewritten
+to `""`. It is restored in `st_globals5.c` between `CFG_Sfx` and `GWorkDir`, which is its position in
+the image, with an explicit 68-zero initialiser so it stays in `_DATA`.
+
+The string arguments are read from the DGROUP image rather than inferred: 0x5b0 is `"strong.sav\\"`
+(11 bytes + NUL, the declared 12) and 0x5bb is `"%sgame.cfg"` (10 + NUL, the declared 11).
+
+The three path helpers were exported with a separate `uint16_t arg2` that they fold back into a far
+pointer with `CONCAT22`, so each call passes `_DS` for it - the image pushes the runtime DGROUP
+segment `0x280` there, which is `_DS` in the rebuild. Passing the link-time paragraph 0x2410 (as
+`ovc05_error.c:48` still does) would point at the wrong segment.
+
+## Measured (HEAD 38c75f84 -> this commit)
+
+    structural_deficits  3381:01c8  4/7 -> 7/7  (gone from the list; 11 functions left, was 12)
+    grep_checks          9,798 (unchanged)
+    REBUILT.EXE          447,784 -> 447,906
+    build 65/65, LINK.LOG 0 errors
+    compare_state        identical 734 / 7 different / 889 missing (unchanged)
+    diff_dgroup          288/1,805 matched, 62 layout runs (unchanged - the restored array lands
+                         inside the block the string removal already displaced)
+    compare_runtime      280 identical / 11 different at all three sample points (unchanged)
+
+Note on the data gates: restoring `GOriginalDir` does **not** move them, because the 1,457 removed
+string arrays shift everything between it and the comparison anchors. It moved one symbol out of the
+"recovered (renamed)" bucket (14 -> 13) but not into "identical", i.e. it is present and named
+correctly, just not at the original offset.
+
+`init_paths` runs inside `init_game`, so all three runtime sample points (main entry, init_game, key)
+exercise the rewritten body - the unchanged 280/11 confirms it executes without fault.

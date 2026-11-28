@@ -134,22 +134,31 @@ void __cdecl16far chpath(char far *path, uint16_t arg2)
 void __cdecl16far init_paths(void)
 
 {
-  /* Recovered shape:
-       getcwd(DGROUP:[0x44])                     ; the current directory
-       strcpy(&GWorkDir, "")           ; same buffer
-       ensure_tail_slash(&GWorkDir, 0x2410)
-       strcat(&GWorkDir, (char *)GSaveFileName)
-       append_name_to_path(exe path, work dir) ; chdir to the exe's directory
+  /* Re-derived from 3381:01c8 (116 bytes), call by call:
 
-     The decompiled form addressed the original image's data segment (0x2410) for the
-     cwd buffer and passed that segment number as ensure_tail_slash's second argument.
-     The buffer it fills is copied into GWorkDir immediately afterwards, so it is
-     "".  The trailing append_name_to_path/chpath only changes to the
-     program's own directory, which is where this build already runs. */
-  getcwd((char *)"",68);
-  strcpy((char *)&GWorkDir,(char *)"");
-  ensure_tail_slash((char *)&GWorkDir,0);
-  strcat((char *)&GWorkDir,(char *)GSaveFileName);
+       0x01cb  getcwd(GOriginalDir, 0x44)          lcall 0,0x2568
+       0x01db  strcpy(GWorkDir, GOriginalDir)      lcall 0,0x2d31
+       0x01ef  ensure_tail_slash(GWorkDir)         call  3381:0132
+       0x01fc  strcat(GWorkDir, "strong.sav\\")    lcall 0,0x2cc2, src _DS:0x5b0
+       0x020e  append_name_to_path(GGameExe, "%sgame.cfg")   call 3381:009a, name _DS:0x5bb
+       0x0228  path_strip_tail_slash(<that result>)          call 3381:00fe
+       0x0231  chpath(<that result>)                         call 3381:016c
+
+     The buffers are the two named DGROUP areas the image addresses: the cwd buffer at
+     0x8c28 (`GOriginalDir`, 68 bytes -- the size passed to getcwd) and the work buffer at
+     0x8c6c (`GWorkDir`, 80 bytes).  The earlier body had replaced both with `""` string
+     literals, which made getcwd write 68 bytes over a constant.
+
+     The three path helpers were exported with a separate `uint16_t arg2` that they fold back
+     into a far pointer with CONCAT22, so each call passes the data segment for it. */
+  getcwd((char *)GOriginalDir,68);
+  strcpy((char *)GWorkDir,(char *)GOriginalDir);
+  ensure_tail_slash((char *)GWorkDir,(uint16_t)_DS);
+  strcat((char *)GWorkDir,"strong.sav\\");
+  chpath(path_strip_tail_slash(
+             append_name_to_path((char far *)MK_FP(GGameExe.seg,GGameExe.ofs),
+                                 (char far *)"%sgame.cfg"),(uint16_t)_DS),
+         (uint16_t)_DS);
   return;
 }
 
