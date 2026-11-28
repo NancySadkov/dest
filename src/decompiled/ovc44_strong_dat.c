@@ -137,7 +137,9 @@ void __cdecl16far getcache(bool updateFile)
   uint16_t *puVar11;
   uint16_t unaff_SI;
   long *unaff_DI;
-  int iVar12;
+  int rowOff;              /* cc * 0x17 + 0x1b / 0x16, an offset into the RLE record table */
+  int idx;                 /* the 0..3 and 0..2 loop indices */
+  int cnt;                 /* the 0x92 counter the tail walks */
   uint16_t rleSeg3;
   undefined1 resId;
   bool bVar15;
@@ -457,11 +459,11 @@ void __cdecl16far getcache(bool updateFile)
       ((far_t far *)timeOfDayGfx + cc)->ofs = (uint16_t)farPtr;
     }
     else {
-      iVar12 = cc * 0x17 + 0x1b;
+      rowOff = cc * 0x17 + 0x1b;
       segArg = (uint16_t)((ulong)((long)(int)cc * 0x17) >> 0x10);
       src_04.seg = (int)((long)(int)cc * 0x17) + 6;
       src_04.ofs = (((stg_tmp_t *)tg)->aptr).seg;
-      pfVar1 = ovr_stshRleCut((far_t far *)(&((stg_tmp_t *)tg)->aptr)->ofs,src_04,21,iVar12,62,(int16_t)unaff_DI,(char)iVar12,0x3e,0);
+      pfVar1 = ovr_stshRleCut((far_t far *)(&((stg_tmp_t *)tg)->aptr)->ofs,src_04,21,rowOff,62,(int16_t)unaff_DI,(char)rowOff,0x3e,0);
       resId = 0x4c;
       stored = ovr_stshStoreFile((uint8_t *)pfVar1,(char)segArg);
       *(uint16_t *)((int)&timeOfDayGfx[0].seg + cc * 4) = segArg;
@@ -481,11 +483,11 @@ void __cdecl16far getcache(bool updateFile)
       ((uint16_t *)&blitFrameOfs)[cc * 2] = (int)farPtr;
     }
     else {
-      iVar12 = cc * 0x17 + 0x16;
+      rowOff = cc * 0x17 + 0x16;
       segArg = (uint16_t)((ulong)((long)(int)cc * 0x17) >> 0x10);
       src_05.seg = (int)((long)(int)cc * 0x17) + 9;
       src_05.ofs = (((stg_tmp_t *)tg)->aptr).seg;
-      pfVar1 = ovr_stshRleCut((far_t far *)(&((stg_tmp_t *)tg)->aptr)->ofs,src_05,72,iVar12,75,(int16_t)unaff_DI,(char)iVar12,0x4b,0);
+      pfVar1 = ovr_stshRleCut((far_t far *)(&((stg_tmp_t *)tg)->aptr)->ofs,src_05,72,rowOff,75,(int16_t)unaff_DI,(char)rowOff,0x4b,0);
       resId = 0x4c;
       stored = ovr_stshStoreFile((uint8_t *)pfVar1,(char)segArg);
       ((uint16_t *)&blitFrameSeg)[cc * 2] = segArg;
@@ -1284,40 +1286,40 @@ void __cdecl16far getcache(bool updateFile)
     asm { mov word ptr [(tg) + 2], dx };
     (*(uint16_t *)((uint8_t *)&(tg) + 2)) = rleSeg;
   }
-  for (iVar12 = 0; iVar12 < 4; iVar12 = iVar12 + 1) {
+  for (idx = 0; idx < 4; idx = idx + 1) {
     if (updateFile == false) {
       farPtr = func_0x0007ffe0(0x4c);
-      BldGfxNormal[0xb7 + iVar12 * 18].seg = (int)((ulong)farPtr >> 0x10);
-      ((far_t far *)(BldGfxNormal + 0xb7) + iVar12 * 0x12)->ofs = (uint16_t)farPtr;
+      BldGfxNormal[0xb7 + idx * 18].seg = (int)((ulong)farPtr >> 0x10);
+      ((far_t far *)(BldGfxNormal + 0xb7) + idx * 0x12)->ofs = (uint16_t)farPtr;
       farPtr = func_0x0007ffe0(0x4c);
-      BldGfxNormal[0xb8 + iVar12 * 18].seg = (int)((ulong)farPtr >> 0x10);
-      ((far_t far *)(BldGfxNormal + 0xb8) + iVar12 * 0x12)->ofs = (uint16_t)farPtr;
+      BldGfxNormal[0xb8 + idx * 18].seg = (int)((ulong)farPtr >> 0x10);
+      ((far_t far *)(BldGfxNormal + 0xb8) + idx * 0x12)->ofs = (uint16_t)farPtr;
       farPtr = func_0x0007ffe0(0x4c);
-      BldGfxNormal[0xb9 + iVar12 * 18].seg = (int)((ulong)farPtr >> 0x10);
-      ((far_t far *)(BldGfxNormal + 0xb9) + iVar12 * 0x12)->ofs = (uint16_t)farPtr;
+      BldGfxNormal[0xb9 + idx * 18].seg = (int)((ulong)farPtr >> 0x10);
+      ((far_t far *)(BldGfxNormal + 0xb9) + idx * 0x12)->ofs = (uint16_t)farPtr;
     }
     else {
-      segArg = (uint16_t)((ulong)((long)iVar12 * 0x30) >> 0x10);
-      pixels_x00118.seg = (int)((long)iVar12 * 0x30) + 3;
+      segArg = (uint16_t)((ulong)((long)idx * 0x30) >> 0x10);
+      pixels_x00118.seg = (int)((long)idx * 0x30) + 3;
       pixels_x00118.ofs = (((stg_tmp_t *)tg)->aptr).seg;
-      pfVar1 = ovr_stshRleType2((far_t far *)(&((stg_tmp_t *)tg)->aptr)->ofs,0,0,iVar12 * 0x30 + 0x32,54,0,1);
+      pfVar1 = ovr_stshRleType2((far_t far *)(&((stg_tmp_t *)tg)->aptr)->ofs,0,0,idx * 0x30 + 0x32,54,0,1);
       stored = ovr_stshStoreFile((uint8_t *)pfVar1,(char)segArg);
-      BldGfxNormal[0xb7 + iVar12 * 18].seg = segArg;
-      ((far_t far *)(BldGfxNormal + 0xb7) + iVar12 * 0x12)->ofs = (uint16_t)stored;
-      segArg = (uint16_t)((ulong)((long)iVar12 * 0x30) >> 0x10);
-      pixels_x00119.seg = (int)((long)iVar12 * 0x30) + 3;
+      BldGfxNormal[0xb7 + idx * 18].seg = segArg;
+      ((far_t far *)(BldGfxNormal + 0xb7) + idx * 0x12)->ofs = (uint16_t)stored;
+      segArg = (uint16_t)((ulong)((long)idx * 0x30) >> 0x10);
+      pixels_x00119.seg = (int)((long)idx * 0x30) + 3;
       pixels_x00119.ofs = (((stg_tmp_t *)tg)->aptr).seg;
-      pfVar1 = ovr_stshRleType2((far_t far *)(&((stg_tmp_t *)tg)->aptr)->ofs,0,62,iVar12 * 0x30 + 0x32,116,0,1);
+      pfVar1 = ovr_stshRleType2((far_t far *)(&((stg_tmp_t *)tg)->aptr)->ofs,0,62,idx * 0x30 + 0x32,116,0,1);
       stored = ovr_stshStoreFile((uint8_t *)pfVar1,(char)segArg);
-      BldGfxNormal[0xb8 + iVar12 * 18].seg = segArg;
-      ((far_t far *)(BldGfxNormal + 0xb8) + iVar12 * 0x12)->ofs = (uint16_t)stored;
-      segArg = (uint16_t)((ulong)((long)iVar12 * 0x30) >> 0x10);
-      pixels_x00120.seg = (int)((long)iVar12 * 0x30) + 3;
+      BldGfxNormal[0xb8 + idx * 18].seg = segArg;
+      ((far_t far *)(BldGfxNormal + 0xb8) + idx * 0x12)->ofs = (uint16_t)stored;
+      segArg = (uint16_t)((ulong)((long)idx * 0x30) >> 0x10);
+      pixels_x00120.seg = (int)((long)idx * 0x30) + 3;
       pixels_x00120.ofs = (((stg_tmp_t *)tg)->aptr).seg;
-      pfVar1 = ovr_stshRleType2((far_t far *)(&((stg_tmp_t *)tg)->aptr)->ofs,0,62,iVar12 * 0x30 + 0x32,116,0,1);
+      pfVar1 = ovr_stshRleType2((far_t far *)(&((stg_tmp_t *)tg)->aptr)->ofs,0,62,idx * 0x30 + 0x32,116,0,1);
       stored = ovr_stshStoreFile((uint8_t *)pfVar1,(char)segArg);
-      BldGfxNormal[0xb9 + iVar12 * 18].seg = segArg;
-      ((far_t far *)(BldGfxNormal + 0xb9) + iVar12 * 0x12)->ofs = (uint16_t)stored;
+      BldGfxNormal[0xb9 + idx * 18].seg = segArg;
+      ((far_t far *)(BldGfxNormal + 0xb9) + idx * 0x12)->ofs = (uint16_t)stored;
     }
   }
   if (updateFile != false) {
@@ -1326,40 +1328,40 @@ void __cdecl16far getcache(bool updateFile)
     asm { mov word ptr [(tg) + 2], dx };
     (*(uint16_t *)((uint8_t *)&(tg) + 2)) = rleSeg;
   }
-  for (iVar12 = 0; iVar12 < 4; iVar12 = iVar12 + 1) {
+  for (idx = 0; idx < 4; idx = idx + 1) {
     if (updateFile == false) {
       farPtr = func_0x0007ffe0(0x4c);
-      BldGfxNormal[0xba + iVar12 * 18].seg = (int)((ulong)farPtr >> 0x10);
-      ((far_t far *)(BldGfxNormal + 0xba) + iVar12 * 0x12)->ofs = (uint16_t)farPtr;
+      BldGfxNormal[0xba + idx * 18].seg = (int)((ulong)farPtr >> 0x10);
+      ((far_t far *)(BldGfxNormal + 0xba) + idx * 0x12)->ofs = (uint16_t)farPtr;
       farPtr = func_0x0007ffe0(0x4c);
-      BldGfxNormal[0xbb + iVar12 * 18].seg = (int)((ulong)farPtr >> 0x10);
-      ((far_t far *)(BldGfxNormal + 0xbb) + iVar12 * 0x12)->ofs = (uint16_t)farPtr;
+      BldGfxNormal[0xbb + idx * 18].seg = (int)((ulong)farPtr >> 0x10);
+      ((far_t far *)(BldGfxNormal + 0xbb) + idx * 0x12)->ofs = (uint16_t)farPtr;
       farPtr = func_0x0007ffe0(0x4c);
-      BldGfxNormal[0xbc + iVar12 * 18].seg = (int)((ulong)farPtr >> 0x10);
-      ((far_t far *)(BldGfxNormal + 0xbc) + iVar12 * 0x12)->ofs = (uint16_t)farPtr;
+      BldGfxNormal[0xbc + idx * 18].seg = (int)((ulong)farPtr >> 0x10);
+      ((far_t far *)(BldGfxNormal + 0xbc) + idx * 0x12)->ofs = (uint16_t)farPtr;
     }
     else {
-      segArg = (uint16_t)((ulong)((long)iVar12 * 0x30) >> 0x10);
-      pixels_x00121.seg = (int)((long)iVar12 * 0x30) + 3;
+      segArg = (uint16_t)((ulong)((long)idx * 0x30) >> 0x10);
+      pixels_x00121.seg = (int)((long)idx * 0x30) + 3;
       pixels_x00121.ofs = (((stg_tmp_t *)tg)->aptr).seg;
-      pfVar1 = ovr_stshRleType2((far_t far *)(&((stg_tmp_t *)tg)->aptr)->ofs,0,0,iVar12 * 0x30 + 0x32,54,0,1);
+      pfVar1 = ovr_stshRleType2((far_t far *)(&((stg_tmp_t *)tg)->aptr)->ofs,0,0,idx * 0x30 + 0x32,54,0,1);
       stored = ovr_stshStoreFile((uint8_t *)pfVar1,(char)segArg);
-      BldGfxNormal[0xba + iVar12 * 18].seg = segArg;
-      ((far_t far *)(BldGfxNormal + 0xba) + iVar12 * 0x12)->ofs = (uint16_t)stored;
-      segArg = (uint16_t)((ulong)((long)iVar12 * 0x30) >> 0x10);
-      pixels_x00122.seg = (int)((long)iVar12 * 0x30) + 3;
+      BldGfxNormal[0xba + idx * 18].seg = segArg;
+      ((far_t far *)(BldGfxNormal + 0xba) + idx * 0x12)->ofs = (uint16_t)stored;
+      segArg = (uint16_t)((ulong)((long)idx * 0x30) >> 0x10);
+      pixels_x00122.seg = (int)((long)idx * 0x30) + 3;
       pixels_x00122.ofs = (((stg_tmp_t *)tg)->aptr).seg;
-      pfVar1 = ovr_stshRleType2((far_t far *)(&((stg_tmp_t *)tg)->aptr)->ofs,0,62,iVar12 * 0x30 + 0x32,116,0,1);
+      pfVar1 = ovr_stshRleType2((far_t far *)(&((stg_tmp_t *)tg)->aptr)->ofs,0,62,idx * 0x30 + 0x32,116,0,1);
       stored = ovr_stshStoreFile((uint8_t *)pfVar1,(char)segArg);
-      BldGfxNormal[0xbb + iVar12 * 18].seg = segArg;
-      ((far_t far *)(BldGfxNormal + 0xbb) + iVar12 * 0x12)->ofs = (uint16_t)stored;
-      segArg = (uint16_t)((ulong)((long)iVar12 * 0x30) >> 0x10);
-      pixels_x00123.seg = (int)((long)iVar12 * 0x30) + 3;
+      BldGfxNormal[0xbb + idx * 18].seg = segArg;
+      ((far_t far *)(BldGfxNormal + 0xbb) + idx * 0x12)->ofs = (uint16_t)stored;
+      segArg = (uint16_t)((ulong)((long)idx * 0x30) >> 0x10);
+      pixels_x00123.seg = (int)((long)idx * 0x30) + 3;
       pixels_x00123.ofs = (((stg_tmp_t *)tg)->aptr).seg;
-      pfVar1 = ovr_stshRleType2((far_t far *)(&((stg_tmp_t *)tg)->aptr)->ofs,0,62,iVar12 * 0x30 + 0x32,116,0,1);
+      pfVar1 = ovr_stshRleType2((far_t far *)(&((stg_tmp_t *)tg)->aptr)->ofs,0,62,idx * 0x30 + 0x32,116,0,1);
       stored = ovr_stshStoreFile((uint8_t *)pfVar1,(char)segArg);
-      BldGfxNormal[0xbc + iVar12 * 18].seg = segArg;
-      ((far_t far *)(BldGfxNormal + 0xbc) + iVar12 * 0x12)->ofs = (uint16_t)stored;
+      BldGfxNormal[0xbc + idx * 18].seg = segArg;
+      ((far_t far *)(BldGfxNormal + 0xbc) + idx * 0x12)->ofs = (uint16_t)stored;
     }
   }
   if (updateFile != false) {
@@ -1368,40 +1370,40 @@ void __cdecl16far getcache(bool updateFile)
     asm { mov word ptr [(tg) + 2], dx };
     (*(uint16_t *)((uint8_t *)&(tg) + 2)) = rleSeg;
   }
-  for (iVar12 = 0; iVar12 < 4; iVar12 = iVar12 + 1) {
+  for (idx = 0; idx < 4; idx = idx + 1) {
     if (updateFile == false) {
       farPtr = func_0x0007ffe0(0x4c);
-      BldGfxNormal[0xbd + iVar12 * 18].seg = (int)((ulong)farPtr >> 0x10);
-      ((far_t far *)(BldGfxNormal + 0xbd) + iVar12 * 0x12)->ofs = (uint16_t)farPtr;
+      BldGfxNormal[0xbd + idx * 18].seg = (int)((ulong)farPtr >> 0x10);
+      ((far_t far *)(BldGfxNormal + 0xbd) + idx * 0x12)->ofs = (uint16_t)farPtr;
       farPtr = func_0x0007ffe0(0x4c);
-      BldGfxNormal[0xbe + iVar12 * 18].seg = (int)((ulong)farPtr >> 0x10);
-      ((far_t far *)(BldGfxNormal + 0xbe) + iVar12 * 0x12)->ofs = (uint16_t)farPtr;
+      BldGfxNormal[0xbe + idx * 18].seg = (int)((ulong)farPtr >> 0x10);
+      ((far_t far *)(BldGfxNormal + 0xbe) + idx * 0x12)->ofs = (uint16_t)farPtr;
       farPtr = func_0x0007ffe0(0x4c);
-      BldGfxNormal[0xbf + iVar12 * 18].seg = (int)((ulong)farPtr >> 0x10);
-      ((far_t far *)(BldGfxNormal + 0xbf) + iVar12 * 0x12)->ofs = (uint16_t)farPtr;
+      BldGfxNormal[0xbf + idx * 18].seg = (int)((ulong)farPtr >> 0x10);
+      ((far_t far *)(BldGfxNormal + 0xbf) + idx * 0x12)->ofs = (uint16_t)farPtr;
     }
     else {
-      segArg = (uint16_t)((ulong)((long)iVar12 * 0x30) >> 0x10);
-      pixels_x00124.seg = (int)((long)iVar12 * 0x30) + 3;
+      segArg = (uint16_t)((ulong)((long)idx * 0x30) >> 0x10);
+      pixels_x00124.seg = (int)((long)idx * 0x30) + 3;
       pixels_x00124.ofs = (((stg_tmp_t *)tg)->aptr).seg;
-      pfVar1 = ovr_stshRleType2((far_t far *)(&((stg_tmp_t *)tg)->aptr)->ofs,0,0,iVar12 * 0x30 + 0x32,54,0,1);
+      pfVar1 = ovr_stshRleType2((far_t far *)(&((stg_tmp_t *)tg)->aptr)->ofs,0,0,idx * 0x30 + 0x32,54,0,1);
       stored = ovr_stshStoreFile((uint8_t *)pfVar1,(char)segArg);
-      BldGfxNormal[0xbd + iVar12 * 18].seg = segArg;
-      ((far_t far *)(BldGfxNormal + 0xbd) + iVar12 * 0x12)->ofs = (uint16_t)stored;
-      segArg = (uint16_t)((ulong)((long)iVar12 * 0x30) >> 0x10);
-      pixels_x00125.seg = (int)((long)iVar12 * 0x30) + 3;
+      BldGfxNormal[0xbd + idx * 18].seg = segArg;
+      ((far_t far *)(BldGfxNormal + 0xbd) + idx * 0x12)->ofs = (uint16_t)stored;
+      segArg = (uint16_t)((ulong)((long)idx * 0x30) >> 0x10);
+      pixels_x00125.seg = (int)((long)idx * 0x30) + 3;
       pixels_x00125.ofs = (((stg_tmp_t *)tg)->aptr).seg;
-      pfVar1 = ovr_stshRleType2((far_t far *)(&((stg_tmp_t *)tg)->aptr)->ofs,0,62,iVar12 * 0x30 + 0x32,116,0,1);
+      pfVar1 = ovr_stshRleType2((far_t far *)(&((stg_tmp_t *)tg)->aptr)->ofs,0,62,idx * 0x30 + 0x32,116,0,1);
       stored = ovr_stshStoreFile((uint8_t *)pfVar1,(char)segArg);
-      BldGfxNormal[0xbe + iVar12 * 18].seg = segArg;
-      ((far_t far *)(BldGfxNormal + 0xbe) + iVar12 * 0x12)->ofs = (uint16_t)stored;
-      segArg = (uint16_t)((ulong)((long)iVar12 * 0x30) >> 0x10);
-      pixels_x00126.seg = (int)((long)iVar12 * 0x30) + 3;
+      BldGfxNormal[0xbe + idx * 18].seg = segArg;
+      ((far_t far *)(BldGfxNormal + 0xbe) + idx * 0x12)->ofs = (uint16_t)stored;
+      segArg = (uint16_t)((ulong)((long)idx * 0x30) >> 0x10);
+      pixels_x00126.seg = (int)((long)idx * 0x30) + 3;
       pixels_x00126.ofs = (((stg_tmp_t *)tg)->aptr).seg;
-      pfVar1 = ovr_stshRleType2((far_t far *)(&((stg_tmp_t *)tg)->aptr)->ofs,0,62,iVar12 * 0x30 + 0x32,116,0,1);
+      pfVar1 = ovr_stshRleType2((far_t far *)(&((stg_tmp_t *)tg)->aptr)->ofs,0,62,idx * 0x30 + 0x32,116,0,1);
       stored = ovr_stshStoreFile((uint8_t *)pfVar1,(char)segArg);
-      BldGfxNormal[0xbf + iVar12 * 18].seg = segArg;
-      ((far_t far *)(BldGfxNormal + 0xbf) + iVar12 * 0x12)->ofs = (uint16_t)stored;
+      BldGfxNormal[0xbf + idx * 18].seg = segArg;
+      ((far_t far *)(BldGfxNormal + 0xbf) + idx * 0x12)->ofs = (uint16_t)stored;
     }
   }
   if (updateFile != false) {
@@ -1410,40 +1412,40 @@ void __cdecl16far getcache(bool updateFile)
     asm { mov word ptr [(tg) + 2], dx };
     (*(uint16_t *)((uint8_t *)&(tg) + 2)) = rleSeg;
   }
-  for (iVar12 = 0; iVar12 < 4; iVar12 = iVar12 + 1) {
+  for (idx = 0; idx < 4; idx = idx + 1) {
     if (updateFile == false) {
       farPtr = func_0x0007ffe0(0x4c);
-      BldGfxNormal[0xc0 + iVar12 * 18].seg = (int)((ulong)farPtr >> 0x10);
-      ((far_t far *)(BldGfxNormal + 0xc0) + iVar12 * 0x12)->ofs = (uint16_t)farPtr;
+      BldGfxNormal[0xc0 + idx * 18].seg = (int)((ulong)farPtr >> 0x10);
+      ((far_t far *)(BldGfxNormal + 0xc0) + idx * 0x12)->ofs = (uint16_t)farPtr;
       farPtr = func_0x0007ffe0(0x4c);
-      BldGfxNormal[0xc1 + iVar12 * 18].seg = (int)((ulong)farPtr >> 0x10);
-      ((far_t far *)(BldGfxNormal + 0xc1) + iVar12 * 0x12)->ofs = (uint16_t)farPtr;
+      BldGfxNormal[0xc1 + idx * 18].seg = (int)((ulong)farPtr >> 0x10);
+      ((far_t far *)(BldGfxNormal + 0xc1) + idx * 0x12)->ofs = (uint16_t)farPtr;
       farPtr = func_0x0007ffe0(0x4c);
-      BldGfxNormal[0xc2 + iVar12 * 18].seg = (int)((ulong)farPtr >> 0x10);
-      ((far_t far *)(BldGfxNormal + 0xc2) + iVar12 * 0x12)->ofs = (uint16_t)farPtr;
+      BldGfxNormal[0xc2 + idx * 18].seg = (int)((ulong)farPtr >> 0x10);
+      ((far_t far *)(BldGfxNormal + 0xc2) + idx * 0x12)->ofs = (uint16_t)farPtr;
     }
     else {
-      segArg = (uint16_t)((ulong)((long)iVar12 * 0x30) >> 0x10);
-      pixels_x00127.seg = (int)((long)iVar12 * 0x30) + 3;
+      segArg = (uint16_t)((ulong)((long)idx * 0x30) >> 0x10);
+      pixels_x00127.seg = (int)((long)idx * 0x30) + 3;
       pixels_x00127.ofs = (((stg_tmp_t *)tg)->aptr).seg;
-      pfVar1 = ovr_stshRleType2((far_t far *)(&((stg_tmp_t *)tg)->aptr)->ofs,0,0,iVar12 * 0x30 + 0x32,54,0,1);
+      pfVar1 = ovr_stshRleType2((far_t far *)(&((stg_tmp_t *)tg)->aptr)->ofs,0,0,idx * 0x30 + 0x32,54,0,1);
       stored = ovr_stshStoreFile((uint8_t *)pfVar1,(char)segArg);
-      BldGfxNormal[0xc0 + iVar12 * 18].seg = segArg;
-      ((far_t far *)(BldGfxNormal + 0xc0) + iVar12 * 0x12)->ofs = (uint16_t)stored;
-      segArg = (uint16_t)((ulong)((long)iVar12 * 0x30) >> 0x10);
-      pixels_x00128.seg = (int)((long)iVar12 * 0x30) + 3;
+      BldGfxNormal[0xc0 + idx * 18].seg = segArg;
+      ((far_t far *)(BldGfxNormal + 0xc0) + idx * 0x12)->ofs = (uint16_t)stored;
+      segArg = (uint16_t)((ulong)((long)idx * 0x30) >> 0x10);
+      pixels_x00128.seg = (int)((long)idx * 0x30) + 3;
       pixels_x00128.ofs = (((stg_tmp_t *)tg)->aptr).seg;
-      pfVar1 = ovr_stshRleType2((far_t far *)(&((stg_tmp_t *)tg)->aptr)->ofs,0,62,iVar12 * 0x30 + 0x32,116,0,1);
+      pfVar1 = ovr_stshRleType2((far_t far *)(&((stg_tmp_t *)tg)->aptr)->ofs,0,62,idx * 0x30 + 0x32,116,0,1);
       stored = ovr_stshStoreFile((uint8_t *)pfVar1,(char)segArg);
-      BldGfxNormal[0xc1 + iVar12 * 18].seg = segArg;
-      ((far_t far *)(BldGfxNormal + 0xc1) + iVar12 * 0x12)->ofs = (uint16_t)stored;
-      segArg = (uint16_t)((ulong)((long)iVar12 * 0x30) >> 0x10);
-      pixels_x00129.seg = (int)((long)iVar12 * 0x30) + 3;
+      BldGfxNormal[0xc1 + idx * 18].seg = segArg;
+      ((far_t far *)(BldGfxNormal + 0xc1) + idx * 0x12)->ofs = (uint16_t)stored;
+      segArg = (uint16_t)((ulong)((long)idx * 0x30) >> 0x10);
+      pixels_x00129.seg = (int)((long)idx * 0x30) + 3;
       pixels_x00129.ofs = (((stg_tmp_t *)tg)->aptr).seg;
-      pfVar1 = ovr_stshRleType2((far_t far *)(&((stg_tmp_t *)tg)->aptr)->ofs,0,62,iVar12 * 0x30 + 0x32,116,0,1);
+      pfVar1 = ovr_stshRleType2((far_t far *)(&((stg_tmp_t *)tg)->aptr)->ofs,0,62,idx * 0x30 + 0x32,116,0,1);
       stored = ovr_stshStoreFile((uint8_t *)pfVar1,(char)segArg);
-      BldGfxNormal[0xc2 + iVar12 * 18].seg = segArg;
-      ((far_t far *)(BldGfxNormal + 0xc2) + iVar12 * 0x12)->ofs = (uint16_t)stored;
+      BldGfxNormal[0xc2 + idx * 18].seg = segArg;
+      ((far_t far *)(BldGfxNormal + 0xc2) + idx * 0x12)->ofs = (uint16_t)stored;
     }
   }
   if (updateFile != false) {
@@ -1452,40 +1454,40 @@ void __cdecl16far getcache(bool updateFile)
     asm { mov word ptr [(tg) + 2], dx };
     (*(uint16_t *)((uint8_t *)&(tg) + 2)) = rleSeg;
   }
-  for (iVar12 = 0; iVar12 < 4; iVar12 = iVar12 + 1) {
+  for (idx = 0; idx < 4; idx = idx + 1) {
     if (updateFile == false) {
       farPtr = func_0x0007ffe0(0x4c);
-      BldGfxNormal[0xc3 + iVar12 * 18].seg = (int)((ulong)farPtr >> 0x10);
-      ((far_t far *)(BldGfxNormal + 0xc3) + iVar12 * 0x12)->ofs = (uint16_t)farPtr;
+      BldGfxNormal[0xc3 + idx * 18].seg = (int)((ulong)farPtr >> 0x10);
+      ((far_t far *)(BldGfxNormal + 0xc3) + idx * 0x12)->ofs = (uint16_t)farPtr;
       farPtr = func_0x0007ffe0(0x4c);
-      BldGfxNormal[0xc4 + iVar12 * 18].seg = (int)((ulong)farPtr >> 0x10);
-      ((far_t far *)(BldGfxNormal + 0xc4) + iVar12 * 0x12)->ofs = (uint16_t)farPtr;
+      BldGfxNormal[0xc4 + idx * 18].seg = (int)((ulong)farPtr >> 0x10);
+      ((far_t far *)(BldGfxNormal + 0xc4) + idx * 0x12)->ofs = (uint16_t)farPtr;
       farPtr = func_0x0007ffe0(0x4c);
-      BldGfxNormal[0xc5 + iVar12 * 18].seg = (int)((ulong)farPtr >> 0x10);
-      ((far_t far *)(BldGfxNormal + 0xc5) + iVar12 * 0x12)->ofs = (uint16_t)farPtr;
+      BldGfxNormal[0xc5 + idx * 18].seg = (int)((ulong)farPtr >> 0x10);
+      ((far_t far *)(BldGfxNormal + 0xc5) + idx * 0x12)->ofs = (uint16_t)farPtr;
     }
     else {
-      segArg = (uint16_t)((ulong)((long)iVar12 * 0x30) >> 0x10);
-      pixels_x00130.seg = (int)((long)iVar12 * 0x30) + 3;
+      segArg = (uint16_t)((ulong)((long)idx * 0x30) >> 0x10);
+      pixels_x00130.seg = (int)((long)idx * 0x30) + 3;
       pixels_x00130.ofs = (((stg_tmp_t *)tg)->aptr).seg;
-      pfVar1 = ovr_stshRleType2((far_t far *)(&((stg_tmp_t *)tg)->aptr)->ofs,0,0,iVar12 * 0x30 + 0x32,54,0,1);
+      pfVar1 = ovr_stshRleType2((far_t far *)(&((stg_tmp_t *)tg)->aptr)->ofs,0,0,idx * 0x30 + 0x32,54,0,1);
       stored = ovr_stshStoreFile((uint8_t *)pfVar1,(char)segArg);
-      BldGfxNormal[0xc3 + iVar12 * 18].seg = segArg;
-      ((far_t far *)(BldGfxNormal + 0xc3) + iVar12 * 0x12)->ofs = (uint16_t)stored;
-      segArg = (uint16_t)((ulong)((long)iVar12 * 0x30) >> 0x10);
-      pixels_x00131.seg = (int)((long)iVar12 * 0x30) + 3;
+      BldGfxNormal[0xc3 + idx * 18].seg = segArg;
+      ((far_t far *)(BldGfxNormal + 0xc3) + idx * 0x12)->ofs = (uint16_t)stored;
+      segArg = (uint16_t)((ulong)((long)idx * 0x30) >> 0x10);
+      pixels_x00131.seg = (int)((long)idx * 0x30) + 3;
       pixels_x00131.ofs = (((stg_tmp_t *)tg)->aptr).seg;
-      pfVar1 = ovr_stshRleType2((far_t far *)(&((stg_tmp_t *)tg)->aptr)->ofs,0,62,iVar12 * 0x30 + 0x32,116,0,1);
+      pfVar1 = ovr_stshRleType2((far_t far *)(&((stg_tmp_t *)tg)->aptr)->ofs,0,62,idx * 0x30 + 0x32,116,0,1);
       stored = ovr_stshStoreFile((uint8_t *)pfVar1,(char)segArg);
-      BldGfxNormal[0xc4 + iVar12 * 18].seg = segArg;
-      ((far_t far *)(BldGfxNormal + 0xc4) + iVar12 * 0x12)->ofs = (uint16_t)stored;
-      segArg = (uint16_t)((ulong)((long)iVar12 * 0x30) >> 0x10);
-      pixels_x00132.seg = (int)((long)iVar12 * 0x30) + 3;
+      BldGfxNormal[0xc4 + idx * 18].seg = segArg;
+      ((far_t far *)(BldGfxNormal + 0xc4) + idx * 0x12)->ofs = (uint16_t)stored;
+      segArg = (uint16_t)((ulong)((long)idx * 0x30) >> 0x10);
+      pixels_x00132.seg = (int)((long)idx * 0x30) + 3;
       pixels_x00132.ofs = (((stg_tmp_t *)tg)->aptr).seg;
-      pfVar1 = ovr_stshRleType2((far_t far *)(&((stg_tmp_t *)tg)->aptr)->ofs,0,62,iVar12 * 0x30 + 0x32,116,0,1);
+      pfVar1 = ovr_stshRleType2((far_t far *)(&((stg_tmp_t *)tg)->aptr)->ofs,0,62,idx * 0x30 + 0x32,116,0,1);
       stored = ovr_stshStoreFile((uint8_t *)pfVar1,(char)segArg);
-      BldGfxNormal[0xc5 + iVar12 * 18].seg = segArg;
-      ((far_t far *)(BldGfxNormal + 0xc5) + iVar12 * 0x12)->ofs = (uint16_t)stored;
+      BldGfxNormal[0xc5 + idx * 18].seg = segArg;
+      ((far_t far *)(BldGfxNormal + 0xc5) + idx * 0x12)->ofs = (uint16_t)stored;
     }
   }
   if (updateFile != false) {
@@ -1494,40 +1496,40 @@ void __cdecl16far getcache(bool updateFile)
     asm { mov word ptr [(tg) + 2], dx };
     (*(uint16_t *)((uint8_t *)&(tg) + 2)) = rleSeg;
   }
-  for (iVar12 = 0; iVar12 < 4; iVar12 = iVar12 + 1) {
+  for (idx = 0; idx < 4; idx = idx + 1) {
     if (updateFile == false) {
       farPtr = func_0x0007ffe0(0x4c);
-      BldGfxNormal[0xc6 + iVar12 * 18].seg = (int)((ulong)farPtr >> 0x10);
-      ((far_t far *)(BldGfxNormal + 0xc6) + iVar12 * 0x12)->ofs = (uint16_t)farPtr;
+      BldGfxNormal[0xc6 + idx * 18].seg = (int)((ulong)farPtr >> 0x10);
+      ((far_t far *)(BldGfxNormal + 0xc6) + idx * 0x12)->ofs = (uint16_t)farPtr;
       farPtr = func_0x0007ffe0(0x4c);
-      BldGfxNormal[199 + iVar12 * 18].seg = (int)((ulong)farPtr >> 0x10);
-      ((far_t far *)(BldGfxNormal + 199) + iVar12 * 0x12)->ofs = (uint16_t)farPtr;
+      BldGfxNormal[199 + idx * 18].seg = (int)((ulong)farPtr >> 0x10);
+      ((far_t far *)(BldGfxNormal + 199) + idx * 0x12)->ofs = (uint16_t)farPtr;
       farPtr = func_0x0007ffe0(0x4c);
-      BldGfxNormal[200 + iVar12 * 18].seg = (int)((ulong)farPtr >> 0x10);
-      ((far_t far *)(BldGfxNormal + 200) + iVar12 * 0x12)->ofs = (uint16_t)farPtr;
+      BldGfxNormal[200 + idx * 18].seg = (int)((ulong)farPtr >> 0x10);
+      ((far_t far *)(BldGfxNormal + 200) + idx * 0x12)->ofs = (uint16_t)farPtr;
     }
     else {
-      segArg = (uint16_t)((ulong)((long)iVar12 * 0x30) >> 0x10);
-      pixels_x00133.seg = (int)((long)iVar12 * 0x30) + 3;
+      segArg = (uint16_t)((ulong)((long)idx * 0x30) >> 0x10);
+      pixels_x00133.seg = (int)((long)idx * 0x30) + 3;
       pixels_x00133.ofs = (((stg_tmp_t *)tg)->aptr).seg;
-      pfVar1 = ovr_stshRleType2((far_t far *)(&((stg_tmp_t *)tg)->aptr)->ofs,0,0,iVar12 * 0x30 + 0x32,54,0,1);
+      pfVar1 = ovr_stshRleType2((far_t far *)(&((stg_tmp_t *)tg)->aptr)->ofs,0,0,idx * 0x30 + 0x32,54,0,1);
       stored = ovr_stshStoreFile((uint8_t *)pfVar1,(char)segArg);
-      BldGfxNormal[0xc6 + iVar12 * 18].seg = segArg;
-      ((far_t far *)(BldGfxNormal + 0xc6) + iVar12 * 0x12)->ofs = (uint16_t)stored;
-      segArg = (uint16_t)((ulong)((long)iVar12 * 0x30) >> 0x10);
-      pixels_x00134.seg = (int)((long)iVar12 * 0x30) + 3;
+      BldGfxNormal[0xc6 + idx * 18].seg = segArg;
+      ((far_t far *)(BldGfxNormal + 0xc6) + idx * 0x12)->ofs = (uint16_t)stored;
+      segArg = (uint16_t)((ulong)((long)idx * 0x30) >> 0x10);
+      pixels_x00134.seg = (int)((long)idx * 0x30) + 3;
       pixels_x00134.ofs = (((stg_tmp_t *)tg)->aptr).seg;
-      pfVar1 = ovr_stshRleType2((far_t far *)(&((stg_tmp_t *)tg)->aptr)->ofs,0,62,iVar12 * 0x30 + 0x32,116,0,1);
+      pfVar1 = ovr_stshRleType2((far_t far *)(&((stg_tmp_t *)tg)->aptr)->ofs,0,62,idx * 0x30 + 0x32,116,0,1);
       stored = ovr_stshStoreFile((uint8_t *)pfVar1,(char)segArg);
-      BldGfxNormal[199 + iVar12 * 18].seg = segArg;
-      ((far_t far *)(BldGfxNormal + 199) + iVar12 * 0x12)->ofs = (uint16_t)stored;
-      segArg = (uint16_t)((ulong)((long)iVar12 * 0x30) >> 0x10);
-      pixels_x00135.seg = (int)((long)iVar12 * 0x30) + 3;
+      BldGfxNormal[199 + idx * 18].seg = segArg;
+      ((far_t far *)(BldGfxNormal + 199) + idx * 0x12)->ofs = (uint16_t)stored;
+      segArg = (uint16_t)((ulong)((long)idx * 0x30) >> 0x10);
+      pixels_x00135.seg = (int)((long)idx * 0x30) + 3;
       pixels_x00135.ofs = (((stg_tmp_t *)tg)->aptr).seg;
-      pfVar1 = ovr_stshRleType2((far_t far *)(&((stg_tmp_t *)tg)->aptr)->ofs,0,62,iVar12 * 0x30 + 0x32,116,0,1);
+      pfVar1 = ovr_stshRleType2((far_t far *)(&((stg_tmp_t *)tg)->aptr)->ofs,0,62,idx * 0x30 + 0x32,116,0,1);
       stored = ovr_stshStoreFile((uint8_t *)pfVar1,(char)segArg);
-      BldGfxNormal[200 + iVar12 * 18].seg = segArg;
-      ((far_t far *)(BldGfxNormal + 200) + iVar12 * 0x12)->ofs = (uint16_t)stored;
+      BldGfxNormal[200 + idx * 18].seg = segArg;
+      ((far_t far *)(BldGfxNormal + 200) + idx * 0x12)->ofs = (uint16_t)stored;
     }
   }
   if (updateFile != false) {
@@ -1541,11 +1543,11 @@ void __cdecl16far getcache(bool updateFile)
     asm { mov word ptr [(tg) + 2], dx };
     (*(uint16_t *)((uint8_t *)&(tg) + 2)) = rleSeg;
   }
-  for (iVar12 = 0; iVar12 < 3; iVar12 = iVar12 + 1) {
+  for (idx = 0; idx < 3; idx = idx + 1) {
     for (cc = 0; (int)cc < 3; cc = cc + 1) {
       if (updateFile == false) {
         farPtr = func_0x0007ffe0(0x4c);
-        iVar3 = iVar12 * 3 + cc;
+        iVar3 = idx * 3 + cc;
         BldGfxNormal[0x135 + iVar3 * 3].seg = (int)((ulong)farPtr >> 0x10);
         ((far_t far *)(BldGfxNormal + 0x135) + iVar3 * 3)->ofs = (uint16_t)farPtr;
       }
@@ -1553,22 +1555,22 @@ void __cdecl16far getcache(bool updateFile)
         segArg = (uint16_t)((ulong)((long)(int)cc * 100) >> 0x10);
         pixels_00.seg = (uint16_t)((long)(int)cc * 100);
         pixels_00.ofs = (((stg_tmp_t *)tg)->aptr).seg;
-        pfVar1 = ovr_stshRleType2((far_t far *)(&((stg_tmp_t *)tg)->aptr)->ofs,0,iVar12 * 0x41,cc * 100 + 99,iVar12 * 0x41 + 0x40,30,-4);
+        pfVar1 = ovr_stshRleType2((far_t far *)(&((stg_tmp_t *)tg)->aptr)->ofs,0,idx * 0x41,cc * 100 + 99,idx * 0x41 + 0x40,30,-4);
         stored = ovr_stshStoreFile((uint8_t *)pfVar1,(char)segArg);
-        iVar3 = iVar12 * 3 + cc;
+        iVar3 = idx * 3 + cc;
         BldGfxNormal[0x135 + iVar3 * 3].seg = segArg;
         ((far_t far *)(BldGfxNormal + 0x135) + iVar3 * 3)->ofs = (uint16_t)stored;
       }
-      iVar3 = iVar12 * 3 + cc;
+      iVar3 = idx * 3 + cc;
       rleSeg = ((far_t far *)(BldGfxNormal + 0x135) + iVar3 * 3)->ofs;
-      iVar4 = iVar12 * 3 + cc;
+      iVar4 = idx * 3 + cc;
       BldGfxNormal[0x136 + iVar4 * 3].seg =
            BldGfxNormal[0x135 + iVar3 * 3].seg;
       ((far_t far *)(BldGfxNormal + 0x136) + iVar4 * 3)->ofs = rleSeg;
-      iVar3 = iVar12 * 3 + cc;
+      iVar3 = idx * 3 + cc;
       rleSeg = BldGfxNormal[0x135 + iVar3 * 3].seg;
       rleSeg2 = ((far_t far *)(BldGfxNormal + 0x135) + iVar3 * 3)->ofs;
-      iVar3 = iVar12 * 3 + cc;
+      iVar3 = idx * 3 + cc;
       BldGfxNormal[0x137 + iVar3 * 3].seg = rleSeg;
       ((far_t far *)(BldGfxNormal + 0x137) + iVar3 * 3)->ofs = rleSeg2;
     }
@@ -2150,7 +2152,7 @@ void __cdecl16far getcache(bool updateFile)
   }
   resId = 0x4c;
   ovr_stshStubifyCopy1to0(0x8f);
-  iVar12 = 0x92;
+  cnt = 0x92;
   rleSeg = rleSeg2;
   if (updateFile != false) {
     (*(uint16_t *)((uint8_t *)&(tg))) = ovr_grabLbm(17,0,0);
@@ -2166,8 +2168,8 @@ void __cdecl16far getcache(bool updateFile)
       if ((cc != 0) || (iVar3 != 0)) {
         if (updateFile == false) {
           farPtr = func_0x0007ffe0(resId);
-          BldGfxNormal[iVar12 * 3].seg = (int)((ulong)farPtr >> 0x10);
-          ((far_t far *)BldGfxNormal + iVar12 * 3)->ofs = (uint16_t)farPtr;
+          BldGfxNormal[cnt * 3].seg = (int)((ulong)farPtr >> 0x10);
+          ((far_t far *)BldGfxNormal + cnt * 3)->ofs = (uint16_t)farPtr;
         }
         else {
           segArg = (uint16_t)((ulong)((long)(int)cc * 0x87) >> 0x10);
@@ -2179,18 +2181,18 @@ void __cdecl16far getcache(bool updateFile)
           asm { mov rleSeg2,dx };
           resId = 0x4c;
           stored = ovr_stshStoreFile((uint8_t *)pfVar1,(char)segArg);
-          BldGfxNormal[iVar12 * 3].seg = segArg;
-          ((far_t far *)BldGfxNormal + iVar12 * 3)->ofs = (uint16_t)stored;
+          BldGfxNormal[cnt * 3].seg = segArg;
+          ((far_t far *)BldGfxNormal + cnt * 3)->ofs = (uint16_t)stored;
         }
-        rleSeg = ((far_t far *)BldGfxNormal + iVar12 * 3)->ofs;
-        BldGfxNormal[1 + iVar12 * 3].seg =
-             BldGfxNormal[iVar12 * 3].seg;
-        ((far_t far *)(BldGfxNormal + 1) + iVar12 * 3)->ofs = rleSeg;
-        rleSeg = BldGfxNormal[iVar12 * 3].seg;
-        rleSeg2 = ((far_t far *)BldGfxNormal + iVar12 * 3)->ofs;
-        BldGfxNormal[2 + iVar12 * 3].seg = rleSeg;
-        ((far_t far *)(BldGfxNormal + 2) + iVar12 * 3)->ofs = rleSeg2;
-        iVar12 = iVar12 + 1;
+        rleSeg = ((far_t far *)BldGfxNormal + cnt * 3)->ofs;
+        BldGfxNormal[1 + cnt * 3].seg =
+             BldGfxNormal[cnt * 3].seg;
+        ((far_t far *)(BldGfxNormal + 1) + cnt * 3)->ofs = rleSeg;
+        rleSeg = BldGfxNormal[cnt * 3].seg;
+        rleSeg2 = ((far_t far *)BldGfxNormal + cnt * 3)->ofs;
+        BldGfxNormal[2 + cnt * 3].seg = rleSeg;
+        ((far_t far *)(BldGfxNormal + 2) + cnt * 3)->ofs = rleSeg2;
+        cnt = cnt + 1;
       }
     }
   }

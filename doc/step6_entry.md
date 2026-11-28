@@ -24889,3 +24889,33 @@ that leaves two one-use slots:
 
 `at` has gone from 169 hits to 2 dead declarations, and every step of that was checked against the
 image rather than renamed by pattern.
+
+
+## `getcache` (6ffe:02f7): `iVar12`'s three roles separated - grep 7,858 -> 7,655 (-203)
+
+The largest single batch of this work. `iVar12` had 159 uses in a 2,375-line body, but they fall into
+three disjoint regions with no value crossing between them, so the split is safe rather than
+cosmetic:
+
+    460-464, 484-488   rowOff   cc * 0x17 + 0x1b / 0x16   (an offset into the RLE record table,
+                                                             passed straight to ovr_stshRleCut)
+    1287-1571          idx      six `for (idx = 0; idx < 4; ...)` loops and one `< 3`
+    2153-2193          cnt      `iVar12 = 0x92` and the counter walk that follows
+
+Each region assigns before its first read, which is what makes one name per region correct rather than
+merely convenient. `getcache` is now down to:
+
+    iVar3 23, puVar11 19, iVar4 4, uVar10 3, bVar15 3, unaff_DI 37, unaff_SI 2
+
+`unaff_DI`/`unaff_SI` are the register-passed arguments this body takes mid-flow (the same shape as
+`4d05:24b1`), so they cannot be named - only the three locals can.
+
+## Measured (HEAD 5192e02b -> this commit)
+
+    grep_checks          7,858 -> 7,655   (-203)
+    REBUILT.EXE          447,858 (unchanged)
+    build 65/65, LINK.LOG 0 errors
+    compare_state        identical 734 / 7 different / 889 missing (unchanged)
+    diff_dgroup          288/1,805 matched (unchanged)
+    compare_runtime      280 identical / 11 different at entry, init_game and key (unchanged)
+    structural_deficits  two game bodies: 7e7c:0b9c (177/187), 77eb:0d61 (54/58)
