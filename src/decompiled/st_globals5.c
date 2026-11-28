@@ -308,8 +308,7 @@ undefined s_has_destroyed_all_enemies__congr_2410_4f62[45] = "has destroyed all 
 undefined s_select_an_alignment__2410_4f9c[21] = "Select an alignment.";
 undefined s_select_the_character_s_name__2410_500d[29] = "Select the character's name.";
 undefined s_keep__s__2410_505a[9] = "Keep %s.";
-char s_auto_build[] = "Auto-build    " "\x7f";
-/* 50c1: the short twin of s_auto_build (0x50b1) */
+/* 50c1: the short twin of "Auto-build    \x7f" (0x50b1) */
 /* 5293: twin of "All Property" */
 /* 55c8: three anonymous words (5, 10, 20) between this string and EntityScanPos. */
 undefined w_entityScanCosts[6] = { 0x05, 0x00, 0x0a, 0x00, 0x14, 0x00 };

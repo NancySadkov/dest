@@ -1493,7 +1493,7 @@ void __cdecl16far manage_settlementScreen(byte partyIndex)
     if (sheet->faction == 0) {
       if ((sheet->flags5d & 2) == 0) {
         items[n].seg = (uint16_t)_DS;
-        items[n].ofs = (uint16_t)s_auto_build;
+        items[n].ofs = (uint16_t)"Auto-build    \x7f";
       }
       else {
         items[n].seg = (uint16_t)_DS;

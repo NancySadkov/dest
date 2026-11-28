@@ -376,4 +376,3 @@ brect_t mouseSaveRect3 = { 223, 159, 226, 196, 0xA000 };
 /* 0897: a mouse save rectangle (10-byte brect_t) */
 brect_t mouseSaveRect2 = { 208, 157, 226, 196, 0xA000 };
 /* 08da: a third "%d \\r" copy */
-char s_Attracting__d_of_a__2410_0921[55] = "Attracting %d of a possible %d %s%s to this location.";
