@@ -23270,3 +23270,82 @@ The string arguments were verified against the DGROUP image rather than taken on
 
 `write_game_cfg` is not on any of the three runtime sample paths (it runs only when the audio
 settings are written), so the runtime gate is unchanged by construction.
+
+
+## `77eb:0d61` - decode advanced but not written; the measured blockers
+
+I did not write this body this pass, and the reason is concrete rather than a preference. The full
+listing (`tmp/o45_0d61.txt`, 600 lines, 2,385 bytes) is decoded far enough to describe the shape, and
+three things would have to be guessed to write it. Recording them here so the next pass starts from
+these facts.
+
+### Corrected field offsets (the earlier note had several wrong)
+
+`bldtp_t` base is `0060:010e`, stride `0x27`. Reading every `es:[bx+...]` against the struct that is
+already in `st_types.h`:
+
+    0x11a  +0x0c  kind           (the test at 0x11ac)
+    0x11b  +0x0d  size           (the 4-wide test at 0x1021, the 2-wide at 0x10e1/0x154b,
+                                  and the x -= colOfs at 0x15a6 -- NOT "kind" as noted before)
+    0x11e  +0x10  flags          (==1 / ==2 tests at 0x11c5/0x11de)
+    0x121  +0x13  flags2         (test 0x20 at 0x1232, 0x15c7)
+    0x125  +0x17  cost           (the gold comparison at 0x145e, the cost pushed at 0x127e/0x15fd)
+    0x133  +0x25  unitType       (== 0x12 test at 0x0ef0 -- the "outpost" arm)
+    0x134  +0x26  flags3         (test 0x80 at 0x0f68, and `& 0x7f` as a rank index)
+
+### The five-way menu is fully decoded
+
+Entries are (far string, code) pushed into two arrays in the frame:
+`far_t menu[5]` at `[bp-0x3f2]` and the codes at `[bp-0xb + i]` (so the bytes sit at `-0xa..-0x7`).
+
+    0x7685 "Place"            -> 1
+    0x768b "Change Building"  -> 2     (always added)
+    0x769b "Change Party"     -> 3     (only when the flag at [bp+0xe] != 0)
+    0x76a8 "Done"             -> 4     (always added)
+
+The table at `cs:0x16a8` reads `2c14 3314 6216 7016 2c14`, i.e. 0x142c, 0x1433, 0x1662, 0x1670,
+0x142c, so the dispatch is: 0 -> 0x142c, 1 -> 0x1433 (place), 2 -> 0x1662 (change building),
+3 -> 0x1670 (change party), 4 -> 0x142c. 0x142c sets the exit flag, 0x1662 re-enters the outer loop
+after `lcall 0x200,0x20(party)`, 0x1670 calls `ovc45_textChoosePartyBuild(x, GfxRndSeed2,
+&entityIndex)` and exits only if it returns 0xff.
+
+### The blockers
+
+1. **Four calls into the relocated window `0x200`** (`0x0dbb`, `0x0ece`, `0x1649`, `0x1666`), all
+   `resolved=no` in `audit/overlay_segments.csv` (16 candidates). Their shapes are known -
+   `0x25(sheet->buildType) -> bldtp index` (feeds every later read),
+   `0x34(bldType, party) -> bool` (the "may place?" gate at 0x0edc),
+   `0x2a(sheet->buildType) -> value` (first argument of `createConstructionRecordFar` at 0x1652),
+   `0x20(party) -> void`. Without the first one nothing downstream can even be indexed.
+
+2. **A compiler-reordered argument list.** At `0x126d` the pushes are
+
+       0x127e cost             (bldtp_t+0x17)
+       0x129b party            (consumed by ovc22_className, which returns a far ptr in DX:AX)
+       0x12a4 dx, ax           (the class-name pointer)
+       0x12a6 3
+       0x12a8 0x55
+       0x12aa Font03 (4)
+       0x12c8 sheet  (4)
+       0x12d2 ss:buf1 (4)
+       0x12da call ovc45_compute9
+       0x12dd add sp, 0x10
+
+   That is 22 bytes pushed and 16 popped. `ovc45_compute9` uses `[bp+6]..[bp+14]` (8 words) and ends
+   `retf`, so it takes exactly those 16 bytes; `cost` + the class-name pair are carried past it and
+   are consumed by the *next* call's `add sp, 0x12` (0x12f1), which also popped 6 more bytes than it
+   pushed. That is Turbo C evaluating `stsprintf`'s argument list right-to-left with the
+   `ovc22_className(party)` subexpression in the middle, and reconstructing the exact source
+   argument order from it needs care - a wrong guess changes both the format and the arguments.
+
+3. **`ovc45_compute9`'s role.** It writes a dotted string into an 80-byte buffer and returns it; the
+   surrounding code then formats `" It will cost %s the %s %d gp. "`. Which of its five arguments is
+   the sheet, which the font, and what `0x55`/`3` mean is not derivable from the two call sites
+   without reading its body (220 bytes) as well.
+
+Writing the other ~85% around these three points would produce a body that looks finished and is
+wrong at its most load-bearing call, so I worked the deficits that *are* fully derivable instead:
+
+    this turn:  3381:01c8 init_paths      4/7  -> 7/7   (plus a real buffer restored, see above)
+                6257:009f write_game_cfg 10/13 -> 13/13
+    remaining:  10 functions, 96 missing calls
