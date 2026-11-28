@@ -24919,3 +24919,34 @@ merely convenient. `getcache` is now down to:
     diff_dgroup          288/1,805 matched (unchanged)
     compare_runtime      280 identical / 11 different at entry, init_game and key (unchanged)
     structural_deficits  two game bodies: 7e7c:0b9c (177/187), 77eb:0d61 (54/58)
+
+
+## `getcache` finished: grep 7,655 -> 7,584 (-71), and the body now holds only register arguments
+
+Same region method, five more slots:
+
+    iVar3   1550-1575  -> slotOfs   idx * 3 + cc, a BldGfxNormal row offset
+            2166-2178  -> row3      the 0..2 index of the tail loop (two roles, split)
+    iVar4   1566-1569  -> slotOfs   the same idx * 3 + cc expression, so the same name
+    puVar11 1626-2028  -> seqSlot   AnimSeqPtr[k].ofs + cc * 4, a {ofs, seg} destination slot
+                                     (one role across all four regions)
+    uVar10  2073-2076  -> lbmSeg    the DX half ovr_grabLbmTR returns (`asm mov uVar10,dx`)
+    bVar15  388-390    -> carry     the carry out of the 32-bit StshCtOfs add
+
+`iVar3` was the only one with two roles, and they are in disjoint regions with an assignment before
+each first read - the same test that made the `iVar12` split safe. `iVar4` was a second copy of
+`iVar3`'s expression, so it folds into `slotOfs` rather than acquiring a name of its own.
+
+**`getcache` is now down to `unaff_DI` 37 and `unaff_SI` 2** - the register-passed arguments this body
+takes mid-flow. There is nothing left to name in it: 2,375 lines, 184 hits at the start of this pass,
+zero nameable slots now.
+
+## Measured (HEAD e98c192f -> this commit)
+
+    grep_checks          7,655 -> 7,584   (-71)
+    REBUILT.EXE          447,858 (unchanged)
+    build 65/65, LINK.LOG 0 errors
+    compare_state        identical 734 / 7 different / 889 missing (unchanged)
+    diff_dgroup          288/1,805 matched (unchanged)
+    compare_runtime      280 identical / 11 different at entry, init_game and key (unchanged)
+    structural_deficits  two game bodies: 7e7c:0b9c (177/187), 77eb:0d61 (54/58)
