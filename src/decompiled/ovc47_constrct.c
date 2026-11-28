@@ -440,7 +440,6 @@ void constrct_buildInfoText(int x,byte far *flag,int entityIdx,int arg4,int arg5
     /* GUESS: +0x1a of the entity record - agnt_t names +0x17 as `entity` (4 bytes) and +0x1b as
        `owner`, so this byte falls inside the entity pointer; kept raw until the layout is settled. */
     owner = ((byte far *)&Entities[entityIdx])[0x1a];
-    bldType = (byte)ovr_ovc45_usesGfxRndSeed2((void far *)MK_FP(_SS,(uint16_t)&x));
     bld = &BuildingTypes[bldType];
 
     if (done == 0) {
