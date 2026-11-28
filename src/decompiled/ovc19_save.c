@@ -95,156 +95,229 @@ void __cdecl16far save_usesCalcSeasonPalette(void)
 
 
 /* 49fd:01da */
+
+/* Loads a saved game.  The image is a straight sequence of validated block reads
+   (`push count / push bufSeg / push bufOfs / push handle / push cs / call 0`), then the leader
+   sheets are allocated 0xae bytes each and read, the 10-byte preview block and the header are
+   read again, and the header is compared with the saved one so a truncated file is rejected.
+
+   The previous body passed `unaff_DI`/`unaff_SI` as the segment and count of every call, i.e.
+   garbage, and declared the 0x28-byte header as a single byte.  Every argument below is taken from
+   the image; the two module-data segments (0x58 for the square records, 0x88 for the record list)
+   have no symbol in the tree and are marked as such. */
 uint __cdecl16far stLoad(int handle)
 
 {
-  uint readOk;
-  int iVar2;
-  void *pvVar3;
-  uint16_t uVar5;
-  uint unaff_SI;
-  uint16_t unaff_DI;
-  uint8_t header;
-  
+  uint8_t header[0x28];
+  char far *savedHeader;
+  int i;
+
   ovr_stop_audio();
-  ovr_drawTextAt((char *)"Loading...",0x2410,0);
-  if (-1 < handle) {
-    SaveAuto = 0;
-    AgntFlag1 = false;
-    ovr_freeGameResources();
-    readOk = save_readBlock((int)&header,(void *)CONCAT22(0x28,_SS),unaff_DI,unaff_SI);
-    if (((((readOk & 0xff) != 0) &&
-         (iVar2 = strcmp((char *)CONCAT22(_SS,&header),
-                         (char *)CONCAT22(SaveHeader.seg,SaveHeader.ofs)), iVar2 == 0)) &&
-        (readOk = save_readBlock((int)(short (*) [148] [60])GUnitGrid,
-                                (void *)CONCAT22(0x4560,(*(uint16_t *)((uint8_t *)&(GUnitGrid) + 2))),unaff_DI,unaff_SI),
-        (readOk & 0xff) != 0)) &&
-       ((((readOk = save_readBlock((int)(short (*) [60] [148])GMapFlags,
-                                  (void *)CONCAT22(0x4560,(*(uint16_t *)((uint8_t *)&(GMapFlags) + 2))),unaff_DI,unaff_SI),
-          (readOk & 0xff) != 0 &&
-          (readOk = save_readBlock((int)(byte (*) [59] [148])GMapCells,
-                                  (void *)CONCAT22(0x22b0,(*(uint16_t *)((uint8_t *)&(GMapCells) + 2))),unaff_DI,unaff_SI),
-          (readOk & 0xff) != 0)) &&
-         ((readOk = save_readBlock(-0x7661,(void *)((char *)&_DATA + 2),unaff_DI,unaff_SI), (readOk & 0xff) != 0 &&
-          ((readOk = save_readBlock(-0x7663,(void *)((char *)&_DATA + 2),unaff_DI,unaff_SI), (readOk & 0xff) != 0
-           && (readOk = save_readBlock(-0x6f69,(void *)((char *)&_DATA + 2),unaff_DI,unaff_SI),
-              (readOk & 0xff) != 0)))))) &&
-        ((readOk = save_readBlock((int)Entities,(void *)CONCAT22(EntityCount * 0x37,DAT_2000_d190),
-                                 unaff_DI,unaff_SI), (readOk & 0xff) != 0 &&
-         (readOk = save_readBlock(0x881,(void *)((char *)&_DATA + 2),unaff_DI,unaff_SI), (readOk & 0xff) != 0))))))
-    {
-      uVar5 = (uint16_t)((ulong)((long)SquareRecCount * 0x13) >> 0x10);
-      readOk = save_readBlock(0,(void *)CONCAT22((int)((long)SquareRecCount * 0x13),
-                                                (void *)((int)&AgntAnms[0x7c].halfWidth + 1)),
-                             unaff_DI,unaff_SI);
-      if (((readOk & 0xff) != 0) &&
-         (readOk = save_readBlock(-0x6f1a,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI), (readOk & 0xff) != 0)) {
-        for (iVar2 = 0; iVar2 < (int)(uint)GLeaderCount; iVar2 = iVar2 + 1) {
-          pvVar3 = ovr_stshAlloc(0xae);
-          ((uint16_t *)(iVar2 * 4))[1] = uVar5;
-          *(uint16_t *)(iVar2 * 4) = (uint16_t)pvVar3;   /* hand fix: store of the far pointer's offset half */
-          readOk = save_readBlock(*(int *)(iVar2 * 4),
-                                 (void *)CONCAT22(0xae,(void *)((int *)(iVar2 * 4))[1]),unaff_DI,
-                                 unaff_SI);
-          if ((readOk & 0xff) == 0) goto L_save_49fd_01da_0800;
-        }
-        readOk = save_readBlock(0x4a12,(void *)&__C0_ASM_CopyRight,unaff_DI,unaff_SI);
-        if (((((((((((readOk & 0xff) != 0) &&
-                   (readOk = save_readBlock(-0x6f1b,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI),
-                   (readOk & 0xff) != 0)) &&
-                  (readOk = save_readBlock(-0x6f1c,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI),
-                  (readOk & 0xff) != 0)) &&
-                 (((readOk = save_readBlock(-0x6e21,(void *)((char *)&_DATA + 2),unaff_DI,unaff_SI),
-                   (readOk & 0xff) != 0 &&
-                   (readOk = save_readBlock(0,(char *)CONCAT22(GRecordCount * 0x12, (char *)GRecords),
-                                           unaff_DI,unaff_SI), (readOk & 0xff) != 0)) &&
-                  ((readOk = save_readBlock(-0x7667,(void *)((char *)&_DATA + 2),unaff_DI,unaff_SI),
-                   (readOk & 0xff) != 0 &&
-                   ((readOk = save_readBlock((int)GUnits,
-                                            (void *)CONCAT22(GUnitCount * 9,(*(uint16_t *)((uint8_t *)&(GUnits) + 2))),unaff_DI,
-                                            unaff_SI), (readOk & 0xff) != 0 &&
-                    (readOk = save_readBlock(0x2f3,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI),
-                    (readOk & 0xff) != 0)))))))) &&
-                (readOk = save_readBlock(-0x6f62,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI),
-                (readOk & 0xff) != 0)) &&
-               ((((readOk = save_readBlock(-0x6f91,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI),
-                  (readOk & 0xff) != 0 &&
-                  (readOk = save_readBlock(-0x6f92,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI),
-                  (readOk & 0xff) != 0)) &&
-                 (readOk = save_readBlock(-0x6f97,(void *)&__C0_ASM_CopyRight,unaff_DI,unaff_SI),
-                 (readOk & 0xff) != 0)) &&
-                ((readOk = save_readBlock(-0x6df0,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI),
-                 (readOk & 0xff) != 0 &&
-                 (readOk = save_readBlock(-0x6f1d,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI),
-                 (readOk & 0xff) != 0)))))) &&
-              (((readOk = save_readBlock(-0x6f93,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI),
-                (readOk & 0xff) != 0 &&
-                ((readOk = save_readBlock(0x2f4,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI),
-                 (readOk & 0xff) != 0 &&
-                 (readOk = save_readBlock(-0x6f99,(void *)((char *)&_DATA + 2),unaff_DI,unaff_SI),
-                 (readOk & 0xff) != 0)))) &&
-               (readOk = save_readBlock(-0x6f63,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI),
-               (readOk & 0xff) != 0)))) &&
-             ((((readOk = save_readBlock(0x5dcf,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI),
-                (readOk & 0xff) != 0 &&
-                (readOk = save_readBlock(0x5dd7,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI),
-                (readOk & 0xff) != 0)) &&
-               (readOk = save_readBlock(0x5ddf,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI),
-               (readOk & 0xff) != 0)) &&
-              (((readOk = save_readBlock(0x5de7,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI),
-                (readOk & 0xff) != 0 &&
-                (readOk = save_readBlock(-0x6d33,(void *)((char *)&_DATA + 2),unaff_DI,unaff_SI),
-                (readOk & 0xff) != 0)) &&
-               ((readOk = save_readBlock(-0x6d34,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI),
-                (readOk & 0xff) != 0 &&
-                ((readOk = save_readBlock(0x6a86,(void *)((char *)&_DATA + 2),unaff_DI,unaff_SI),
-                 (readOk & 0xff) != 0 &&
-                 (readOk = save_readBlock(0x6a88,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI),
-                 (readOk & 0xff) != 0)))))))))) &&
-            ((readOk = save_readBlock(0x439,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI), (readOk & 0xff) != 0
-             && ((((readOk = save_readBlock(-0x766f,(void *)&__C0_ASM_CopyRight,unaff_DI,unaff_SI),
-                   (readOk & 0xff) != 0 &&
-                   (readOk = save_readBlock(-0x7670,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI),
-                   (readOk & 0xff) != 0)) &&
-                  (readOk = save_readBlock(0x693a,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI),
-                  (readOk & 0xff) != 0)) &&
-                 (((readOk = save_readBlock(-0x6d38,(void *)((char *)&_DATA + 2),unaff_DI,unaff_SI),
-                   (readOk & 0xff) != 0 &&
-                   (readOk = save_readBlock(0x744,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI),
-                   (readOk & 0xff) != 0)) &&
-                  ((readOk = save_readBlock(-0x6f65,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI),
-                   (readOk & 0xff) != 0 &&
-                   ((readOk = save_readBlock(-0x6e1a,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI),
-                    (readOk & 0xff) != 0 &&
-                    (readOk = save_readBlock(-0x6e1c,(void *)((char *)&_DATA + 2),unaff_DI,unaff_SI),
-                    (readOk & 0xff) != 0)))))))))))) &&
-           ((readOk = save_readBlock(0x26df,(void *)&__C0_ASM_CopyRight,unaff_DI,unaff_SI), (readOk & 0xff) != 0
-            && ((((readOk = save_readBlock(-0x6d3a,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI),
-                  (readOk & 0xff) != 0 &&
-                  (readOk = save_readBlock(-0x6d44,(void *)MK_FP(0x2410, 0xa),unaff_DI,unaff_SI),
-                  (readOk & 0xff) != 0)) &&
-                 (readOk = save_readBlock((int)&header,(void *)CONCAT22(0x28,_SS),unaff_DI,
-                                         unaff_SI), (readOk & 0xff) != 0)) &&
-                (iVar2 = strcmp((char *)CONCAT22(_SS,&header),
-                                (char *)CONCAT22(SaveHeader.seg,SaveHeader.ofs)), iVar2 == 0)))))) {
-          ovr_drawTextAt((char *)"Load complete.",0x2410,0);
-          SaveAuto = 1;
-          ovr_ovc24_usesAlignUp4();
-          save_usesCalcSeasonPalette();
-          return 1;
-        }
-      }
+  ovr_drawTextAt((char far *)"Loading...",0xa000);
+  if (handle < 0) {
+    goto failed;
+  }
+  SaveAuto = 0;
+  AgntFlag1 = false;
+  ovr_freeGameResources();
+  if ((save_readBlock(handle,(void *)header,_SS,0x28) & 0xff) == 0) {
+    goto failed;
+  }
+  /* The image calls the CRT's far strcmp (`lcall 0,0x2d01`) with two far pointers; this tree's
+     strcmp takes near pointers, so the header is compared with the same strcmp semantics by hand. */
+  savedHeader = (char far *)MK_FP(SaveHeader.seg,SaveHeader.ofs);
+  for (i = 0; i < 0x28; i++) {
+    if (header[i] != savedHeader[i]) {
+      goto failed;
+    }
+    if (header[i] == '\0') {
+      break;
     }
   }
-L_save_49fd_01da_0800:
-  readOk = (uint)suppressLoadError;
-  if (readOk == 0) {
-    ovr_drawTextAt((char *)"Load Error",0x2410,0);
+  if ((save_readBlock(handle,(void *)(uint16_t)GUnitGrid,
+                      (uint16_t)((uint32_t)GUnitGrid >> 16),0x4560) & 0xff) == 0) {
+    goto failed;
+  }
+  if ((save_readBlock(handle,(void *)(uint16_t)GMapFlags,
+                      (uint16_t)((uint32_t)GMapFlags >> 16),0x4560) & 0xff) == 0) {
+    goto failed;
+  }
+  if ((save_readBlock(handle,(void *)(uint16_t)GMapCells,
+                      (uint16_t)((uint32_t)GMapCells >> 16),0x22b0) & 0xff) == 0) {
+    goto failed;
+  }
+  if ((save_readBlock(handle,(void *)&GfxRndSeed,_DS,2) & 0xff) == 0) {
+    goto failed;
+  }
+  if ((save_readBlock(handle,(void *)&GfxRndSeed2,_DS,2) & 0xff) == 0) {
+    goto failed;
+  }
+  if ((save_readBlock(handle,(void *)&EntityCount,_DS,2) & 0xff) == 0) {
+    goto failed;
+  }
+  if ((save_readBlock(handle,(void *)(uint16_t)Entities,
+                      (uint16_t)((uint32_t)Entities >> 16),EntityCount * 0x37) & 0xff) == 0) {
+    goto failed;
+  }
+  if ((save_readBlock(handle,(void *)&SquareRecCount,_DS,2) & 0xff) == 0) {
+    goto failed;
+  }
+  /* GUESS: the square-record array lives at segment 0x58 offset 0 (a module data segment the tree
+     has no symbol for); the image pushes the segment as a literal. */
+  if ((save_readBlock(handle,(void *)0,0x58,SquareRecCount * 0x13) & 0xff) == 0) {
+    goto failed;
+  }
+  if ((save_readBlock(handle,(void *)&GLeaderCount,_DS,1) & 0xff) == 0) {
+    goto failed;
+  }
+  for (i = 0; i < (int)(uint)GLeaderCount; i++) {
+    GLeaderSheets[i] = (char_sheet_t far *)ovr_stshAlloc(0xae,0);
+    if ((save_readBlock(handle,(void *)(uint16_t)GLeaderSheets[i],
+                        (uint16_t)((uint32_t)GLeaderSheets[i] >> 16),0xae) & 0xff) == 0) {
+      goto failed;
+    }
+  }
+  if ((save_readBlock(handle,(void *)&TimerSeed,_DS,4) & 0xff) == 0) {
+    goto failed;
+  }
+  if ((save_readBlock(handle,(void *)&CurPartySlot,_DS,1) & 0xff) == 0) {
+    goto failed;
+  }
+  if ((save_readBlock(handle,(void *)&PartyCount,_DS,1) & 0xff) == 0) {
+    goto failed;
+  }
+  if ((save_readBlock(handle,(void *)&GRecordCount,_DS,2) & 0xff) == 0) {
+    goto failed;
+  }
+  /* GUESS: the record list lives at segment 0x88 offset 0 (same situation as 0x58 above). */
+  if ((save_readBlock(handle,(void *)0,0x88,GRecordCount * 0x12) & 0xff) == 0) {
+    goto failed;
+  }
+  if ((save_readBlock(handle,(void *)&GUnitCount,_DS,2) & 0xff) == 0) {
+    goto failed;
+  }
+  if ((save_readBlock(handle,(void *)(uint16_t)GUnits,
+                      (uint16_t)((uint32_t)GUnits >> 16),GUnitCount * 9) & 0xff) == 0) {
+    goto failed;
+  }
+  if ((save_readBlock(handle,(void *)&MessageDelay,_DS,1) & 0xff) == 0) {
+    goto failed;
+  }
+  if ((save_readBlock(handle,(void *)&worldIndex,_DS,1) & 0xff) == 0) {
+    goto failed;
+  }
+  if ((save_readBlock(handle,(void *)&spyReportTimer,_DS,1) & 0xff) == 0) {
+    goto failed;
+  }
+  if ((save_readBlock(handle,(void *)&seasonTimer,_DS,1) & 0xff) == 0) {
+    goto failed;
+  }
+  if ((save_readBlock(handle,(void *)&tickCountLo,_DS,4) & 0xff) == 0) {
+    goto failed;
+  }
+  if ((save_readBlock(handle,(void *)&PlayerIndex,_DS,1) & 0xff) == 0) {
+    goto failed;
+  }
+  if ((save_readBlock(handle,(void *)&PartySize,_DS,1) & 0xff) == 0) {
+    goto failed;
+  }
+  if ((save_readBlock(handle,(void *)&unitUpdateTimer,_DS,1) & 0xff) == 0) {
+    goto failed;
+  }
+  if ((save_readBlock(handle,(void *)&messageDelayTicks,_DS,1) & 0xff) == 0) {
+    goto failed;
+  }
+  if ((save_readBlock(handle,(void *)&GameTick,_DS,2) & 0xff) == 0) {
+    goto failed;
+  }
+  if ((save_readBlock(handle,(void *)&Difficulty,_DS,1) & 0xff) == 0) {
+    goto failed;
+  }
+  if ((save_readBlock(handle,(void *)&lowIntelEnemies,_DS,1) & 0xff) == 0) {
+    goto failed;
+  }
+  if ((save_readBlock(handle,(void *)&medIntelEnemies,_DS,1) & 0xff) == 0) {
+    goto failed;
+  }
+  if ((save_readBlock(handle,(void *)&highIntelEnemies,_DS,1) & 0xff) == 0) {
+    goto failed;
+  }
+  if ((save_readBlock(handle,(void *)&secondWaveSize,_DS,1) & 0xff) == 0) {
+    goto failed;
+  }
+  if ((save_readBlock(handle,(void *)&promotionBandUsed,_DS,2) & 0xff) == 0) {
+    goto failed;
+  }
+  if ((save_readBlock(handle,(void *)&promotionCount,_DS,1) & 0xff) == 0) {
+    goto failed;
+  }
+  if ((save_readBlock(handle,(void *)&strongholdsDestroyed,_DS,2) & 0xff) == 0) {
+    goto failed;
+  }
+  if ((save_readBlock(handle,(void *)&GHighScoreSaved,_DS,1) & 0xff) == 0) {
+    goto failed;
+  }
+  if ((save_readBlock(handle,(void *)&GPaused,_DS,1) & 0xff) == 0) {
+    goto failed;
+  }
+  if ((save_readBlock(handle,(void *)&GPopulationLo,_DS,4) & 0xff) == 0) {
+    goto failed;
+  }
+  if ((save_readBlock(handle,(void *)&GGameInProgress,_DS,1) & 0xff) == 0) {
+    goto failed;
+  }
+  if ((save_readBlock(handle,(void *)&GSeason,_DS,1) & 0xff) == 0) {
+    goto failed;
+  }
+  if ((save_readBlock(handle,(void *)&GTimeLo,_DS,2) & 0xff) == 0) {
+    goto failed;
+  }
+  if ((save_readBlock(handle,(void *)&seasonGroupBase,_DS,1) & 0xff) == 0) {
+    goto failed;
+  }
+  if ((save_readBlock(handle,(void *)&GWantsExit2,_DS,1) & 0xff) == 0) {
+    goto failed;
+  }
+  if ((save_readBlock(handle,(void *)&PlayerCount,_DS,1) & 0xff) == 0) {
+    goto failed;
+  }
+  if ((save_readBlock(handle,(void *)&GYear,_DS,2) & 0xff) == 0) {
+    goto failed;
+  }
+  if ((save_readBlock(handle,(void *)&GSeed,_DS,4) & 0xff) == 0) {
+    goto failed;
+  }
+  if ((save_readBlock(handle,(void *)&ListCount,_DS,1) & 0xff) == 0) {
+    goto failed;
+  }
+  /* GUESS: an unnamed 10-byte DGROUP block at 0x92bc..0x92c5 (no audit symbol; the tree's
+     declarations there are the talkwin9 cut pointers, which the original does not read here). */
+  if ((save_readBlock(handle,(void *)0x92bc,_DS,0xa) & 0xff) == 0) {
+    goto failed;
+  }
+  if ((save_readBlock(handle,(void *)header,_SS,0x28) & 0xff) == 0) {
+    goto failed;
+  }
+  for (i = 0; i < 0x28; i++) {
+    if (header[i] != savedHeader[i]) {
+      goto failed;
+    }
+    if (header[i] == '\0') {
+      break;
+    }
+  }
+  ovr_drawTextAt((char far *)"Load complete.",0xa000);
+  SaveAuto = 1;
+  ovr_ovc24_usesAlignUp4();
+  save_usesCalcSeasonPalette();
+  return 1;
+
+failed:
+  if (suppressLoadError == 0) {
+    ovr_drawTextAt((char far *)"Load Error",0xa000);
   }
   return 0;
 }
-
-
 /* 49fd:081e */
 
 /* Loads the save slot named save.NNN: builds the filename, opens it, runs stLoad on the handle and

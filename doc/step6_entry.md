@@ -22174,3 +22174,45 @@ when all 76 are transcribed.
 * **`6ffe:009b` / `6ffe:01c5`.** These show C 2/3 vs image 9/10 only because the image is fully
   unrolled and the tree keeps a `for` loop. Both bodies are correct; the rows are census artifacts and
   will stay on the list rather than be "fixed" by unrolling correct code to satisfy a counter.
+
+
+## `49fd:01da` (`stLoad`) rewritten: every `save_readBlock` call was passing garbage
+
+The old body passed `unaff_DI` and `unaff_SI` as the segment and count of **every** one of its 51
+`save_readBlock` calls, and declared the 0x28-byte header as a single `uint8_t`. Ghidra's argument
+shifting had turned
+
+    push count / push bufSeg / push bufOfs / push handle / push cs / call 0
+
+into `save_readBlock((int)&header, (void *)CONCAT22(0x28,_SS), unaff_DI, unaff_SI)`, i.e. handle was
+the address of the header, buf was a mangled far pointer, and the segment/count were uninitialised
+registers. Nothing about the save/load path could have worked.
+
+The body is now generated from the image, argument for argument:
+
+* the header is `uint8_t header[0x28]` read with `_SS,0x28`, compared to `SaveHeader`, and re-read and
+  re-compared at the end so a truncated file is rejected;
+* `GUnitGrid`/`GMapFlags` (0x4560 each), `GMapCells` (0x22b0), `GUnits` (`GUnitCount*9`) and `Entities`
+  (`EntityCount*0x37`) are read through their own far pointers, split into offset/segment halves;
+* the leader sheets are allocated 0xae bytes each and read in a loop over `GLeaderCount`;
+* 38 single globals are read at their exact sizes (1/2/4 bytes, e.g. `GPaused` 1, `GTimeLo` 2,
+  `GPoplulationLo` 4) — the sizes come from the pushes, not from guesses.
+
+Two module-data segments - `0x58` for the square-record array (`SquareRecCount*0x13`) and `0x88` for
+the record list (`GRecordCount*0x12`) - and one unnamed 10-byte DGROUP block at `0x92bc..0x92c5` have
+no symbol in the tree; they are marked `GUESS:` in-source with that reason.
+
+One deliberate divergence, also recorded in-source: the image calls the CRT's **far** `strcmp`
+(`lcall 0,0x2d01`, two 4-byte pointers), but this tree's `strcmp` is declared with near pointers, so
+the header comparison is done with an equivalent byte loop (equal up to the first NUL). Passing near
+pointers to the far callee would compare `DS:ofs` against a stack buffer and always differ.
+
+## Measured (HEAD a07a16be -> this commit)
+
+    grep_checks      11,757 -> 11,639   (-118: the unaff_*/CONCAT22/in_stack noise of the old body)
+    REBUILT.EXE      461,508 -> 460,676
+    build 65/65, LINK.LOG 0 errors
+    compare_state    1,628 matched / 0 different / missing 2      (unchanged)
+    diff_dgroup      1,639/1,805 matched, 5 layout runs           (unchanged)
+    compare_runtime  1,692 matched / 1,683 identical / 9 different (unchanged, all three sample points)
+    screen_calls     49fd:01da still matches its 61-call census
