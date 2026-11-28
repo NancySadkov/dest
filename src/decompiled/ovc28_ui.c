@@ -824,51 +824,52 @@ char * __cdecl16far
 ovc28_usesUiInputText(far_t entries,uint16_t count,far_t hint,uint8_t *pageOut,uint16_t arg5,uint16_t arg6)
 
 {
-  uint16_t uVar1;
-  char *pcVar2;
-  uint uVar3;
-  uint16_t *puVar4;
-  uint uVar5;
-  uint16_t in_stack_00000010;
+  uint16_t entryWord;       /* the menu entry's offset word */
+  char *deadRes;           /* the short-list uiInputText result, unused */
+  char *choice;            /* the paged uiInputText result */
+  uint entryCount;         /* bStack_7, the entry being copied */
+  uint insertAt;           /* the index the choice maps to */
+  uint16_t *entryPtr;       /* &entries[bStack_6 + bStack_7] */
+  uint insertBase;          /* bStack_4, the paging offset */
   far_t entries_00;
   far_t hint_00;
   uint8_t menuEntries;
   uint16_t auStack_34 [17];
-  uint16_t uStack_12;
-  uint16_t uStack_10;
-  uint16_t uStack_e;
-  uint16_t uStack_c;
+  uint16_t fmtOfs;          /* 0x5dc2, the prompt format string's offset */
+  uint16_t fmtSeg;          /* 0x2410, its segment */
+  uint16_t hintOfs;         /* hint.ofs, carried across the page loop */
+  uint16_t hintSeg;         /* hint.seg */
   byte bStack_9;
-  uint8_t uStack_8;
+  uint8_t defaultItem;      /* 2, 3 or 1: which item is the default for this page */
   byte bStack_7;
   byte bStack_6;
   byte bStack_5;
   byte bStack_4;
-  char cStack_3;
+  char choiceLo;            /* (char)choice, the menu's answer code */
   
-  uStack_c = hint.seg;
-  uStack_e = hint.ofs;
+  hintSeg = hint.seg;
+  hintOfs = hint.ofs;
   if ((int)count < 10) {
-    pcVar2 = uiInputText(entries,count,hint,0x0,0);
+    deadRes = uiInputText(entries,count,hint,0x0,0);
   }
   else {
     while( true ) {
       auStack_34[0] = 0x2410;
       menuEntries = 0x5db9;
-      uStack_10 = 0x2410;
-      uStack_12 = 0x5dc2;
+      fmtSeg = 0x2410;
+      fmtOfs = 0x5dc2;
       if (*pageOut == 0) {
         bStack_4 = 0;
         bStack_6 = 0;
         bStack_5 = 9;
-        uStack_8 = 0x2;
+        defaultItem = 0x2;
         bStack_9 = 10;
       }
       else if ((int)((uint)*pageOut * 8 + 8) < (int)count) {
         bStack_4 = 1;
         bStack_6 = *pageOut * '\b' + 1;
         bStack_5 = 8;
-        uStack_8 = 0x3;
+        defaultItem = 0x3;
         bStack_9 = 10;
       }
       else {
@@ -876,40 +877,40 @@ ovc28_usesUiInputText(far_t entries,uint16_t count,far_t hint,uint8_t *pageOut,u
         bStack_6 = *pageOut * '\b' + 1;
         bStack_5 = (char)count - bStack_6;
         bStack_9 = bStack_5 + 1;
-        uStack_8 = 0x1;
+        defaultItem = 0x1;
       }
       for (bStack_7 = 0; bStack_7 < bStack_5; bStack_7 = bStack_7 + 1) {
-        puVar4 = (uint16_t *)(entries.ofs + ((uint)bStack_6 + (uint)bStack_7) * 4);
-        uVar1 = *puVar4;
-        uVar5 = (uint)bStack_4;
-        uVar3 = (uint)bStack_7;
-        auStack_34[(uVar5 + uVar3) * 2] = puVar4[1];
-        *(uint16_t *)(&menuEntries + (uVar5 + uVar3) * 4) = uVar1;
+        entryPtr = (uint16_t *)(entries.ofs + ((uint)bStack_6 + (uint)bStack_7) * 4);
+        entryWord = *entryPtr;
+        insertBase = (uint)bStack_4;
+        entryCount = (uint)bStack_7;
+        auStack_34[(insertBase + entryCount) * 2] = entryPtr[1];
+        *(uint16_t *)(&menuEntries + (insertBase + entryCount) * 4) = entryWord;
       }
-      hint_00.seg = uStack_c;
-      hint_00.ofs = uStack_e;
+      hint_00.seg = hintSeg;
+      hint_00.ofs = hintOfs;
       entries_00.seg = _SS;
       entries_00.ofs = (uint16_t)&menuEntries;
-      pcVar2 = uiInputText(entries_00,(uint)bStack_9,hint_00,uStack_8,0);
-      cStack_3 = (char)pcVar2;
-      if (cStack_3 == '\0') {
+      choice = uiInputText(entries_00,(uint)bStack_9,hint_00,defaultItem,0);
+      choiceLo = (char)choice;
+      if (choiceLo == '\0') {
         return (char *)0;
       }
-      if (cStack_3 == -2) {
+      if (choiceLo == -2) {
         return (char *)0xfe;
       }
-      if ((bStack_4 + 1 <= ((uint)pcVar2 & 0xff)) &&
-         (uVar3 = (uint)bStack_4 + (uint)bStack_5 + 1, ((uint)pcVar2 & 0xff) < uVar3)) break;
-      if (cStack_3 == '\x01') {
+      if ((bStack_4 + 1 <= ((uint)choice & 0xff)) &&
+         (insertAt = (uint)bStack_4 + (uint)bStack_5 + 1, ((uint)choice & 0xff) < insertAt)) break;
+      if (choiceLo == '\x01') {
         *pageOut = *pageOut - 1;
       }
       else {
         *pageOut = *pageOut + 1;
       }
     }
-    pcVar2 = (char *)CONCAT11((char)(uVar3 >> 8),(bStack_6 + cStack_3) - bStack_4);
+    choice = (char *)CONCAT11((char)(insertAt >> 8),(bStack_6 + choiceLo) - bStack_4);
   }
-  return pcVar2;
+  return choice;
 }
 
 

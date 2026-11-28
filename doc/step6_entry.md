@@ -25708,3 +25708,42 @@ dead store visible instead of pretending it is part of the segment arithmetic.
     grep_checks          5,549 -> 5,416   (-133)
       init_usesRandBelow (3381:24c3)      -58
       constrct_usesLDIV_at_ (7e7c:2b4c)   -75
+
+
+## `6018:1398` (paged uiInputText list): 48 hits down to 0, grep 5,416 -> 5,360 (-56)
+
+The chooser that splits a long entry list into pages.
+
+    pcVar2 -> deadRes   the short-list uiInputText result, never read
+              choice    the paged uiInputText result
+    uVar3  -> entryCount  bStack_7, the entry being copied
+              insertAt    the index the choice maps to
+    cStack_3 -> choiceLo    (char)choice, the answer code
+    uStack_8 -> defaultItem 2, 3 or 1: which item is this page's default
+    puVar4 -> entryPtr   &entries[bStack_6 + bStack_7]
+    uVar5  -> insertBase bStack_4, the paging offset
+    uVar1  -> entryWord  the menu entry's offset word
+    uStack_e / uStack_c -> hintOfs / hintSeg   hint carried across the page loop
+    uStack_12 / uStack_10 -> fmtOfs (0x5dc2) / fmtSeg (0x2410)  the prompt format string
+
+`in_stack_00000010` was declared and referenced nowhere - deleted, like `unaff_SI`/`unaff_DI` in
+`55fe:184e`. `fmtOfs`/`fmtSeg` are the reverse case: written and never read in the C, because Ghidra
+dropped the `sprintf` that consumes the 0x2410:0x5dc2 pointer; they are named rather than deleted so the
+constant pair stays visible.
+
+## Measured (HEAD 2394ce52 -> this commit)
+
+    grep_checks          5,416 -> 5,360   (-56)
+    REBUILT.EXE          447,970 (unchanged size)
+    build 65/65, LINK.LOG 0 errors
+    compare_state        identical 734 / 7 different / 889 missing (unchanged)
+    diff_dgroup          288/1,805 matched (unchanged)
+    compare_runtime      280 identical / 11 different at entry, init_game and key (unchanged)
+    structural_deficits  two game bodies: 7e7c:0b9c (177/187), 77eb:0d61 (54/58)
+
+## Turn total (HEAD e850b68b -> here)
+
+    grep_checks          5,549 -> 5,360   (-189)
+      init_usesRandBelow (3381:24c3)      -58
+      constrct_usesLDIV_at_ (7e7c:2b4c)   -75
+      6018:1398 (paged list)              -56
