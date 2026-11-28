@@ -22639,3 +22639,27 @@ directly.
 Remaining 34: compute6 (7 of 9), costOrIncomeLabel (4 of 5), fmVsprintf (5 of 44), usesStshRealloc
 (2), strcpy (9), compute8 (1), createConstrFar (1), ovc28_compute2 (1) and the two unnameable sites
 (1f8,2a x2, 1a8,2a).
+
+
+## 7e7c:0b9c: unitType 9's four variants each compute their own noun and gold (census 153 -> 161)
+
+The image does not hoist the two helpers out of the branch: `0x1d2c`, `0x1d50`, `0x1dcb`, `0x1e4f`
+are four separate `ovc45_compute6` calls (one per variant) and `0x1d7a`, `0x1df5`, `0x1e79`, `0x1ecf`
+are four separate `ovc45_costOrIncomeLabel` calls. My previous version computed each once before the
+dispatch, so three compute6 and three costOrIncomeLabel sites were missing.
+
+Each of the four branches now has its own pair, matching the image's repetition.
+
+## Measured (HEAD de63c3dc -> this commit)
+
+    screen_calls     7e7c:0b9c  C 153 -> 161  (image 187), delta -34 -> -26
+    grep_checks      11,516 (unchanged)
+    REBUILT.EXE      466,972 -> 467,244
+    build 65/65, LINK.LOG 0 errors
+    compare_state    1,628 matched / 0 different / missing 2      (unchanged)
+    diff_dgroup      1,639/1,805 matched, 5 layout runs           (unchanged)
+    compare_runtime  1,692 matched / 1,683 identical / 9 different (unchanged, all three sample points)
+
+Remaining 26: compute6 (the unitType 0/8 arm computes it per branch, +4 there), fmVsprintf (5),
+strcpy (9), usesStshRealloc (2), compute8/createConstrFar/ovc28_compute2 (1 each) and the two
+unnameable sites.

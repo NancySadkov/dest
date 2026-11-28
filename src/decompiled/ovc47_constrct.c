@@ -694,48 +694,60 @@ void constrct_buildInfoText(int x,byte far *flag,int entityIdx,int arg4,int arg5
       }
       else if (bld->unitType == 9) {
         /* Four variants on the two quantities the pass-2 preamble computed: v16 (feeds) and v18
-           (housing).  The noun is the DGROUP 0x74ad table indexed by ovc45_compute6, and the gold
-           figure is ovc45_costOrIncomeLabel of the income value. */
-        nounIdx = (uint16_t)ovr_ovc45_compute6(v18,bld->storage);
-        noun = (nounIdx != 0) ? (char far *)"people" : (char far *)"person";
-        gold = (uint16_t)ovr_ovc45_costOrIncomeLabel(v16,(uint16_t)(v16 < 0 ? -v16 : v16));
+           (housing).  The image computes the noun (DGROUP 0x74ad via ovc45_compute6) and the gold
+           figure (ovc45_costOrIncomeLabel) *inside* each variant - 0x1d2c/0x1d50/0x1dcb/0x1e4f and
+           0x1d7a/0x1df5/0x1e79/0x1ecf - so they are repeated per branch here too. */
         if ((v16 == 0) && (v18 == 0)) {
           /* nothing to report */
         }
         else if (v16 > 0) {
           if (v18 > 0) {
+            nounIdx = (uint16_t)ovr_ovc45_compute6(v18,bld->storage);
+            noun = (nounIdx != 0) ? (char far *)"people" : (char far *)"person";
+            gold = (uint16_t)ovr_ovc45_costOrIncomeLabel(v16,(uint16_t)(v16 < 0 ? -v16 : v16));
             res = ovr_fmVsprintf(
                       (char far *)"%s: %s %d gold. provides housing for %d %s and feeds %d %s.",
                       (uint16_t)ovr_ovc15_usesStshRealloc(
                           (char far *)MK_FP((uint16_t)((uint32_t)bld->name >> 16),
                                             (uint16_t)bld->name)),(uint16_t)noun,gold,
                       v18,(uint16_t)noun,v16,(uint16_t)noun);
+            strcpy(outBuf,res);
           }
           else {
+            nounIdx = (uint16_t)ovr_ovc45_compute6(v18,bld->storage);
+            noun = (nounIdx != 0) ? (char far *)"people" : (char far *)"person";
+            gold = (uint16_t)ovr_ovc45_costOrIncomeLabel(v16,(uint16_t)(v16 < 0 ? -v16 : v16));
             res = ovr_fmVsprintf((char far *)"%s: %s %d gold. Feeds %d %s.",
                                  (uint16_t)ovr_ovc15_usesStshRealloc(
                                      (char far *)MK_FP((uint16_t)((uint32_t)bld->name >> 16),
                                                        (uint16_t)bld->name)),(uint16_t)noun,gold,
                                  v16,(uint16_t)noun);
+            strcpy(outBuf,res);
           }
-          strcpy(outBuf,res);
         }
         else {
           if (v18 > 0) {
+            nounIdx = (uint16_t)ovr_ovc45_compute6(v18,bld->storage);
+            noun = (nounIdx != 0) ? (char far *)"people" : (char far *)"person";
+            gold = (uint16_t)ovr_ovc45_costOrIncomeLabel(v16,(uint16_t)(v16 < 0 ? -v16 : v16));
             res = ovr_fmVsprintf((char far *)"%s: %s %d gold. Provides housing for %d %s.",
                                  (uint16_t)ovr_ovc15_usesStshRealloc(
                                      (char far *)MK_FP((uint16_t)((uint32_t)bld->name >> 16),
                                                        (uint16_t)bld->name)),(uint16_t)noun,gold,
                                  v18,(uint16_t)noun);
+            strcpy(outBuf,res);
           }
           else {
+            nounIdx = (uint16_t)ovr_ovc45_compute6(v18,bld->storage);
+            noun = (nounIdx != 0) ? (char far *)"people" : (char far *)"person";
+            gold = (uint16_t)ovr_ovc45_costOrIncomeLabel(v16,(uint16_t)(v16 < 0 ? -v16 : v16));
             res = ovr_fmVsprintf((char far *)"%s: %s %d gold.",
                                  (uint16_t)ovr_ovc15_usesStshRealloc(
                                      (char far *)MK_FP((uint16_t)((uint32_t)bld->name >> 16),
                                                        (uint16_t)bld->name)),(uint16_t)noun,
                                  gold);
+            strcpy(outBuf,res);
           }
-          strcpy(outBuf,res);
         }
       }
       /* GAP: the remaining pass-2 arms (unitType 3, 7, 0xa, 0xb, 0xc) - their literals are in the
