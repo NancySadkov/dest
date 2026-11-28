@@ -25508,3 +25508,42 @@ argument they pair with.
     grep_checks          6,090 -> 5,825   (-265)
       constr_usesAgnt_clear (36ce:0995)   -121
       ovc24_textKill (5943:026e)          -144
+
+
+## `ovc15_textMake` (4207:10a3) cleared: 81 hits down to 0, grep 5,825 -> 5,721 (-104)
+
+The entity-spawn routine. Roles, all with an assignment before the first read:
+
+    uVar5  -> evictIdx      ovc15_usesRandBelow2, the entity to evict when over the cap
+              newIdx        EntityCount, the slot being filled (12 sites)
+              strengthVal   AgntGs[gindex].strength before the modifier
+              alignRes      ovc15_usesAlignUp4(destX,destY)
+              randVal       rand(), scaled into the 0..0x8000 roll
+    uVar8  -> entSeg        SEG_OF(Entities) ;  modRes  ovr_agnt_abilityModifier(partyIndex,4)
+    puVar1 -> frameW / healthW / levelPtr   the three two-word or one-word field groups
+    iVar6  -> recOfs        level * 4, or class * 0x94 + level * 4
+    uVar3  -> statWord      the stat table's first word for the level
+    cVar4  -> levelGain     ovr_ovc15_textView's increment
+    iStack_6 -> finalStrength   strengthVal + modRes, floored at 1
+    puVar2 -> flagsPtr      (uint *)(&Entities[i].base.frames + 3)
+
+`puVar1` is the interesting one: the same pointer slot is used for `frameIndex` (two words),
+`health` (two words) and `level` (one word) at three different places, twice each for the first two -
+so it is one pointer variable per field group, not one per statement.
+
+## Measured (HEAD 0e970910 -> this commit)
+
+    grep_checks          5,825 -> 5,721   (-104)
+    REBUILT.EXE          447,970 -> 447,938   (-32: frame reshuffle)
+    build 65/65, LINK.LOG 0 errors
+    compare_state        identical 734 / 7 different / 889 missing (unchanged)
+    diff_dgroup          288/1,805 matched (unchanged)
+    compare_runtime      280 identical / 11 different at entry, init_game and key (unchanged)
+    structural_deficits  two game bodies: 7e7c:0b9c (177/187), 77eb:0d61 (54/58)
+
+## Turn total (HEAD dbb7af4e -> here)
+
+    grep_checks          6,090 -> 5,721   (-369)
+      constr_usesAgnt_clear (36ce:0995)   -121
+      ovc24_textKill (5943:026e)          -144
+      ovc15_textMake (4207:10a3)          -104

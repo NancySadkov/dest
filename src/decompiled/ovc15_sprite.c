@@ -524,35 +524,42 @@ entity_t * __cdecl16far
 ovc15_usesLDIV_at_(uint16_t x,uint16_t y,uint16_t destX,uint16_t destY,byte gindex,uint8_t animFrame,byte partyIndex,uint16_t arg8,uint16_t arg9,uint16_t arg10,uint16_t arg11)
 
 {
-  uint8_t *puVar1;
-  uint *puVar2;
-  uint16_t uVar3;
-  char cVar4;
-  uint uVar5;
-  int iVar6;
+  uint8_t *frameW;         /* &Entities[i].base.frameIndex, written as two words */
+  uint8_t *healthW;        /* &Entities[i].base.health, written as two words */
+  uint8_t *levelPtr;       /* &Entities[i].base.level */
+  uint *flagsPtr;           /* (uint *)(&Entities[i].base.frames + 3) */
+  uint16_t statWord;        /* the stat table's first word for the level */
+  char levelGain;           /* ovr_ovc15_textView's level increment */
+  uint evictIdx;            /* ovc15_usesRandBelow2, the entity to evict */
+  uint newIdx;              /* EntityCount, the slot being filled */
+  uint strengthVal;         /* AgntGs[gindex].strength before the modifier */
+  uint alignRes;            /* ovc15_usesAlignUp4(destX,destY) */
+  uint randVal;             /* rand(), scaled into the 0..0x8000 roll */
+  int recOfs;               /* level * 4, or class * 0x94 + level * 4 */
   entity_t *peVar7;
-  uint16_t uVar8;
+  uint16_t entSeg;          /* SEG_OF(Entities) */
+  uint16_t modRes;          /* ovr_agnt_abilityModifier(partyIndex,4) */
   long lVar9;
-  int iStack_6;
+  int finalStrength;        /* strengthVal + modRes, floored at 1 */
   
   if (EntityCount < 0x259) {
     mapDirty = 1;
     if (PlayerIndex < 2) {
       if (0x21b < EntityCount) {
-        uVar5 = ovc15_usesRandBelow2();
-        ovc15_removeEntity(uVar5);
+        evictIdx = ovc15_usesRandBelow2();
+        ovc15_removeEntity(evictIdx);
         EntityCount = EntityCount - 1;
       }
     }
     else if (599 < EntityCount) {
-      uVar5 = ovc15_usesRandBelow2();
-      ovc15_removeEntity(uVar5);
+      evictIdx = ovc15_usesRandBelow2();
+      ovc15_removeEntity(evictIdx);
       EntityCount = EntityCount - 1;
     }
     _fsetmem(MK_FP((int)((ulong)Entities >> 0x10),Entities + EntityCount),0x37,0);
     (Entities)[EntityCount].base.targetX = destX;
     (Entities)[EntityCount].base.targetY = destY;
-    uVar8 = (uint16_t)((ulong)Entities >> 0x10);
+    entSeg = (uint16_t)((ulong)Entities >> 0x10);
     if ((destX == x) && (destY == y)) {
       (Entities)[EntityCount].base.destX = 0;
       (Entities)[EntityCount].base.destY = 0;
@@ -565,15 +572,15 @@ ovc15_usesLDIV_at_(uint16_t x,uint16_t y,uint16_t destX,uint16_t destY,byte gind
     (Entities)[EntityCount].base.y = y;
     (Entities)[EntityCount].base.target = 0xff;
     (Entities)[EntityCount].base.gindex = gindex;
-    uVar5 = EntityCount;
-    uVar8 = (uint16_t)((ulong)Entities >> 0x10);
+    newIdx = EntityCount;
+    entSeg = (uint16_t)((ulong)Entities >> 0x10);
     peVar7 = Entities;
-    puVar1 = &peVar7[EntityCount].base.frameIndex;
-    puVar1[0] = 0x0;
-    puVar1[1] = 0x0;
-    puVar1 = &peVar7[uVar5].base.health;
-    puVar1[0] = 0x64;
-    puVar1[1] = 0x0;
+    frameW = &peVar7[EntityCount].base.frameIndex;
+    frameW[0] = 0x0;
+    frameW[1] = 0x0;
+    healthW = &peVar7[newIdx].base.health;
+    healthW[0] = 0x64;
+    healthW[1] = 0x0;
     *(uint16_t *)((int)&(Entities)[EntityCount].base.frames + 1) = 0;
     (Entities)[EntityCount].base.animFrame = animFrame;
     *(byte *)((int)&(Entities)[EntityCount].base.entity + 3) = partyIndex;
@@ -582,19 +589,19 @@ ovc15_usesLDIV_at_(uint16_t x,uint16_t y,uint16_t destX,uint16_t destY,byte gind
     *(undefined1 *)&(Entities)[EntityCount].base.flags32 =
          AgntGs[(uint)gindex].strength;
     if (*((char far *)GLeaderSheets[partyIndex] + 0x2f) != -1) {
-      uVar5 = (uint)AgntGs[(uint)gindex].strength;
-      uVar8 = ovr_agnt_abilityModifier(partyIndex,4);
-      iStack_6 = uVar5 + (int)(char)uVar8;
-      if (iStack_6 < 1) {
-        iStack_6 = 1;
+      strengthVal = (uint)AgntGs[(uint)gindex].strength;
+      modRes = ovr_agnt_abilityModifier(partyIndex,4);
+      finalStrength = strengthVal + (int)(char)modRes;
+      if (finalStrength < 1) {
+        finalStrength = 1;
       }
       *(undefined1 *)((int)&(Entities)[EntityCount].base.state + 1) =
-           (undefined1)iStack_6;
-      *(undefined1 *)&(Entities)[EntityCount].base.flags32 = (undefined1)iStack_6;
+           (undefined1)finalStrength;
+      *(undefined1 *)&(Entities)[EntityCount].base.flags32 = (undefined1)finalStrength;
     }
     if (AgntGs[(uint)gindex].ai == '\0') {
-      uVar5 = ovc15_usesAlignUp4(destX,destY);
-      if ((uVar5 & 0xff) == 0) {
+      alignRes = ovc15_usesAlignUp4(destX,destY);
+      if ((alignRes & 0xff) == 0) {
         *(undefined1 *)((int)&(Entities)[EntityCount].base.flags32 + 1) = 2;
       }
     }
@@ -604,17 +611,17 @@ ovc15_usesLDIV_at_(uint16_t x,uint16_t y,uint16_t destX,uint16_t destY,byte gind
     if ((AgntGs[(uint)gindex].flags2 & 0x1000) == 0) {
       if ((AgntGs[(uint)gindex].flags2 & 0x2000) == 0) {
         lVar9 = 0x8000;
-        uVar5 = rand();
-        lVar9 = LDIV_at_(CONCAT22(((int)uVar5 >> 0xf) << 1 | (uint)((int)uVar5 < 0),uVar5 << 1),
+        randVal = rand();
+        lVar9 = LDIV_at_(CONCAT22(((int)randVal >> 0xf) << 1 | (uint)((int)randVal < 0),randVal << 1),
                          lVar9);
         if ((int)lVar9 == 0) {
-          puVar2 = (uint *)((int)&(Entities)[EntityCount].base.frames + 3);
-          *puVar2 = *puVar2 | 1;
+          flagsPtr = (uint *)((int)&(Entities)[EntityCount].base.frames + 3);
+          *flagsPtr = *flagsPtr | 1;
         }
       }
       else {
-        puVar2 = (uint *)((int)&(Entities)[EntityCount].base.frames + 3);
-        *puVar2 = *puVar2 | 1;
+        flagsPtr = (uint *)((int)&(Entities)[EntityCount].base.frames + 3);
+        *flagsPtr = *flagsPtr | 1;
       }
     }
     (Entities)[EntityCount].base.level =
@@ -623,58 +630,58 @@ ovc15_usesLDIV_at_(uint16_t x,uint16_t y,uint16_t destX,uint16_t destY,byte gind
         (AgntGs[(uint)gindex].shortName[0] < 5)) &&
        (AgntGs[(uint)gindex].shortName[3] != -1)) {
       while ((Entities)[EntityCount].base.level < 5) {
-        cVar4 =(uint16_t)( ovr_ovc15_textView()   /* hand fix: args lost by the decompiler */);
-        uVar8 = (uint16_t)((ulong)Entities >> 0x10);
+        levelGain =(uint16_t)( ovr_ovc15_textView()   /* hand fix: args lost by the decompiler */);
+        entSeg = (uint16_t)((ulong)Entities >> 0x10);
         *(char *)((int)&(Entities)[EntityCount].base.state + 1) =
-             *(char *)((int)&(Entities)[EntityCount].base.state + 1) + cVar4;
-        uVar8 = (uint16_t)((ulong)Entities >> 0x10);
+             *(char *)((int)&(Entities)[EntityCount].base.state + 1) + levelGain;
+        entSeg = (uint16_t)((ulong)Entities >> 0x10);
         *(char *)&(Entities)[EntityCount].base.flags32 =
-             (char)(Entities)[EntityCount].base.flags32 + cVar4;
-        puVar1 = &(Entities)[EntityCount].base.level;
-        *puVar1 = *puVar1 + 0x1;
+             (char)(Entities)[EntityCount].base.flags32 + levelGain;
+        levelPtr = &(Entities)[EntityCount].base.level;
+        *levelPtr = *levelPtr + 0x1;
       }
     }
-    uVar5 = EntityCount;
+    newIdx = EntityCount;
     peVar7 = Entities;
-    uVar8 = (uint16_t)((ulong)Entities >> 0x10);
+    entSeg = (uint16_t)((ulong)Entities >> 0x10);
     if (AgntGs[(uint)gindex].shortName[3] == -1) {
-      iVar6 = (uint)peVar7[EntityCount].base.level * 4;
-      uVar3 = *(uint16_t *)(iVar6 + -4);
-      *(uint16_t *)&peVar7[EntityCount].base.frameIndex = *(uint16_t *)(iVar6 + -2);
-      *(uint16_t *)&peVar7[uVar5].base.health = uVar3;
+      recOfs = (uint)peVar7[EntityCount].base.level * 4;
+      statWord = *(uint16_t *)(recOfs + -4);
+      *(uint16_t *)&peVar7[EntityCount].base.frameIndex = *(uint16_t *)(recOfs + -2);
+      *(uint16_t *)&peVar7[newIdx].base.health = statWord;
     }
     else {
-      iVar6 = (uint)AgntGs[(uint)gindex].shortName[3] * 0x94 +
+      recOfs = (uint)AgntGs[(uint)gindex].shortName[3] * 0x94 +
               (uint)peVar7[EntityCount].base.level * 4;
-      uVar3 = *(uint16_t *)(iVar6 + -4);
-      *(uint16_t *)&peVar7[EntityCount].base.frameIndex = *(uint16_t *)(iVar6 + -2);
-      *(uint16_t *)&peVar7[uVar5].base.health = uVar3;
+      statWord = *(uint16_t *)(recOfs + -4);
+      *(uint16_t *)&peVar7[EntityCount].base.frameIndex = *(uint16_t *)(recOfs + -2);
+      *(uint16_t *)&peVar7[newIdx].base.health = statWord;
     }
-    uVar5 = EntityCount;
-    uVar8 = (uint16_t)((ulong)Entities >> 0x10);
+    newIdx = EntityCount;
+    entSeg = (uint16_t)((ulong)Entities >> 0x10);
     peVar7 = Entities;
     if (*(int *)&peVar7[EntityCount].base.health == 0 &&
         *(int *)&peVar7[EntityCount].base.frameIndex == 0) {
-      puVar1 = &peVar7[EntityCount].base.frameIndex;
-      puVar1[0] = 0x0;
-      puVar1[1] = 0x0;
-      puVar1 = &peVar7[uVar5].base.health;
-      puVar1[0] = 0x64;
-      puVar1[1] = 0x0;
+      frameW = &peVar7[EntityCount].base.frameIndex;
+      frameW[0] = 0x0;
+      frameW[1] = 0x0;
+      healthW = &peVar7[newIdx].base.health;
+      healthW[0] = 0x64;
+      healthW[1] = 0x0;
     }
-    uVar5 = EntityCount;
+    newIdx = EntityCount;
     EntityCount = EntityCount + 1;
     ovr_attact_usesGMapFlags3();
     if (AgntFlag1 != false) {
-      uVar8 = (uint16_t)((ulong)Entities >> 0x10);
+      entSeg = (uint16_t)((ulong)Entities >> 0x10);
       peVar7 = Entities;
-      if (((GfxRndSeed - 2U <= ((peVar7 + uVar5)->base).x) &&
-          (((peVar7 + uVar5)->base).x <= GfxRndSeed + 1U)) && (peVar7[uVar5].base.y == GfxRndSeed2))
+      if (((GfxRndSeed - 2U <= ((peVar7 + newIdx)->base).x) &&
+          (((peVar7 + newIdx)->base).x <= GfxRndSeed + 1U)) && (peVar7[newIdx].base.y == GfxRndSeed2))
       {
-        ovc15_textArena(uVar5,0,0);
+        ovc15_textArena(newIdx,0,0);
       }
     }
-    peVar7 = Entities + uVar5;
+    peVar7 = Entities + newIdx;
     return peVar7;
   }
                     /* WARNING: Subroutine does not return */
