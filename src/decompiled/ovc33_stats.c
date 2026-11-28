@@ -1254,22 +1254,22 @@ stats_usesAlignUp42(byte agntIndex,byte gfxIndex,int16_t x,int16_t y,brect_t *re
   uint16_t uVar16;
   undefined1 slotLo;       /* low byte of the alignUp4 result */
   undefined1 slotHi;       /* high byte of it */
-  uint8_t entries;
-  uint16_t uStack_36;
-  uint16_t uStack_34;
-  uint16_t uStack_32;
-  uint16_t uStack_30;
-  uint16_t uStack_2e;
-  uint16_t uStack_2c;
-  uint16_t uStack_2a;
-  uint16_t uStack_28;
-  uint16_t uStack_26;
+  uint16_t menu0Ofs;       /* "Previous" at DGROUP:0x6473 */
+  uint16_t menu0Seg;       /* 0x2410, or 0 when the item is absent */
+  uint16_t menu1Ofs;       /* "Next" at 0x647c */
+  uint16_t menu1Seg;
+  uint16_t menu2Ofs;       /* "Leader" at 0x6481 */
+  uint16_t menu2Seg;
+  uint16_t menu3Ofs;       /* "Help" at 0x6488 */
+  uint16_t menu3Seg;
+  uint16_t menu4Ofs;       /* "Done" at 0x6401 */
+  uint16_t menu4Seg;
   uint8_t permTable;
-  undefined1 uStack_10;
-  undefined1 uStack_f;
-  undefined1 uStack_e;
-  undefined1 uStack_d;
-  undefined1 uStack_c;
+  undefined1 menuCode0;    /* 4 */
+  undefined1 menuCode1;    /* 5 */
+  undefined1 menuCode2;    /* 7 */
+  undefined1 menuCode3;    /* 9 */
+  undefined1 menuCode4;    /* 6 */
   char flagB;              /* the other */
   char flagA;              /* one of the two loop flags */
   byte bStack_4;
@@ -1322,45 +1322,45 @@ L_stats_6386_1c9f_1E1D:
 L_stats_6386_1c9f_1ECD:
   otherAgnt = stats_prevAgentByOwner(agntIndex);
   if (otherAgnt == -1) {
-    uStack_36 = 0;
-    entries = 0;
+    menu0Seg = 0;
+    menu0Ofs = 0;
   }
   else {
-    uStack_36 = 0x2410;
-    entries = 0x6473;
+    menu0Seg = 0x2410;
+    menu0Ofs = 0x6473;
   }
-  uStack_10 = 4;
+  menuCode0 = 4;
   otherAgnt = stats_nextAgentByOwner(agntIndex);
   if (otherAgnt == -1) {
-    uStack_32 = 0;
-    uStack_34 = 0;
+    menu1Seg = 0;
+    menu1Ofs = 0;
   }
   else {
-    uStack_32 = 0x2410;
-    uStack_34 = 0x647c;
+    menu1Seg = 0x2410;
+    menu1Ofs = 0x647c;
   }
-  uStack_f = 5;
-  uStack_e = 7;
+  menuCode1 = 5;
+  menuCode2 = 7;
   if ((char)AGNT_FIELD(Agnts[agntIndex].entity, base.entity, 3) == -1) {
-    uStack_2e = 0;
-    uStack_30 = 0;
+    menu2Seg = 0;
+    menu2Ofs = 0;
   }
   else {
-    uStack_2e = 0x2410;
-    uStack_30 = 0x6481;
+    menu2Seg = 0x2410;
+    menu2Ofs = 0x6481;
   }
-  uStack_d = 9;
-  uStack_2a = 0x2410;
-  uStack_2c = 0x6488;
-  uStack_c = 6;
-  uStack_26 = 0x2410;
-  uStack_28 = 0x6401;
+  menuCode3 = 9;
+  menu3Seg = 0x2410;
+  menu3Ofs = 0x6488;
+  menuCode4 = 6;
+  menu4Seg = 0x2410;
+  menu4Ofs = 0x6401;
   puVar9 = (uint8_t *)((int)&AgntAnms[0x75].halfWidth + 1);
   if (Agnts[agntIndex].gdata->ai == '\0') {
     menuBarShown = 1;
   }
   entries_00.seg = _SS;
-  entries_00.ofs = (uint16_t)&entries;
+  entries_00.ofs = (uint16_t)&menu0Ofs;
   pcVar6 = ovr_uiInputText(entries_00,5,far_from_u32((uint32_t)(0x0)),0x0,0);
   bStack_4 = (byte)pcVar6;
   menuBarShown = 0;

@@ -24526,3 +24526,43 @@ disposition re-derived first - it is not a rename, it is a missing call.
     compare_state        identical 734 / 7 different / 889 missing (unchanged)
     diff_dgroup          288/1,805 matched (unchanged)
     compare_runtime      280 identical / 11 different at entry, init_game and key (unchanged)
+
+
+## `at` (6386:1c9f): the menu block recovered, and a truncated offset fixed - grep 8,007 -> 7,974
+
+Applied the same procedure here, and it found a **different defect from `69c8:04c6`**: `at` has no
+F_SCOPY or copied table, but it does build a five-entry menu by hand, and the exported body declared
+the first label's offset as a `uint8_t`:
+
+    uint8_t entries;      /* then `entries = 0x6473;` -> truncated to 0x73 */
+
+so `ovr_uiInputText` was handed a label pointer of `0x2410:0x0073` instead of `0x2410:0x6473`. The
+five labels are DGROUP strings, read straight out of `audit/dgroup_2410.bin`:
+
+    0x6473  "Previous"   code 4
+    0x647c  "Next"       code 5
+    0x6481  "Leader"     code 7
+    0x6488  "Help"       code 9
+    0x6401  "Done"       code 6
+
+The whole block is now named for what it is, and the offset is 16-bit:
+
+    menu0Ofs / menu0Seg .. menu4Ofs / menu4Seg    the five far pointers
+    menuCode0 .. menuCode4                        the five codes
+
+`menu0Ofs = 0x6473` now stores 0x6473, and `&menu0Ofs` still addresses the record block the callee
+walks, so the wire layout is unchanged.
+
+**Still to do here:** the remaining 85 hits in this body are `bVar3`/`bVar4`/`uVar5`/`pcVar6`/
+`puVar7`/`puVar9`/`puVar11`/`piVar12`/`puVar13`/`uVar15`/`uVar16` - several of them reused (e.g.
+`uVar5` is both an alignUp4 result and a computed value), and `uVar1` is a `uint32_t` used once.
+
+## Measured (HEAD c1f3ebd7 -> this commit)
+
+    grep_checks          8,007 -> 7,974   (-33, and below 8,000 for the first time)
+    REBUILT.EXE          447,906 (unchanged)
+    build 65/65, LINK.LOG 0 errors
+    compare_state        identical 734 / 7 different / 889 missing (unchanged)
+    diff_dgroup          288/1,805 matched (unchanged)
+    compare_runtime      280 identical / 11 different at entry, init_game and key (unchanged)
+    structural_deficits  two game bodies: 7e7c:0b9c (177/187), 77eb:0d61 (54/58)
