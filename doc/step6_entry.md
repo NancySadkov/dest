@@ -22113,3 +22113,64 @@ fragment copies do not help name it either, since those segments carry no recove
 `OVR01 22a6:..`, `DATA_entity.c 195d:..`, ...), so the `0x50 / 0x60 / 0x70` "segments" the building and
 sheet arrays are addressed through are per-module data selectors, not DGROUP. That is exactly why the
 tree models them as typed globals (`BuildingTypes`, `GLeaderSheets`, `GUnits`) rather than as segments.
+
+
+## `7e7c:0b9c`: complete call census and block map (body still needs a dedicated pass)
+
+The function is **2,938 instructions / 8,096 bytes**, with **27 distinct overlay pairs across 185
+calls** (the earlier "12 pairs" figure came from a truncated trace window). Resolving every pair:
+
+    170,004d x44 ovr_fmVsprintf              250,0084 x9  ovr_ovc45_compute6
+    160,0025 x41 ovr_ovc15_usesStshRealloc   250,00a2 x5  ovr_ovc45_costOrIncomeLabel
+    000,2d31 x32 strcpy                      250,0039 x5  ovr_ovc45_compute9
+    0f8,003e x8  ovr_say                     250,009d x2  ovr_ovc45_compute8
+    0f8,004d x7  ovr_inputUpdate             250,002f x2  ovr_ovc45_compute3
+    140,0020 x4  ovr_play_sfx                250,0066 x2  ovr_ovc45_usesGPopulationLo
+    000,2cc2 x3  strcat                      250,0020 x1  ovr_ovc45_getUnitIndex
+    198,003e x3  ovr_ovc22_className *       250,004d x1  ovc45_textChoosePartyBuild
+    1c8,0025 x3  ovr_ovc28_compute2          250,0061 x1  ovc45_rankPercent
+    1a0,002a x2  createConstructionRecordFar 250,008e x1  ovc45_usesGfxRndSeed2
+    1a0,003e x2  createConstructionRecord    250,0098 x1  ovc45_compute7
+    170,007a x1  ovr_stsprintf               250,0020 x1  ovc45_getUnitIndex
+    198,0057 x1  ?    198,005c x1  ?    1a8,002a x1  ?    1f8,002a x2  ?
+
+`*` `198,003e` is named by this module's own `land_info` body (27 votes, `ovc22_className`); the static
+map cannot decide it because offset 0x3e exists in three candidate overlay segments. Five sites remain
+unnameable: `198,0057`, `198,005c` and `1f8,002a` have no same-module vote anywhere, and the
+co-residency anchor available in this module (`1a8,0043` = `alignUp4` -> overlay 0x2379) points at
+`ovc24_checkStrongholds` for `1a8,002a`, a 3-byte stub entry of the wrong module for text output.
+
+**Structure.** 96 distinct jump targets; 42 blocks return through `0x1f1a` and 13 through `0x2b38`, so
+the routine is two halves selected near the top. 76 text leaves (**44** `fmVsprintf` + **32** `strcpy` +
+**3** `strcat`, each fed by `usesStshRealloc` calls) build one line per leaf, rendered through
+`ovc45_compute9(dst, Font03, x, y, className)`. The first leaf is representative:
+
+    55fe-style guard: if (BuildingTypes[bld].durability == 0x64) goto next
+    else {
+      className(Entities[arg3].byte_0x1a) -> tmp
+      ovc45_compute9(bufA, Font03, 0x46, 3, GLeaderSheets[..].name)
+      ovc45_compute9(bufB, Font03, 0x46, 2, GLeaderSheets[GUnits[idx].unitType].name)
+      fmVsprintf(out, "0x7a45", bld->durability, bld->durability, GUnits[idx].level,
+                 className, usesStshRealloc(bld->name));
+      strcpy(outBuf, out);
+    }
+
+Writing this faithfully means transcribing ~76 leaves and their guards, i.e. roughly 700-900 lines of C.
+The largest body landed so far is `5ded:10ea` at 993 instructions; this is 3x that, and unlike it this
+one has no runtime oracle either. It is a size problem, not a data problem: all but 5 of 185 call sites
+are named, and the data model (`GUnits` stride 9 at DGROUP 0x8995, `Entities` stride 0x37 at 0x908e
+field +0x1a, `BuildingTypes` stride 0x27 with `durability` = 0x22, `GLeaderSheets` far table at segment
+0x70) is fully determined. The next pass should work through it leaf by leaf, committing the body only
+when all 76 are transcribed.
+
+## Two more targets examined and set aside for the same reason
+
+* **`619c:025d` (`ovc30_usesRandBelow`, 192 B, C 4 vs image 1).** The body that is there uses
+  `AgntGs[...]` / `worldMenuLabels[...]` as the base of a table the image addresses as
+  **segment 0x60 offset 0x26d6, stride 0x95, 42 entries**, with a bool at +0 and a byte at +0x53. That
+  table is module data (like `BuildingTypes`), it is not in `audit/dgroup_2410.bin` (which stops at
+  0x9000 and holds DGROUP only), and no symbol exists for it - so neither the existing base nor a typed
+  replacement can be written without inventing a structure. Same class of blocker as `77eb:0d61`.
+* **`6ffe:009b` / `6ffe:01c5`.** These show C 2/3 vs image 9/10 only because the image is fully
+  unrolled and the tree keeps a `for` loop. Both bodies are correct; the rows are census artifacts and
+  will stay on the list rather than be "fixed" by unrolling correct code to satisfy a counter.
