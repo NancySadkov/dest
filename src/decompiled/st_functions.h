@@ -712,7 +712,7 @@ void __cdecl16far ovc22_usesRandBelow2(byte partyIndex,uint16_t outFlag,uint16_t
 void __cdecl16far ovc22_spawnForLeaders(void);
 uint16_t __cdecl16far ovc22_usesGOngoingBattle(byte x,byte y);
 uint16_t __cdecl16far ovc22_usesGOngoingBattle2(byte x,byte y);
-void __cdecl16far ovc23_textAdlibNone(void);
+uint16_t __cdecl16far ovc23_textAdlibNone(void);
 undefined1 __cdecl16far ovc23_tickRecordsAt(uint16_t x,int y,char excluded,uint16_t arg4);
 bool __cdecl16far ovc23_isCursorAt(uint16_t x,int y);
 int __cdecl16far ovc23_usesCornerBR(int x,int bldType);

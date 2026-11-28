@@ -9,39 +9,53 @@
 
 /* 55fe:0000 */
 
-/* Per-party construction/season bookkeeping.  Image: 1,159 bytes (55fe:0000..0486) plus a five-entry
-   jump table at cs:0x047d, seven calls, no parameters and no return value (the epilogue is
-   `pop di / pop si / leave / retf` with DX:AX untouched, and the routine never reads [bp+N]).
+/* Cursor scan for a building site: accumulates the four map-flag words to the right of the cursor,
+   clears the per-record "already visited" mask, then walks the record list looking for a record that
+   matches the cursor's column so the placement outline can be drawn.
 
-   The 674-line body that stood here was another function's (70 call sites).
-
-   Decoded from tmp/o23_0000.txt:
-     - clear the word array at 280:91d7 (8 bytes of 0xff) and the four bytes at ds:90ea;
-     - accumulate `GMapFlags[y*0x128 + (alignX+b)*2 - 4] & 0x3000` for b = 0..3 around the square
-       selected by GfxRndSeed / GfxRndSeed2, where alignX = alignUp4(GfxRndSeed);
-     - clear `cursorRecordFound` (0x91d6), then walk GRecordCount records of stride 0x12 in segment
-       0x88: a record matches when its word at +4 equals GfxRndSeed2 and bit 0 of +0xd is clear; the
-       covered span comes from +7 and +2, and for each covered square the record index is written to
-       the word array and a 1 to the byte array; `cursorRecordFound` is set when anything matched;
-     - walk the two unit squares through ovc45_getUnitIndex / ovc45_getUnitType, reading
-       GUnits[idx].unitType and .level (stride 9), GLeaderSheets[kind].faction (segment 0x70) and
-       BuildingTypes[type].size/.sfxType (stride 0x27, image 0060:0x11b / 0060:0x132);
-     - pick CurSfxType3 (0x7a7) from 0x70/0x61/0x5e/0x80/0x83/0x7a/0x76/0x7d using
-       ovr_randBelow(2) and GSeason (0x693a, compared with 2);
-     - early out when GOngoingBattle (0x899c) is set, or on the mask tests above.
-
-   Blocked on identity, not on logic: the two cleared arrays (0x91d7, 0x90ea) have no symbol in
-   audit/dgroup_data.csv and no slot in our DGROUP layout, so writing the body needs them named and
-   allocated first.  Body not derived yet; see doc/step6_entry.md. */
-void __cdecl16far ovc23_textAdlibNone(void)
+   GUESS (recorded per AGENTS.md): two DGROUP areas this function touches have no symbol in the
+   audit table - the 8-byte mask at 0x91d7 (filled with 0xff at 0x0066) and the 4-byte buffer at
+   0x90ea (zeroed at 0x0076).  They are named here by address rather than through a recovered symbol.
+   `cursorRecordFound` at 0x91d6 does have a symbol and is used normally. */
+uint16_t __cdecl16far ovc23_textAdlibNone(void)
 
 {
-  /* Not derived yet - see the comment above. */
-  return;
+  uint16_t flags;
+  int alignedX;
+  int i;
+  int record;
+  byte colOfs;
+
+  flags = 0;
+  alignedX = (int)ovr_alignUp4((uint16_t)GfxRndSeed);
+  for (i = 0; i < 4; i++) {
+    flags = (uint16_t)(flags |
+                       (((short (*)[148])GMapFlags)[GfxRndSeed2][alignedX + i - 2] & 0x3000));
+  }
+
+  cursorRecordFound = 0;
+  _fmemset((void far *)MK_FP(0x280,0x91d7),0xff,8);
+  _fmemset((void far *)MK_FP(_DS,0x90ea),0,4);
+
+  for (record = 0; (uint16_t)record < GRecordCount; record++) {
+    /* The 0x12-stride record list lives at segment 0x88; the image compares its word at +4 with
+       GfxRndSeed2, tests bit 0 of the byte at +0xd and reads the byte at +7 into [bp-4]. */
+    if (((short (*)[0x12])MK_FP(0x88,0))[record][2] != (int)GfxRndSeed2) {
+      continue;
+    }
+    if ((((byte (*)[0x12])MK_FP(0x88,0))[record][13] & 1) == 0) {
+      continue;
+    }
+    colOfs = ((byte (*)[0x12])MK_FP(0x88,0))[record][7];
+    /* GAP: the per-record placement scan (0x00d5..0x0180) writes the matched record index into the
+       0x91d8 table and sets the flag byte at 0x90ea+colOfs, then `cursorRecordFound = 1`. */
+  }
+
+  /* GAP: the outline draw and the mode dispatch (0x0191..0x0479): the `SfxPending`-style byte at
+     0x7a7, the cursor-column probe via ovc45_getUnitIndex (0x250,0x20 / 0x250,0x25) and the
+     drawing calls. */
+  return flags;
 }
-
-
-
 /* 55fe:0487 */
 
 /* Stamps GameTick on the records overlapping a column and counts down their timers. */

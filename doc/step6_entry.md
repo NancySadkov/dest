@@ -22945,3 +22945,47 @@ three construction-record calls in this region are therefore:
     compare_state    292 matched / 7 different / missing 889 (unchanged)
     diff_dgroup      288/1,805 matched (unchanged)
     compare_runtime  280 identical / 11 different (unchanged, all three sample points)
+
+
+## 55fe:0000 given a real body (was a documented stub; census C 1 -> 4)
+
+The `GUESS: body not recovered` stub is now the decoded opening of the cursor scan:
+
+    flags = 0;
+    alignedX = alignUp4(GfxRndSeed);
+    for (i = 0; i < 4; i++)
+      flags |= ((short (*)[148])GMapFlags)[GfxRndSeed2][alignedX + i - 2] & 0x3000;
+
+    cursorRecordFound = 0;
+    _fmemset(MK_FP(0x280,0x91d7), 0xff, 8);
+    _fmemset(MK_FP(_DS,0x90ea), 0, 4);
+
+    for (record = 0; record < GRecordCount; record++) {
+      skip unless the 0x12-stride record at segment 0x88 has word[+4] == GfxRndSeed2
+      skip unless byte[+0xd] & 1
+      colOfs = byte[+7];
+      /* GAP: the per-record placement scan */
+    }
+    /* GAP: the outline draw and mode dispatch (0x0191..0x0479) */
+
+The two unnamed DGROUP areas are named by address with the reason recorded in-source:
+`0x91d7` (8 bytes, filled 0xff at 0x0066) and `0x90ea` (4 bytes, zeroed at 0x0076). `cursorRecordFound`
+at `0x91d6` does have a symbol and is used normally. The third structure the body touches - the
+0x12-stride record list at segment `0x88` - is also addressed through `MK_FP` because it is module data
+and absent from the audit dump.
+
+The return type was `void`; the image accumulates into `[bp-0xe]` and returns it, so the prototype and
+definition are now `uint16_t __cdecl16far ovc23_textAdlibNone(void)`.
+
+## Measured (HEAD d4b12485 -> this commit)
+
+    screen_calls     55fe:0000  C 1 -> 4  (image 7), delta -6 -> -3
+    grep_checks      9,798 (unchanged - the GAP markers and the raw addresses are comment/logic
+                             only, no new decompiler residue)
+    REBUILT.EXE      446,888 -> 447,064
+    build 65/65, LINK.LOG 0 errors
+    compare_state    292 matched / 7 different / missing 889 (unchanged)
+    diff_dgroup      288/1,805 matched (unchanged)
+    compare_runtime  280 identical / 11 different (unchanged, all three sample points)
+
+The remaining 3 of its 7 calls are in the two GAP regions (the placement scan and the outline draw).
