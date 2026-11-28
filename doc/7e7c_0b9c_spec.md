@@ -250,3 +250,79 @@ Leaf 4 itself, entered when `BuildingTypes[bld].unitType == 6` (base 0x10e + 0x2
                  1, 6, ... and each arm builds its own message; the literal for every arm is in the
                  inventory above.
 
+## Leaves 5-45: recorded guards, formats and argument shapes
+
+Produced by `tmp/leaf_table.py`, which simulates the stack forward from `7e7c:0b9c` (every `push`
+appends, every `add sp,N`/`pop` removes) and dumps the exact frame at each `fmVsprintf`/`stsprintf`
+site. The prologue's `push bp / push si / push di` are excluded from the argument list.
+
+Reading the columns:
+
+* **guard** - the nearest `cmp byte ptr es:[bx + 0x133]` (that is `BuildingTypes[bld].unitType`) and
+  the branch that follows it. It identifies the dispatch *value* for the arm; the branch polarity
+  (`je` to the body or `je` to the next arm) must be confirmed against the target when the body is
+  written, because the dispatch is a chain of `cmp`/`je` pairs rather than a `switch`.
+* **format** - the literal passed to `fmVsprintf`/`stsprintf` (first argument).
+* **args** - the argument frame in push order, i.e. **reverse** of the C argument order. A `<dx> <ax>`
+  pair is one far pointer: it is always the DX:AX return of the call immediately before it
+  (`className`, a `compute9` line render, `usesStshRealloc`, `costOrIncomeLabel`, ...). `<ax>` alone
+  is the AX return of the preceding call or a loaded byte (`bld.durability`, `bld.cost`,
+  `GUnits[unitIdx].level`, ...), and `bld.*` entries are direct `es:[bx+...]` field loads.
+
+| # | address | guard | format | args (push order) |
+|---|---------|-------|--------|-------------------|
+| 1 | 0d75 | ? | "%s (%d/%d): Owned by %s. Active party is %" | <dx> <ax> <dx> <ax> <dx> <ax> <ax> <ax> <dx> <ax> _DS "%s (%d/%d): Owned by %s. Active party is %" |
+| 2 | 0e68 | ? | "%s: Owned by %s. Active party is %s the %s" | <dx> <ax> <dx> <ax> <dx> <ax> <dx> <ax> _DS "%s: Owned by %s. Active party is %s the %s" |
+| 3 | 0ef8 | ? | "%s: Active party is %s the %s." | <dx> <ax> <dx> <ax> <dx> <ax> _DS "%s: Active party is %s the %s." |
+| 4 | 10dc | cmp [bld.unitType],6 ; je 0x1028 | "%s: Costs %d gold and provides training to" | <ax> <ax> <dx> <ax> _DS "%s: Costs %d gold and provides training to" _SS <ax> |
+| 5 | 114a | cmp [bld.unitType],1 ; je 0x1103 | "%s: Costs %d gold of income. Replaces brok" | <ax> <dx> <ax> _DS "%s: Costs %d gold of income. Replaces brok" |
+| 6 | 11ad | cmp [bld.unitType],1 ; je 0x1103 | "%s: Costs %d gold of income. Forges +%d we" | <ax> <ax> <dx> <ax> _DS "%s: Costs %d gold of income. Forges +%d we" |
+| 7 | 1247 | cmp [bld.unitType],0x1d ; je 0x11e7 | "%s: Costs %d gold of income. Improves armo" | <ax> <ax> <dx> <ax> _DS "%s: Costs %d gold of income. Improves armo" |
+| 8 | 12c5 | cmp [bld.unitType],0x1d ; je 0x11e7 | "%s: Costs %d gold of income. Improves armo" | <ax> <ax> <dx> <ax> _DS "%s: Costs %d gold of income. Improves armo" |
+| 9 | 1360 | cmp [bld.unitType],0xd ; je 0x12ff | "%s: Costs %d gold of income. Replaces brok" | <ax> <ax> <dx> <ax> _DS "%s: Costs %d gold of income. Replaces brok" |
+| 10 | 13c3 | cmp [bld.unitType],0xd ; je 0x12ff | "%s: Costs %d gold of income. Creates +%d b" | <ax> <ax> <dx> <ax> _DS "%s: Costs %d gold of income. Creates +%d b" |
+| 11 | 1441 | cmp [bld.unitType],0xe ; jne 0x145c | "%s: Costs %d gold. Increases unit size of " | <ax> <ax> <dx> <ax> _DS "%s: Costs %d gold. Increases unit size of " |
+| 12 | 14bc | cmp [bld.unitType],0xf ; jne 0x14d7 | "%s: Costs %d gold. Increases building spee" | <ax> <ax> <dx> <ax> _DS "%s: Costs %d gold. Increases building spee" |
+| 13 | 1523 | cmp [bld.unitType],0x17 ; jne 0x153e | "%s: Costs %d gold. Enhances training by %d" | <cs> <ax> <ax> <dx> <ax> _DS "%s: Costs %d gold. Enhances training by %d" |
+| 14 | 159e | cmp [bld.unitType],0x10 ; jne 0x15b9 | "%s: Costs %d gold. Produces +%d rings of p" | <cs> <ax> <ax> <dx> <ax> _DS "%s: Costs %d gold. Produces +%d rings of p" |
+| 15 | 1600 | cmp [bld.unitType],0x11 ; jne 0x161b | "%s: Costs %d gold. Produces mirrors for me" | <cs> <ax> <dx> <ax> _DS "%s: Costs %d gold. Produces mirrors for me" |
+| 16 | 1662 | cmp [bld.unitType],0x12 ; jne 0x167d | "%s: Costs %d gold. Attracts new units to t" | <cs> <ax> <dx> <ax> _DS "%s: Costs %d gold. Attracts new units to t" |
+| 17 | 16da | cmp [bld.unitType],0x13 ; jne 0x16f5 | "%s: Costs %d gold. Provides %u units of go" | <cs> bld.w12a <ax> <dx> <ax> _DS "%s: Costs %d gold. Provides %u units of go" |
+| 18 | 173c | cmp [bld.unitType],0x14 ; jne 0x1757 | "%s: Costs %d gold. Claim trees automatical" | <cs> <ax> <dx> <ax> _DS "%s: Costs %d gold. Claim trees automatical" |
+| 19 | 179e | cmp [bld.unitType],0x15 ; jne 0x17b9 | "%s: Costs %d gold. Repairs buildings at se" | <cs> <ax> <dx> <ax> _DS "%s: Costs %d gold. Repairs buildings at se" |
+| 20 | 182d | cmp [bld.unitType],0x16 ; jne 0x1848 | "%s: Trades %d food for gold. Total trade i" | <cs> bld.b0a0 <ax> <dx> <ax> _DS "%s: Trades %d food for gold. Total trade i" |
+| 21 | 18ad | cmp [bld.unitType],4 ; jne 0x18c8 | "%s: Creates %d gold of income, and accesse" | <cs> <ax> <di> <dx> <ax> _DS "%s: Creates %d gold of income, and accesse" |
+| 22 | 1929 | cmp [bld.unitType],2 ; jne 0x1944 | "%s: Costs %d gold of income and provides v" | <cs> <ax> <ax> <ax> <dx> <ax> _DS "%s: Costs %d gold of income and provides v" |
+| 23 | 19a1 | cmp [bld.unitType],5 ; jne 0x19bc | "%s: Costs %d gold of income and provides s" | <cs> bld.w12a <ax> <dx> <ax> _DS "%s: Costs %d gold of income and provides s" |
+| 24 | 1a19 | cmp [bld.unitType],0x13 ; jne 0x1a34 | "%s: Costs %d gold of income and provides s" | <cs> bld.w12a <ax> <dx> <ax> _DS "%s: Costs %d gold of income and provides s" |
+| 25 | 1acc | cmp [bld.unitType],0 ; je 0x1a50 | "%s: Provides housing for %d %s and storage" | <cs> bld.w12a bld.b74af bld.b74ad <word ptr [bp - 0x18]> <dx> <ax> _DS "%s: Provides housing for %d %s and storage" |
+| 26 | 1b34 | cmp [bld.unitType],0 ; je 0x1a50 | "%s: Provides housing for %d %s." | <cs> bld.b74af bld.b74ad <word ptr [bp - 0x18]> <dx> <ax> _DS "%s: Provides housing for %d %s." |
+| 27 | 1bea | cmp [bld.unitType],8 ; je 0x1b6e | "%s: Provides housing for %d %s and storage" | <cs> bld.w12a bld.b74af bld.b74ad <word ptr [bp - 0x18]> <dx> <ax> _DS "%s: Provides housing for %d %s and storage" |
+| 28 | 1c52 | cmp [bld.unitType],8 ; je 0x1b6e | "%s: Provides housing for %d %s." | <cs> bld.b74af bld.b74ad <word ptr [bp - 0x18]> <dx> <ax> _DS "%s: Provides housing for %d %s." |
+| 29 | 1ce9 | cmp [bld.unitType],9 ; jne 0x1d04 | "%s: %s %d gold. Feeds %d %s." | <cs> bld.b74af bld.b74ad <word ptr [bp - 0x16]> <ax> <dx> <ax> <dx> <ax> _DS "%s: %s %d gold. Feeds %d %s." |
+| 30 | 1dad | ? | "%s: %s %d gold. provides housing for %d %s" | <cs> bld.b74af bld.b74ad <word ptr [bp - 0x16]> bld.b74af bld.b74ad <word ptr [bp - 0x18]> <ax> <dx> <ax> <dx> <ax> _DS "%s: %s %d gold. provides housing for %d %s" |
+| 31 | 1e28 | ? | "%s: %s %d gold. Feeds %d %s." | <cs> bld.b74af bld.b74ad <word ptr [bp - 0x16]> <ax> <dx> <ax> <dx> <ax> _DS "%s: %s %d gold. Feeds %d %s." |
+| 32 | 1eac | ? | "%s: %s %d gold. Provides housing for %d %s" | <cs> bld.b74af bld.b74ad <word ptr [bp - 0x18]> <ax> <dx> <ax> <dx> <ax> _DS "%s: %s %d gold. Provides housing for %d %s" |
+| 33 | 1f02 | ? | "%s: %s %d gold." | <cs> <ax> <dx> <ax> <dx> <ax> _DS "%s: %s %d gold." |
+| 34 | 200e | ? | " Salvage value %d gold." | <cs> <word ptr [bp - 0x1e]> _DS " Salvage value %d gold." |
+| 35 | 213e | ? | " Repair costs %d gp." | <cs> <word ptr [bp - 0x1c]> _DS " Repair costs %d gp." |
+| 36 | 21ff | ? | " Upgrade costs %d gp." | <cs> <word ptr [bp - 0x1c]> _DS " Upgrade costs %d gp." |
+| 37 | 23c8 | ? | "%s will be salvaged for %d gold. Are you s" | <cs> <word ptr [bp - 0x1e]> <dx> <ax> _DS "%s will be salvaged for %d gold. Are you s" |
+| 38 | 2425 | ? | "Get rid of %s permanently. Are you sure?" | <cs> bld.name.seg bld.name.ofs _DS "Get rid of %s permanently. Are you sure?" |
+| 39 | 25ce | ? | "%s is being filled." | <cs> <word ptr [bp + 0xc]> <dx> <ax> _DS "%s is being filled." |
+| 40 | 2630 | ? | "%s salvaged for %d gold." | <cs> <word ptr [bp + 0xc]> <word ptr [bp - 0x1e]> <dx> <ax> _DS "%s salvaged for %d gold." |
+| 41 | 2739 | ? | "%s is demolished." | <cs> <word ptr [bp + 0xc]> <dx> <ax> _DS "%s is demolished." |
+| 42 | 27f3 | ? | "%s does not have enough gold." | <cs> <word ptr [bp + 0xc]> <dx> <ax> _DS "%s does not have enough gold." |
+| 43 | 2858 | ? | "%s repaired." | <cs> <word ptr [bp + 0xc]> <dx> <ax> _DS "%s repaired." |
+| 44 | 2986 | ? | "%s does not have enough gold." | <cs> <word ptr [bp + 0xc]> <dx> <ax> _DS "%s does not have enough gold." |
+| 45 | 2a07 | ? | "%s upgraded." | <cs> <word ptr [bp + 0xc]> <dx> <ax> _DS "%s upgraded." |
+
+## Remaining work for the body
+
+* resolve the `<ax>`/`<dx>` placeholders to the expressions just before them (2-6 instructions each);
+* fix each arm's branch polarity;
+* the 5 unnameable call sites (`198,0057`, `198,005c`, `1a8,002a`, `1f8,002a` x2) - the first two are
+  the leaf-4 preamble pair, already documented.
+
+With the frame shapes above, that is mechanical per leaf: the pattern is always
+`bld.name` + 0-4 scalar fields + 0-2 rendered lines + the class name.
