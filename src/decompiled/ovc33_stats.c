@@ -1238,11 +1238,12 @@ stats_usesAlignUp42(byte agntIndex,byte gfxIndex,int16_t x,int16_t y,brect_t *re
   far_t gfx_03;
   far_t gfx_04;
   char otherAgnt;          /* stats_prev/nextAgentByOwner's result */
-  byte bVar3;
+  byte result;             /* the value every return path sets */
   bool moreHousing;        /* ovr_draw_textProvidesMoreHousing's result */
-  uint uVar5;
+
   uint choiceVal;          /* the ovr_uiInputText answer the switch tests */
   uint agentIdx;           /* the agent index the move case walks */
+  uint slotProbe;          /* stats_usesAlignUp4(owner), tested immediately */
   uint aligned;            /* alignUp4 of a coordinate, compared with the cursor */
   char *choice;            /* ovr_uiInputText's answer */
   ulong *counterPtr;       /* ovr_attact_usesBDADailyTimeCounter's result */
@@ -1393,11 +1394,11 @@ L_stats_6386_1c9f_1ECD:
           limit = (uint)AgntCount;
           if ((int)limit <= (int)agentIdx) {
             ovr_agnt_usesAlignToSeg();
-            bVar3 = (byte)limit;
+            result = (byte)limit;
             ovr_agnt_usesAlignToSeg();
             ovr_agnt_usesAlignToSeg();
             ovr_agnt_usesAlignToSeg();
-            return bVar3;
+            return result;
           }
           limit = agentIdx;
           if (Agnts[agentIdx].gdata->type == '\x02') break;
@@ -1476,23 +1477,23 @@ switchD_6000_58bf_caseD_5:
       gfx_03.seg = nwpanel1Cut2Seg;
       gfx_03.ofs = nwpanel1Cut2Ofs;
       ovr_blitLoadRleGfx(gfx_03,far_from_u32((uint32_t)(0xa000e249)),0x49);
-      bVar3 = 0x10;
+      result = 0x10;
       gfx_04.seg = trianglsCut5Seg;
       gfx_04.ofs = trianglsCut5Ofs;
       ovr_blitLoadRleGfx(gfx_04,far_from_u32((uint32_t)(0xa000e249)),0x49);
       ovc41_usesGMenuItem();
-      return bVar3;
+      return result;
     case 5:
       goto switchD_6000_58bf_caseD_5;
     }
   }
-  else if (uVar5 == 0xfc) {
+  else if (choiceVal == 0xfc) {
     if ((*(uint8_t far *)((uint8_t far *)&Agnts[agntIndex].entity->base.flags32 + 1) & 1) == 0) {
       stats_unreadyNotice(agntIndex);
     }
   }
-  else if (uVar5 < 0xfd) {
-    if (uVar5 == 7) {
+  else if (choiceVal < 0xfd) {
+    if (choiceVal == 7) {
       if ((char)AGNT_FIELD(Agnts[agntIndex].entity, base.entity, 3) != -1) {
         ovr_stop_audio();
         CurMusicType = 0xff;
@@ -1517,26 +1518,26 @@ switchD_6000_58bf_caseD_5:
       }
     }
     else {
-      if (uVar5 == 8) goto L_stats_6386_1c9f_20C5;
-      if (uVar5 == 9) {
+      if (choiceVal == 8) goto L_stats_6386_1c9f_20C5;
+      if (choiceVal == 9) {
         ovr_ovc50_usesUiInputText();
         flagB = '\x01';
       }
     }
   }
-  else if (uVar5 == 0xfd) {
+  else if (choiceVal == 0xfd) {
 L_stats_6386_1c9f_20C5:
-    uVar5 = stats_usesAlignUp4(Agnts[agntIndex].owner);
-    if ((uVar5 & 0xff) == 0) {
+    slotProbe = stats_usesAlignUp4(Agnts[agntIndex].owner);
+    if ((slotProbe & 0xff) == 0) {
       stats_setAgentBase(agntIndex);
     }
   }
-  else if (uVar5 == 0xfe) {
+  else if (choiceVal == 0xfe) {
     if ((*(uint8_t far *)((uint8_t far *)&Agnts[agntIndex].entity->base.flags32 + 1) & 1) != 0) {
       stats_unreadyNotice(agntIndex);
     }
-    uVar5 = stats_usesAlignUp4(Agnts[agntIndex].owner);
-    if ((char)uVar5 != '\0') {
+    slotProbe = stats_usesAlignUp4(Agnts[agntIndex].owner);
+    if ((char)slotProbe != '\0') {
       stats_calledAwayNotice(agntIndex);
     }
   }
@@ -1547,10 +1548,10 @@ L_stats_6386_1c9f_22C8:
     if (Cancelled != 0) {
       return Cancelled;
     }
-    bVar3 = Cancelled;
+    result = Cancelled;
     stats_openCastlePanel();
     ovr_ovc41_usesGMenuItem();
-    return bVar3;
+    return result;
   }
   goto L_stats_6386_1c9f_1E1D;
 }

@@ -24854,3 +24854,38 @@ boundary that needs the same treatment once that block is re-derived.
     compare_state        identical 734 / 7 different / 889 missing (unchanged)
     diff_dgroup          288/1,805 matched (unchanged)
     compare_runtime      280 identical / 11 different at entry, init_game and key (unchanged)
+
+
+## `at` (6386:1c9f) is now free of Ghidra slots: grep 7,877 -> 7,858
+
+The `0x1486..0x1536` block settled the way the image reads: `uVar5` there is the **choice** for every
+comparison (`0xfc`, `< 0xfd`, `7`, `8`, `9`, `0xfd`, `0xfe`) and a **fresh result** only where it is
+assigned by `stats_usesAlignUp4` and tested on the very next line, so the two are separate:
+
+    0x1529  slotProbe = stats_usesAlignUp4(Agnts[agntIndex].owner);
+    0x1530  if ((slotProbe & 0xff) == 0) stats_setAgentBase(agntIndex);
+    0x1538  slotProbe = stats_usesAlignUp4(Agnts[agntIndex].owner);
+    0x1539  if ((char)slotProbe != '\0') stats_calledAwayNotice(agntIndex);
+
+That also settles the question I raised last pass: `0x1534`'s `else if (uVar5 == 0xfe)` is on the
+**choice**, not on the probe - it is the next arm of the same `else if` chain, so the earlier
+assignment cannot reach it. The body was faithful; the slot was reused.
+
+`bVar3` then turned out to be single-role after all: every one of its three assignments feeds a
+`return` (1397/1401, 1480/1485, 1551/1554), so it is the function's `result`. With `uVar5` emptied,
+that leaves two one-use slots:
+
+    uVar1   a uint32_t, never read
+    uVar15  a uint16_t, never read
+
+## Measured (HEAD 2a674b22 -> this commit)
+
+    grep_checks          7,877 -> 7,858   (-19)
+    REBUILT.EXE          447,858 (unchanged)
+    build 65/65, LINK.LOG 0 errors
+    compare_state        identical 734 / 7 different / 889 missing (unchanged)
+    diff_dgroup          288/1,805 matched (unchanged)
+    compare_runtime      280 identical / 11 different at entry, init_game and key (unchanged)
+
+`at` has gone from 169 hits to 2 dead declarations, and every step of that was checked against the
+image rather than renamed by pattern.
