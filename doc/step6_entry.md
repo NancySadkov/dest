@@ -22789,3 +22789,32 @@ the body is finished. Renaming is safe to layer on either way.
 Rate: 121 hits per function-sized batch. At the same density the remaining 9,936 needs roughly 80
 batches of this size, or fewer if the larger functions (ovc22_classes 434, ovc33_stats 408,
 ovc45_unitinfo 309) are taken first.
+
+
+## Renaming batch 2: ovc22_searchCellsAround (5087:416e) - grep 9,936 -> 9,822
+
+Second batch, first in ovc22_classes.c (the largest [iusbc]Var file at 434 hits). Nine locals named
+from their provable roles in the ring scan:
+
+    iStack_4           -> radius        outward ring radius (loop 1..0x93)
+    iStack_6           -> step          step along the ring (0..radius)
+    cStack_7 / cStack_8-> dx / dy       the two -1/+1 direction loops
+    in_stack_00000004  -> xSeg          the segment half of the far x pointer (CONCAT22 partner)
+    uVar3              -> checkRes      result of the occupancy/flag probes
+    uVar5              -> flagsRes      result of testMapFlags / usesGMapFlags2
+    uVar4              -> alignRes      result of the second alignUp call
+    bVar2              -> textArenaRes  result of textArena2
+
+123 -> 9 Ghidra-name occurrences in this body.
+
+## Measured (HEAD e8041ada -> this commit)
+
+    grep_checks      9,936 -> 9,822    (-114)
+    REBUILT.EXE      446,712 (unchanged)
+    build 65/65, LINK.LOG 0 errors
+    compare_state    292 matched / 7 different / missing 889 (unchanged)
+    diff_dgroup      288/1,805 matched (unchanged)
+    compare_runtime  280 identical / 11 different (unchanged, all three sample points)
+    screen_calls     unchanged
+
+Cumulative renaming: 10,057 -> 9,822 (-235 in two batches).

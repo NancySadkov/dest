@@ -2248,144 +2248,144 @@ ovc22_searchCellsAround(uint *xPtr,uint *yPtr,byte yOutOfs,byte yOutSeg,char par
   byte skipCheck;
   uint x1;
   uint y1;
-  bool bVar2;
+  bool textArenaRes;
   uint16_t mask;
-  uint uVar3;
-  uint16_t uVar4;
-  uint16_t uVar5;
+  uint checkRes;
+  uint16_t alignRes;
+  uint16_t flagsRes;
   uint32_t *puVar6;
-  uint *in_stack_00000004;
-  char cStack_8;
-  char cStack_7;
-  int iStack_6;
-  int iStack_4;
+  uint *xSeg;
+  char dy;
+  char dx;
+  int step;
+  int radius;
   
-  x1 = *(uint *)CONCAT22((uint *)xPtr,in_stack_00000004);
+  x1 = *(uint *)CONCAT22((uint *)xPtr,xSeg);
   y1 = *(uint *)CONCAT22((uint *)yPtr,(*(uint16_t *)((uint8_t *)&(xPtr) + 2)));
   skipCheck = *(byte *)((int)*(uint32_t *)((uint)(*(uint8_t *)((uint8_t *)&(yPtr) + 2)) << 2) + 0x3f);
   mask = 0x1000 << (skipCheck & 0x1f);
-  uVar3 = ovc22_usesAlignUp4(*(uint *)CONCAT22((uint *)xPtr,in_stack_00000004),
+  checkRes = ovc22_usesAlignUp4(*(uint *)CONCAT22((uint *)xPtr,xSeg),
                              *(uint *)CONCAT22((uint *)yPtr,(*(uint16_t *)((uint8_t *)&(xPtr) + 2))),(*(uint8_t *)((uint8_t *)&(yPtr) + 2)),mask);
-  if ((char)uVar3 == '\0') {
-    uVar4 = ovc22_usesAlignUp42((uint16_t *)CONCAT22((uint *)xPtr,in_stack_00000004),
+  if ((char)checkRes == '\0') {
+    alignRes = ovc22_usesAlignUp42((uint16_t *)CONCAT22((uint *)xPtr,xSeg),
                                 (uint16_t *)CONCAT22((uint *)yPtr,(*(uint16_t *)((uint8_t *)&(xPtr) + 2))),(*(uint8_t *)((uint8_t *)&(yPtr) + 2)),mask);
-    if ((char)uVar4 == '\0') {
-      for (iStack_4 = 1; iStack_4 < 0x94; iStack_4 = iStack_4 + 1) {
-        for (iStack_6 = 0; iStack_6 <= iStack_4; iStack_6 = iStack_6 + 1) {
-          for (cStack_7 = -1; cStack_7 < '\x02'; cStack_7 = cStack_7 + '\x02') {
-            for (cStack_8 = -1; cStack_8 < '\x02'; cStack_8 = cStack_8 + '\x02') {
-              *(uint *)CONCAT22((uint *)xPtr,in_stack_00000004) = x1 + cStack_7 * iStack_6;
-              if (cStack_7 < '\0') {
-                *(uint *)CONCAT22((uint *)xPtr,in_stack_00000004) =
-                     *(uint *)CONCAT22((uint *)xPtr,in_stack_00000004) - 1;
+    if ((char)alignRes == '\0') {
+      for (radius = 1; radius < 0x94; radius = radius + 1) {
+        for (step = 0; step <= radius; step = step + 1) {
+          for (dx = -1; dx < '\x02'; dx = dx + '\x02') {
+            for (dy = -1; dy < '\x02'; dy = dy + '\x02') {
+              *(uint *)CONCAT22((uint *)xPtr,xSeg) = x1 + dx * step;
+              if (dx < '\0') {
+                *(uint *)CONCAT22((uint *)xPtr,xSeg) =
+                     *(uint *)CONCAT22((uint *)xPtr,xSeg) - 1;
               }
-              *(uint *)CONCAT22((uint *)yPtr,(*(uint16_t *)((uint8_t *)&(xPtr) + 2))) = y1 + cStack_8 * iStack_4;
-              if ((((3 < *(uint *)CONCAT22((uint *)xPtr,in_stack_00000004)) &&
-                   (*(uint *)CONCAT22((uint *)xPtr,in_stack_00000004) < 0x90)) &&
+              *(uint *)CONCAT22((uint *)yPtr,(*(uint16_t *)((uint8_t *)&(xPtr) + 2))) = y1 + dy * radius;
+              if ((((3 < *(uint *)CONCAT22((uint *)xPtr,xSeg)) &&
+                   (*(uint *)CONCAT22((uint *)xPtr,xSeg) < 0x90)) &&
                   (*(uint *)CONCAT22((uint *)yPtr,(*(uint16_t *)((uint8_t *)&(xPtr) + 2))) != 0)) &&
                  (*(uint *)CONCAT22((uint *)yPtr,(*(uint16_t *)((uint8_t *)&(xPtr) + 2))) < 0x3b)) {
-                uVar3 = ovc22_usesAlignUp4(*(uint *)CONCAT22((uint *)xPtr,in_stack_00000004),
+                checkRes = ovc22_usesAlignUp4(*(uint *)CONCAT22((uint *)xPtr,xSeg),
                                            *(uint *)CONCAT22((uint *)yPtr,(*(uint16_t *)((uint8_t *)&(xPtr) + 2))),(*(uint8_t *)((uint8_t *)&(yPtr) + 2)),
                                            mask);
-                if ((char)uVar3 != '\0') {
-                  return uVar3 & 0xff00;
+                if ((char)checkRes != '\0') {
+                  return checkRes & 0xff00;
                 }
                 if ((skipCheck != 0) &&
-                   (uVar3 = ovc22_usesGUnitGrid(*(uint *)CONCAT22((uint *)xPtr,in_stack_00000004),
+                   (checkRes = ovc22_usesGUnitGrid(*(uint *)CONCAT22((uint *)xPtr,xSeg),
                                                 *(uint *)CONCAT22((uint *)yPtr,(*(uint16_t *)((uint8_t *)&(xPtr) + 2)))),
-                   uVar3 != 0)) {
-                  return CONCAT11((char)(uVar3 >> 8),1);
+                   checkRes != 0)) {
+                  return CONCAT11((char)(checkRes >> 8),1);
                 }
                 if (((yOutOfs == 3) &&
-                    (uVar5 = ovc22_testMapFlags(*(uint *)CONCAT22((uint *)xPtr,in_stack_00000004),
+                    (flagsRes = ovc22_testMapFlags(*(uint *)CONCAT22((uint *)xPtr,xSeg),
                                                 *(uint *)CONCAT22((uint *)yPtr,(*(uint16_t *)((uint8_t *)&(xPtr) + 2))),mask),
-                    (char)uVar5 != '\0')) &&
-                   (uVar3 = ovc22_usesGMapFlags2
+                    (char)flagsRes != '\0')) &&
+                   (checkRes = ovc22_usesGMapFlags2
                                       (skipCheck,x1,y1,
-                                       *(uint *)CONCAT22((uint *)xPtr,in_stack_00000004),
+                                       *(uint *)CONCAT22((uint *)xPtr,xSeg),
                                        *(uint *)CONCAT22((uint *)yPtr,(*(uint16_t *)((uint8_t *)&(xPtr) + 2)))),
-                   (char)uVar3 != '\0')) {
-                  return uVar3 & 0xff00;
+                   (char)checkRes != '\0')) {
+                  return checkRes & 0xff00;
                 }
                 if ((((yOutOfs & 1) == 0) && (yOutSeg == 0)) &&
-                   (bVar2 = ovc22_textArena2(*(uint *)CONCAT22((uint *)xPtr,in_stack_00000004),
-                                             *(uint *)CONCAT22((uint *)yPtr,(*(uint16_t *)((uint8_t *)&(xPtr) + 2)))), bVar2)) {
-                  uVar5 = ovc22_usesGMapFlags2
+                   (textArenaRes = ovc22_textArena2(*(uint *)CONCAT22((uint *)xPtr,xSeg),
+                                             *(uint *)CONCAT22((uint *)yPtr,(*(uint16_t *)((uint8_t *)&(xPtr) + 2)))), textArenaRes)) {
+                  flagsRes = ovc22_usesGMapFlags2
                                     (skipCheck,x1,y1,
-                                     *(uint *)CONCAT22((uint *)xPtr,in_stack_00000004),
+                                     *(uint *)CONCAT22((uint *)xPtr,xSeg),
                                      *(uint *)CONCAT22((uint *)yPtr,(*(uint16_t *)((uint8_t *)&(xPtr) + 2))));
-                  if ((char)uVar5 != '\0') {
+                  if ((char)flagsRes != '\0') {
                     return 1;
                   }
                 }
                 if (((yOutOfs & 2) == 0) &&
-                   (uVar3 = ovc22_usesGUnitGrid2
-                                      (*(uint *)CONCAT22((uint *)xPtr,in_stack_00000004),
+                   (checkRes = ovc22_usesGUnitGrid2
+                                      (*(uint *)CONCAT22((uint *)xPtr,xSeg),
                                        *(uint *)CONCAT22((uint *)yPtr,(*(uint16_t *)((uint8_t *)&(xPtr) + 2))),(*(uint8_t *)((uint8_t *)&(yPtr) + 2))),
-                   uVar3 != 0)) {
-                  uVar5 = ovc22_usesGMapFlags2
+                   checkRes != 0)) {
+                  flagsRes = ovc22_usesGMapFlags2
                                     (skipCheck,x1,y1,
-                                     *(uint *)CONCAT22((uint *)xPtr,in_stack_00000004),
+                                     *(uint *)CONCAT22((uint *)xPtr,xSeg),
                                      *(uint *)CONCAT22((uint *)yPtr,(*(uint16_t *)((uint8_t *)&(xPtr) + 2))));
-                  if ((char)uVar5 != '\0') {
+                  if ((char)flagsRes != '\0') {
                     return 1;
                   }
                 }
               }
-              *(uint *)CONCAT22((uint *)xPtr,in_stack_00000004) = x1 + cStack_7 * iStack_4;
-              if (cStack_7 < '\0') {
-                *(uint *)CONCAT22((uint *)xPtr,in_stack_00000004) =
-                     *(uint *)CONCAT22((uint *)xPtr,in_stack_00000004) - 1;
+              *(uint *)CONCAT22((uint *)xPtr,xSeg) = x1 + dx * radius;
+              if (dx < '\0') {
+                *(uint *)CONCAT22((uint *)xPtr,xSeg) =
+                     *(uint *)CONCAT22((uint *)xPtr,xSeg) - 1;
               }
-              *(uint *)CONCAT22((uint *)yPtr,(*(uint16_t *)((uint8_t *)&(xPtr) + 2))) = y1 + cStack_8 * iStack_6;
-              if (((3 < *(uint *)CONCAT22((uint *)xPtr,in_stack_00000004)) &&
-                  (*(uint *)CONCAT22((uint *)xPtr,in_stack_00000004) < 0x90)) &&
+              *(uint *)CONCAT22((uint *)yPtr,(*(uint16_t *)((uint8_t *)&(xPtr) + 2))) = y1 + dy * step;
+              if (((3 < *(uint *)CONCAT22((uint *)xPtr,xSeg)) &&
+                  (*(uint *)CONCAT22((uint *)xPtr,xSeg) < 0x90)) &&
                  ((*(uint *)CONCAT22((uint *)yPtr,(*(uint16_t *)((uint8_t *)&(xPtr) + 2))) != 0 &&
                   (*(uint *)CONCAT22((uint *)yPtr,(*(uint16_t *)((uint8_t *)&(xPtr) + 2))) < 0x3b)))) {
-                uVar3 = ovc22_usesAlignUp4(*(uint *)CONCAT22((uint *)xPtr,in_stack_00000004),
+                checkRes = ovc22_usesAlignUp4(*(uint *)CONCAT22((uint *)xPtr,xSeg),
                                            *(uint *)CONCAT22((uint *)yPtr,(*(uint16_t *)((uint8_t *)&(xPtr) + 2))),(*(uint8_t *)((uint8_t *)&(yPtr) + 2)),
                                            mask);
-                if ((char)uVar3 != '\0') {
-                  return uVar3 & 0xff00;
+                if ((char)checkRes != '\0') {
+                  return checkRes & 0xff00;
                 }
                 if ((skipCheck != 0) &&
-                   (uVar3 = ovc22_usesGUnitGrid(*(uint *)CONCAT22((uint *)xPtr,in_stack_00000004),
+                   (checkRes = ovc22_usesGUnitGrid(*(uint *)CONCAT22((uint *)xPtr,xSeg),
                                                 *(uint *)CONCAT22((uint *)yPtr,(*(uint16_t *)((uint8_t *)&(xPtr) + 2)))),
-                   uVar3 != 0)) {
-                  return CONCAT11((char)(uVar3 >> 8),1);
+                   checkRes != 0)) {
+                  return CONCAT11((char)(checkRes >> 8),1);
                 }
                 if ((((yOutOfs & 3) == 3) &&
-                    (uVar5 = ovc22_testMapFlags(*(uint *)CONCAT22((uint *)xPtr,in_stack_00000004),
+                    (flagsRes = ovc22_testMapFlags(*(uint *)CONCAT22((uint *)xPtr,xSeg),
                                                 *(uint *)CONCAT22((uint *)yPtr,(*(uint16_t *)((uint8_t *)&(xPtr) + 2))),mask),
-                    (char)uVar5 != '\0')) &&
-                   (uVar3 = ovc22_usesGMapFlags2
+                    (char)flagsRes != '\0')) &&
+                   (checkRes = ovc22_usesGMapFlags2
                                       (skipCheck,x1,y1,
-                                       *(uint *)CONCAT22((uint *)xPtr,in_stack_00000004),
+                                       *(uint *)CONCAT22((uint *)xPtr,xSeg),
                                        *(uint *)CONCAT22((uint *)yPtr,(*(uint16_t *)((uint8_t *)&(xPtr) + 2)))),
-                   (char)uVar3 != '\0')) {
-                  return uVar3 & 0xff00;
+                   (char)checkRes != '\0')) {
+                  return checkRes & 0xff00;
                 }
                 if ((((yOutOfs & 1) == 0) && (yOutSeg == 0)) &&
-                   (bVar2 = ovc22_textArena2(*(uint *)CONCAT22((uint *)xPtr,in_stack_00000004),
-                                             *(uint *)CONCAT22((uint *)yPtr,(*(uint16_t *)((uint8_t *)&(xPtr) + 2)))), bVar2)) {
-                  uVar5 = ovc22_usesGMapFlags2
+                   (textArenaRes = ovc22_textArena2(*(uint *)CONCAT22((uint *)xPtr,xSeg),
+                                             *(uint *)CONCAT22((uint *)yPtr,(*(uint16_t *)((uint8_t *)&(xPtr) + 2)))), textArenaRes)) {
+                  flagsRes = ovc22_usesGMapFlags2
                                     (skipCheck,x1,y1,
-                                     *(uint *)CONCAT22((uint *)xPtr,in_stack_00000004),
+                                     *(uint *)CONCAT22((uint *)xPtr,xSeg),
                                      *(uint *)CONCAT22((uint *)yPtr,(*(uint16_t *)((uint8_t *)&(xPtr) + 2))));
-                  if ((char)uVar5 != '\0') {
+                  if ((char)flagsRes != '\0') {
                     return 1;
                   }
                 }
                 if (((yOutOfs & 2) == 0) &&
-                   (uVar3 = ovc22_usesGUnitGrid2
-                                      (*(uint *)CONCAT22((uint *)xPtr,in_stack_00000004),
+                   (checkRes = ovc22_usesGUnitGrid2
+                                      (*(uint *)CONCAT22((uint *)xPtr,xSeg),
                                        *(uint *)CONCAT22((uint *)yPtr,(*(uint16_t *)((uint8_t *)&(xPtr) + 2))),(*(uint8_t *)((uint8_t *)&(yPtr) + 2))),
-                   uVar3 != 0)) {
-                  uVar5 = ovc22_usesGMapFlags2
+                   checkRes != 0)) {
+                  flagsRes = ovc22_usesGMapFlags2
                                     (skipCheck,x1,y1,
-                                     *(uint *)CONCAT22((uint *)xPtr,in_stack_00000004),
+                                     *(uint *)CONCAT22((uint *)xPtr,xSeg),
                                      *(uint *)CONCAT22((uint *)yPtr,(*(uint16_t *)((uint8_t *)&(xPtr) + 2))));
-                  if ((char)uVar5 != '\0') {
+                  if ((char)flagsRes != '\0') {
                     return 1;
                   }
                 }
@@ -2400,18 +2400,18 @@ ovc22_searchCellsAround(uint *xPtr,uint *yPtr,byte yOutOfs,byte yOutSeg,char par
         pbVar1 = (byte *)((int)*puVar6 + 0x5d);
         *pbVar1 = *pbVar1 | 2;
       }
-      *(uint *)CONCAT22((uint *)xPtr,in_stack_00000004) = x1;
+      *(uint *)CONCAT22((uint *)xPtr,xSeg) = x1;
       *(uint *)CONCAT22((uint *)yPtr,(*(uint16_t *)((uint8_t *)&(xPtr) + 2))) = y1;
-      uVar3 = (uint)puVar6 & 0xff00;
+      checkRes = (uint)puVar6 & 0xff00;
     }
     else {
-      uVar3 = uVar4 & 0xff00;
+      checkRes = alignRes & 0xff00;
     }
   }
   else {
-    uVar3 = uVar3 & 0xff00;
+    checkRes = checkRes & 0xff00;
   }
-  return uVar3;
+  return checkRes;
 }
 
 
