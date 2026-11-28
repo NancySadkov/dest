@@ -731,7 +731,8 @@ void __cdecl16far attact_usesAlignUp42(void)
   byte defByte;
   undefined1 flag4000;
   
-  func_0x0004f735(0x3f0b);
+  /* 0x108b: call 0x685 - attact_usesAgntFlag1, no arguments. */
+  attact_usesAgntFlag1();
   reported = 0x0;
   _fmemset(MK_FP(_SS, &zeroScratch), 0, 5);
   GGameState = 0x3f;
@@ -749,7 +750,8 @@ void __cdecl16far attact_usesAlignUp42(void)
         segArg = 0x1000;
         printf("%d %d %d  \r",GGameState,debugEmptyCellCount,debugStaleTickCount);
       }
-      func_0x0004fcda(segArg);
+      /* 0x17cc: call 0xc2a - attact_usesGMapFlags3, no arguments. */
+      attact_usesGMapFlags3();
       GGameState = 0x3d;
       if (DebugVerbose != false) {
         printf("%d %d %d  \r",GGameState,debugEmptyCellCount,debugStaleTickCount);
@@ -767,7 +769,8 @@ void __cdecl16far attact_usesAlignUp42(void)
         ovr_constr_usesBlitRect();
         GGameState = 0x13;
       }
-      func_0x0004f68f(segArg);
+      /* 0x1873: call 0x5df - attact_usesSquareRecCount2, no arguments. */
+      attact_usesSquareRecCount2();
       GGameState = 0x1d;
       for (reportIdx = 0; (int)reportIdx < 5; reportIdx = reportIdx + 1) {
         if ((&reportedUnits)[reportIdx] != 0x0) {
@@ -902,7 +905,9 @@ L_attact_3f0b_1082_1477:
             alignedX = ovr_alignUp4(*(int *)(recIdx * 0x13),0,0);
             alignedEntX = ovr_alignUp4((destEnt->base).x,0,0);
             if ((alignedX == alignedEntX) && (*(uint16_t *)((uint8_t *)&SquareRecs[recIdx] + 2) == (peVar14->base).y)) {
-              func_0x0004f930(0x2379,recIdx * 0x13 + (uint)defByte + 0xe,0x17f8);
+              /* 0x156d: call 0x880 - attact_decrementCounter, one far pointer into the
+                 square-record array (segment 0x58). */
+              attact_decrementCounter((char far *)MK_FP(0x58,recIdx * 0x13 + (uint)defByte + 0xe));
               if (*(uint16_t *)((uint8_t *)&SquareRecs[recIdx] + 2) == GfxRndSeed2) {
                 alignedRec = ovr_alignUp4(*(int *)(recIdx * 0x13),0,0);
                 alignedX = ovr_alignUp4(GfxRndSeed,0,0);

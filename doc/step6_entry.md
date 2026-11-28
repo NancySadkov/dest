@@ -23501,3 +23501,45 @@ row for 0x208 - so the target has no static name.
     compare_state        identical 734 / 7 different / 889 missing (unchanged)
     diff_dgroup          288/1,805 matched (unchanged)
     compare_runtime      280 identical / 11 different at entry, init_game and key (unchanged)
+
+
+## `attact_usesAlignUp42` (3f0b:1082): four of its twelve same-module calls were stubs
+
+The `-12` on this 2,172-byte function is not missing code: the body already had twelve call sites
+that correspond one-to-one with the image's twelve `call 0xNNN` instructions, but four of them had
+been written against **placeholder stubs** (`func_0x0004f735`, `func_0x0004fcda`, `func_0x0004f68f`,
+`func_0x0004f930` - named after bogus absolute addresses and returning 0), so those four sites did
+nothing.
+
+Reading each site against `audit/functions_real.tsv` gives the real targets:
+
+    0x108b  call 0x685   push cs; call, no arguments            -> attact_usesAgntFlag1()
+    0x17cc  call 0xc2a   push cs; call, no arguments            -> attact_usesGMapFlags3()
+    0x1873  call 0x5df   push cs; call, no arguments            -> attact_usesSquareRecCount2()
+    0x156d  call 0x880   push 0x58; push recIdx*0x13+def+0xe   -> attact_decrementCounter(far *)
+
+The last one is a single far pointer into the square-record array in segment `0x58`, which the
+prototype `attact_decrementCounter(char far *counter)` matches exactly.
+
+**Still open in this function (8 sites, all mapped but needing their frames read):**
+
+    0x1231, 0x13dc   call 0x27d  (4 args)  -> attact_usesSCARRY2     body has func_0x0004f32d
+    0x12e6, 0x1325, 0x1365  call 0x362 (5 args) -> attact_usesSCARRY22  body has sub_OVC21_manage_c_23C2
+    0x1151, 0x1471   call 0xade  (5 args)  -> attact_usesEntities    body has manage_usesCurSfxType32
+    0x173c           call 0x894  (1 arg)   -> attact_usesAgntCount    body has manage_usesLitoa103
+
+The counts match 1:1, so the mapping itself is settled; what remains is the argument order, which the
+push lists above pin down for the next pass.
+
+## Measured (HEAD 3450ea28 -> this commit)
+
+    structural_deficits  3f0b:1082  28/40 -> 32/40  (delta -12 -> -8)
+    grep_checks          9,798 (unchanged)
+    REBUILT.EXE          447,986 -> 447,954
+    build 65/65, LINK.LOG 0 errors
+    compare_state        identical 734 / 7 different / 889 missing (unchanged)
+    diff_dgroup          288/1,805 matched (unchanged)
+    compare_runtime      280 identical / 11 different at entry, init_game and key (unchanged)
+
+Two of the four `func_0x0004xxxx` stubs are no longer called anywhere in the tree, so the rebuild no
+longer links those dead paths into this function.
