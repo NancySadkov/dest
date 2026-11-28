@@ -440,37 +440,31 @@ ovc40_usesAlignToSeg
   (*(uint8_t *)((uint8_t *)&(palette.seg) + 1)) = (char)(palSeg >> 8);
   setSeasonPalette(palette);
   if (formatIndex == 2) {
-    text1_00.seg = uStack_4a;
-    text1_00.ofs = auStack_52[3];
-    text2_00.seg = uStack_4a;
-    text2_00.ofs = auStack_52[3];
+    /* 0x0676: both pointers are rankNames[4]. */
+    text1_00 = rankNames[4];
+    text2_00 = rankNames[4];
     ovc40_usesBlitLabel(text1_00,text2_00,0,0xf2);
-    text1_01.seg = uStack_46;
-    text1_01.ofs = uStack_48;
-    text2_01.seg = uStack_46;
-    text2_01.ofs = uStack_48;
+    /* 0x068e: both are rankNames[5]. */
+    text1_01 = rankNames[5];
+    text2_01 = rankNames[5];
     ovc40_usesBlitLabel(text1_01,text2_01,1,0xf2);
-    text1_02.seg = uStack_22;
-    text1_02.ofs = uStack_24;
-    text2_02.seg = uStack_46;
-    text2_02.ofs = uStack_48;
+    /* 0x06a6: text1 is rankNames[14], text2 rankNames[5]. */
+    text1_02 = rankNames[14];
+    text2_02 = rankNames[5];
     ovc40_usesBlitLabel(text1_02,text2_02,2,0xf2);
   }
   else if (formatIndex == 3) {
-    text1_03.seg = uStack_42;
-    text1_03.ofs = uStack_44;
-    text2_03.seg = uStack_42;
-    text2_03.ofs = uStack_44;
+    /* 0x06c7: both are rankNames[6]. */
+    text1_03 = rankNames[6];
+    text2_03 = rankNames[6];
     ovc40_usesBlitLabel(text1_03,text2_03,0,0xf2);
-    text1_04.seg = uStack_3e;
-    text1_04.ofs = uStack_40;
-    text2_04.seg = uStack_3e;
-    text2_04.ofs = uStack_40;
+    /* 0x06df: both are rankNames[7]. */
+    text1_04 = rankNames[7];
+    text2_04 = rankNames[7];
     ovc40_usesBlitLabel(text1_04,text2_04,1,0xf2);
-    text1_05.seg = uStack_3a;
-    text1_05.ofs = uStack_3c;
-    text2_05.seg = uStack_3a;
-    text2_05.ofs = uStack_3c;
+    /* 0x06f7: both are rankNames[8]. */
+    text1_05 = rankNames[8];
+    text2_05 = rankNames[8];
     ovc40_usesBlitLabel(text1_05,text2_05,2,0xf2);
   }
   else if ((formatIndex == 4) || (formatIndex == 6)) {
@@ -504,8 +498,8 @@ ovc40_usesAlignToSeg
     (*(uint8_t *)((uint8_t *)&(text2_07.ofs))) = ofsLo;
     text2_07.seg = segTmp;
     ovc40_usesBlitLabel(text1_07,text2_07,labelIdx,blitColour);
-    text1_08.seg = uStack_26;
-    text1_08.ofs = uStack_28;
+    /* 0x07a5: rankNames[13] against a null second pointer. */
+    text1_08 = rankNames[13];
     ovc40_usesBlitLabel(text1_08,far_from_u32((uint32_t)(0x0)),1,0xf2);
   }
   else {

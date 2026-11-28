@@ -24442,3 +24442,47 @@ and true.
     compare_state        identical 734 / 7 different / 889 missing (unchanged)
     diff_dgroup          288/1,805 matched (unchanged)
     compare_runtime      280 identical / 11 different at entry, init_game and key (unchanged)
+
+
+## The table mapping applied: seven of `ovc40_usesAlignToSeg`'s nine label calls now read the table
+
+I extracted each `ovc40_usesBlitLabel` call from the image and resolved its four pointer pushes to
+table indices (base `bp-0x5a`, entry = `(0x5a - offset) / 4`):
+
+    0x0676  [bp-0x4a]:[bp-0x48] twice   -> entry 4, entry 4     (row 0)
+    0x068e  [bp-0x46]:[bp-0x44] twice   -> entry 5, entry 5     (row 1)
+    0x06a6  [bp-0x22]:[bp-0x20] / 5     -> entry 14, entry 5    (row 2)
+    0x06c7  [bp-0x42]:[bp-0x40] twice   -> entry 6, entry 6     (row 0)
+    0x06df  [bp-0x3e]:[bp-0x3c] twice   -> entry 7, entry 7     (row 1)
+    0x06f7  [bp-0x3a]:[bp-0x38] twice   -> entry 8, entry 8     (row 2)
+    0x07a5  [bp-0x26]:[bp-0x24] / null  -> entry 13, null       (row 1)
+    0x07c0  [bp-0x5a]:[bp-0x58] twice   -> entry 0, entry 0     (row 0)
+    0x091d  [bp-0x2e]:[bp-0x2c] twice   -> entry 11, entry 11   (row 0)
+
+The exported body had them **systematically off by one word**: it took `seg` from the *next* entry's
+`ofs` half (`text1_01.seg = uStack_46; text1_01.ofs = uStack_48;`), which is the classic far-pointer
+split error. Seven calls are now direct table reads:
+
+    text1_00 = text2_00 = rankNames[4];
+    text1_01 = text2_01 = rankNames[5];
+    text1_02 = rankNames[14];  text2_02 = rankNames[5];
+    text1_03 = text2_03 = rankNames[6];
+    text1_04 = text2_04 = rankNames[7];
+    text1_05 = text2_05 = rankNames[8];
+    text1_08 = rankNames[13];
+
+**Still to wire** (mapping recorded, branch alignment unverified): `0x07c0` -> entry 0, `0x08fa` ->
+entry 9, and the `text1_06` / `text1_10` / `text2_09` sites, whose `formatIndex` branch placement I
+have not yet matched to the image's linear order. Also still open: the three `ovr_stsprintf` format
+pointers built from `uStack_2c` / `uStack_58` / `uStack_66` / `uStack_68`, which are the same kind of
+table entry in the *second* (16-byte) copied table and need the same treatment.
+
+## Measured (HEAD d498bbd8 -> this commit)
+
+    grep_checks          8,035 -> 8,007   (-28)
+    REBUILT.EXE          447,906 (unchanged)
+    build 65/65, LINK.LOG 0 errors
+    compare_state        identical 734 / 7 different / 889 missing (unchanged)
+    diff_dgroup          288/1,805 matched (unchanged)
+    compare_runtime      280 identical / 11 different at entry, init_game and key (unchanged)
+    structural_deficits  two game bodies: 7e7c:0b9c (177/187), 77eb:0d61 (54/58)
