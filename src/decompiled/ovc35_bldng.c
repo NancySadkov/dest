@@ -194,70 +194,72 @@ void bldng_selectBuildingType(byte partyIndex)
   far_t entries;
   far_t entries_00;
   far_t hint;
-  uint uVar2;
-  uint16_t uVar3;
+  uint typeVal;             /* bldng_usesGStrangeTable's result in the scan */
+  uint classVal;            /* the leader's own class, after the scan */
+  uint16_t allowed;         /* bldng_compute2's verdict for this building type */
+  uint16_t widthWord;       /* (class * 0x27 + 0x10e), the building's name word */
   int recOfs;
-  char *pcVar5;
-  uint8_t *puVar6;
-  uint16_t uVar7;
+  char *choiceText;         /* ovr_stsprintf's result */
+  uint8_t *menuBase;        /* &menuEntries, the menu's far offset */
+  uint16_t textSeg;         /* DX from ovr_stsprintf: the text's segment */
   uint16_t count;
-  byte in_stack_00000004;
-  undefined1 uVar8;
+  byte leaderIdx;          /* the leader whose buildings are being chosen */
+  undefined1 widthLo;       /* the low byte of widthWord */
   uint8_t buildTypes;
   uint8_t menuEntries;
   uint16_t auStack_190 [97];
   char acStack_ce [200];
-  int iStack_6;
+  int buildIdx;             /* 7 .. 0x30, the building type scan */
   byte bitMask;
   
-  bitMask = '\x01' << (AgntGs[(uint)(GLeaderSheets[in_stack_00000004])->classStr].shortName[3] & 0x1f);
-  buildTypes = bldng_getClass(in_stack_00000004);
+  bitMask = '\x01' << (AgntGs[(uint)(GLeaderSheets[leaderIdx])->classStr].shortName[3] & 0x1f);
+  buildTypes = bldng_getClass(leaderIdx);
   buildTypes = buildTypes & 0xff;
   auStack_190[0] = *(uint16_t *)((int)&GStrangeTable[0x31].seg + buildTypes * 4);
   menuEntries = ((far_t far *)(GStrangeTable + 0x31) + buildTypes)->ofs;
   count = 1;
-  iStack_6 = 7;
+  buildIdx = 7;
   while( true ) {
-    if (0x30 < iStack_6) break;
-    uVar2 = bldng_usesGStrangeTable((byte)iStack_6);
-    if ((BuildingTypes[(uVar2 & 0xff)].type & bitMask) != 0) {
-      uVar2 = bldng_usesGStrangeTable((byte)iStack_6);
-      if ((uint8_t)((uint)BuildingTypes[uVar2 & 0xff].halfWidth >> 8) == 0) {
-        uVar3 = bldng_compute2((uint8_t)iStack_6,in_stack_00000004);
-        if ((char)uVar3 != '\0') {
-          *(int *)(&buildTypes + count * 2) = iStack_6;
-          tableOfs = ((far_t far *)(GStrangeTable + 0x31) + iStack_6)->ofs;
-          auStack_190[count * 2] = *(uint16_t *)((int)&GStrangeTable[0x31].seg + iStack_6 * 4);
+    if (0x30 < buildIdx) break;
+    typeVal = bldng_usesGStrangeTable((byte)buildIdx);
+    if ((BuildingTypes[(typeVal & 0xff)].type & bitMask) != 0) {
+      typeVal = bldng_usesGStrangeTable((byte)buildIdx);
+      if ((uint8_t)((uint)BuildingTypes[typeVal & 0xff].halfWidth >> 8) == 0) {
+        allowed = bldng_compute2((uint8_t)buildIdx,leaderIdx);
+        if ((char)allowed != '\0') {
+          *(int *)(&buildTypes + count * 2) = buildIdx;
+          tableOfs = ((far_t far *)(GStrangeTable + 0x31) + buildIdx)->ofs;
+          auStack_190[count * 2] = *(uint16_t *)((int)&GStrangeTable[0x31].seg + buildIdx * 4);
           *(uint16_t *)(&menuEntries + count * 4) = tableOfs;
           count = count + 1;
         }
       }
     }
-    iStack_6 = iStack_6 + 1;
+    buildIdx = buildIdx + 1;
   }
   entries_00.seg = (uint16_t)_SS;
   entries_00.ofs = (uint16_t)&menuEntries;
   bldng_buildMenuEntries
-            ((uint32_t)CONCAT22(_SS,&buildTypes),entries_00,count,in_stack_00000004);
-  uVar2 = bldng_usesGStrangeTable
-                    ((GLeaderSheets[in_stack_00000004])->buildType[0]);
-  recOfs = (uVar2 & 0xff) * 0x27;
-  uVar3 = *(uint16_t *)(recOfs + 0x10e);
-  uVar8 = (undefined1)uVar3;
-  pcVar5 = ovr_stsprintf(acStack_ce,(char *)CONCAT22(0x690b,_SS),
-                         (char *)CONCAT13((char)((uint)uVar3 >> 8),CONCAT12(uVar8,0x2410)),uVar8,
+            ((uint32_t)CONCAT22(_SS,&buildTypes),entries_00,count,leaderIdx);
+  classVal = bldng_usesGStrangeTable
+                    ((GLeaderSheets[leaderIdx])->buildType[0]);
+  recOfs = (classVal & 0xff) * 0x27;
+  widthWord = *(uint16_t *)(recOfs + 0x10e);
+  widthLo = (undefined1)widthWord;
+  choiceText = ovr_stsprintf(acStack_ce,(char *)CONCAT22(0x690b,_SS),
+                         (char *)CONCAT13((char)((uint)widthWord >> 8),CONCAT12(widthLo,0x2410)),widthLo,
                          (char)*(uint16_t *)(recOfs + 0x110));
-  asm { mov uVar7,dx };
-  puVar6 = &menuEntries;
+  asm { mov textSeg,dx };
+  menuBase = &menuEntries;
   entries.seg = (uint16_t)_SS;
-  entries.ofs = (uint16_t)puVar6;
-  (*(uint8_t *)((uint8_t *)&(hint.seg))) = (char)uVar7;
-  hint.ofs = (uint16_t)pcVar5;
-  (*(uint8_t *)((uint8_t *)&(hint.seg) + 1)) = (char)((uint)uVar7 >> 8);
-  ovr_ovc28_compute2(entries,count,hint,(char)pcVar5,0);
-  if ((char)puVar6 != '\0') {
-    (GLeaderSheets[in_stack_00000004])->buildType[0] =
-         (&stk_fe0a)[((uint)puVar6 & 0xff) * 2];
+  entries.ofs = (uint16_t)menuBase;
+  (*(uint8_t *)((uint8_t *)&(hint.seg))) = (char)textSeg;
+  hint.ofs = (uint16_t)choiceText;
+  (*(uint8_t *)((uint8_t *)&(hint.seg) + 1)) = (char)((uint)textSeg >> 8);
+  ovr_ovc28_compute2(entries,count,hint,(char)choiceText,0);
+  if ((char)menuBase != '\0') {
+    (GLeaderSheets[leaderIdx])->buildType[0] =
+         (&stk_fe0a)[((uint)menuBase & 0xff) * 2];
   }
   return;
 }

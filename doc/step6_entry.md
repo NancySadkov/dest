@@ -25866,3 +25866,40 @@ compiler, not by inspection.
     diff_dgroup          288/1,805 matched (unchanged)
     compare_runtime      280 identical / 11 different at entry, init_game and key (unchanged)
     structural_deficits  two game bodies: 7e7c:0b9c (177/187), 77eb:0d61 (54/58)
+
+
+## `bldng_selectBuildingType` (676c:03dd): 48 hits down to 0, grep 5,164 -> 5,107 (-57)
+
+The building-type chooser: it builds the legal-type list by scanning 7..0x30, then formats the current
+name and runs the menu.
+
+    iStack_6 -> buildIdx    7 .. 0x30, the building type scan
+    uVar2    -> typeVal     bldng_usesGStrangeTable's result inside the scan
+                classVal    the leader's own class, after the scan
+    uVar3    -> allowed     bldng_compute2's verdict for this type
+                widthWord   (class * 0x27 + 0x10e), the building's name word
+    uVar8    -> widthLo     the low byte of widthWord
+    puVar6   -> menuBase    &menuEntries, the menu's far offset
+    pcVar5   -> choiceText  ovr_stsprintf's result
+    uVar7    -> textSeg     DX from ovr_stsprintf: the text's segment
+    in_stack_00000004 -> leaderIdx   the leader whose buildings are being chosen
+
+Two of my line lists were wrong on the first attempt (`buildIdx` at 231, `widthLo` at 249) and the
+compiler rejected both before anything was committed - the fix each time was to read the call, not to
+re-guess: 231's `iStack_6` is `&buildTypes + count * 2 = buildIdx`, and 249 has no `uVar8` at all.
+
+## Measured (HEAD 91273f6b -> this commit)
+
+    grep_checks          5,164 -> 5,107   (-57)
+    REBUILT.EXE          448,002 (unchanged size)
+    build 65/65, LINK.LOG 0 errors
+    compare_state        identical 734 / 7 different / 889 missing (unchanged)
+    diff_dgroup          288/1,805 matched (unchanged)
+    compare_runtime      280 identical / 11 different at entry, init_game and key (unchanged)
+    structural_deficits  two game bodies: 7e7c:0b9c (177/187), 77eb:0d61 (54/58)
+
+## Turn total (HEAD 907d3e6b -> here)
+
+    grep_checks          5,245 -> 5,107   (-138)
+      ovc45_textDone2 (77eb:1bb3)        -81
+      bldng_selectBuildingType (676c:03dd)  -57
