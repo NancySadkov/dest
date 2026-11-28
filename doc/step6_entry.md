@@ -23910,3 +23910,27 @@ role line to line, so naming them would document a falsehood.
     diff_dgroup          288/1,805 matched (unchanged)
     compare_runtime      280 identical / 11 different at entry, init_game and key (unchanged)
     structural_deficits  6 entries, unchanged
+
+
+## Renaming batch 4 in `ovc45_unitinfo.c`: grep 9,570 -> 9,536
+
+    ovc45_compute9     (77eb:226e)  iVar3 -> dstIdx (destination write cursor)
+                                    iVar4 -> runWidth (running pixel width while copying)
+                                    in_stack_00000012 -> dotMode (the variadic argument at
+                                      [bp+0x12]; 2 selects ".." over "...")
+    ovc45_usesGMapFlags4 (77eb:215a) in_AX -> axIn (AX carried across the bounds tests)
+    ovc45_usesGfxRndSeed2 (77eb:20e8) in_AX -> axIn ; extraout_AH -> axHigh
+
+`ovc45_compute9` is the helper whose argument frame was reconstructed for `77eb:0d61`; naming its
+locals makes that record readable, and `dotMode` is the argument that explains why the image has two
+`ovr_font_textWidth("..")` / `ovr_font_textWidth("...")` calls.
+
+## Measured (HEAD 46d2dea2 -> this commit)
+
+    grep_checks          9,570 -> 9,536   (-34; -133 this turn, -262 across the two rename turns)
+    REBUILT.EXE          447,922 (unchanged)
+    build 65/65, LINK.LOG 0 errors
+    compare_state        identical 734 / 7 different / 889 missing (unchanged)
+    diff_dgroup          288/1,805 matched (unchanged)
+    compare_runtime      280 identical / 11 different at entry, init_game and key (unchanged)
+    structural_deficits  6 entries, unchanged

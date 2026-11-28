@@ -1374,8 +1374,8 @@ uint __cdecl16far ovc45_usesGfxRndSeed2(int far *x)
 
 {
   byte bldSize;
-  uint in_AX;
-  undefined1 extraout_AH;
+  uint axIn;               /* AX, which the image reads back as the result */
+  undefined1 axHigh;       /* the AH half the image carries across the cell probe */
   uint result;
   byte scanDown;
   byte cellType;
@@ -1383,10 +1383,10 @@ uint __cdecl16far ovc45_usesGfxRndSeed2(int far *x)
   scanDown = 0;
   while( true ) {
     if (3 < scanDown) {
-      return in_AX & 0xff00;
+      return axIn & 0xff00;
     }
     cellType = ovc45_getUnitType(*x - (uint)scanDown,GfxRndSeed2);
-    in_AX = CONCAT11(extraout_AH,cellType);
+    axIn = CONCAT11(axHigh,cellType);
     if (cellType != 0) break;
     scanDown = scanDown + 1;
   }
@@ -1413,12 +1413,12 @@ uint __cdecl16far ovc45_usesGfxRndSeed2(int far *x)
 int __cdecl16far ovc45_usesGMapFlags4(int x,int y)
 
 {
-  int in_AX;
+  int axIn;                /* AX across the bounds tests, as the image uses it */
   int result;
   byte hiByte;
   
-  if ((((x < 0) || (y < 0)) || (in_AX = x + 1, 0x93 < in_AX)) || (in_AX = y + 1, 0x3b < in_AX)) {
-    result = CONCAT11((char)((uint)in_AX >> 8),2);
+  if ((((x < 0) || (y < 0)) || (axIn = x + 1, 0x93 < axIn)) || (axIn = y + 1, 0x3b < axIn)) {
+    result = CONCAT11((char)((uint)axIn >> 8),2);
   }
   else {
     if (((*(short (*) [60] [148])GMapFlags)[y][x] & 3U) == 3) {
@@ -1529,14 +1529,14 @@ int __cdecl16far ovc45_compute9(char *dest,char *src,char *font,uint maxWidth,ch
 {
   byte fontByte;
   uint fullWidth;
-  int iVar3;
-  int iVar4;
-  char in_stack_00000012;
+  int dstIdx;              /* destination write cursor */
+  int runWidth;            /* running pixel width while copying */
+  char dotMode;            /* the variadic argument at [bp+0x12]; 2 selects two dots */
   int textWidth;
   
   fullWidth = ovr_font_textWidth((*(uint16_t *)((uint8_t *)&(src) + 2)),font,maxWidth,0,0);
   if (mode < fullWidth) {
-    if (in_stack_00000012 == '\x02') {
+    if (dotMode == '\x02') {
       textWidth = ovr_font_textWidth((char *)"..",(char *)CONCAT22((*(uint16_t *)((uint8_t *)&(font) + 2)),(char *)0x2410),maxWidth,0,0)
       ;
     }
@@ -1544,23 +1544,23 @@ int __cdecl16far ovc45_compute9(char *dest,char *src,char *font,uint maxWidth,ch
       textWidth = ovr_font_textWidth((char *)"...",(char *)CONCAT22((*(uint16_t *)((uint8_t *)&(font) + 2)),(char *)0x2410),maxWidth,0,0)
       ;
     }
-    iVar3 = 0;
-    for (iVar4 = 0;
-        (((byte *)(*(uint16_t *)((uint8_t *)&(src) + 2)))[   iVar3] != '\0' &&
-        ((int)(textWidth + iVar4 + (uint)*(byte *)((*(uint16_t *)((uint8_t *)&(font) + 2)) + ((byte *)(*(uint16_t *)((uint8_t *)&(src) + 2)))[   iVar3] + 0xa1)) <=
-         (int)mode)); iVar4 = iVar4 + (uint)fontByte) {
-      fontByte = *(byte *)((*(uint16_t *)((uint8_t *)&(font) + 2)) + ((byte *)(*(uint16_t *)((uint8_t *)&(src) + 2)))[   iVar3] + 0xa1);
-      dest[iVar3] = ((byte *)(*(uint16_t *)((uint8_t *)&(src) + 2)))[   iVar3];
-      iVar3 = iVar3 + 1;
+    dstIdx = 0;
+    for (runWidth = 0;
+        (((byte *)(*(uint16_t *)((uint8_t *)&(src) + 2)))[   dstIdx] != '\0' &&
+        ((int)(textWidth + runWidth + (uint)*(byte *)((*(uint16_t *)((uint8_t *)&(font) + 2)) + ((byte *)(*(uint16_t *)((uint8_t *)&(src) + 2)))[   dstIdx] + 0xa1)) <=
+         (int)mode)); runWidth = runWidth + (uint)fontByte) {
+      fontByte = *(byte *)((*(uint16_t *)((uint8_t *)&(font) + 2)) + ((byte *)(*(uint16_t *)((uint8_t *)&(src) + 2)))[   dstIdx] + 0xa1);
+      dest[dstIdx] = ((byte *)(*(uint16_t *)((uint8_t *)&(src) + 2)))[   dstIdx];
+      dstIdx = dstIdx + 1;
     }
-    dest[iVar3] = '.';
-    dest[iVar3 + 1] = '.';
-    iVar4 = iVar3 + 2;
-    if (in_stack_00000012 != '\x02') {
-      dest[iVar4] = '.';
-      iVar4 = iVar3 + 3;
+    dest[dstIdx] = '.';
+    dest[dstIdx + 1] = '.';
+    runWidth = dstIdx + 2;
+    if (dotMode != '\x02') {
+      dest[runWidth] = '.';
+      runWidth = dstIdx + 3;
     }
-    dest[iVar4] = '\0';
+    dest[runWidth] = '\0';
     (*(uint16_t *)((uint8_t *)&(src) + 2)) = (uint16_t)dest;   /* hand fix: 2-byte segment half */
   }
   return (int)(*(uint16_t *)((uint8_t *)&(src) + 2));
