@@ -1241,6 +1241,8 @@ stats_usesAlignUp42(byte agntIndex,byte gfxIndex,int16_t x,int16_t y,brect_t *re
   byte bVar3;
   bool moreHousing;        /* ovr_draw_textProvidesMoreHousing's result */
   uint uVar5;
+  uint choiceVal;          /* the ovr_uiInputText answer the switch tests */
+  uint agentIdx;           /* the agent index the move case walks */
   uint aligned;            /* alignUp4 of a coordinate, compared with the cursor */
   char *choice;            /* ovr_uiInputText's answer */
   ulong *counterPtr;       /* ovr_attact_usesBDADailyTimeCounter's result */
@@ -1371,25 +1373,25 @@ L_stats_6386_1c9f_1ECD:
   }
   flagA = '\0';
   flagB = '\0';
-  uVar5 = (uint)bStack_4;
-  if (uVar5 == 6) {
+  choiceVal = (uint)bStack_4;
+  if (choiceVal == 6) {
     flagB = '\x01';
     flagA = '\x01';
   }
-  else if (uVar5 < 7) {
+  else if (choiceVal < 7) {
     limit = 5;
-    switch(uVar5) {
+    switch(choiceVal) {
     case 0:
       menuBarShown = 0;
-      uVar5 = 5;
+      agentIdx = 5;
       Agnts[5].x = 0x2b;
       Agnts[5].y = 2;
       do {
         bStack_3 = 1;
         while( true ) {
-          uVar5 = uVar5 + 1;
+          agentIdx = agentIdx + 1;
           limit = (uint)AgntCount;
-          if ((int)limit <= (int)uVar5) {
+          if ((int)limit <= (int)agentIdx) {
             ovr_agnt_usesAlignToSeg();
             bVar3 = (byte)limit;
             ovr_agnt_usesAlignToSeg();
@@ -1397,23 +1399,23 @@ L_stats_6386_1c9f_1ECD:
             ovr_agnt_usesAlignToSeg();
             return bVar3;
           }
-          limit = uVar5;
-          if (Agnts[uVar5].gdata->type == '\x02') break;
-          if (Agnts[uVar5].gdata->type == '\x01') {
-            Agnts[uVar5].x = 0x3d;
-            Agnts[uVar5].y = 0x12;
+          limit = agentIdx;
+          if (Agnts[agentIdx].gdata->type == '\x02') break;
+          if (Agnts[agentIdx].gdata->type == '\x01') {
+            Agnts[agentIdx].x = 0x3d;
+            Agnts[agentIdx].y = 0x12;
           }
           else {
-            if (Agnts[uVar5].gdata->type == '\v') {
-              Agnts[uVar5].x = 0x56;
-              Agnts[uVar5].y = 0x14;
+            if (Agnts[agentIdx].gdata->type == '\v') {
+              Agnts[agentIdx].x = 0x56;
+              Agnts[agentIdx].y = 0x14;
             }
           }
         }
 switchD_6000_58bf_caseD_5:
-        Agnts[uVar5].x = 0x6e;
+        Agnts[agentIdx].x = 0x6e;
         Agnts[limit].y = 0xb;
-        uVar5 = limit;
+        agentIdx = limit;
       } while( true );
     case 1:
                     /* WARNING: Bad instruction - Truncating control flow here */

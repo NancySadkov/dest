@@ -24818,3 +24818,39 @@ a separate question from the pointer's source.
 `0x07c0` is still unaccounted for: it is a row-0 label whose two pointers are `rankNames[0]`, and no
 statement in the current branch structure produces it. That needs the branch disposition re-derived
 against the image's call order, not another pointer repair.
+
+
+## `at`: `uVar5` split into `choiceVal` / `agentIdx`, grep 7,895 -> 7,877
+
+The image reuses one slot for two things in the same straight-line block, and the boundary is visible
+in the source: `ovr_uiInputText`'s answer is only tested by the switch, and the "move to location"
+case walks `Agnts[]` with its own counter.
+
+    1374  choiceVal = (uint)bStack_4;          /* ovr_uiInputText's answer */
+    1375  if (choiceVal == 6) { ... }
+    1379  else if (choiceVal < 7) {
+    1380    limit = 5;
+    1381    switch (choiceVal) {
+    1384      agentIdx = 5;                      /* the agent index the case walks */
+    1390      agentIdx = agentIdx + 1;
+    1392      if ((int)limit <= (int)agentIdx) { ... }
+    1400      limit = agentIdx;
+    1401      if (Agnts[agentIdx].gdata->type == '\x02') break;
+    ...
+    1416      agentIdx = limit;
+
+No value has to survive from the choice into the loop (`1384` overwrites it before the first read), so
+the split is semantic as well as nominal.
+
+`uVar5` still has 21 uses at `0x1486..0x1536`, where it is the choice again for the
+`0xfc/0xfd/0xfe` comparisons and then a `stats_usesAlignUp4` result at `0x1526`/`0x1535` - i.e. a third
+boundary that needs the same treatment once that block is re-derived.
+
+## Measured (HEAD 52fe3a77 -> this commit)
+
+    grep_checks          7,895 -> 7,877   (-18)
+    REBUILT.EXE          447,858 (unchanged)
+    build 65/65, LINK.LOG 0 errors
+    compare_state        identical 734 / 7 different / 889 missing (unchanged)
+    diff_dgroup          288/1,805 matched (unchanged)
+    compare_runtime      280 identical / 11 different at entry, init_game and key (unchanged)
