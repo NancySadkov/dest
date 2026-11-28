@@ -889,6 +889,8 @@ void constrct_buildInfoText(int x,byte far *flag,int entityIdx,int arg4,int arg5
                                  (uint16_t)ovr_ovc15_usesStshRealloc(
                                      (char far *)MK_FP((uint16_t)((uint32_t)bld->name >> 16),
                                                        (uint16_t)bld->name)));
+            /* the second prompt variant has its own list call (image 0x2436) */
+            choice = (int)ovr_ovc28_compute2(&list[n],2,res);
           }
           if (res != (char far *)0) {
             choice = (int)ovr_ovc28_compute2(&list[n],2,res);
