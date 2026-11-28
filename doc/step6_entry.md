@@ -24236,3 +24236,35 @@ project decision, not a cleanup, and the headline number would not move either w
     7e7c:0b9c  177/187   the three unresolved window1f8:002a / 1a8,2a sites + 7 abridged variants
     77eb:0d61   54/58    the four unresolved 0x200 calls
     (the rest are the supplied crtl.c/ovl.c and four recorded shape artefacts)
+
+
+## Renaming batch 11: the `ovc01_driver.c` tail, grep 8,444 -> 8,347 (-97)
+
+Seven small bodies, every slot single-role:
+
+    digIsInstalled   (2d63:071e)  pcVar1 -> swiTarget ; bVar2 -> installed ; iVar3 -> entryAddr
+                                  (entryAddr is DriverEntry's offset, then the SWI result)
+    blitRaw          (2d63:005d)  puVar1 -> srcPtr ; uVar2 -> lineOfs ; uVar3 -> col
+                                  (lineOfs is y + y/4, the row's byte offset)
+    driver_compute1  (2d63:0107)  bVar1 -> majorTerm (clamped to 2) ; bVar2 -> minorTerm (0..4)
+    midIsLoaded      (2d63:07ce)  bVar1 -> loaded ; iVar2 -> entryAddr
+    vgaSetPalette8bit(2d63:01df)  puVar1 -> bluePtr (pal+2) ; iVar2 -> entries (0x100)
+    driver_zeroWords (2d63:0bc8)  puVar1 -> cur ; puVar2 -> p
+    vgaSetPalette    (2d63:01bf)  puVar1 -> bluePtr ; uStack0007 -> palHighByte ;
+                                  in_stack_0000000a -> entries
+
+## Measured (HEAD fdd606d9 -> this commit)
+
+    grep_checks          8,444 -> 8,347   (-97)
+    REBUILT.EXE          447,906 (unchanged)
+    build 65/65, LINK.LOG 0 errors
+    compare_state        identical 734 / 7 different / 889 missing (unchanged)
+    diff_dgroup          288/1,805 matched (unchanged)
+    compare_runtime      280 identical / 11 different at entry, init_game and key (unchanged)
+    structural_deficits  unchanged: two game bodies (7e7c:0b9c, 77eb:0d61)
+
+Next pockets, measured after this batch: `ovc45_textDone2` (137 hits / 21 slots) and `ovc45_textDone`
+(116 / 19) in ovc45_unitinfo.c, then `ovc06_blit.c` and `ovc40_palette.c`. The two textDone bodies
+have the same far-pointer-half structure as `ovc40_usesAlignToSeg` (segments and offsets stored as
+separate scalars, then recombined with CONCAT13/CONCAT22), so the honest fix there is the same
+collapse-into-`far_t` rewrite rather than a rename.

@@ -88,32 +88,32 @@ void __cdecl16far
 blitRaw(uint16_t x1,uint16_t y1,uint16_t x2,uint16_t y2,uint16_t srcSeg,uint16_t dstSeg)
 
 {
-  undefined1 *puVar1;
-  uint uVar2;
+  undefined1 *srcPtr;      /* the source byte for this pixel */
+  uint lineOfs;            /* y + y/4, the row's byte offset */
   uint16_t dy;
-  uint16_t uVar3;
+  uint16_t col;            /* columns left in the current row */
   uint16_t dx;
   uint16_t s;
   uint16_t d;
   uint32_t ps;
   
-  uVar2 = CONCAT11((char)y1,(char)(y1 >> 8));
-  s = uVar2 + (uVar2 >> 2) + x1;
+  lineOfs = CONCAT11((char)y1,(char)(y1 >> 8));
+  s = lineOfs + (lineOfs >> 2) + x1;
   dy = (y2 - y1) + 1;
   dx = (x2 - x1) + 1;
-  uVar3 = dx;
+  col = dx;
   d = s;
   do {
-    for (; uVar3 != 0; uVar3 = uVar3 - 1) {
-      puVar1 = (undefined1 *)s;
+    for (; col != 0; col = col - 1) {
+      srcPtr = (undefined1 *)s;
       s = s + 1;
-      *(undefined1 *)d = *puVar1;
+      *(undefined1 *)d = *srcPtr;
       d = (uint16_t)(d + 1);
     }
     s = s + (0x140 - dx);
     d = d + (0x140 - dx);
     dy = dy - 1;
-    uVar3 = dx;
+    col = dx;
   } while (dy != 0);
   return;
 }
@@ -197,21 +197,21 @@ uint16_t __cdecl16far be2(uint16_t w)
 char __cdecl16far driver_compute1(char cornerA,byte cornerB,char cornerC)
 
 {
-  byte bVar1;
-  byte bVar2;
+  byte majorTerm;          /* clamped to 2 */
+  byte minorTerm;          /* clamped to 0..4 */
   
-  bVar1 = (byte)(CONCAT11(CARRY1(cornerC + cornerA,cornerB),cornerC + cornerA + cornerB) >> 7);
-  if (2 < bVar1) {
-    bVar1 = 2;
+  majorTerm = (byte)(CONCAT11(CARRY1(cornerC + cornerA,cornerB),cornerC + cornerA + cornerB) >> 7);
+  if (2 < majorTerm) {
+    majorTerm = 2;
   }
-  bVar2 = ((char)(cornerB - cornerA) >> 2) + 2;
-  if ((char)bVar2 < '\0') {
-    bVar2 = 0;
+  minorTerm = ((char)(cornerB - cornerA) >> 2) + 2;
+  if ((char)minorTerm < '\0') {
+    minorTerm = 0;
   }
-  else if (4 < bVar2) {
-    bVar2 = 4;
+  else if (4 < minorTerm) {
+    minorTerm = 4;
   }
-  return (bVar1 * '\x05' + -0xc) - bVar2;
+  return (majorTerm * '\x05' + -0xc) - minorTerm;
 }
 
 
@@ -282,21 +282,21 @@ void __cdecl16far miceSetPosition(uint16_t col,uint16_t row)
 uint8_t __cdecl16far vgaSetPalette(uint8_t *paletteOfs,uint8_t paletteSeg,int startIndex,uint16_t arg4)
 
 {
-  uint8_t *puVar1;
-  undefined1 uStack0007;
-  int in_stack_0000000a;
+  uint8_t *bluePtr;         /* paletteOfs + 2, the blue component */
+  undefined1 palHighByte;   /* high byte of the split palette pointer */
+  int entries;             /* entries sent to the DAC */
   
-  paletteOfs = CONCAT13(uStack0007,CONCAT12(paletteSeg,paletteOfs));
+  paletteOfs = CONCAT13(palHighByte,CONCAT12(paletteSeg,paletteOfs));
   out(0x3c8,(undefined1)startIndex);
   do {
     out(0x3c9,*paletteOfs);
-    puVar1 = paletteOfs + 2;
+    bluePtr = paletteOfs + 2;
     out(0x3c9,paletteOfs[1]);
     paletteOfs = paletteOfs + 3;
-    out(0x3c9,*puVar1);
-    in_stack_0000000a = in_stack_0000000a + -1;
-  } while (in_stack_0000000a != 0);
-  return *puVar1;
+    out(0x3c9,*bluePtr);
+    entries = entries + -1;
+  } while (entries != 0);
+  return *bluePtr;
 }
 
 
@@ -306,20 +306,20 @@ uint8_t __cdecl16far vgaSetPalette(uint8_t *paletteOfs,uint8_t paletteSeg,int st
 uint8_t __cdecl16far vgaSetPalette8bit(uint8_t far *pal, uint16_t arg2)
 
 {
-  uint8_t *puVar1;
-  int iVar2;
+  uint8_t *bluePtr;         /* pal + 2, the blue component */
+  int entries;             /* 0x100 entries sent to the DAC */
   
   out(0x3c8,0);
-  iVar2 = 0x100;
+  entries = 0x100;
   do {
     out(0x3c9,*pal);
-    puVar1 = pal + 2;
+    bluePtr = pal + 2;
     out(0x3c9,pal[1]);
     pal = pal + 3;
-    out(0x3c9,*puVar1);
-    iVar2 = iVar2 + -1;
-  } while (iVar2 != 0);
-  return *puVar1;
+    out(0x3c9,*bluePtr);
+    entries = entries + -1;
+  } while (entries != 0);
+  return *bluePtr;
 }
 
 
@@ -1054,26 +1054,26 @@ void __cdecl16far digPreformatSound(void)
 bool __cdecl16far digIsInstalled(void)
 
 {
-  code *pcVar1;
-  bool bVar2;
-  int iVar3;
+  code *swiTarget;         /* what swi(0x66) hands back to call */
+  bool installed;          /* the answer this returns */
+  int entryAddr;           /* DriverEntry's offset, then the SWI result */
   
-  iVar3 = (int)DriverEntry;
-  if (iVar3 == 0) {
+  entryAddr = (int)DriverEntry;
+  if (entryAddr == 0) {
 return_false:
-    bVar2 = false;
+    installed = false;
   }
   else {
-    if ((*(int *)(iVar3 + -6) == 0x494d) && (*(int *)(iVar3 + -4) == 0x4944)) {
-      pcVar1 = (code *)swi(0x66);
-      iVar3 = (*pcVar1)(0x2410);
-      if (iVar3 == 0) goto return_false;
+    if ((*(int *)(entryAddr + -6) == 0x494d) && (*(int *)(entryAddr + -4) == 0x4944)) {
+      swiTarget = (code *)swi(0x66);
+      entryAddr = (*swiTarget)(0x2410);
+      if (entryAddr == 0) goto return_false;
     }
-    else if ((*(int *)(iVar3 + -6) != 0x454b) || (*(int *)(iVar3 + -4) != 0x4e52))
+    else if ((*(int *)(entryAddr + -6) != 0x454b) || (*(int *)(entryAddr + -4) != 0x4e52))
     goto return_false;
-    bVar2 = true;
+    installed = true;
   }
-  return bVar2;
+  return installed;
 }
 
 
@@ -1153,17 +1153,17 @@ void __cdecl16far midGetSequenceStatus(void)
 bool __cdecl16far midIsLoaded(void)
 
 {
-  bool bVar1;
-  int iVar2;
+  bool loaded;             /* the answer this returns */
+  int entryAddr;           /* DriverEntry's offset */
   
-  iVar2 = (int)DriverEntry;
-  if (((iVar2 == 0) || (*(int *)(iVar2 + -6) != 0x494d)) || (*(int *)(iVar2 + -4) != 0x4944)) {
-    bVar1 = false;
+  entryAddr = (int)DriverEntry;
+  if (((entryAddr == 0) || (*(int *)(entryAddr + -6) != 0x494d)) || (*(int *)(entryAddr + -4) != 0x4944)) {
+    loaded = false;
   }
   else {
-    bVar1 = true;
+    loaded = true;
   }
-  return bVar1;
+  return loaded;
 }
 
 
@@ -1741,14 +1741,14 @@ void __cdecl16far driver_copyWords(far_t src,far_t dst,uint16_t count)
 void __cdecl16far driver_zeroWords(far_t dst,uint16_t count)
 
 {
-  uint16_t *puVar1;
-  uint16_t *puVar2;
+  uint16_t *cur;            /* the word being cleared */
+  uint16_t *p;              /* running destination pointer */
   
-  puVar2 = (uint16_t *)dst.ofs;
+  p = (uint16_t *)dst.ofs;
   for (; count != 0; count = count - 1) {
-    puVar1 = puVar2;
-    puVar2 = puVar2 + 1;
-    *puVar1 = 0;
+    cur = p;
+    p = p + 1;
+    *cur = 0;
   }
   return;
 }
