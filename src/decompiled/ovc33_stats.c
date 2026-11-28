@@ -881,13 +881,13 @@ char * __cdecl16far stats_readyStatusText(byte agntIndex,char *text)
 void __cdecl16far stats_usesEntityCount(char partyIndex)
 
 {
-  byte *pbVar1;
-  uint uVar2;
+  byte *flagBytePtr;       /* &Entities[i].base + 0x33, bit 2 cleared */
+  uint i;                  /* entity index */
   
-  for (uVar2 = 0; uVar2 < EntityCount; uVar2 = uVar2 + 1) {
-    if (*(char *)((int)&(Entities)[uVar2].base.entity + 3) == partyIndex) {
-      pbVar1 = (byte *)((uint8_t *)&(Entities)[uVar2] + 0x33);
-      *pbVar1 = *pbVar1 & 0xfb;
+  for (i = 0; i < EntityCount; i = i + 1) {
+    if (*(char *)((int)&(Entities)[i].base.entity + 3) == partyIndex) {
+      flagBytePtr = (byte *)((uint8_t *)&(Entities)[i] + 0x33);
+      *flagBytePtr = *flagBytePtr & 0xfb;
     }
   }
   return;
@@ -1104,20 +1104,20 @@ void __cdecl16far stats_calledAwayNotice(byte agntIndex)
 undefined1 __cdecl16far stats_nextAgentByOwner(byte agntIndex)
 
 {
-  int iVar1;
-  uint uVar2;
-  undefined1 uStack_3;
+  int i;                   /* agent index */
+  uint bestOwner;          /* smallest owner index above the given agent's */
+  undefined1 found;        /* the agent found, 0xff when none */
   
-  uStack_3 = 0xff;
-  uVar2 = 0x7fff;
-  for (iVar1 = 0; iVar1 < (int)(uint)AgntCount; iVar1 = iVar1 + 1) {
-    if ((Agnts[agntIndex].owner < Agnts[iVar1].owner) &&
-       (Agnts[iVar1].owner < uVar2)) {
-      uVar2 = Agnts[iVar1].owner;
-      uStack_3 = (undefined1)iVar1;
+  found = 0xff;
+  bestOwner = 0x7fff;
+  for (i = 0; i < (int)(uint)AgntCount; i = i + 1) {
+    if ((Agnts[agntIndex].owner < Agnts[i].owner) &&
+       (Agnts[i].owner < bestOwner)) {
+      bestOwner = Agnts[i].owner;
+      found = (undefined1)i;
     }
   }
-  return uStack_3;
+  return found;
 }
 
 
@@ -1129,20 +1129,20 @@ undefined1 __cdecl16far stats_nextAgentByOwner(byte agntIndex)
 undefined1 __cdecl16far stats_prevAgentByOwner(byte agntIndex)
 
 {
-  int iVar1;
-  int iVar2;
-  undefined1 uStack_3;
+  int i;                   /* agent index */
+  int bestOwner;           /* largest owner index below the given agent's */
+  undefined1 found;        /* the agent found, 0xff when none */
   
-  uStack_3 = 0xff;
-  iVar2 = -1;
-  for (iVar1 = 0; iVar1 < (int)(uint)AgntCount; iVar1 = iVar1 + 1) {
-    if ((Agnts[iVar1].owner < Agnts[agntIndex].owner) &&
-       (iVar2 < Agnts[iVar1].owner)) {
-      iVar2 = Agnts[iVar1].owner;
-      uStack_3 = (undefined1)iVar1;
+  found = 0xff;
+  bestOwner = -1;
+  for (i = 0; i < (int)(uint)AgntCount; i = i + 1) {
+    if ((Agnts[i].owner < Agnts[agntIndex].owner) &&
+       (bestOwner < Agnts[i].owner)) {
+      bestOwner = Agnts[i].owner;
+      found = (undefined1)i;
     }
   }
-  return uStack_3;
+  return found;
 }
 
 

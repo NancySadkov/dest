@@ -23829,3 +23829,40 @@ already made for `in_DX` in the log.
 
 Four functions now read as ordinary C with no Ghidra slot names; the builds and all three runtime
 dumps confirm the renaming changed nothing but identifiers.
+
+
+## Renaming batch 2 in `ovc33_stats.c`: grep 9,718 -> 9,669
+
+Same rule as before - only slots with one provable role, or ones that split cleanly into two.
+
+**`stats_nextAgentByOwner` (6386:1997) - 17 hits.** The loop index, the running comparison key, and
+the result byte:
+
+    iVar1   -> i          agent index
+    uVar2   -> bestOwner  smallest owner index above the given agent's (seeded 0x7fff)
+    uStack_3-> found      the agent found, 0xff when none
+
+**`stats_prevAgentByOwner` (6386:1a19) - 17 hits.** Identical shape, mirrored:
+
+    iVar2   -> bestOwner  largest owner index below the given agent's (seeded -1)
+
+**`stats_usesEntityCount` (6386:1353) - 11 hits.**
+
+    pbVar1  -> flagBytePtr   &Entities[i].base + 0x33, whose bit 2 the function clears
+    uVar2   -> i             entity index
+
+**Deliberately skipped:** `agntCopyNthField` (6386:02db, 21 hits) and `drawString` / `at` - their
+bodies are still decompiler-shaped, carrying packed `CONCAT11(in_stack_00000007,filed_index)` pairs
+and aliased stack slots whose roles change from line to line. Naming those would dress up code that
+needs a rewrite first, which is the one thing I have consistently refused to do; the same applies to
+`drawAgntStats` (203 hits / 15 slots) and `at` (169 / 34).
+
+## Measured (HEAD ef68850b -> this commit)
+
+    grep_checks          9,718 -> 9,669   (-49; -129 across this turn, from 9,798)
+    REBUILT.EXE          447,922 (unchanged)
+    build 65/65, LINK.LOG 0 errors
+    compare_state        identical 734 / 7 different / 889 missing (unchanged)
+    diff_dgroup          288/1,805 matched (unchanged)
+    compare_runtime      280 identical / 11 different at entry, init_game and key (unchanged)
+    structural_deficits  6 entries, unchanged
