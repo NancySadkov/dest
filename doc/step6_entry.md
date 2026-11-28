@@ -23210,3 +23210,28 @@ correctly, just not at the original offset.
 
 `init_paths` runs inside `init_game`, so all three runtime sample points (main entry, init_game, key)
 exercise the rewritten body - the unchanged 280/11 confirms it executes without fault.
+
+
+## stExit: the exit path now restores the directory init_paths saved (3168:00f4)
+
+The same buffer regression had a second site. `stExit` (3168:0000) ends with
+
+    3168:00f4  push 0x280        ; DGROUP
+    3168:00f7  push 0x8c28       ; GOriginalDir
+    3168:00fa  lcall 0x130,0x39  ; chpath
+
+and the tree had it as `ovr_chpath((char *)"",0x2410)` - a chdir to offset 0 of the link-time
+paragraph, i.e. a different directory entirely. With `GOriginalDir` restored it is what the image
+says: `ovr_chpath((char *)GOriginalDir,(uint16_t)_DS)`.
+
+This was the last place in the tree that used a string literal as a **write destination**
+(`(char *)""` handed to a function that stores through it): the count is now 0.
+
+## Measured (HEAD d10cab11 -> this commit)
+
+    grep_checks          9,798 (unchanged)
+    REBUILT.EXE          447,906
+    build 65/65, LINK.LOG 0 errors
+    compare_state        identical 734 / 7 different / 889 missing (unchanged)
+    diff_dgroup          288/1,805 matched (unchanged)
+    compare_runtime      280 identical / 11 different (unchanged, all three sample points)
