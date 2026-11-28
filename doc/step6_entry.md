@@ -22685,3 +22685,22 @@ missing. Both types now have their own arm with the two branches and a compute6 
 `7e7c:0b9c` has left the `|delta| >= 20` table. Remaining 16 calls: the abbreviated argument lists in
 five arms (fmVsprintf 5, usesStshRealloc 2, strcpy 9) plus the three single-call inner guards and the
 two unnameable sites.
+
+
+## 7e7c:0b9c: compute8 evaluated per menu entry (census 171 -> 172)
+
+The image calls ovc45_compute8 twice - once for the Repair entry (0x20ea) and once for the Upgrade
+entry (0x2170) - while my menu body evaluated it once for both. Split accordingly.
+
+## Measured (HEAD 977eb0f0 -> this commit)
+
+    screen_calls     7e7c:0b9c  C 171 -> 172  (image 187), delta -16 -> -15
+    grep_checks      11,516 (unchanged)
+    REBUILT.EXE      467,548 -> 467,580
+    build 65/65, LINK.LOG 0 errors
+    compare_state    1,628 matched / 0 different / missing 2
+    diff_dgroup      1,639/1,805 matched, 5 layout runs
+    compare_runtime  1,692 matched / 1,683 identical / 9 different
+
+Remaining 15: strcpy x4, fmVsprintf x1, compute6 x1, costOrIncomeLabel x1, ovc28_compute2 x1,
+createConstrFar x1 and the unnameable 1f8,2a x2 / 1a8,2a x3-class sites.

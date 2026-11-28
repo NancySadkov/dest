@@ -814,6 +814,8 @@ void constrct_buildInfoText(int x,byte far *flag,int entityIdx,int arg4,int arg5
           n++;
         }
       }
+      /* The image calls compute8 twice - once for the Repair entry (0x20ea) and once for the
+         Upgrade entry (0x2170) - so it is evaluated per entry, not once for both. */
       if (ovr_ovc45_compute8(GUnits[unitIdx].unitType) != 0) {
         if (GUnits[unitIdx].level < 8) {
           codes[n] = 2;
@@ -826,6 +828,8 @@ void constrct_buildInfoText(int x,byte far *flag,int entityIdx,int arg4,int arg5
             strcat(outBuf,res);
           }
         }
+      }
+      if (ovr_ovc45_compute8(GUnits[unitIdx].unitType) != 0) {
         if (bld->halfWidth != 0) {
           codes[n] = 3;
           list[n].seg = (uint16_t)_DS;
