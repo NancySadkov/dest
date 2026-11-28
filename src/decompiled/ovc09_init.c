@@ -582,7 +582,11 @@ void __cdecl16far init_textFilename(void)
         }
       }
       else if (h > 0x3f) {
-        if ((uint16_t)ovr_randBelow(4) == 3 && constr_usesGMapFlags((int)row,(int)col) != 0) {
+        /* 0x113e..0x1180: three tests in sequence - randBelow(4) == 3, the placement check,
+           then randBelow(2) != 0.  The third test was missing from this body. */
+        if (((uint16_t)ovr_randBelow(4) == 3) &&
+            (constr_usesGMapFlags((int)row,(int)col) != 0) &&
+            ((uint16_t)ovr_randBelow(2) != 0)) {
           GUnitGrid[col][row] = (short)((uint16_t)ovr_randBelow(9) + 0x67);
         }
       }

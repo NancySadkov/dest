@@ -23689,3 +23689,45 @@ Analysis only; no code or data changed.
     grep_checks 9,798 · build 65/65 · LINK.LOG 0 errors · REBUILT.EXE 447,890
     compare_state 734 / 7 / 889 · diff_dgroup 288/1,805
     compare_runtime 280 identical / 11 different at all three sample points
+
+
+## `3381:08dc`: one real gap fixed (the missing `randBelow(2)` test), and the rest explained
+
+The grid section's `h > 0x3f` arm is a three-test chain in the image:
+
+    0x113e  cmp ax,3 / je            if (randBelow(4) != 3) next
+    0x1149  constr_usesGMapFlags     if (== 0) next
+    0x115a  push 2; randBelow(2)     if (== 0) next          <-- absent from the body
+    0x116b  push 9; randBelow(9)     GUnitGrid = randBelow(9) + 0x67
+
+The third test was missing, so this body both drew from the RNG one time fewer and placed buildings
+at a different rate. Added; `3381:08dc` goes 48/60 -> 49/60.
+
+**Where the other eleven sites are.** Re-running the argument multiset after the fix leaves
+`16 x3, 2 x2, 8 x3, 9 x1, 11 x1, 17 x1` plus the register-pushed pair. Those are exactly the
+second copy of the height-profile loop:
+
+    first  copy (0x08ef..0x0b00): 10, 2, 8, 16, 2, 17, 8, 11, 16, 8, 9
+    second copy (0x0c3d..0x0d3b):     16, 16,  2, 17, 8, 11, 16, 8, 9
+
+The image emits the row generator twice, once per parity - the guards prove it (`si == 0` versus
+`si == 0x93`), and the index bases differ by exactly one column (`[bp+si-0xa3]`/`[bp+si-0xa2]` in the
+first copy, `[bp+si-0xa1]`/`[bp+si-0xa2]` in the second). Those `-0xa1/-0xa2/-0xa3` are **not three
+arrays**: with the buffer seated at `bp-0xa3` they are `profile[si]`, `profile[si+1]` and
+`profile[si+2]`, so the second copy compares the cursor with its neighbour in the reverse traversal -
+which is what the body's `nb = col + d` expresses with `d = (row & 1) ? -1 : 1`.
+
+So ten of the eleven are a duplicated-loop shape difference, of the same class as `6ffe:009b` and
+`2d63:04b7`, and are *not* to be "fixed" by splitting the loop. The eleventh is the second grid arm
+at `0x12df` (`if (placeable && randBelow(2) == 0) GUnitGrid = randBelow(9) + 0x67`), whose `h`-range
+I have not yet pinned to the dispatch - that is the single remaining item in this function.
+
+## Measured (HEAD 91cb024a -> this commit)
+
+    structural_deficits  3381:08dc  48/60 -> 49/60  (delta -12 -> -11)
+    grep_checks          9,798 (unchanged)
+    REBUILT.EXE          447,890 -> 447,906
+    build 65/65, LINK.LOG 0 errors
+    compare_state        identical 734 / 7 different / 889 missing (unchanged)
+    diff_dgroup          288/1,805 matched (unchanged)
+    compare_runtime      280 identical / 11 different at entry, init_game and key (unchanged)
