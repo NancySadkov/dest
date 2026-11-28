@@ -23866,3 +23866,47 @@ needs a rewrite first, which is the one thing I have consistently refused to do;
     diff_dgroup          288/1,805 matched (unchanged)
     compare_runtime      280 identical / 11 different at entry, init_game and key (unchanged)
     structural_deficits  6 entries, unchanged
+
+
+## Renaming batch 3: grep 9,669 -> 9,570 (-99)
+
+**`ovc33_stats.c`**
+
+    stats_drawPortrait (6386:01a4)   paVar2 -> g ; in_DX -> dxIn ; uVar4 -> dxHigh ;
+                                     in_stack_0000000c -> paletteSeg   (the palette far pointer's
+                                     segment, which the image takes from [bp+0xc])
+    agntGetWeaponName (6386:0367)    uVar1 -> fieldPtr ; unaff_BP -> srcSeg ;
+                                     in_stack_00000004 -> dstSeg
+    stats_compute4    (6386:05d3)    cVar3 -> modifier ; in_stack_00000006 -> arg2, which is the
+                                     parameter the prototype already declared but never used
+    drawString        (6386:24c2)    uVar1 -> blitted ; sVar2 -> textLen ; uStack_a -> startY ;
+                                     iStack_6 -> barY (stored by the screen-mode switch, never read)
+
+**`ovc45_unitinfo.c`**
+
+    ovc45_compute3    (77eb:09c1)    iVar1 carried TWO roles - the sheet offset, then the LUDIV
+                                     result in the same slot.  Split into `sheetOfs` and
+                                     `converted`; iVar3 -> heldLo.
+    ovc45_usesAlignUp4 (77eb:01bb)   uVar3 was both the loop index and the returned value; split
+                                     into `i` and the early-return form.  uVar1 -> alignedX,
+                                     in_stack_0000000a -> entityIndexSeg, bStack_3 -> bestSlot.
+    ovc45_cellBelowBlocked (77eb:0742) psVar1 -> flagPtr ; bVar3 -> axHigh ; iVar2 -> result.
+
+Both split slots are the same class of defect as `ovc22_usesRandBelow2`'s `uVar7`: one image slot
+reused for two roles, where a single name would be a lie.
+
+**Skipped, and why:** `agntCopyNthField`, `drawString`'s neighbours `drawAgntStats` / `at`, and the
+`*(uint16_t *)((uint8_t *)&(dst) + 2)` / `CONCAT22(...)` pointer-splitting bodies. Their slots change
+role line to line, so naming them would document a falsehood.
+
+## Measured (HEAD be62ba4a -> this commit)
+
+    grep_checks          9,669 -> 9,570   (-99; -228 across the two rename turns, from 9,798)
+      ovc45_unitinfo.c   [iusbc]Var 309 -> 262
+      ovc33_stats.c      [iusbc]Var 359 -> 330
+    REBUILT.EXE          447,922 (unchanged)
+    build 65/65, LINK.LOG 0 errors
+    compare_state        identical 734 / 7 different / 889 missing (unchanged)
+    diff_dgroup          288/1,805 matched (unchanged)
+    compare_runtime      280 identical / 11 different at entry, init_game and key (unchanged)
+    structural_deficits  6 entries, unchanged

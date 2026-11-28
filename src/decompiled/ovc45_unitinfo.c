@@ -61,31 +61,28 @@ short __cdecl16far ovc45_getUnitIndex(int x,int y)
 uint __cdecl16far ovc45_usesAlignUp4(int slotMin,int x,uint16_t y,uint *entityIndexOut)
 
 {
-  uint uVar1;
-  uint uVar3;
-  uint *in_stack_0000000a;
-  byte bStack_3;
+  uint alignedX;           /* alignUp4 of the entity's x */
+  uint i;                  /* entity index */
+  uint *entityIndexSeg;    /* segment half of entityIndexOut */
+  byte bestSlot;           /* smallest slot above slotMin, 0xff when none */
   
-  bStack_3 = 0xff;
-  for (uVar3 = 0; uVar3 < EntityCount; uVar3 = uVar3 + 1) {
-    uVar1 = ovr_alignUp4((Entities)[uVar3].base.x,0,0);
-    if (uVar1 == x) {
-      if (((((Entities)[uVar3].base.y == y) &&
-           (AgntGs[(uint)(Entities)[uVar3].base.gindex].ai == '\0')) &&
-          (slotMin < (int)(uint)AGNT_FIELD(&(Entities)[uVar3], base.entity, 3))) &&
-         (AGNT_FIELD(&(Entities)[uVar3], base.entity, 3) < bStack_3)) {
-        bStack_3 = AGNT_FIELD(&(Entities)[uVar3], base.entity, 3);
-        *(uint *)CONCAT22((uint *)entityIndexOut,in_stack_0000000a) = uVar3;
+  bestSlot = 0xff;
+  for (i = 0; i < EntityCount; i = i + 1) {
+    alignedX = ovr_alignUp4((Entities)[i].base.x,0,0);
+    if (alignedX == x) {
+      if (((((Entities)[i].base.y == y) &&
+           (AgntGs[(uint)(Entities)[i].base.gindex].ai == '\0')) &&
+          (slotMin < (int)(uint)AGNT_FIELD(&(Entities)[i], base.entity, 3))) &&
+         (AGNT_FIELD(&(Entities)[i], base.entity, 3) < bestSlot)) {
+        bestSlot = AGNT_FIELD(&(Entities)[i], base.entity, 3);
+        *(uint *)CONCAT22((uint *)entityIndexOut,entityIndexSeg) = i;
       }
     }
   }
-  if (bStack_3 == 0xff) {
-    uVar3 = 0xffff;
+  if (bestSlot == 0xff) {
+    return 0xffff;
   }
-  else {
-    uVar3 = (uint)bStack_3;
-  }
-  return uVar3;
+  return (uint)bestSlot;
 }
 
 
@@ -293,19 +290,19 @@ bool __cdecl16far ovc45_usesGMapFlags2(int x,int y)
 int __cdecl16far ovc45_cellBelowBlocked(int x,int y)
 
 {
-  short *psVar1;
-  byte bVar3;
-  int iVar2;
+  short *flagPtr;          /* &GMapFlags[y][x], the cell below is at +0x94 */
+  byte axHigh;             /* high byte of the pointer value, as the image leaves it in AH */
+  int result;
   
-  psVar1 = (*(short (*) [60] [148])GMapFlags)[y] + x;
-  bVar3 = (byte)((uint)psVar1 >> 8);
-  if ((psVar1[0x94] & 3U) == 0) {
-    iVar2 = (uint)bVar3 << 8;
+  flagPtr = (*(short (*) [60] [148])GMapFlags)[y] + x;
+  axHigh = (byte)((uint)flagPtr >> 8);
+  if ((flagPtr[0x94] & 3U) == 0) {
+    result = (uint)axHigh << 8;
   }
   else {
-    iVar2 = CONCAT11(bVar3,1);
+    result = CONCAT11(axHigh,1);
   }
-  return iVar2;
+  return result;
 }
 
 
@@ -431,13 +428,14 @@ int __cdecl16far ovc45_rankPercent(byte partyIndex)
 int __cdecl16far ovc45_compute3(byte partyIndex)
 
 {
-  int iVar1;
-  int iVar3;
+  int sheetOfs;            /* offset of the party's leader sheet */
+  int heldLo;              /* the sheet's 32-bit holding, low word */
+  int converted;           /* what ovc45_usesLDIV_at_ returns for it */
   
-  iVar1 = (int)(uint32_t)GLeaderSheets[partyIndex];
-  iVar3 = *(int *)(iVar1 + 0x56);
-  iVar1 = ovc45_usesLDIV_at_(partyIndex,iVar3,*(uint16_t *)(iVar1 + 0x58));
-  return iVar3 + iVar1;
+  sheetOfs = (int)(uint32_t)GLeaderSheets[partyIndex];
+  heldLo = *(int *)(sheetOfs + 0x56);
+  converted = ovc45_usesLDIV_at_(partyIndex,heldLo,*(uint16_t *)(sheetOfs + 0x58));
+  return heldLo + converted;
 }
 
 

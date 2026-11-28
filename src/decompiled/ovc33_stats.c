@@ -131,36 +131,36 @@ void __cdecl16far stats_drawPortrait(agntG_t far *gdata,byte portraitIndex,int p
   far_t handle;
   far_t handle_00;
   stg_tmp_t *gfxRec;
-  uint16_t in_DX;
-  agntG_t far *paVar2;
-  uint16_t in_stack_0000000c;
+  uint16_t dxIn;           /* DX on entry, as the image's caller left it */
+  agntG_t far *g;
+  uint16_t paletteSeg;     /* segment half of the palette far pointer ([bp+0xc]) */
   far_t gfx;
-  undefined1 uVar4;
+  undefined1 dxHigh;       /* the high byte of dxIn, used to rebuild a far pointer */
   
   handle.seg = talkwin9Cut5Seg;
   handle.ofs = talkwin9Cut5Ofs;
   gfxRec = ovr_stshLoadGfx(handle);
   ovr_calcSeasonPalette
-            (gfxRec->cmap,in_DX,(uint8_t *)palette,in_stack_0000000c,(char)in_DX,(char)palette);
-  paVar2 = (agntG_t *)gdata;
-  if (((paVar2->prts + portraitIndex)->ofs != 0 || paVar2->prts[portraitIndex].seg != 0) &&
-     ((paVar2->prtpals + portraitIndex)->ofs != 0 || paVar2->prtpals[portraitIndex].seg != 0)) {
-    handle_00.seg = paVar2->prtpals[portraitIndex].seg;
-    handle_00.ofs = (paVar2->prtpals + portraitIndex)->ofs;
+            (gfxRec->cmap,dxIn,(uint8_t *)palette,paletteSeg,(char)dxIn,(char)palette);
+  g = (agntG_t *)gdata;
+  if (((g->prts + portraitIndex)->ofs != 0 || g->prts[portraitIndex].seg != 0) &&
+     ((g->prtpals + portraitIndex)->ofs != 0 || g->prtpals[portraitIndex].seg != 0)) {
+    handle_00.seg = g->prtpals[portraitIndex].seg;
+    handle_00.ofs = (g->prtpals + portraitIndex)->ofs;
     gfxRec = ovr_stshLoadGfx(handle_00);
-    uVar4 = (undefined1)(in_DX >> 8);
-    _fmemmove((char far *)MK_FP(in_stack_0000000c,(char *)(palette + 3)),
-           (char *)CONCAT13(uVar4,CONCAT12((char)in_DX,gfxRec->cmap + 3)),0xed);
-    _fmemmove((char far *)MK_FP(in_stack_0000000c,(char *)(palette + 0x1e0)),
-           (char *)CONCAT13(uVar4,CONCAT12((char)in_DX,gfxRec->cmap + 0x1e0)),0x90);
+    dxHigh = (undefined1)(dxIn >> 8);
+    _fmemmove((char far *)MK_FP(paletteSeg,(char *)(palette + 3)),
+           (char *)CONCAT13(dxHigh,CONCAT12((char)dxIn,gfxRec->cmap + 3)),0xed);
+    _fmemmove((char far *)MK_FP(paletteSeg,(char *)(palette + 0x1e0)),
+           (char *)CONCAT13(dxHigh,CONCAT12((char)dxIn,gfxRec->cmap + 0x1e0)),0x90);
   }
   if (GameRunning == false) {
-    ovr_vgaSetPalette8bit((uint8_t *)palette,in_stack_0000000c);
+    ovr_vgaSetPalette8bit((uint8_t *)palette,paletteSeg);
   }
-  if ((paVar2->prts + portraitIndex)->ofs != 0 || paVar2->prts[portraitIndex].seg != 0) {
+  if ((g->prts + portraitIndex)->ofs != 0 || g->prts[portraitIndex].seg != 0) {
     ovr_driver_fillRect(0xf,9,0x83,0x72,0xec,0xa000,0x72,0xec,0,0,0);
-    gfx.seg = paVar2->prts[portraitIndex].seg;
-    gfx.ofs = (paVar2->prts + portraitIndex)->ofs;
+    gfx.seg = g->prts[portraitIndex].seg;
+    gfx.ofs = (g->prts + portraitIndex)->ofs;
     ovr_blitGfxRect(gfx,16,10,(brect_t *)(BlitRects + 1),0x10,true,0x10,0x10,0,0,0,0);
   }
   return;
@@ -221,36 +221,36 @@ char * __cdecl16far
 agntGetWeaponName(char *dst,uint8_t atype,bool magical,uint8_t field_index,int32_t agent)
 
 {
-  uint32_t uVar1;
+  uint32_t fieldPtr;       /* the agent's field record, read at packed+0x1d */
   uint16_t tofs;
-  uint16_t unaff_BP;
-  char *in_stack_00000004;
+  uint16_t srcSeg;         /* segment half of the source packed string */
+  char *dstSeg;            /* segment half of the destination ([bp+4]) */
   undefined1 in_stack_0000000f;
   
   if (*(int *)((int)&AgntGs[0].wpn_name + (uint)(*(uint8_t *)((uint8_t *)&(dst) + 2)) * 0x95) == 0 &&
       *(int *)((int)&AgntGs[0].wpn_name + 2 + (uint)(*(uint8_t *)((uint8_t *)&(dst) + 2)) * 0x95) == 0) {
     if (atype == 0x0) {
-      strcpy((char *)CONCAT22((char *)dst,in_stack_00000004),"normal weaponry");
+      strcpy((char *)CONCAT22((char *)dst,dstSeg),"normal weaponry");
     }
     else {
-      strcpy((char *)CONCAT22((char *)dst,in_stack_00000004),"weaponry");
+      strcpy((char *)CONCAT22((char *)dst,dstSeg),"weaponry");
     }
   }
   else {
-    uVar1 = *(uint32_t *)(CONCAT11(in_stack_0000000f,field_index) + 0x1d);
-    if ((*(uint *)((int)uVar1 + 0x40) & 0x4000) == 0) {
+    fieldPtr = *(uint32_t *)(CONCAT11(in_stack_0000000f,field_index) + 0x1d);
+    if ((*(uint *)((int)fieldPtr + 0x40) & 0x4000) == 0) {
       tofs = (uint)(*(uint8_t *)((uint8_t *)&(dst) + 2)) * 0x95;
-      agntCopyNthField((uint8_t)in_stack_00000004,
+      agntCopyNthField((uint8_t)dstSeg,
                        (char *)CONCAT22(*(uint16_t *)((int)&AgntGs[0].wpn_name + tofs),(char *)dst
                                        ),
-                       (char *)CONCAT22(unaff_BP,(char *)*(uint16_t *)
+                       (char *)CONCAT22(srcSeg,(char *)*(uint16_t *)
                                                           ((int)&AgntGs[0].wpn_name + 2 + tofs)));
     }
     else {
-      strcpy((char *)CONCAT22((char *)dst,in_stack_00000004),"short sword");
+      strcpy((char *)CONCAT22((char *)dst,dstSeg),"short sword");
     }
   }
-  return in_stack_00000004;
+  return dstSeg;
 }
 
 
@@ -346,21 +346,20 @@ char __cdecl16far stats_compute4(agnt_t far *agnt,uint16_t arg2)
 {
   byte gindexVal;
   byte compute10Val;
-  char cVar3;
+  char modifier;           /* the level/ability modifier this returns */
   uint16_t abilityMod;
-  uint16_t in_stack_00000006;
   
   gindexVal = agnt->gindex;
   if (AgntGs[(uint)gindexVal].shortName[3] == -1) {
-    cVar3 = AgntGs[(uint)gindexVal].shortName[4];
+    modifier = AgntGs[(uint)gindexVal].shortName[4];
   }
   else {
-    compute10Val = ovr_agnt_compute10(agnt,in_stack_00000006);
-    cVar3 = AgntGs[(uint)gindexVal].shortName[4] - compute10Val;
+    compute10Val = ovr_agnt_compute10(agnt,arg2);
+    modifier = AgntGs[(uint)gindexVal].shortName[4] - compute10Val;
     abilityMod = ovr_agnt_abilityModifier(*(uint8_t far *)((uint8_t far *)agnt + 0x1a),3);
-    cVar3 = cVar3 - (char)abilityMod;
+    modifier = modifier - (char)abilityMod;
   }
-  return cVar3;
+  return modifier;
 }
 
 
@@ -1645,25 +1644,25 @@ void __cdecl16far stats_openCastlePanel(void)
 void __cdecl16far drawString(char *text,uint16_t widths,uint16_t arg3)
 
 {
-  uint uVar1;
-  size_t sVar2;
+  uint blitted;            /* characters the blit consumed */
+  size_t textLen;          /* strlen of the remaining text */
   far_t gfx;
   uint8_t rect;
-  uint16_t uStack_a;
-  int16_t iStack_6;
+  uint16_t startY;         /* initial TextBlitY, from the screen mode */
+  int16_t barY;            /* set by the screen-mode switch; not read by the body */
   
   _fmemmove((char far *)MK_FP(_SS,&rect),(char *)(BlitRects + 1),10);
   if (ScreenMode == '\x01') {
-    uStack_a = 0x9c;
-    iStack_6 = 190;
+    startY = 0x9c;
+    barY = 190;
   }
   else {
-    uStack_a = 0x75;
+    startY = 0x75;
     if (GameRunning == false) {
-      iStack_6 = 178;
+      barY = 178;
     }
     else {
-      iStack_6 = 150;
+      barY = 150;
     }
   }
   rect = 19;
@@ -1672,14 +1671,14 @@ void __cdecl16far drawString(char *text,uint16_t widths,uint16_t arg3)
   gfx.seg = talkwin9Cut4Seg;
   gfx.ofs = talkwin9Cut4Ofs;
   ovr_blitGfxRect(gfx,0,0,(brect_t *)&rect,(uint8_t)_SS,0,0,0,0,0,0,0);
-  TextBlitY = uStack_a;
+  TextBlitY = startY;
   while( true ) {
     TextBlitX = 0x13;
-    uVar1 = ovr_blitText(text,(byte *)CONCAT22(Font03.ofs,widths),Font03.seg,0xd7,(char)Font03.seg,
+    blitted = ovr_blitText(text,(byte *)CONCAT22(Font03.ofs,widths),Font03.seg,0xd7,(char)Font03.seg,
                          0xd7,0xed);
-    sVar2 = strlen((char *)CONCAT22(widths,text));
-    if (sVar2 <= uVar1) break;
-    text = text + uVar1;
+    textLen = strlen((char *)CONCAT22(widths,text));
+    if (textLen <= blitted) break;
+    text = text + blitted;
     TextBlitY = TextBlitY + 0xb;
   }
   ovr_clean_ring_buffer();
