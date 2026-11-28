@@ -22754,3 +22754,38 @@ total is now dominated by Ghidra local names rather than data declarations.
 A first attempt broke the build with `extern` removals that were not restricted to the inlined names
 (`_ctype`, `__C0_ASM_CopyRight`, `promotionBandUsed`, `LevelBandMin` became undefined); the removal is
 now keyed to the declaration list only, and the build is green.
+
+
+## Renaming batch 1: stshRead (474a:008f) - 12 Ghidra locals named from their roles (grep -121)
+
+First batch of the local-name mass, in `ovc17_stash.c`. Every name is read off the code, not invented:
+
+    in_stack_00000004 -> resIndex    indexes StshPtrs / StshSizes / StshHandles
+    in_stack_00000006 -> dstHi       high word of the destination pointer (ovr_mkp argument)
+    in_stack_00000008 -> dstLo       low word of the destination pointer
+    in_stack_0000000a -> wantLo      low word of the remaining byte count
+    in_stack_0000000c -> wantHi      high word of the remaining byte count
+    unaff_DI          -> dstSeg      the destination segment register
+    pbuf              -> dstOfs      working copy of the destination offset
+    puVar1 / piVar2   -> readLo / readHi   the per-resource "bytes already read" lo/hi words
+    uVar3             -> wantTotal   the original remaining count (returned as a delta)
+    puVar4            -> mkpRes      result of ovr_mkp()
+    bVar7             -> carry       carry out of a 32-bit add
+
+## Measured (HEAD e6c8cd63 -> this commit)
+
+    grep_checks      10,057 -> 9,936    (-121, one function)
+    REBUILT.EXE      446,712 (unchanged)
+    build 65/65, LINK.LOG 0 errors
+    compare_state    292 matched / 7 different / missing 889 (unchanged)
+    diff_dgroup      288/1,805 matched (unchanged)
+    compare_runtime  280 identical / 11 different (unchanged)
+    screen_calls     unchanged
+
+Method note: `stshRead`'s body is still decompiler-shaped in places (`CARRY2`, `CONCAT22`,
+`(*(uint16_t *)((uint8_t *)&(StshPtrs[0]) + 2))`), so this batch fixes the names without pretending
+the body is finished. Renaming is safe to layer on either way.
+
+Rate: 121 hits per function-sized batch. At the same density the remaining 9,936 needs roughly 80
+batches of this size, or fewer if the larger functions (ovc22_classes 434, ovc33_stats 408,
+ovc45_unitinfo 309) are taken first.
