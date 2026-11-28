@@ -111,100 +111,101 @@ undefined1 __cdecl16far agnt_computeFrameExtents(agnt_t far *agnt,uint8_t *resul
 {
   uint8_t factionVal;
   uint16_t framesHi;
-  int iVar3;
+  int recOfs;               /* the frame record's offset, *sprEntry */
   bool compute4Flag;
-  int iVar5;
-  int *piVar6;
-  uint16_t in_stack_0000000a;
-  char cStack_e;
-  char cStack_d;
-  int iStack_c;
-  int iStack_a;
-  int iStack_8;
-  int iStack_6;
+  int framesSegDead;        /* sprEntry[1], stored and never read */
+  int row;                  /* rowIdx + laneIdx * laneStep, the grid row tested */
+  int *sprEntry;            /* &frames[frameIndex] */
+  uint16_t resultSeg;       /* the segment of the caller's result byte */
+  char laneStep;            /* -1 and 1: the two lanes a row is scanned in */
+  char colStep;             /* +1 or -1, the direction the column walks */
+  int colEnd;               /* the far column bound */
+  int colIdx;               /* the column being scanned, clamped to 0..0x68 */
+  int laneIdx;              /* 0 .. extents[2][2] >> 1 */
+  int rowIdx;               /* y >> 1, clamped to 0..9 */
   
   if ((int)agnt->y < 0x15) {
     factionVal = agnt->faction;
     framesHi = *(uint16_t *)((int)&agnt->frames + 2);
-    piVar6 = (int *)(*(int *)&agnt->frames + (uint)agnt->frameIndex * 4);
-    iVar5 = piVar6[1];
-    iVar3 = *piVar6;
-    iStack_6 = (int)agnt->y >> 1;
-    if (iStack_6 < 0) {
-      iStack_6 = 0;
+    sprEntry = (int *)(*(int *)&agnt->frames + (uint)agnt->frameIndex * 4);
+    framesSegDead = sprEntry[1];
+    recOfs = *sprEntry;
+    rowIdx = (int)agnt->y >> 1;
+    if (rowIdx < 0) {
+      rowIdx = 0;
     }
-    if (9 < iStack_6) {
-      iStack_6 = 9;
+    if (9 < rowIdx) {
+      rowIdx = 9;
     }
     if (agnt->level == 0x0) {
-      cStack_d = '\x01';
-      iStack_a = ((int)((int)(*(((agntG_t far *)agnt->gdata)->extents + 2))[0] + *(int *)(iVar3 + 0x17)
+      colStep = '\x01';
+      colIdx = ((int)((int)(*(((agntG_t far *)agnt->gdata)->extents + 2))[0] + *(int *)(recOfs + 0x17)
                        + ((agnt_t far *)CONCAT22((uint8_t *)result,agnt))->x) >> 1) + -1;
-      iStack_c = iStack_a +
+      colEnd = colIdx +
                  ((int)((agntG_t far *)agnt->gdata)->extents[2][1] -
                   (int)(*(((agntG_t far *)agnt->gdata)->extents + 2))[0] >> 1);
     }
     else {
-      cStack_d = -1;
-      iStack_a = ((int)((-*(int *)(iVar3 + 0x17) -
+      colStep = -1;
+      colIdx = ((int)((-*(int *)(recOfs + 0x17) -
                         (int)(*(((agntG_t far *)agnt->gdata)->extents + 2))[0]) +
                        ((agnt_t far *)CONCAT22((uint8_t *)result,agnt))->x) >> 1) + 1;
-      iStack_c = iStack_a -
+      colEnd = colIdx -
                  ((int)((agntG_t far *)agnt->gdata)->extents[2][1] -
                   (int)(*(((agntG_t far *)agnt->gdata)->extents + 2))[0] >> 1);
     }
-    if (iStack_a < 0) {
-      iStack_a = 0;
+    if (colIdx < 0) {
+      colIdx = 0;
     }
-    if (iStack_c < 0) {
-      iStack_c = 0;
+    if (colEnd < 0) {
+      colEnd = 0;
     }
-    if (0x68 < iStack_a) {
-      iStack_a = 0x68;
+    if (0x68 < colIdx) {
+      colIdx = 0x68;
     }
-    if (0x68 < iStack_c) {
-      iStack_c = 0x68;
+    if (0x68 < colEnd) {
+      colEnd = 0x68;
     }
     while( true ) {
-      for (iStack_8 = 0; iStack_8 <= (int)((agntG_t far *)agnt->gdata)->extents[2][2] >> 1;
-          iStack_8 = iStack_8 + 1) {
-        cStack_e = -1;
-        while (((cStack_e < '\x02' && (iStack_8 != 0)) || ((cStack_e == -1 && (iStack_8 == 0))))) {
-          iVar5 = iStack_6 + iStack_8 * cStack_e;
-          if ((-1 < iVar5) && (iVar5 < 10)) {
-            if ((AgntArrayA[iVar5][iStack_a] != '\0') &&
-               (((AgntArrayA[iVar5][iStack_a] <= AgntCount &&
-                 (Agnts[AgntArrayA[iVar5][iStack_a] - 1].faction !=
+      for (laneIdx = 0; laneIdx <= (int)((agntG_t far *)agnt->gdata)->extents[2][2] >> 1;
+          laneIdx = laneIdx + 1) {
+        laneStep = -1;
+        while (((laneStep < '\x02' && (laneIdx != 0)) || ((laneStep == -1 && (laneIdx == 0))))) {
+          row = rowIdx + laneIdx * laneStep;
+          if ((-1 < row) && (row < 10)) {
+            if ((AgntArrayA[row][colIdx] != '\0') &&
+               (((AgntArrayA[row][colIdx] <= AgntCount &&
+                 (Agnts[AgntArrayA[row][colIdx] - 1].faction !=
                   factionVal)) &&
-                (Agnts[AgntArrayA[iVar5][iStack_a] - 1].combatState == '\0')
+                (Agnts[AgntArrayA[row][colIdx] - 1].combatState == '\0')
                 ))) {
-              *(char *)CONCAT22(in_stack_0000000a,(*(uint16_t *)((uint8_t *)&(result) + 2))) =
-                   AgntArrayA[iVar5][iStack_a];
-              compute4Flag = agnt_compute4((char *)CONCAT22(in_stack_0000000a,(*(uint16_t *)((uint8_t *)&(result) + 2))));
+              *(char *)CONCAT22(resultSeg,(*(uint16_t *)((uint8_t *)&(result) + 2))) =
+                   AgntArrayA[row][colIdx];
+              compute4Flag = agnt_compute4((char *)CONCAT22(resultSeg,(*(uint16_t *)((uint8_t *)&(result) + 2))));
               if (compute4Flag) {
-                return *(char *)CONCAT22(in_stack_0000000a,(*(uint16_t *)((uint8_t *)&(result) + 2)));
+                return *(char *)CONCAT22(resultSeg,(*(uint16_t *)((uint8_t *)&(result) + 2)));
               }
             }
-            if (((AgntArrayB[iVar5][iStack_a] != '\0') &&
-                (AgntArrayB[iVar5][iStack_a] <= AgntCount)) &&
-               ((Agnts[AgntArrayB[iVar5][iStack_a] - 1].faction != factionVal
-                && (Agnts[AgntArrayB[iVar5][iStack_a] - 1].combatState ==
+            if (((AgntArrayB[row][colIdx] != '\0') &&
+                (AgntArrayB[row][colIdx] <= AgntCount)) &&
+               ((Agnts[AgntArrayB[row][colIdx] - 1].faction != factionVal
+                && (Agnts[AgntArrayB[row][colIdx] - 1].combatState ==
                     '\0')))) {
-              *(char *)CONCAT22(in_stack_0000000a,(*(uint16_t *)((uint8_t *)&(result) + 2))) =
-                   AgntArrayB[iVar5][iStack_a];
-              return *(char *)CONCAT22(in_stack_0000000a,(*(uint16_t *)((uint8_t *)&(result) + 2)));
+              *(char *)CONCAT22(resultSeg,(*(uint16_t *)((uint8_t *)&(result) + 2))) =
+                   AgntArrayB[row][colIdx];
+              return *(char *)CONCAT22(resultSeg,(*(uint16_t *)((uint8_t *)&(result) + 2)));
             }
           }
-          cStack_e = cStack_e + '\x02';
+          laneStep = laneStep + '\x02';
         }
       }
-      if (iStack_a == iStack_c) break;
-      iStack_a = iStack_a + cStack_d;
+      if (colIdx == colEnd) break;
+      colIdx = colIdx + colStep;
     }
-    *(char *)CONCAT22(in_stack_0000000a,(*(uint16_t *)((uint8_t *)&(result) + 2))) = '\0';
+    *(char *)CONCAT22(resultSeg,(*(uint16_t *)((uint8_t *)&(result) + 2))) = '\0';
   }
   else {
-    *(char *)CONCAT22(in_stack_0000000a,(*(uint16_t *)((uint8_t *)&(result) + 2))) = '\0';
+    *(char *)CONCAT22(resultSeg,(*(uint16_t *)((uint8_t *)&(result) + 2))) = '\0';
   }
   return 0;
 }

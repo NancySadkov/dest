@@ -25343,3 +25343,35 @@ were a straight deletion rather than a rename.
     diff_dgroup          288/1,805 matched (unchanged)
     compare_runtime      280 identical / 11 different at entry, init_game and key (unchanged)
     structural_deficits  two game bodies: 7e7c:0b9c (177/187), 77eb:0d61 (54/58)
+
+
+## `3b1d:00ce` (agnt_computeFrameExtents) cleared: 87 hits down to 0, grep 6,275 -> 6,184 (-91)
+
+The agent picker at a frame's extents - every slot is a single role in a small, fully readable body:
+
+    iStack_6 -> rowIdx     y >> 1, clamped to 0..9
+    iStack_a -> colIdx     the column being scanned, clamped to 0..0x68
+    iStack_c -> colEnd     the far column bound the walk stops at
+    cStack_d -> colStep    +1 or -1, the walk's direction
+    iStack_8 -> laneIdx    0 .. extents[2][2] >> 1
+    cStack_e -> laneStep   -1 and 1: the two lanes a row is scanned in
+    iVar5    -> framesSegDead  sprEntry[1], stored at 130 and never read
+                row            rowIdx + laneIdx * laneStep, the grid row tested
+    iVar3    -> recOfs     the frame record offset, *sprEntry
+    piVar6   -> sprEntry   &frames[frameIndex]
+    in_stack_0000000a -> resultSeg   the segment of the caller's result byte
+
+`resultSeg` is another **never-written** local: it is read seven times as the segment half of
+`CONCAT22(resultSeg, ...)` at 181..207 and assigned nowhere in the body. Named as the slot it is, with
+the gap in the comment - substituting a value would be a guess, exactly as with `uStack_16` in
+`ovc49_drawAgents` and `stgSeg2` in `stshInitAudioAssets`.
+
+## Measured (HEAD 9fc5256e -> this commit)
+
+    grep_checks          6,275 -> 6,184   (-91)
+    REBUILT.EXE          447,778 (unchanged size)
+    build 65/65, LINK.LOG 0 errors
+    compare_state        identical 734 / 7 different / 889 missing (unchanged)
+    diff_dgroup          288/1,805 matched (unchanged)
+    compare_runtime      280 identical / 11 different at entry, init_game and key (unchanged)
+    structural_deficits  two game bodies: 7e7c:0b9c (177/187), 77eb:0d61 (54/58)
