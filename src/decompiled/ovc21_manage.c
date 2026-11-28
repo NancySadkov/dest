@@ -1802,11 +1802,11 @@ manage_usesGUnitCount
           ,int far *gucD,int far *gucE,int far *gucF,int far *gucG)
 
 {
-  byte bVar1;
-  int iVar2;
-  int iVar4;
-  unit_t *puVar5;
-  uint uVar6;
+  byte bldType;            /* GRecords[i].reserved08, a building type */
+  int valueB;              /* the second value summed before the subtraction */
+  int valueA;              /* the first value summed */
+  unit_t *units;           /* a copy of GUnits */
+  uint unitIdx;            /* 0xf8..GUnitCount loop index */
   int *in_stack_00000018;
   int *in_stack_0000001c;
   int *in_stack_00000020;
@@ -1820,51 +1820,51 @@ manage_usesGUnitCount
   *in_stack_00000018 = 0;
   *in_stack_0000001c = 0;
   *in_stack_00000020 = 0;
-  uVar6 = 0xf8;
+  unitIdx = 0xf8;
   while( true ) {
-    if (GUnitCount <= uVar6) {
-      for (uVar6 = 0; uVar6 < GRecordCount; uVar6 = uVar6 + 1) {
-        if ((GRecords[uVar6].party == partyIndex) &&
-           (bVar1 = GRecords[uVar6].reserved08, BuildingTypes[bVar1].unitType == unitType))
+    if (GUnitCount <= unitIdx) {
+      for (unitIdx = 0; unitIdx < GRecordCount; unitIdx = unitIdx + 1) {
+        if ((GRecords[unitIdx].party == partyIndex) &&
+           (bldType = GRecords[unitIdx].reserved08, BuildingTypes[bldType].unitType == unitType))
         {
           *gucD = *gucD + 1;
-          if (BuildingTypes[bVar1].resource == '\x01') {
+          if (BuildingTypes[bldType].resource == '\x01') {
             *in_stack_00000018 = *in_stack_00000018 + 1;
           }
-          else if (BuildingTypes[bVar1].resource == '\x02') {
+          else if (BuildingTypes[bldType].resource == '\x02') {
             *in_stack_0000001c = *in_stack_0000001c + 1;
           }
-          else if (BuildingTypes[bVar1].resource == '\x03') {
+          else if (BuildingTypes[bldType].resource == '\x03') {
             *in_stack_00000020 = *in_stack_00000020 + 1;
           }
         }
       }
-      iVar4 = *in_stack_0000001c;
-      iVar2 = *in_stack_00000020;
+      valueA = *in_stack_0000001c;
+      valueB = *in_stack_00000020;
       *gucA = *gucA - *in_stack_0000001c;
       *gucB = *gucB - *in_stack_00000020;
-      return iStack_4 - (iVar4 + iVar2);
+      return iStack_4 - (valueA + valueB);
     }
     if (partyIndex != -1) break;
-    puVar5 = GUnits;
-    if (((puVar5[uVar6].unitType != 0xff) &&
-        (GLeaderSheets[puVar5[uVar6].unitType]->faction == '\0')) &&
-       (bVar1 = (puVar5 + uVar6)->bldType, BuildingTypes[bVar1].unitType == unitType)) {
+    units = GUnits;
+    if (((units[unitIdx].unitType != 0xff) &&
+        (GLeaderSheets[units[unitIdx].unitType]->faction == '\0')) &&
+       (bldType = (units + unitIdx)->bldType, BuildingTypes[bldType].unitType == unitType)) {
       iStack_4 = iStack_4 + 1;
-      if (BuildingTypes[bVar1].resource == '\x01') {
+      if (BuildingTypes[bldType].resource == '\x01') {
         *gucA = *gucA + 1;
       }
-      else if (BuildingTypes[bVar1].resource == '\x02') {
+      else if (BuildingTypes[bldType].resource == '\x02') {
         *gucB = *gucB + 1;
       }
-      else if (BuildingTypes[bVar1].resource == '\x03') {
+      else if (BuildingTypes[bldType].resource == '\x03') {
         *gucC = *gucC + 1;
       }
     }
-    uVar6 = uVar6 + 1;
+    unitIdx = unitIdx + 1;
   }
-  iVar4 = manage_usesGUnits();
-  return iVar4;
+  valueA = manage_usesGUnits();
+  return valueA;
 }
 
 
@@ -2044,12 +2044,14 @@ void __cdecl16near manage_textAllProperty(uint16_t partyArg)
   long lVar1;
   far_t gfx;
   far_t entries;
-  uint16_t *puVar2;
+  uint16_t *sheetSlot;     /* &GLeaderSheets[partyArg] as a word pair */
   void *pvVar3;
-  int iVar4;
+  int statValue;           /* manage_usesGUnitCount's result */
+  int recOfs;              /* (row + sectBase) * 6 */
   char far *numText;
-  uint8_t *puVar6;
-  uint16_t uVar7;
+  uint8_t *sheetPtr;       /* the sheet the slot points at */
+  uint16_t inputCode;      /* ovc28_usesUiInputText's result */
+  uint16_t textWidth;      /* 0x50 */
   char apMsg[80];
   char apNum[80];
   uint16_t apNameOfs;
@@ -2063,10 +2065,11 @@ void __cdecl16near manage_textAllProperty(uint16_t partyArg)
   int apLvl3Shown;
   uint16_t apUnitCount;
   char far *apNameText;
-  int iVar8;
-  int iVar9;
+  int row;                 /* 0..0xc row of the section */
+  int sectBase;            /* 0x1a, 0xd or 0 */
   uint16_t fontOfs;
-  undefined1 uVar11;
+  undefined1 totalLo;      /* low byte of apUnitTotal */
+  undefined1 fontSegLo;    /* low byte of Font02.seg */
   undefined1 fontSegHi;
   uint8_t term;
   
@@ -2103,13 +2106,13 @@ L_menuLoop:
   if (partyArg == -1) { ovr_blitLabel((char far *)"All property.",(byte far *)MK_FP(Font02.seg,Font02.ofs),0xde,0x50);
   }
   else {
-    puVar2 = (uint16_t *)((uint)partyArg * 4);
-    puVar6 = (uint8_t *)*puVar2;
-    apNameSeg = puVar2[1];
-    apNameOfs =(uint16_t)( puVar6);
-    uVar7 = 0x50;
+    sheetSlot = (uint16_t *)((uint)partyArg * 4);
+    sheetPtr = (uint8_t *)*sheetSlot;
+    apNameSeg = sheetSlot[1];
+    apNameOfs =(uint16_t)( sheetPtr);
+    textWidth = 0x50;
     term = 0xde;
-    uVar11 = (undefined1)Font02.seg;
+    fontSegLo = (undefined1)Font02.seg;
     fontSegHi = (undefined1)(Font02.seg >> 8);
     fontOfs = Font02.ofs;
   apNameText = (char far *)ovr_ovc45_compute9((char far *)MK_FP(_SS,apNum),(char far *)MK_FP(apNameSeg,apNameOfs),(char far *)MK_FP(Font02.seg,Font02.ofs),0x69,3);
@@ -2126,74 +2129,74 @@ L_menuLoop:
   manage_usesBlitLabel2("Level 3",0xdc,0xe0);
   TextBlitY = TextBlitY + 0xc;
   if (apSel == '\x04') {
-    iVar9 = 0x1a;
+    sectBase = 0x1a;
   }
   else if (apSel == '\x03') {
-    iVar9 = 0xd;
+    sectBase = 0xd;
   }
   else {
-    iVar9 = 0;
+    sectBase = 0;
   }
-  iVar8 = 0;
+  row = 0;
   while( true ) {
-    if (0xc < iVar8) break;
-    if (iVar8 + iVar9 < 0x1e) {
+    if (0xc < row) break;
+    if (row + sectBase < 0x1e) {
       TextBlitX = 0x11;
-      iVar4 = (iVar8 + iVar9) * 6;
-  ovr_blitLabel((char far *)MK_FP(GStructures[iVar8 + iVar9].name.seg,GStructures[iVar8 + iVar9].name.ofs),(byte far *)MK_FP(Font02.seg,Font02.ofs),0xde,0xe0);
-  iVar4 = manage_usesGUnitCount(partyArg,GStructures[iVar8 + iVar9].type,(int far *)&apLvl1Value,(int far *)&apLvl2Value,(int far *)&apUnitTotal,(int far *)&apLvl3Value,(int far *)&apLvl1Shown,(int far *)&apLvl2Shown,(int far *)&apLvl3Shown);
-      apUnitCount = (uint16_t)iVar4;
-      apUnitTotal = iVar4;
+      recOfs = (row + sectBase) * 6;
+  ovr_blitLabel((char far *)MK_FP(GStructures[row + sectBase].name.seg,GStructures[row + sectBase].name.ofs),(byte far *)MK_FP(Font02.seg,Font02.ofs),0xde,0xe0);
+  statValue = manage_usesGUnitCount(partyArg,GStructures[row + sectBase].type,(int far *)&apLvl1Value,(int far *)&apLvl2Value,(int far *)&apUnitTotal,(int far *)&apLvl3Value,(int far *)&apLvl1Shown,(int far *)&apLvl2Shown,(int far *)&apLvl3Shown);
+      apUnitCount = (uint16_t)statValue;
+      apUnitTotal = statValue;
       if (apLvl3Value == 0) {
-        iVar4 = 100;
-        uVar11 = (undefined1)apUnitTotal;
+        statValue = 100;
+        totalLo = (undefined1)apUnitTotal;
   numText = litoa10((char *)&apNum,(long)apUnitTotal);
-        manage_blitLabelRight(numText,iVar4);
+        manage_blitLabelRight(numText,statValue);
       }
       else {
-        iVar4 = 100;
+        statValue = 100;
   numText = ovr_stsprintf((char far *)MK_FP(_SS,apMsg),(char far *)MK_FP(_DS,0x52e5),apUnitCount,(uint16_t)apUnitCount);
-        manage_blitLabelRight(numText,iVar4);
+        manage_blitLabelRight(numText,statValue);
       }
-      lVar1 = (long)((iVar8 + iVar9) * 6);
+      lVar1 = (long)((row + sectBase) * 6);
       if (*(char *)((int)&GStructures[0].pad + (int)lVar1) != '\0') {
         if (apLvl1Shown == 0) {
-          iVar4 = 0x8c;
-          uVar11 = (undefined1)apLvl1Value;
+          statValue = 0x8c;
+          totalLo = (undefined1)apLvl1Value;
   numText = litoa10((char *)&apNum,(long)apLvl1Value);
-          manage_blitLabelRight(numText,iVar4);
+          manage_blitLabelRight(numText,statValue);
         }
         else {
-          iVar4 = 0x8c;
+          statValue = 0x8c;
   numText = ovr_stsprintf((char far *)MK_FP(_SS,apMsg),(char far *)MK_FP(_DS,0x52e5),apUnitCount,(uint16_t)apUnitCount);
-          manage_blitLabelRight(numText,iVar4);
+          manage_blitLabelRight(numText,statValue);
         }
         if (apLvl2Shown == 0) {
-          iVar4 = 0xb4;
-          uVar11 = (undefined1)apLvl2Value;
+          statValue = 0xb4;
+          totalLo = (undefined1)apLvl2Value;
   numText = litoa10((char *)&apNum,(long)apLvl2Value);
-          manage_blitLabelRight(numText,iVar4);
+          manage_blitLabelRight(numText,statValue);
         }
         else {
-          iVar4 = 0xb4;
+          statValue = 0xb4;
   numText = ovr_stsprintf((char far *)MK_FP(_SS,apMsg),(char far *)MK_FP(_DS,0x52e5),apUnitCount,(uint16_t)apUnitCount);
-          manage_blitLabelRight(numText,iVar4);
+          manage_blitLabelRight(numText,statValue);
         }
         if (apLvl3Shown == 0) {
-          iVar4 = 0xdc;
-          uVar11 = (undefined1)apUnitTotal;
+          statValue = 0xdc;
+          totalLo = (undefined1)apUnitTotal;
   numText = litoa10((char *)&apNum,(long)apUnitTotal);
-          manage_blitLabelRight(numText,iVar4);
+          manage_blitLabelRight(numText,statValue);
         }
         else {
-          iVar4 = 0xdc;
+          statValue = 0xdc;
   numText = ovr_stsprintf((char far *)MK_FP(_SS,apMsg),(char far *)MK_FP(_DS,0x52e5),apUnitCount,(uint16_t)apUnitCount);
-          manage_blitLabelRight(numText,iVar4);
+          manage_blitLabelRight(numText,statValue);
         }
       }
       TextBlitY = TextBlitY + 0xc;
     }
-    iVar8 = iVar8 + 1;
+    row = row + 1;
   }
 L_menuTail:
   if (apSel == 0x5) {
@@ -2209,8 +2212,8 @@ L_menuTail:
   (*(uint8_t *)((uint8_t *)&(entries.seg))) = (char)_SS;
   entries.ofs = (uint16_t)apList;
   (*(uint8_t *)((uint8_t *)&(entries.seg) + 1)) = (char)((uint)_SS >> 8);
-  uVar7 = ovr_ovc28_usesUiInputText(entries,0x23,(uint16_t)0,0,(uint8_t far *)&apFlag);
-  *(undefined1 *)((int)&apSel) = (char)uVar7;
+  inputCode = ovr_ovc28_usesUiInputText(entries,0x23,(uint16_t)0,0,(uint8_t far *)&apFlag);
+  *(undefined1 *)((int)&apSel) = (char)inputCode;
   keyboardInputMode = 0;
   if (((apSel != '\0') && (apSel != '\x01')) &&
      (apSel != -2)) {

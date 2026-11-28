@@ -24193,3 +24193,46 @@ Both files were restored (`git checkout HEAD -- ...`) and the tree is back to:
 else first - either recovered into a smaller stand-in module (they are ~4,000 lines of CRT/overlay
 code in total) or stubbed, which would change the runtime behaviour the gates measure. That is a
 project decision, not a cleanup, and the headline number would not move either way.
+
+
+## Renaming batch 10: `4d05:23fc` and `manage_textAllProperty`, grep 8,553 -> 8,444 (-109)
+
+**`4d05:23fc` (59 hits over 9 slots)** - five single-role names:
+
+    bVar1  -> bldType   GRecords[i].reserved08
+    iVar2  -> valueB ; iVar4 -> valueA    the two values summed before the subtraction
+    puVar5 -> units    a copy of GUnits
+    uVar6  -> unitIdx  0xf8..GUnitCount loop index
+
+**`manage_textAllProperty` (4d05:26f6, 59 hits over 7)** - two single-role names and three splits:
+
+    iVar8 -> row ; iVar9 -> sectBase      0..0xc and 0x1a/0xd/0
+    puVar2 -> sheetSlot ; puVar6 -> sheetPtr
+    iVar4 -> recOfs (the (row+base)*6 offset) + statValue (manage_usesGUnitCount's result)
+    uVar11 -> fontSegLo (low byte of Font02.seg) + totalLo (low byte of apUnitTotal)
+    uVar7 -> textWidth (0x50) + inputCode (ovc28_usesUiInputText's result)
+
+**Examined and deliberately skipped:**
+
+    getcache (6ffe:02f7, 2,375 lines) - iVar12 alone is 159 uses and carries three different
+      roles (a computed 0x17-stride offset at 0x460, a 4-iteration index at 0x1287, a 3-stride
+      index at 0x2188).  Splitting it means rewriting the loader, not renaming it.
+    stshInitPtrs (6ffe:733c) - uVar7/uVar2/uVar4 each hold an offset in one statement and a
+      segment in the next.
+    4d05:24b1 / 4d05:2b3e / 4d05:2371 - these bodies are entered mid-flow and carry their arguments
+      in unaff_BP / unaff_SI / unaff_DI / in_CL, so there is no local to name.
+
+## Measured (HEAD cdae0ea1 -> this commit)
+
+    grep_checks          8,553 -> 8,444   (-109)
+    REBUILT.EXE          447,906 (unchanged)
+    build 65/65, LINK.LOG 0 errors
+    compare_state        identical 734 / 7 different / 889 missing (unchanged)
+    diff_dgroup          288/1,805 matched (unchanged)
+    compare_runtime      280 identical / 11 different at entry, init_game and key (unchanged)
+
+`structural_deficits` now lists exactly two game-code functions:
+
+    7e7c:0b9c  177/187   the three unresolved window1f8:002a / 1a8,2a sites + 7 abridged variants
+    77eb:0d61   54/58    the four unresolved 0x200 calls
+    (the rest are the supplied crtl.c/ovl.c and four recorded shape artefacts)
