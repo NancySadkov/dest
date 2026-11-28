@@ -2483,7 +2483,7 @@ void __cdecl16far stshInitPtrs(void)
   uint16_t uVar2;
   uint16_t unaff_BP;
   uint16_t unaff_SI;
-  uint uVar3;
+  uint i;                  /* 1 .. StshCount-2 slot index */
   uint16_t uVar4;
   far_t fVar5;
   long *plVar6;
@@ -2512,7 +2512,7 @@ void __cdecl16far stshInitPtrs(void)
   uVar2 = StshCtPtr.ofs;
   *(uint16_t *)(uVar2 + 0xb) = uVar7;
   *(uint16_t *)(uVar2 + 9) = (uint16_t)recPtr;   /* hand fix: 2-byte half */
-  for (uVar3 = 1; uVar3 < StshCount - 1; uVar3 = uVar3 + 1) {
+  for (i = 1; i < StshCount - 1; i = i + 1) {
     LXMUL_at_(retStorage2,CONCAT22(in_stack_0000fffa,unaff_SI),
               CONCAT22(unaff_BP,in_stack_0000fffc));
     retStorage = (long *)((int)&AgntAnms[0x38].halfWidth + 1);

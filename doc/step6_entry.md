@@ -24700,3 +24700,45 @@ leave `textDone`'s buffers alone last turn.
     compare_state        identical 734 / 7 different / 889 missing (unchanged)
     diff_dgroup          288/1,805 matched (unchanged)
     compare_runtime      280 identical / 11 different at entry, init_game and key (unchanged)
+
+
+## `stshInitPtrs` (6ffe:733c): not a width defect - it is the `PADD_at_`/`LXMUL_at_` idiom
+
+I ran the dump-and-check-widths procedure on the smallest body of the class and the conclusion is
+different from `69c8:04c6` and `6386:1c9f`: **this one has no 1-byte buffer or split table to repair.**
+The image has no `F_SCOPY` at all; its calls are
+
+    lcall 0, 0xad4   x8    (alloc)
+    lcall 0xe0, 0x25 x4    (load)
+    lcall 0, 0x938   x4    (something else)
+
+and the body is a chain of 32-bit arithmetic helpers:
+
+    PADD_at_(padBase05, padOfs06);              /* add a segmented pointer   */
+    LXMUL_at_(retStorage2, a, b);                /* multiply a 32-bit value   */
+    recPtr = ovr_mkp((uint32_t *)fVar5.ofs, uVar7, (uint16_t)retStorage2);
+
+with `in_stack_0000fffa` declared `uint32_t *` and used alternately as a **segment** and as an
+**offset** (`MK_FP(in_stack_0000fffc, in_stack_0000fffa)`), and `*(uint16_t *)(uVar7 + 0xd) = 0;`
+dereferencing a raw offset as a near pointer. Reconstructing it means modelling the segmented-pointer
+arithmetic the compiler emits for `far` arithmetic - a rewrite of the routine, not a width fix, and
+one that needs `PADD_at_`/`LXMUL_at_` read first.
+
+I did not attempt that. The only slot in the body with a single verifiable role was the loop index, so
+that is all this commit changes:
+
+    uVar3 -> i      the 1 .. StshCount-2 slot index
+
+## Measured (HEAD 81efef02 -> this commit)
+
+    grep_checks          7,970 -> 7,965
+    REBUILT.EXE          447,810 (unchanged)
+    build 65/65, LINK.LOG 0 errors
+    compare_state        identical 734 / 7 different / 889 missing (unchanged)
+    diff_dgroup          288/1,805 matched (unchanged)
+    compare_runtime      280 identical / 11 different at entry, init_game and key (unchanged)
+
+**Where the "same defect class" assumption breaks:** of the four bodies expected to share it, two were
+width/table defects (`69c8:04c6`, `6386:1c9f`), one was a split-array index error with two 1-byte
+buffers that cannot be sized from the frame (`77eb:1754`), and this one is an arithmetic-idiom rewrite.
+Each needs its own reading; there is no shared fix to sweep.
