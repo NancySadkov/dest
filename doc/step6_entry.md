@@ -22989,3 +22989,44 @@ definition are now `uint16_t __cdecl16far ovc23_textAdlibNone(void)`.
     compare_runtime  280 identical / 11 different (unchanged, all three sample points)
 
 The remaining 3 of its 7 calls are in the two GAP regions (the placement scan and the outline draw).
+
+
+## 55fe:0000: the cursor-sound dispatch written (C 4 -> 5)
+
+The second region's tail is now code. `CurSfxType3` (DGROUP 0x7a7) carries the cursor sound:
+
+    CurSfxType3 = 0xff;                                   /* 0x0196 */
+    if (flags == 0x3000) return flags;                    /* 0x01ae */
+    if (cursorRecordFound) { CurSfxType3 = 0x70; return; } /* 0x01b8 */
+    probeCol = 0; probeClass = 0xff;                       /* 0x01d1..0x01d7 */
+    /* GAP: the column probe loop */
+    if (flags == 0x1000 && CurSfxType3 == 0xff && probeClass != 0xff) {
+      if (probeClass < 5)          CurSfxType3 = 0x61;     /* 0x03a8 */
+      else if (probeCol >= 3)      CurSfxType3 = 0x5e;     /* 0x03ba */
+    }
+    if (CurSfxType3 != 0xff) return flags;
+    switch (constr_usesGMapFlags(alignedX, GfxRndSeed2)) {  /* 0x03e5, table cs:0x47d */
+      case 0: CurSfxType3 = 0x80; break;                    /* -> 0x400 */
+      case 1: CurSfxType3 = 0x83; break;                    /* -> 0x40d */
+      case 2: CurSfxType3 = (GSeason == 2) ? 0x7a : 0x76; break;   /* -> 0x41a/0x439 */
+      case 3: CurSfxType3 = (GSeason == 2) ? 0x7a : 0x7d; break;   /* -> 0x443/0x462 */
+      case 4: CurSfxType3 = 0x7a; break;                    /* -> 0x46c */
+    }
+
+The jump table at `cs:0x47d` decodes to `400 40d 41a 443 46c`, and `0x693a` is `GSeason` per the
+audit symbol table, so the two season-conditional arms are read rather than guessed. The probe
+results are initialised from the image (`0x01d1..0x01d7`: `di = 0`, `[bp-3] = 0xff`) before the
+still-unwritten probe loop, so the body is deterministic even with that GAP.
+
+## Measured (HEAD efdc76e4 -> this commit)
+
+    screen_calls     55fe:0000  C 4 -> 5  (image 7), delta -3 -> -2
+    grep_checks      9,798 (unchanged)
+    REBUILT.EXE      447,224 -> 447,416
+    build 65/65, LINK.LOG 0 errors
+    compare_state    292 matched / 7 different / missing 889 (unchanged)
+    diff_dgroup      288/1,805 matched (unchanged)
+    compare_runtime  280 identical / 11 different (unchanged, all three sample points)
+
+Remaining 2 calls: the `ovc45_getUnitIndex` pair (`0x250,0x20` and `0x250,0x25`) inside the probe loop
+(0x01cd..0x037b), plus the `ovr_randBelow` at 0x035f.

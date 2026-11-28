@@ -27,6 +27,8 @@ uint16_t __cdecl16far ovc23_textAdlibNone(void)
   int d;
   int si;
   byte colOfs;
+  byte probeClass;
+  int probeCol;
 
   flags = 0;
   alignedX = (int)ovr_alignUp4((uint16_t)GfxRndSeed);
@@ -78,9 +80,57 @@ uint16_t __cdecl16far ovc23_textAdlibNone(void)
     cursorRecordFound = 1;
   }
 
-  /* GAP: the outline draw and the mode dispatch (0x0191..0x0479): the `SfxPending`-style byte at
-     0x7a7, the cursor-column probe via ovc45_getUnitIndex (0x250,0x20 / 0x250,0x25) and the
-     drawing calls. */
+  /* 0x0191..0x03c5: the cursor sound is cleared, then set from the accumulated flags and the
+     placed-record state.  `CurSfxType3` (DGROUP 0x7a7) carries it. */
+  CurSfxType3 = 0xff;
+  if (flags == 0x3000) {
+    return flags;
+  }
+  if (cursorRecordFound) {
+    CurSfxType3 = 0x70;
+    return flags;
+  }
+  /* the image initialises the probe results before the (unwritten) probe loop: 0x01d1..0x01d7 */
+  probeCol = 0;
+  probeClass = 0xff;
+  /* GAP: the cursor-column probe (0x01cd..0x037b) - ovc45_getUnitIndex(GfxRndSeed2, GfxRndSeed-2..+1)
+     at 0x250,0x20 and 0x250,0x25, and the ovr_randBelow call at 0x035f.  The probe's result feeds
+     [bp-3] and [bp-1], which the code below tests. */
+  if (flags == 0x1000) {
+    if (CurSfxType3 == 0xff) {
+      if ((byte)probeClass != 0xff) {
+        if ((byte)probeClass < 5) {
+          CurSfxType3 = 0x61;
+        }
+        else if (probeCol >= 3) {
+          CurSfxType3 = 0x5e;
+        }
+      }
+    }
+  }
+  if (CurSfxType3 != 0xff) {
+    return flags;
+  }
+  /* 0x03e5..0x0479: the map-flag class picks the cursor sound through the cs:0x47d table
+     (0x400=0x80, 0x40d=0x83, 0x41a=GSeason?0x7a:0x76, 0x443=GSeason?0x7a:0x7d, 0x46c=0x7a). */
+  probeClass = (byte)constr_usesGMapFlags((int)alignedX,(int)GfxRndSeed2);
+  switch ((uint16_t)probeClass) {
+  case 0:
+    CurSfxType3 = 0x80;
+    break;
+  case 1:
+    CurSfxType3 = 0x83;
+    break;
+  case 2:
+    CurSfxType3 = (GSeason == 2) ? 0x7a : 0x76;
+    break;
+  case 3:
+    CurSfxType3 = (GSeason == 2) ? 0x7a : 0x7d;
+    break;
+  case 4:
+    CurSfxType3 = 0x7a;
+    break;
+  }
   return flags;
 }
 /* 55fe:0487 */
