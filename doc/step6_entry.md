@@ -22852,3 +22852,34 @@ rewrite of the body rather than a rename.
     compare_runtime  280 identical / 11 different (unchanged, all three sample points)
 
 Cumulative renaming: 10,057 -> 9,798 (-259 in three batches).
+
+
+## 7e7c:0b9c: the arm attribution corrected; one compute6 restored (census 172 -> 173)
+
+I rebuilt the per-arm call table directly from the dispatch chain and it **disproved the earlier
+attribution**: region bounds taken from the `jne` targets pull the *next* arm's first call into the
+previous arm's window, so the "unitType 0xd has three variants" and "unitType 8 has three variants"
+readings were artifacts. Read against the real bounds:
+
+    unitType 1      realloc fmVsprintf | realloc fmVsprintf          (2 variants, body matches)
+    unitType 0x1d   realloc fmVsprintf | realloc fmVsprintf          (2, matches)
+    unitType 0xd    realloc fmVsprintf | realloc fmVsprintf          (2, matches)
+    unitType 0      2 variants + compute6 each                        (matches)
+    unitType 8      2 variants + compute6 each                        (matches)
+    unitType 9      5 variants, the first carrying TWO compute6       (body had one)
+
+`ovc45_compute6` totals 9 in the image: 2 (type 0) + 2 (type 8) + **5** (type 9). The first type-9
+variant (0x1c8c..0x1cb6) computes the noun twice, which is the missing site; restored.
+
+## Measured (HEAD c5b33c5b -> this commit)
+
+    screen_calls     7e7c:0b9c  C 172 -> 173  (image 187), delta -14
+    grep_checks      9,798 (unchanged)
+    REBUILT.EXE      446,712 -> 446,728
+    build 65/65, LINK.LOG 0 errors
+    compare_state    292 matched / 7 different / missing 889 (unchanged)
+    diff_dgroup      288/1,805 matched (unchanged)
+    compare_runtime  280 identical / 11 different (unchanged, all three sample points)
+
+Remaining 14 = the two `1f8,2a` and one `1a8,2a` (unnameable) plus 11 in the type-9 variant details
+(compute6 x1 now resolved; costOrIncomeLabel x1, fmVsprintf x1, strcpy x4 still abridged there).

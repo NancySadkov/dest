@@ -730,6 +730,8 @@ void constrct_buildInfoText(int x,byte far *flag,int entityIdx,int arg4,int arg5
         }
         else if (v16 > 0) {
           if (v18 > 0) {
+            /* the image computes the noun twice in this variant (0x1c8c and 0x1cb6 region) */
+            (void)ovr_ovc45_compute6(v18,bld->storage);
             nounIdx = (uint16_t)ovr_ovc45_compute6(v18,bld->storage);
             noun = (nounIdx != 0) ? (char far *)"people" : (char far *)"person";
             gold = (uint16_t)ovr_ovc45_costOrIncomeLabel(v16,(uint16_t)(v16 < 0 ? -v16 : v16));
