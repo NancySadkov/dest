@@ -22264,3 +22264,46 @@ in-source rather than silently changing the argument.
 
 Cumulative over the two save functions: grep **11,757 -> 11,516** (-241), both bodies now reading and
 writing the real buffers at the real sizes.
+
+
+## 7e7c:0b9c first body written (skeleton + proven parts)
+
+The 5-line `DECOMPILATION FAILED` stub is gone. The body implements everything decoded so far:
+
+    preamble   x = GfxRndSeed + arg1 - 2; bldType = usesGfxRndSeed2(&x);
+               unitIdx = getUnitIndex(GfxRndSeed2, x)
+    loop       do { owner = Entities[entityIdx].byte_0x1a; bld = &BuildingTypes[bldType];
+                    if (!done) { /* pass 1 */ } else { /* pass 2 */ }
+                    cost = bld->cost * GUnits[unitIdx].level / 0x18 + 1;
+                    codes[n] = 1;
+                    if (bld->action != 0) { list[n] = action; n++; }
+                    else if (unitIdx >= 0xf8 && bld->cost && !(bld->flags2 & 4)) {
+                      list[n] = "Salvage"; n++;
+                    }
+                  } while (!done)
+    pass 1     leaves 1-3 (ownership: "Active party is %s the %s.", "Owned by ..." with and without
+               the (%d/%d) form) and leaves 4-10 (unitType arms 6, 1, 0x1d, 0xd, each split on
+               bld->resource == 1)
+
+GAP markers (in-source) cover the untranscribed remainder: pass-1 arms for unitType 0xe, 0xf, 0x17,
+0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 4, 2, 5; all of pass 2 (0x0f16..); and the menu
+build/dispatch (0x2000..0x2af0) that consumes the list and issues createConstructionRecord /
+usesGPopulationLo / inputUpdate / textChoosePartyBuild.
+
+Two structural corrections came out of writing it:
+
+* the caller in `land_info` had the call collapsed to three arguments
+  (`constrct_buildInfoText(0x23f1, CONCAT11(...), (char)&outFlag)`); the image pushes five, so the
+  call site and the prototype are now `(int x, byte far *flag, int entityIdx, int arg4, int arg5)`.
+* `bldtp_t.name` is a `char far *`, so its segment half is `(uint32_t)bld->name >> 16`, not
+  `bld->name.seg`; the ten occurrences in the body use the correct form.
+
+## Measured (HEAD 93ad6da7 -> this commit)
+
+    screen_calls     7e7c:0b9c  C 1 -> 30  (image 187), delta -186 -> -157
+    grep_checks      11,516 -> 11,517   (+1: the new MK_FP cast form)
+    REBUILT.EXE      459,828 -> 461,258
+    build 65/65, LINK.LOG 0 errors
+    compare_state    1,628 matched / 0 different / missing 2      (unchanged)
+    diff_dgroup      1,639/1,805 matched, 5 layout runs           (unchanged)
+    compare_runtime  1,692 matched / 1,683 identical / 9 different (unchanged, all three sample points)
