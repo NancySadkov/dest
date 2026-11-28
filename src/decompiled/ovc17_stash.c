@@ -53,10 +53,22 @@ uint __cdecl16far stshRead(void)
   uint wantTotal;
   uint16_t srcEmsOfsHi;
   uint32_t *mkpRes;
-  uint uVar5;
+  uint resHi;              /* the resource's +2 word in StshPtrs */
+  uint sizeHi;             /* StshSizes[res]'s high word */
+  uint sizeLo;             /* StshSizes[res]'s low word, the byte count */
+  uint boundHi;            /* (FMXmsHandle - StshPtrs[0]) high word, clamped */
+  uint boundHi2;           /* the same bound after the subtract */
+  uint lenLo;              /* wantLo, handed to xms_usesXmsHandle */
+  uint usedHi;             /* (FMXmsHandle + FMEmsHandle + ...) high word */
+  uint usedHi2;            /* its value with the remaining budget added */
+  uint usedHi3;            /* the same total before the final compare */
+  uint chunkLo1;           /* chunkLo, the length for ems_memmove1 */
+  uint oldReadLo;          /* *readLo before the advance */
   uint16_t rdsz;
   uint16_t readed;
-  uint uVar6;
+  uint sizeHi2;            /* StshSizes[res]'s high word, the compat test */
+  uint endHi;              /* wantHi + StshPtrs[res] + carry */
+  uint stshOfs;            /* StshPtrs[0]'s offset half */
   uint16_t seg;
   uint16_t unaff_SI;
   uint32_t *dstSeg;
@@ -68,11 +80,12 @@ uint __cdecl16far stshRead(void)
   uint wantHi;
   uint srcHi;
   uint countLo;
-  uint16_t uVar8;
+  uint16_t chunkHiArg;     /* chunkHi, the high word of the XMS transfer */
+  uint16_t segArg;         /* seg, the EMS segment for the move */
   uint16_t lenHi;
   uint32_t srcPtr;
   uint16_t dstOfs;
-  uint8_t in_stack_0000ffec;
+  uint8_t shiftCount;      /* the shift count LXURSH_at_ is given */
   uint leftLo;
   uint leftHi;
   uint chunkLo;
@@ -80,73 +93,73 @@ uint __cdecl16far stshRead(void)
   
   wantTotal = wantLo;
   srcPtr = CONCAT22(dstOfs,unaff_SI);
-  uVar5 = *(uint *)((int)(long far *)StshPtrs + resIndex * 4 + 2);
-  uVar6 = *(uint *)((uint8_t *)&StshSizes[resIndex] + 2);
-  if ((uVar5 < uVar6) ||
-     ((uVar5 == uVar6 &&
+  resHi = *(uint *)((int)(long far *)StshPtrs + resIndex * 4 + 2);
+  sizeHi2 = *(uint *)((uint8_t *)&StshSizes[resIndex] + 2);
+  if ((resHi < sizeHi2) ||
+     ((resHi == sizeHi2 &&
       (*(uint *)((long far *)StshPtrs + resIndex) < *(uint *)(&StshSizes[resIndex]))))
      ) {
-    uVar6 = wantHi + *(int *)((int)(long far *)StshPtrs + resIndex * 4 + 2) +
+    endHi = wantHi + *(int *)((int)(long far *)StshPtrs + resIndex * 4 + 2) +
             (uint)CARRY2(wantLo,*(uint *)((long far *)StshPtrs + resIndex));
-    uVar5 = *(uint *)((uint8_t *)&StshSizes[resIndex] + 2);
-    if ((uVar5 <= uVar6) &&
-       ((uVar5 < uVar6 ||
+    sizeHi = *(uint *)((uint8_t *)&StshSizes[resIndex] + 2);
+    if ((sizeHi <= endHi) &&
+       ((sizeHi < endHi ||
         (*(uint *)(&StshSizes[resIndex]) <
          wantLo + *(uint *)((long far *)StshPtrs + resIndex))))) {
-      uVar5 = *(uint *)(&StshSizes[resIndex]);
+      sizeLo = *(uint *)(&StshSizes[resIndex]);
       readLo = (uint *)((int)&AgntAnms[0x53].y + 1 + resIndex * 4);
-      wantLo = uVar5 - *readLo;
+      wantLo = sizeLo - *readLo;
       wantHi =
            (*(int *)((uint8_t *)&StshSizes[resIndex] + 2) -
            *(int *)((int)&AgntAnms[0x53].maxDx + 1 + resIndex * 4)) -
-           (uint)(uVar5 < *readLo);
+           (uint)(sizeLo < *readLo);
     }
     leftHi = wantHi;
     leftLo = wantLo;
     if (resIndex == 0) {
       if (((*(uint16_t *)((uint8_t *)&(StshPtrs[0]) + 2)) <= (*(uint16_t *)((uint8_t *)&(FMXmsHandle) + 2))) &&
          (((*(uint16_t *)((uint8_t *)&(StshPtrs[0]) + 2)) < (*(uint16_t *)((uint8_t *)&(FMXmsHandle) + 2)) || ((uint)StshPtrs[0] < (uint)FMXmsHandle)))) {
-        uVar5 = ((*(uint16_t *)((uint8_t *)&(FMXmsHandle) + 2)) - (*(uint16_t *)((uint8_t *)&(StshPtrs[0]) + 2))) -
+        boundHi = ((*(uint16_t *)((uint8_t *)&(FMXmsHandle) + 2)) - (*(uint16_t *)((uint8_t *)&(StshPtrs[0]) + 2))) -
                 (uint)((uint)FMXmsHandle < (uint)StshPtrs[0]);
-        if ((uVar5 < wantHi) ||
-           ((uVar5 <= wantHi &&
+        if ((boundHi < wantHi) ||
+           ((boundHi <= wantHi &&
             ((uint)FMXmsHandle - (uint)StshPtrs[0] <= wantLo)))) {
           chunkLo = (uint)FMXmsHandle - (uint)StshPtrs[0];
-          uVar5 = ((*(uint16_t *)((uint8_t *)&(FMXmsHandle) + 2)) - (*(uint16_t *)((uint8_t *)&(StshPtrs[0]) + 2))) -
+          boundHi2 = ((*(uint16_t *)((uint8_t *)&(FMXmsHandle) + 2)) - (*(uint16_t *)((uint8_t *)&(StshPtrs[0]) + 2))) -
                   (uint)((uint)FMXmsHandle < (uint)StshPtrs[0]);
-          chunkHi = uVar5;
+          chunkHi = boundHi2;
         }
         else {
           chunkHi = wantHi;
           chunkLo = wantLo;
-          uVar5 = wantLo;
+          lenLo = wantLo;
         }
-        uVar6 = (uint)StshPtrs[0];
+        stshOfs = (uint)StshPtrs[0];
         srcHi = (*(uint16_t *)((uint8_t *)&(StshPtrs[0]) + 2));
         countLo = chunkLo;
-        uVar8 = chunkHi;
+        chunkHiArg = chunkHi;
         mkpRes = ovr_mkp(dstHi,(uint16_t)dstLo,(uint)StshPtrs[0]);
-        xms_usesXmsHandle((int)mkpRes,uVar5,uVar6,srcHi,countLo,uVar8);
+        xms_usesXmsHandle((int)mkpRes,lenLo,stshOfs,srcHi,countLo,chunkHiArg);
         carry = CARRY2((uint)StshPtrs[0],chunkLo);
         (*(uint16_t *)((uint8_t *)&(StshPtrs[0]))) = (uint)StshPtrs[0] + chunkLo;
         (*(uint16_t *)((uint8_t *)&(StshPtrs[0]) + 2)) = (*(uint16_t *)((uint8_t *)&(StshPtrs[0]) + 2)) + chunkHi + (uint)carry;
         leftLo = wantLo - chunkLo;
         leftHi = (wantHi - chunkHi) - (uint)(wantLo < chunkLo);
-        mkpRes = LXURSH_at_(dstSeg,srcPtr,in_stack_0000ffec);
+        mkpRes = LXURSH_at_(dstSeg,srcPtr,shiftCount);
         dstLo = (uint32_t *)((int)mkpRes + (int)dstLo);
         dstHi = (uint32_t *)((int)dstHi + (chunkLo & 0xf));
       }
       if (leftLo != 0 || leftHi != 0) {
-        uVar5 = (*(uint16_t *)((uint8_t *)&(FMXmsHandle) + 2)) + (*(uint16_t *)((uint8_t *)&(FMEmsHandle) + 2)) +
+        usedHi = (*(uint16_t *)((uint8_t *)&(FMXmsHandle) + 2)) + (*(uint16_t *)((uint8_t *)&(FMEmsHandle) + 2)) +
                 (uint)CARRY2((uint)FMXmsHandle,(uint)FMEmsHandle);
-        if (((*(uint16_t *)((uint8_t *)&(StshPtrs[0]) + 2)) <= uVar5) &&
-           (((*(uint16_t *)((uint8_t *)&(StshPtrs[0]) + 2)) < uVar5 ||
+        if (((*(uint16_t *)((uint8_t *)&(StshPtrs[0]) + 2)) <= usedHi) &&
+           (((*(uint16_t *)((uint8_t *)&(StshPtrs[0]) + 2)) < usedHi ||
             ((uint)StshPtrs[0] < (uint)FMXmsHandle + (uint)FMEmsHandle)))) {
-          uVar5 = (((*(uint16_t *)((uint8_t *)&(FMXmsHandle) + 2)) + (*(uint16_t *)((uint8_t *)&(FMEmsHandle) + 2)) +
+          usedHi2 = (((*(uint16_t *)((uint8_t *)&(FMXmsHandle) + 2)) + (*(uint16_t *)((uint8_t *)&(FMEmsHandle) + 2)) +
                    (uint)CARRY2((uint)FMXmsHandle,(uint)FMEmsHandle)) - (*(uint16_t *)((uint8_t *)&(StshPtrs[0]) + 2))) -
                   (uint)((uint)FMXmsHandle + (uint)FMEmsHandle < (uint)StshPtrs[0]);
-          if ((uVar5 < leftHi) ||
-             ((uVar5 <= leftHi &&
+          if ((usedHi2 < leftHi) ||
+             ((usedHi2 <= leftHi &&
               (((uint)FMXmsHandle + (uint)FMEmsHandle) - (uint)StshPtrs[0] <= leftLo)))) {
             chunkLo = ((uint)FMXmsHandle + (uint)FMEmsHandle) - (uint)StshPtrs[0];
             chunkHi = (((*(uint16_t *)((uint8_t *)&(FMXmsHandle) + 2)) + (*(uint16_t *)((uint8_t *)&(FMEmsHandle) + 2)) +
@@ -160,26 +173,26 @@ uint __cdecl16far stshRead(void)
           seg = (uint)StshPtrs[0] - (uint)FMXmsHandle;
           srcEmsOfsHi = ((*(uint16_t *)((uint8_t *)&(StshPtrs[0]) + 2)) - (*(uint16_t *)((uint8_t *)&(FMXmsHandle) + 2))) -
                         (uint)((uint)StshPtrs[0] < (uint)FMXmsHandle);
-          uVar8 = seg;
-          uVar5 = chunkLo;
+          segArg = seg;
+          chunkLo1 = chunkLo;
           lenHi = chunkHi;
           mkpRes = ovr_mkp(dstHi,(uint16_t)dstLo,seg);
-          ems_memmove1((uint16_t)mkpRes,seg,uVar8,srcEmsOfsHi,uVar5,lenHi);
+          ems_memmove1((uint16_t)mkpRes,seg,segArg,srcEmsOfsHi,chunkLo1,lenHi);
           carry = CARRY2((uint)StshPtrs[0],chunkLo);
           (*(uint16_t *)((uint8_t *)&(StshPtrs[0]))) = (uint)StshPtrs[0] + chunkLo;
           (*(uint16_t *)((uint8_t *)&(StshPtrs[0]) + 2)) = (*(uint16_t *)((uint8_t *)&(StshPtrs[0]) + 2)) + chunkHi + (uint)carry;
           carry = leftLo < chunkLo;
           leftLo = leftLo - chunkLo;
           leftHi = (leftHi - chunkHi) - (uint)carry;
-          mkpRes = LXURSH_at_(dstSeg,srcPtr,in_stack_0000ffec);
+          mkpRes = LXURSH_at_(dstSeg,srcPtr,shiftCount);
           dstLo = (uint32_t *)((int)mkpRes + (int)dstLo);
           dstHi = (uint32_t *)((int)dstHi + (chunkLo & 0xf));
         }
       }
-      uVar5 = (*(uint16_t *)((uint8_t *)&(FMXmsHandle) + 2)) + (*(uint16_t *)((uint8_t *)&(FMEmsHandle) + 2)) +
+      usedHi3 = (*(uint16_t *)((uint8_t *)&(FMXmsHandle) + 2)) + (*(uint16_t *)((uint8_t *)&(FMEmsHandle) + 2)) +
               (uint)CARRY2((uint)FMXmsHandle,(uint)FMEmsHandle);
-      if ((uVar5 <= (*(uint16_t *)((uint8_t *)&(StshPtrs[0]) + 2))) &&
-         ((uVar5 != (*(uint16_t *)((uint8_t *)&(StshPtrs[0]) + 2)) ||
+      if ((usedHi3 <= (*(uint16_t *)((uint8_t *)&(StshPtrs[0]) + 2))) &&
+         ((usedHi3 != (*(uint16_t *)((uint8_t *)&(StshPtrs[0]) + 2)) ||
           ((uint)FMXmsHandle + (uint)FMEmsHandle <= (uint)StshPtrs[0])))) {
         lseek(StshHandles[0],(ulong)(*(uint16_t *)((uint8_t *)&(StshPtrs[0]) + 2)),(int)dstSeg);
       }
@@ -202,10 +215,10 @@ uint __cdecl16far stshRead(void)
       dstOfs = (uint16_t)
              ovr_mkp((uint32_t *)(dstOfs + readed),(uint16_t)dstLo,(uint16_t)dstSeg);
       readLo = (uint *)((int)&AgntAnms[0x53].y + 1 + resIndex * 4);
-      uVar5 = *readLo;
+      oldReadLo = *readLo;
       *readLo = *readLo + readed;
       readHi = (int *)((int)&AgntAnms[0x53].maxDx + 1 + resIndex * 4);
-      *readHi = *readHi + (uint)CARRY2(uVar5,readed);
+      *readHi = *readHi + (uint)CARRY2(oldReadLo,readed);
       dstLo = dstHi;
     }
     printf((char *)((long)&BldInstances[0x49].seg + 1));

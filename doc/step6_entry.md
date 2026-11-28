@@ -25783,3 +25783,48 @@ assigned before its first read, so the split is safe.
       constrct_usesLDIV_at_ (7e7c:2b4c)   -75
       6018:1398 (paged list)              -56
       5ded:0000 (dithered line)           -69
+
+
+## `474a:008f` (stash 32-bit XMS/EMS reader): 49 hits down to 2, grep 5,291 -> 5,245 (-46)
+
+This body walks a 32-bit resource across the XMS/EMS boundary and its slots hold one 32-bit word each,
+read from a different place every time:
+
+    uVar5 -> resHi       the resource's +2 word in StshPtrs
+             sizeHi      StshSizes[res]'s high word
+             sizeLo      its low word, the byte count
+             boundHi     (FMXmsHandle - StshPtrs[0]) high word
+             boundHi2    the same bound after the subtract
+             lenLo       wantLo, handed to xms_usesXmsHandle
+             usedHi / usedHi2 / usedHi3   the XMS+EMS total at three comparisons
+             chunkLo1    chunkLo, the length for ems_memmove1
+             oldReadLo   *readLo before the advance
+    uVar6 -> sizeHi2     StshSizes[res]'s high word in the compat test
+             endHi       wantHi + StshPtrs[res] + carry
+             stshOfs     StshPtrs[0]'s offset half
+    uVar8 -> chunkHiArg / segArg      the two high-word arguments
+    in_stack_0000ffec -> shiftCount   what LXURSH_at_ is told to shift by
+
+Eleven lifetimes in `uVar5`, each a 32-bit bound or length read and then consumed within three lines -
+which is why they could be separated where the CONCAT11 chain in `init_usesRandBelow` could not.
+
+Only `unaff_SI` (2) is left, the register value the image leaves for the caller's 32-bit pair.
+
+## Measured (HEAD 3ceeded5 -> this commit)
+
+    grep_checks          5,291 -> 5,245   (-46)
+    REBUILT.EXE          447,970 -> 448,002   (+32: frame reshuffle)
+    build 65/65, LINK.LOG 0 errors
+    compare_state        identical 734 / 7 different / 889 missing (unchanged)
+    diff_dgroup          288/1,805 matched (unchanged)
+    compare_runtime      280 identical / 11 different at entry, init_game and key (unchanged)
+    structural_deficits  two game bodies: 7e7c:0b9c (177/187), 77eb:0d61 (54/58)
+
+## Turn total (HEAD e850b68b -> here)
+
+    grep_checks          5,549 -> 5,245   (-304)
+      init_usesRandBelow (3381:24c3)      -58
+      constrct_usesLDIV_at_ (7e7c:2b4c)   -75
+      6018:1398 (paged list)              -56
+      5ded:0000 (dithered line)           -69
+      474a:008f (XMS/EMS reader)          -46
