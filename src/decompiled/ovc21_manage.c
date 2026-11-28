@@ -348,7 +348,7 @@ void __cdecl16far manage_usesBlitLabel2(char far *text,int x,uint16_t colour)
 
 /* [R4] calls litoa10 */
 
-void __cdecl16far manage_usesLitoa10(char_sheet_t *sheet)
+void __cdecl16far manage_usesLitoa10(char_sheet_t far *sheet)
 
 {
   char xOffset;
@@ -1011,7 +1011,7 @@ char_sheet_t * __cdecl16far chargen(void)
         srand8(CONCAT13((char)(TimerSeed.hi >> 8),CONCAT12((char)TimerSeed.hi,TimerSeed.lo)));
         manage_openTalkWindow();
         manage_rollStats(sheet,(char)sheetSeg);
-        manage_usesLitoa10((char_sheet_t *)
+        manage_usesLitoa10((char_sheet_t far *)
                            CONCAT13((char)(sheetSeg >> 8),CONCAT12((char)sheetSeg,sheet)));
         itemSegs[0] = 0x2410;
         menuItems = 0x4fce;
@@ -1103,7 +1103,7 @@ char_sheet_t * __cdecl16far chargen(void)
       }
       sheet->buildType[0] = 7;
       sheet->partySlot = 0xff;
-      manage_usesLitoa10((char_sheet_t *)
+      manage_usesLitoa10((char_sheet_t far *)
                          CONCAT13((char)(sheetSeg >> 8),CONCAT12((char)sheetSeg,sheet)));
       dlgResult = abilitiesDlg((char_sheet_t *)
                            CONCAT13((char)(sheetSeg >> 8),CONCAT12((char)sheetSeg,sheet)));
@@ -1112,14 +1112,14 @@ char_sheet_t * __cdecl16far chargen(void)
                 ((char_sheet_t *)
                  CONCAT13((char)(sheetSeg >> 8),CONCAT12((char)sheetSeg,sheet)));
       while( true ) {
-        manage_usesLitoa10((char_sheet_t *)
+        manage_usesLitoa10((char_sheet_t far *)
                            CONCAT13((char)(sheetSeg >> 8),CONCAT12((char)sheetSeg,sheet)));
         dlgResult = alignmentDlg((char_sheet_t *)
                              CONCAT13((char)(sheetSeg >> 8),CONCAT12((char)sheetSeg,sheet)));
         if ((dlgResult & 0xff) == 0) break;
 L_chargen_1661:
         manage_openTalkWindow();
-        manage_usesLitoa10((char_sheet_t *)
+        manage_usesLitoa10((char_sheet_t far *)
                            CONCAT13((char)(sheetSeg >> 8),CONCAT12((char)sheetSeg,sheet)));
         genderPicked = uiPickGender((char_sheet_t *)
                              CONCAT13((char)(sheetSeg >> 8),CONCAT12((char)sheetSeg,sheet)));
@@ -1156,7 +1156,7 @@ L_chargen_1661:
               if (choice != 2) {
                 sheet->statMask = sheet->statMask | 2;
                 manage_openTalkWindow();
-                manage_usesLitoa10((char_sheet_t *)
+                manage_usesLitoa10((char_sheet_t far *)
                                    CONCAT13((char)(sheetSeg >> 8),
                                             CONCAT12((char)sheetSeg,sheet)));
                 TimerSeed.lo = 0;
@@ -1300,7 +1300,7 @@ void __cdecl16far manage_textHalflingCastle(void)
     sheetSeg = (int)SEG_OF(GLeaderSheets[PartyCount - 1]);
     newLeader = (char_sheet_t *)far_ofs_u32(GLeaderSheets[PartyCount - 1]);
     widths = newLeader;
-    manage_usesLitoa10((char_sheet_t *)
+    manage_usesLitoa10((char_sheet_t far *)
                        CONCAT13((char)((uint)sheetSeg >> 8),CONCAT12((char)sheetSeg,newLeader)));
   }
   sayText = ovr_fmVsprintf("Place %s here.",
@@ -1390,9 +1390,241 @@ byte __cdecl16far manage_usesGLeaderCount3(byte partyIndex)
 
 
 /* 4d05:1bee */
-/* DECOMPILATION FAILED: Exception while decompiling 4d05:1bee: Response buffer size exceeded for: st.exe
- */
-undefined manage_settlementScreen() { return 0; }
+
+/* Settlement screen: a redraw loop that rebuilds the menu for the current leader and dispatches the
+   chosen entry.  500 instructions, 14 overlay + 10 near calls (C 24, image 24).
+
+   Overlay pairs are named from this module's own derived code and checked against their pushed-word
+   counts at every site: 0x150,0x34 = ovr_stshAlloc, 0x1f0,0x34 = ovr_ovc41_usesGMenuItem,
+   0x210,0x39 = ovr_season_usesDifficulty, 0x1c8,0x20 = ovr_uiInputText, 0x170,0x7a = ovr_stsprintf,
+   0x160,0x2a = ovr_ovc15_capitalize, 0x140,0x2a = ovr_stop_audio.  `0x278,0x20` (Help) has no entry
+   in audit/overlay_segments.csv and no same-module vote, so it stays a documented gap.
+
+   `items[]` holds the menu far pointers and `codes[]` the per-item code at the same index; the codes
+   are dispatched through the nine-entry jump table at cs:0x2168 (codes 2..0xa). */
+void __cdecl16far manage_settlementScreen(byte partyIndex)
+
+{
+  char_sheet_t far *sheet;
+  far_t items[9];
+  byte codes[13];
+  char title[0x190];
+  char nameBuf[0x54];
+  uint16_t popularity;
+  byte found;
+  byte firstPass;
+  byte titleKept;
+  byte redraw;
+  byte sel;
+  byte n;
+
+  ovr_stshAlloc();
+  popularity = manage_usesGLeaderCount();
+  ovr_ovc41_usesGMenuItem();
+  Seed_2000_d1da = GfxRndSeed;
+  Seed_2000_d1d8 = GfxRndSeed2;
+  firstPass = 0;
+  Cancelled = 0;
+  titleKept = 0;
+
+  do {
+    manage_openTalkWindow();
+    sheet = GLeaderSheets[partyIndex];
+    if (sheet->faction == 0) {
+      GfxRndSeed = sheet->x;
+      GfxRndSeed2 = sheet->y;
+    }
+    else {
+      GfxRndSeed = Seed_2000_d1da;
+      GfxRndSeed2 = Seed_2000_d1d8;
+    }
+    partyFilter = partyIndex;
+    unitTypeFilter = 0xfe;
+    ovr_stshAlloc();
+    unitTypeFilter = 0xff;
+    partyFilter = 0xff;
+    manage_usesLitoa10(sheet);
+    found = manage_findFirstLeader();
+
+    if (titleKept == 0) {
+      if (found == partyIndex) {
+        if (GHighScoreSaved == 0) {
+          ovr_stsprintf((char far *)MK_FP(_SS,title),(char far *)MK_FP(_DS,s_year_d_s),
+                        (uint16_t)(GYear + 1),RankReqMsgPtrs[sheet->alignment]);
+        }
+        else {
+          ovr_stsprintf((char far *)MK_FP(_SS,title),
+                        (char far *)MK_FP(_DS,s_year_d_this_leader_s),
+                        (uint16_t)(GYear + 1),
+                        (char far *)MK_FP(menuHighlightTable[sheet->alignment].seg,
+                                          menuHighlightTable[sheet->alignment].ofs));
+        }
+      }
+      else {
+        title[0] = 0;
+      }
+    }
+
+    n = 0;
+    /* the other leader seen by findFirstLeader: its title far pointer, read from the table based at
+       GStatsLabels[4] (0x4955 in the original DGROUP, the same base manage_playerTitle uses). */
+    if ((sheet->faction == 0) && (found != 0xff) && (found != partyIndex)) {
+      items[n] = (GStatsLabels + 4)[GLeaderSheets[found]->titleIndex * 2 +
+                                    GLeaderSheets[found]->gender];
+    }
+    else {
+      items[n].seg = 0;
+      items[n].ofs = 0;
+    }
+    codes[n] = 2;
+    n++;
+
+    if ((sheet->faction == 0) && (manage_usesGLeaderCount3(partyIndex) != 0xff)) {
+      items[n].seg = (uint16_t)_DS;
+      items[n].ofs = (uint16_t)s_next_leader;
+    }
+    else {
+      items[n].seg = 0;
+      items[n].ofs = 0;
+    }
+    codes[n] = 3;
+    n++;
+
+    if (sheet->faction == 0) {
+      if ((sheet->flags5d & 2) == 0) {
+        items[n].seg = (uint16_t)_DS;
+        items[n].ofs = (uint16_t)s_auto_build;
+      }
+      else {
+        items[n].seg = (uint16_t)_DS;
+        items[n].ofs = (uint16_t)s_auto_build_2410_50c1;
+      }
+    }
+    else {
+      items[n].seg = 0;
+      items[n].ofs = 0;
+    }
+    codes[n] = 8;
+    n++;
+
+    items[n].seg = (uint16_t)_DS;
+    items[n].ofs = (uint16_t)s_census;
+    codes[n] = 4;
+    n++;
+
+    items[n].seg = (uint16_t)_DS;
+    items[n].ofs = (uint16_t)s_property;
+    codes[n] = 5;
+    n++;
+
+    if ((sheet->faction == 0) && (found == partyIndex)) {
+      items[n].seg = (uint16_t)_DS;
+      items[n].ofs = (uint16_t)s_total_census;
+      codes[n] = 6;
+      n++;
+      items[n].seg = (uint16_t)_DS;
+      items[n].ofs = (uint16_t)s_all_property;
+      codes[n] = 7;
+      n++;
+    }
+
+    items[n].seg = (uint16_t)_DS;
+    items[n].ofs = (uint16_t)s_help;
+    codes[n] = 0xa;
+    n++;
+
+    items[n].seg = (uint16_t)_DS;
+    items[n].ofs = (uint16_t)s_Done_2410_50fb;
+    codes[n] = 1;
+    n++;
+
+    /* one-shot sound selection on the first draw */
+    if ((sheet->faction == 0) && (firstPass == 0)) {
+      if ((uint8_t)ovr_season_usesDifficulty() <= popularity) {
+        SfxPending = 0x41;
+      }
+      else if (popularity <= 0x1e) {
+        SfxPending = 0x5b;
+      }
+      else {
+        SfxPending = 0x3c;
+      }
+      CurSfxType3 = 0x3c;
+      firstPass = 1;
+    }
+
+    sel = ovr_uiInputText(items,n,(char far *)MK_FP(_SS,title),0);
+    if (sel != 0) {
+      sel = codes[sel - 1];
+    }
+    redraw = 0;
+    titleKept = 0;
+    switch (sel - 2) {
+    case 0:
+      partyIndex = found;
+      redraw = 1;
+      break;
+    case 1:
+      partyIndex = manage_usesGLeaderCount3(partyIndex);
+      redraw = 1;
+      break;
+    case 2:
+      manage_textTotalPopulation(partyIndex);
+      if (Cancelled == 0) {
+        redraw = 1;
+      }
+      break;
+    case 3:
+      manage_textAllProperty(partyIndex);
+      if (Cancelled == 0) {
+        redraw = 1;
+      }
+      break;
+    case 4:
+      manage_textTotalPopulation(0xff);
+      if (Cancelled == 0) {
+        redraw = 1;
+      }
+      break;
+    case 5:
+      manage_textAllProperty(0xff);
+      if (Cancelled == 0) {
+        redraw = 1;
+      }
+      break;
+    case 6:
+      sheet->flags5d = (byte)(sheet->flags5d ^ 2);
+      if ((sheet->flags5d & 2) == 0) {
+        ovr_stsprintf((char far *)MK_FP(_SS,title),
+                      (char far *)MK_FP(_DS,s_s_will_now_build_2410_5100),
+                      ovr_ovc15_capitalize((char far *)MK_FP(_SS,nameBuf),sheet));
+      }
+      else {
+        ovr_stsprintf((char far *)MK_FP(_SS,title),
+                      (char far *)MK_FP(_DS,s_s_will_no_longer_2410_5127),
+                      ovr_ovc15_capitalize((char far *)MK_FP(_SS,nameBuf),sheet));
+      }
+      titleKept = 1;
+      redraw = 1;
+      break;
+    case 7:
+      /* code 9: the jump table's seventh entry is the loop tail itself, i.e. no action */
+      break;
+    case 8:
+      /* GAP: `lcall 0x278,0x20` - the selector has no entry in audit/overlay_segments.csv and no
+         same-module vote names it, so no call can be emitted. */
+      redraw = 1;
+      break;
+    }
+  } while (redraw != 0);
+
+  if (Cancelled == 0) {
+    GfxRndSeed = Seed_2000_d1da;
+    GfxRndSeed2 = Seed_2000_d1d8;
+    ovr_stshAlloc();
+    ovr_stop_audio();
+  }
+}
 
 /* 4d05:217a */
 
@@ -1799,8 +2031,13 @@ uint16_t __cdecl16far manage_usesGUnits(void)
 
 
 
-/* 4d05:277a */
-void __cdecl16near manage_textAllProperty2(uint16_t partyArg)
+/* 4d05:26f6 */
+
+/* The entry at 0x277a that Ghidra filed separately is the continuation of this function:
+   it has no prologue, reuses this frame and is reached by fall-through, so 0x26f6..0x2b08
+   is one routine.  (The table's 129-byte size for 0x26f6 stops mid-instruction at 0x2777; the
+   `mov byte ptr [bp-0x16],0` at 0x2776 runs to 0x2779.) */
+void __cdecl16near manage_textAllProperty(uint16_t partyArg)
 
 {
   long lVar1;
@@ -2113,7 +2350,7 @@ int owner;
   keyboardInputMode = 0;
   if (((*(char *)(unaff_BP + -0x15) != '\0') && (*(char *)(unaff_BP + -0x15) != '\x01')) &&
      (*(char *)(unaff_BP + -0x15) != -2)) {
-    manage_textAllProperty2(0);   /* GUESS: the duplicate fragment below has no frame argument to forward */
+    manage_textAllProperty(0);   /* GUESS: the duplicate fragment below has no frame argument to forward */
     return;
   }
   if ((ScreenMode == '\0') && (*(char *)(unaff_BP + -0x15) != -2)) {
@@ -2149,7 +2386,7 @@ uint16_t __cdecl16far manage_usesCurSfxType32()
   keyboardInputMode = 0;
   if (((*(char *)(unaff_BP + -0x15) != '\0') && (*(char *)(unaff_BP + -0x15) != '\x01')) &&
      (*(char *)(unaff_BP + -0x15) != -2)) {
-    manage_textAllProperty2(0);   /* GUESS: the duplicate fragment below has no frame argument to forward */
+    manage_textAllProperty(0);   /* GUESS: the duplicate fragment below has no frame argument to forward */
     return;
   }
   if ((ScreenMode == '\0') && (*(char *)(unaff_BP + -0x15) != -2)) {
@@ -2255,7 +2492,7 @@ void __cdecl16far manage_highlightStructures(uint8_t partyIndex,int structType)
    UNITS and a POPULATION column per band, and a menu returning the chosen entry.
    Re-derived from the image; the former body carried another screen's text code. */
 
-char * __cdecl16far manage_textTotalPopulation(byte charIndex,short arg6,char_sheet_t *sheet)
+char * __cdecl16far manage_textTotalPopulation(byte charIndex)
 
 {
   far_t bands[24];
@@ -2277,8 +2514,6 @@ char * __cdecl16far manage_textTotalPopulation(byte charIndex,short arg6,char_sh
   int bandIdx;
   int n;
 
-  (void)arg6;
-  (void)sheet;
   /* bands[12..23] are the twelve level labels; bands[0..11] the per-class continua
      (class 4, class 5, class 6 - four entries each, the last of 5 and 6 null). */
   memcpy(&bands[12],LevelBandLabels,0x30);

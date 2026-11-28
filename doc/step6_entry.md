@@ -21897,3 +21897,98 @@ was not committed.
 
     build 65/65 · LINK.LOG 0 errors · REBUILT.EXE 459,876
     grep_checks 11,760 · compare_state 1,628/0/0 · diff_dgroup 1,639/1,805
+
+
+## `4d05:1bee` written, and `4d05:26f6` recovered as the front of `manage_textAllProperty`
+
+**`4d05:26f6` was never exported.** The table lists it as `manage_textAllProperty` (129 bytes, 2 calls)
+and separately `4d05:277a` as `manage_textAllProperty2` (910 bytes, 30 calls), but `0x277a` has **no
+prologue**, is reached by fall-through from the `mov byte ptr [bp-0x16],0` at `0x2776` (which runs to
+`0x2779` - the 129-byte size stops mid-instruction), and reuses `[bp-0x15]`/`[bp-0x16]`. So
+`0x26f6..0x2b08` is one routine. The tree already had a complete body for it under the `0x277a`
+marker, so this was a merge/rename, not a rewrite: marker moved to `4d05:26f6`,
+`manage_textAllProperty2` -> `manage_textAllProperty`, and its two internal call sites updated.
+
+**`4d05:1bee` (`manage_settlementScreen`)** - the 5-line `DECOMPILATION FAILED` stub is now a 237-line
+body derived from the 500-instruction listing (`tmp/o21_1bee.txt`): a redraw loop that rebuilds the
+menu for the current leader and dispatches the chosen entry. Census now matches exactly
+(24 overlay + 10 near = 24 C calls against 24 image calls) and the entry leaves the table.
+
+The decode, for the record:
+
+    ovr_stshAlloc(); popularity = manage_usesGLeaderCount(); ovr_ovc41_usesGMenuItem();
+    Seed_2000_d1da = GfxRndSeed; Seed_2000_d1d8 = GfxRndSeed2;
+    firstPass = 0; Cancelled = 0; titleKept = 0;
+    do {
+      manage_openTalkWindow();
+      sheet = GLeaderSheets[partyIndex];
+      GfxRndSeed/GfxRndSeed2 = faction == 0 ? sheet->x/sheet->y : the two saved globals;
+      partyFilter = partyIndex; unitTypeFilter = 0xfe; ovr_stshAlloc();
+      unitTypeFilter = 0xff; partyFilter = 0xff; manage_usesLitoa10(sheet);
+      found = manage_findFirstLeader();
+      if (!titleKept) {
+        if (found == partyIndex)
+          stsprintf(title, GHighScoreSaved ? "Year %d. This leader %s" : "Year %d. %s",
+                    GYear+1, GHighScoreSaved ? menuHighlightTable[alignment]
+                                             : RankReqMsgPtrs[alignment]);
+        else title[0] = 0;
+      }
+      items[]/codes[] in this order:
+        0 the other leader's title far pointer, from the table based at GStatsLabels[4] (0x4955 in the
+          original DGROUP - the same base manage_playerTitle uses), code 2, or a null pointer
+        1 "Next Leader"  (0x50a5), code 3, if faction==0 && nextLeader(partyIndex) != 0xff
+        2 "Auto-build    \x7f"/"Auto-build" (0x50b1/0x50c1) by flags5d bit 1, code 8, if faction==0
+        3 "Census" (0x50cc) code 4;  4 "Property" (0x50d3) code 5
+        5,6 "Total Census" (0x50dc) / "All Property" (0x50e9), codes 6/7, if faction==0 &&
+            found==partyIndex
+        7 "Help" (0x50f6) code 0xa;  8 "Done" (0x50fb) code 1
+      if (faction==0 && !firstPass) {
+        SfxPending = usesDifficulty() <= popularity ? 0x41 : (popularity <= 0x1e ? 0x5b : 0x3c);
+        CurSfxType3 = 0x3c; firstPass = 1;
+      }
+      sel = uiInputText(items, n, title, 0);  if (sel) sel = codes[sel-1];
+      redraw = 0; titleKept = 0;
+      switch (sel-2) /* jump table cs:0x2168 -> 200d 201a 202f 2051 2073 2094 20b3 212c 2123 */ {
+        0 partyIndex = found;                                   redraw = 1
+        1 partyIndex = nextLeader(partyIndex);                   redraw = 1
+        2 textTotalPopulation(partyIndex);   redraw = !Cancelled
+        3 textAllProperty(partyIndex);       redraw = !Cancelled
+        4 textTotalPopulation(0xff);         redraw = !Cancelled
+        5 textAllProperty(0xff);             redraw = !Cancelled
+        6 flags5d ^= 2; stsprintf(title, flags5d&2 ? "%s will no longer build houses automatically."
+                                                   : "%s will now build homes automatically.",
+                                  capitalize(nameBuf, sheet));  titleKept = 1; redraw = 1
+        7 code 9: no action
+        8 lcall 0x278,0x20 (Help);            redraw = 1        [documented GAP: no selector entry]
+      }
+    } while (redraw);
+    if (!Cancelled) { GfxRndSeed/GfxRndSeed2 = saved; ovr_stshAlloc(); ovr_stop_audio(); }
+
+**Four signature defects fixed to make the body faithful** (each verified against the image):
+
+* `manage_textTotalPopulation`: `(byte, short, char_sheet_t *)` -> `(byte)`. Every site pushes exactly
+  one word, and the body already carried `(void)arg6; (void)sheet;`.
+* `manage_usesLitoa10`: `char_sheet_t *` -> `char_sheet_t far *`. The image does `les bx, ptr [bp + 6]`,
+  i.e. it dereferences a 4-byte far pointer; the six `(char_sheet_t *)CONCAT13(...)` call sites are now
+  `(char_sheet_t far *)`.
+* `ovr_ovc15_capitalize`: `undefined` -> `char far *`. The image consumes DX:AX after the call and
+  pushes both words into `stsprintf`; the callee's own body (ovc15_sprite.c:883) reads
+  `in_stack_00000006/00000008/0000000a`, so its real signature is
+  `char far *capitalize(char far *dest, char far *src)`.
+* `manage_settlementScreen`: `undefined()` -> `void(byte)`, matching `[bp+6]` as the party index.
+
+**Census: two more continuations.** `screen_calls.py` now also merges `4d05:277a` and `4d05:2b09` into
+`4d05:26f6`: `0x2b09` is reached by `jmp 0x2b09` from `0x278c` and reads `[bp-0x15]`/`[bp+6]`, so it is
+the routine's tail, not an entry. With the merges `4d05:26f6` measures `0x26f6..0x2bc4` and matches
+36 C calls against 36 image calls (2 + 30 + 4), so it leaves the table too.
+
+## Measured (HEAD 90a8b51c -> this commit)
+
+    grep_checks      11,760 (unchanged: the new body introduces no placeholder names)
+    REBUILT.EXE      459,876 -> 461,428 (+1,552, the body itself)
+    build 65/65, LINK.LOG 0 errors
+    compare_state    1,628 matched / 0 different / missing 2      (unchanged)
+    diff_dgroup      1,639/1,805 matched, 5 layout runs           (unchanged)
+    compare_runtime  1,692 matched / 1,683 identical / 9 different (unchanged, all three sample points)
+    screen_calls     4d05:1bee  leaves the table (was C 1 / image 24)
+                     4d05:26f6  leaves the table (C 36 / image 36 after the continuation merges)

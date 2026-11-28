@@ -52,6 +52,8 @@ for seg in starts:
 CONTINUATIONS = [
     (0x5ded, 0x14a8),   # no prologue, reads 5ded:10ea's frame, reached by `jmp 0x14a8`
     (0x5ded, 0x1433),   # no caller and no jump reaches it: mid-flow of 10ea's state-3/5 arm
+    (0x4d05, 0x277a),   # continuation of 4d05:26f6: no prologue, fall-through, same frame
+    (0x4d05, 0x2b09),   # 4d05:26f6's tail: reached by `jmp 0x2b09`, reads [bp-0x15]/[bp+6]
 ]
 for seg, ofs in CONTINUATIONS:
     if seg in starts and ofs in starts[seg]:
