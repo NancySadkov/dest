@@ -23114,3 +23114,49 @@ recorded number); the +1 bias is now recorded so the deltas are read correctly.
     compare_runtime  280 identical / 11 different (unchanged, all three sample points)
 
 `55fe:0000` is now a complete body: no GAP markers remain.
+
+
+## New ratchet: `scripts/structural_deficits.py` - the honest list of unwritten bodies
+
+`screen_calls.py` was the only call-census tool, and it is hard to act on: it prints the largest raw
+deltas, which mixes three different things. This script separates them and reports only bodies where
+code is genuinely absent.
+
+**Correction 1 - the +1 definition bias.** `screen_calls` counts `IDENT(` over the body, and the
+body starts at the `/* seg:ofs */` marker, so the function's own signature line counts as a call.
+The distribution over all 917 screened functions:
+
+    delta +1    817        delta  0     34
+    delta -2..-340  36     delta +2..+68  29
+
+So `+1` is parity, and every delta the log has quoted so far is one lower than the real figure.
+`55fe:0000` at `C 8 / image 7` is therefore *exact*; `7e7c:0b9c` at `C 178 / image 187` is ten short,
+not nine.
+
+**Correction 2 - shape differences.** Three bodies are complete but differ from the image's shape:
+
+    ovc44_strong_dat.c 6ffe:009b   image unrolls 9 allocator calls; the body loops
+    ovc44_strong_dat.c 6ffe:01c5   same, 9 slots
+    ovc01_driver.c     2d63:04b7   image calls the row-base helper 3x; the body inlines the arithmetic
+
+They are listed as excluded rather than counted as missing.
+
+**What is actually left (game code, deficit >= 3):**
+
+    ovc45_unitinfo.c   77eb:0d61   2385 bytes    0/58   not derived (blocked on four 0x200 calls)
+    ovc09_init.c       3381:08dc   3515        48/60
+    ovc14_attact.c     3f0b:1082   2172        28/40
+    ovc47_constrct.c   7e7c:0b9c   8112       177/187
+    ovc22_classes.c    5087:056e   3842         4/11
+    ovc09_init.c       3381:01c8    116         4/7
+    ovc14_attact.c     3f0b:0685    426         6/9
+    ovc31_config.c     6257:009f    301        10/13
+
+Eight game functions, 106 missing calls in total. Every other function in the tree matches the image
+after the +1 correction. That is the remaining structural distance - much smaller than the headline
+`grep_checks` total suggests, because that total is dominated by Ghidra local names inside bodies
+that already exist.
+
+## Committed
+
+    scripts/structural_deficits.py     the census with both corrections, artefacts listed explicitly
