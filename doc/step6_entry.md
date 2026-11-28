@@ -24566,3 +24566,53 @@ walks, so the wire layout is unchanged.
     diff_dgroup          288/1,805 matched (unchanged)
     compare_runtime      280 identical / 11 different at entry, init_game and key (unchanged)
     structural_deficits  two game bodies: 7e7c:0b9c (177/187), 77eb:0d61 (54/58)
+
+
+## 77eb:1754 / 77eb:1bb3 (`ovc45_textDone` / `textDone2`): findings only, no change shipped
+
+I ran the `6386:1c9f` procedure on both bodies and stopped short of editing, because each candidate
+fix needs more verification than the remaining budget allows and a wrong stack layout here is worse
+than the current wrong code. What the dump establishes:
+
+**The strings are right, and they name the menu.** `ds:0x7706` = `"Excavate"`, `ds:0x7723` =
+`"%s: Search this location for minerals?  Active party is %s the %s."`, `ds:0x77bd` =
+`"Remove %s permanently.  Are you sure?"` - and the body already stores `0x7706` for entry 0, so the
+label values are not the problem.
+
+**The far-pointer array is split and indexed wrongly.** The image builds `si*4` entries at
+`bp-0x28e` inside a `sub sp,0x28e` frame (`ss:[bx+2] = ds; ss:[bx] = 0x7706`), i.e. a
+`far_t menu[N]`. The body instead declares
+
+    uint8_t menuItems;          /* entry 0's OFFSET, as a byte */
+    uint16_t auStack_28e[19];   /* the remaining halves */
+
+and writes `auStack_28e[1] = 0x770f` (an offset) into what is entry 0's segment slot, then
+`auStack_28e[2] = ...seg` - the same off-by-one-word interleave as `69c8:04c6`. `menuItems` being
+`uint8_t` also truncates `0x7706` to `0x06`, exactly like `at`'s `entries`.
+
+**Two buffers are 1-byte.** `text` is `bp-0x66`, which is `ovc45_compute9`'s destination, and `msg`
+is `bp-0x266`, which receives `fmVsprintf`'s result through `strcpy` at `0x18c8`. Both are declared
+`uint8_t`. I did **not** resize them: the frame only leaves `(0x28e - 0x266)/4 = 10` entries for the
+menu before `msg`'s address, so the array is at most ten far_t, and `compute9`'s `0x55` argument is a
+pixel width rather than a character count - the correct sizes are not derivable from the numbers in
+front of me without reading `compute9`'s write bound.
+
+**The restructure I would do next** (all verified against the image, none of it guessed):
+
+    far_t menu[10];          /* at bp-0x28e, stride 4: {ofs, seg} per entry */
+    uint8_t menuCode[11];    /* at bp-0xa */
+    char msg[?]  at bp-0x266 ; char text[?] at bp-0x66
+
+with `menu[k] = {0x7706, 0x2410}` etc., `menuCode[k] = 1..4`, and `ovr_ovc28_compute2` given
+`&menu[0]` instead of the split halves.
+
+## Measured (HEAD abfbb836 -> this commit)
+
+No source change in this commit; the gates are the ones the previous commit left:
+
+    grep_checks          7,974
+    REBUILT.EXE          447,906
+    build 65/65, LINK.LOG 0 errors
+    compare_state        identical 734 / 7 different / 889 missing
+    diff_dgroup          288/1,805 matched
+    compare_runtime      280 identical / 11 different at entry, init_game and key
