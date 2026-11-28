@@ -527,8 +527,7 @@ ovc40_usesAlignToSeg
     labelIdx = 2;
     format1Tab = &format1;
     msgPtr = ovr_stsprintf((char *)&text1,
-                           (char *)CONCAT22(*(uint16_t *)(format1Tab + (uint)formatIndex * 4),_SS
-                                           ),
+                           (char far *)MK_FP(groupNames[2 + (uint)formatIndex].seg,groupNames[2 + (uint)formatIndex].ofs),
                            (char *)CONCAT13((char)((uint)textOfs >> 8),
                                             CONCAT12((char)textOfs,auStack_62[(uint)formatIndex * 2]
                                                     )),(char)textOfs,textSeg);
@@ -536,8 +535,7 @@ ovc40_usesAlignToSeg
     ofsHi = (undefined1)((uint)msgPtr >> 8);
     format2Tab = &format2;
     msgPtr = ovr_stsprintf((char *)&text2,
-                           (char *)CONCAT22(*(uint16_t *)(format2Tab + (uint)formatIndex * 4),_SS
-                                           ),
+                           (char far *)MK_FP(rankNames[2 + (uint)formatIndex].seg,rankNames[2 + (uint)formatIndex].ofs),
                            (char *)CONCAT22(textOfs,(char *)auStack_52[(uint)formatIndex * 2]),
                            textSeg);
     /* 0x092a: row 2, both pointers rankNames[11]. */

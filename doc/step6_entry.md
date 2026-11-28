@@ -24779,3 +24779,42 @@ renamed. `bVar3` (7) is `(byte)limit` returned and then `0x10`, also two roles.
     diff_dgroup          288/1,805 matched (unchanged)
     compare_runtime      280 identical / 11 different at entry, init_game and key (unchanged)
     structural_deficits  two game bodies: 7e7c:0b9c (177/187), 77eb:0d61 (54/58)
+
+
+## `ovc40_usesAlignToSeg`: the run-time-indexed format tables were entries of the copied tables
+
+`formatIndex`'s bound and the tables' identity both come out of one instruction:
+
+    0x0815  mov al, byte ptr [bp + 0x10]     ; formatIndex is the 6th parameter
+    0x081a  shl ax, 2                        ; 4-byte stride: a far_t
+    0x081d  lea dx, [bp - 0x62]              ; table base
+    0x0820  add ax, dx
+    0x0824  push word ptr ss:[bx + 2]        ; segment
+    0x0828  push word ptr ss:[bx]            ; offset
+
+and `bp-0x62` is **`groupNames[2]`** (the 16-byte table copied from `ds:0x6b76` sits at `bp-0x6a`).
+The second site uses `bp-0x52`, which is **`rankNames[2]`** (the 60-byte table at `bp-0x5a`). So there is
+no separate "format table": the body's `uint8_t format1; uint8_t *format1Tab = &format1;` was
+indexing a never-written 1-byte scalar at a 4-byte stride - the same class as `at`'s `entries`.
+
+Both sites now read the copied table directly:
+
+    (char far *)MK_FP(groupNames[2 + (uint)formatIndex].seg, groupNames[2 + (uint)formatIndex].ofs)
+    (char far *)MK_FP(rankNames[2 + (uint)formatIndex].seg, rankNames[2 + (uint)formatIndex].ofs)
+
+`formatIndex` is tested for 0, 2, 3, 4, 5 and 6 in this body, so the index expression is left
+unclamped; the groups table holds four entries, and only this branch's range reaches past it, which is
+a separate question from the pointer's source.
+
+## Measured (HEAD f85f5ffc -> this commit)
+
+    grep_checks          7,895 (unchanged - the fix replaces a stack read with a table read)
+    REBUILT.EXE          447,810 -> 447,858   (+48: two 4-byte far reads)
+    build 65/65, LINK.LOG 0 errors
+    compare_state        identical 734 / 7 different / 889 missing (unchanged)
+    diff_dgroup          288/1,805 matched (unchanged)
+    compare_runtime      280 identical / 11 different at entry, init_game and key (unchanged)
+
+`0x07c0` is still unaccounted for: it is a row-0 label whose two pointers are `rankNames[0]`, and no
+statement in the current branch structure produces it. That needs the branch disposition re-derived
+against the image's call order, not another pointer repair.
