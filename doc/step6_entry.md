@@ -25547,3 +25547,50 @@ so it is one pointer variable per field group, not one per statement.
       constr_usesAgnt_clear (36ce:0995)   -121
       ovc24_textKill (5943:026e)          -144
       ovc15_textMake (4207:10a3)          -104
+
+
+## `ovc43_usesFmFreeAudio` (6fbe:0000): eight slots resolved, two deliberately left, grep 5,721 -> 5,637 (-84)
+
+This one is a chain walk over char sheets that ends by allocating and filling a new one.
+
+    uStack_6 -> curSheet     the sheet the chain is currently at (2 sites)
+                newSheet     the sheet being built (24 sites)
+    uVar6    -> opcode       nameText[4] - 0xb, the record kind the switch dispatches on
+                newLeaderIdx GLeaderCount before the increment
+    pcVar4   -> resultSheet  the 0x2410 sentinel the early return uses
+                nextSheet    the sheet the chain step found
+                allocSheet   ovr_stshAlloc(0xae)'s result
+    pcVar1   -> statPtrA / statPtrB   the two level- and class-scaled stat-byte addresses
+    iVar7    -> scanIdx      how many records the walk has taken
+    uVar8    -> gindexHi / sheetSegHi
+    uVar2    -> randVal      ovr_randBelow(1,0)
+    pfVar3   -> protPtr      ovr_ovc22_textRingProt's result
+
+**Left, with the reason recorded:**
+
+- `bStack_8` (6): holds `(byte)sheetSeg` at 44, is tested for 0xff at 57, is **reassigned to
+  `GLeaderCount` at 80**, and is read again at 127/128 on both paths. Two different values in one slot
+  with no assignment-before-read boundary - splitting it would change which value the tail sees.
+- `pcVar5` (7): `sheet->nameText + 6` at 45, then used as a *segment* at 79/82 and as an *offset* at 89.
+  The same slot is a pointer in one place and two halves of a far pointer in others, so a rename would
+  have to invent which half it is at each site.
+
+Both are named in the log rather than guessed, the same treatment as `ovc49_drawAgents`' `uVar13`.
+
+## Measured (HEAD 902a4493 -> this commit)
+
+    grep_checks          5,721 -> 5,637   (-84)
+    REBUILT.EXE          447,938 -> 447,954   (+16: frame reshuffle)
+    build 65/65, LINK.LOG 0 errors
+    compare_state        identical 734 / 7 different / 889 missing (unchanged)
+    diff_dgroup          288/1,805 matched (unchanged)
+    compare_runtime      280 identical / 11 different at entry, init_game and key (unchanged)
+    structural_deficits  two game bodies: 7e7c:0b9c (177/187), 77eb:0d61 (54/58)
+
+## Turn total (HEAD dbb7af4e -> here)
+
+    grep_checks          6,090 -> 5,637   (-453)
+      constr_usesAgnt_clear (36ce:0995)   -121
+      ovc24_textKill (5943:026e)          -144
+      ovc15_textMake (4207:10a3)          -104
+      ovc43_usesFmFreeAudio (6fbe:0000)    -84
