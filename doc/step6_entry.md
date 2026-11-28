@@ -25096,3 +25096,49 @@ reads on entry (`a = CONCAT22(unaff_SI,unaff_DI)`). There is nothing left to nam
 Four intermediate states were compiled and linked while working through the block; each one built
 65/65 and linked with 0 errors before the next was attempted, so the tree has never carried a broken
 state.
+
+
+## `ovc49_drawAgents` (8699:1e09): 253 hits down to 9, grep 7,187 -> 6,930 (-257)
+
+The largest single body left in `ovc49_agents.c` (762 lines). Twenty-five slots resolved; every one
+was read with its statements rather than renamed by pattern, and eight of them turned out to hold
+several unrelated lifetimes:
+
+    uVar10 -> bodyFrame / compute1Res / activeRes / crossIdx / compute27Res / spellRes
+              compute12Res / entScan           (8 roles, from ovc49_body1 through the entity scan)
+    uVar12 -> randRes / randByte / pan / sprOfs
+    uVar13 -> framesSeg / agntsSeg / ptrHi / cursorRes
+    uVar21 -> savedY / sprSeg / stgSeg
+    uVar15 -> agntsSeg2 / recSeg / activeRes2
+    iVar17 -> sprEntryOfs / recOfs / colIdx / stExitRes / framesOfs / screenX / prevRecOfs / scanOfs
+    iVar14 -> colIdx / crossY / recOfs / entY
+    bVar4  -> timerVal / animFrameVal ;  bVar5 -> moved / destYVal
+    bVar7  -> onScreen ;  bVar8 -> nearTop
+    cStack_3/4/5/6 -> sawFaction0 / sawFaction1 / bothGone / anyCleared
+    cStack_13 -> factionSeen1 (written through `(&factionSeen)[faction] = 1`)
+    puVar3 -> flagsPtr ; puVar19 -> scanEntry
+    uStack_1a -> deadTargetY (1404, overwritten at 1679 before any read) / animFrameNo
+    uStack_16 -> stgSeg2
+
+**Two findings recorded rather than "fixed":**
+
+1. `uStack_16` is used five times as `gfx_XX.seg = uStack_16;` and is **never written anywhere in the
+   body**. The sibling site at 1494 does the right thing
+   (`gfx_01.seg = (uint16_t)((ulong)stgFar >> 0x10)`), so the value is almost certainly `stgFar`'s
+   segment; substituting it would change behaviour, and I did not do that on a guess. It is named
+   `stgSeg2` with the gap in its comment.
+2. `uVar13`'s remaining 8 uses are a genuine interleave: `savedX` is stored at 1242 and restored at
+   1328, but the **same slot** receives `ovc49_agentIsActive`'s result at 1337 and is then restored
+   into x again at 1365 and 1393. Splitting the slot into `savedX` and `activeRes` would silently
+   change those three stores, and the image's data flow is needed to say which variable each belongs
+   to. Left as `uVar13`, documented here as an open image question.
+
+## Measured (HEAD a4df9969 -> this commit)
+
+    grep_checks          7,187 -> 6,930   (-257)
+    REBUILT.EXE          447,858 (unchanged size)
+    build 65/65, LINK.LOG 0 errors
+    compare_state        identical 734 / 7 different / 889 missing (unchanged)
+    diff_dgroup          288/1,805 matched (unchanged)
+    compare_runtime      280 identical / 11 different at entry, init_game and key (unchanged)
+    structural_deficits  two game bodies: 7e7c:0b9c (177/187), 77eb:0d61 (54/58)
