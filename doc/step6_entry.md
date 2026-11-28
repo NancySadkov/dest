@@ -25828,3 +25828,41 @@ Only `unaff_SI` (2) is left, the register value the image leaves for the caller'
       6018:1398 (paged list)              -56
       5ded:0000 (dithered line)           -69
       474a:008f (XMS/EMS reader)          -46
+
+
+## `ovc45_textDone2` (77eb:1bb3) finished: 68 hits down to 0, grep 5,245 -> 5,164 (-81)
+
+The "claim this tree" menu, the sibling of `ovc45_textDone` from an earlier pass.
+
+    puVar1  -> goldLoPtr     &sheet->gold, the low word
+    piVar2  -> goldHiPtr     &sheet->gold + 2
+    bVar3   -> actorIdx      the acting agent's index
+    puVar5  -> classRec      the 4-byte class record for the actor
+    iVar6   -> compute9Res   ovc45_compute9's result, handed to usesStshRealloc
+               entRec1       the actor's sheet pointer
+               goldHi1       that sheet's +0x58 gold high word
+    iVar11  -> entRec2       a second copy of the sheet pointer
+    uVar13  -> segDead       a segment half stored and never read
+    uStack_1a -> costTenth   BuildingTypes[bldType].cost / 10
+    uStack_18 -> incomeRes   ovr_ovc22_seasonalIncome's result
+    uStack_14 -> savedExpinc expinc held across createConstructionRecord
+    cStack_f -> partyRes     (char)ovc45_textChoosePartyBuild's result
+    cStack_e -> doneFlag     set when the menu should close
+    uVar15  -> msgWidth      0x7a, the width handed to usesStshRealloc
+               ssHiByte     (undefined1)(_SS >> 8)
+    unaff_DI -> diArg        the value the image leaves in DI
+
+One correction to my own first attempt this turn: I had named `uVar15`'s 0x7a assignment `deadWidth`
+on the assumption it was overwritten before any read - it is **read** at 1262 as
+`usesStshRealloc(..., msgWidth, 0, 0, 0)`, so it is a live width and is now `msgWidth`. Caught by the
+compiler, not by inspection.
+
+## Measured (HEAD 907d3e6b -> this commit)
+
+    grep_checks          5,245 -> 5,164   (-81)
+    REBUILT.EXE          448,002 (unchanged size)
+    build 65/65, LINK.LOG 0 errors
+    compare_state        identical 734 / 7 different / 889 missing (unchanged)
+    diff_dgroup          288/1,805 matched (unchanged)
+    compare_runtime      280 identical / 11 different at entry, init_game and key (unchanged)
+    structural_deficits  two game bodies: 7e7c:0b9c (177/187), 77eb:0d61 (54/58)
