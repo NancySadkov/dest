@@ -22532,3 +22532,33 @@ unitType 0/8 and 9 now derive the noun from the real call and the two real liter
 Note the count only moved by 2: the win here is correctness (a guessed noun replaced by the derived
 one), not census. Remaining 53 calls: the arms for unitType 3, 7, 0xa, 0xb, 0xc and the `0x1a8,0x2a`
 site.
+
+
+## 7e7c:0b9c: unitType 9 restructured into its four real variants (census 134 -> 138)
+
+The trace at `0x1d04..0x1f10` shows the arm is not three cases but four, selected by the two quantities
+the pass-2 preamble computes (`[bp-0x16]` = feeds, `[bp-0x18]` = housing):
+
+    v16 == 0 && v18 == 0  ->  no message (continues at 0x1f1a)
+    v16 > 0, v18 > 0      ->  0x7ff2 "%s: %s %d gold. provides housing for %d %s and feeds %d %s."
+    v16 > 0, v18 == 0     ->  0x7fd5 "%s: %s %d gold. Feeds %d %s."
+    v16 == 0, v18 > 0     ->  0x802e "%s: %s %d gold. Provides housing for %d %s."
+    v16 == 0, v18 == 0    ->  0x805a "%s: %s %d gold."
+
+The gold figure is `ovc45_costOrIncomeLabel(v16, abs(v16))` (the `0x250,0xa2` call at 0x1ecf), and the
+noun is the DGROUP 0x74ad table indexed by `ovc45_compute6(v18, bld->storage)` - the same table as the
+housing arms. My previous version had the three messages in the wrong order and used `bld->cost`
+instead of the cost-or-income label; both are corrected.
+
+## Measured (HEAD 566fac2f -> this commit)
+
+    screen_calls     7e7c:0b9c  C 134 -> 138  (image 187), delta -53 -> -49
+    grep_checks      11,516 (unchanged)
+    REBUILT.EXE      466,222 -> 466,394
+    build 65/65, LINK.LOG 0 errors
+    compare_state    1,628 matched / 0 different / missing 2      (unchanged)
+    diff_dgroup      1,639/1,805 matched, 5 layout runs           (unchanged)
+    compare_runtime  1,692 matched / 1,683 identical / 9 different (unchanged, all three sample points)
+
+Remaining 49 calls in this function: the arms for unitType 3, 7, 0xa, 0xb and 0xc, and the
+`0x1a8,0x2a` site.

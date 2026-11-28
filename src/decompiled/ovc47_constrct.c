@@ -419,6 +419,7 @@ void constrct_buildInfoText(int x,byte far *flag,int entityIdx,int arg4,int arg5
   int v18;
   int choice;
   uint16_t nounIdx;
+  uint16_t gold;
   char far *noun;
   char far *res;
   char outBuf[0x2b0];
@@ -660,32 +661,50 @@ void constrct_buildInfoText(int x,byte far *flag,int entityIdx,int arg4,int arg5
         strcpy(outBuf,res);
       }
       else if (bld->unitType == 9) {
-        /* Same person/people table as the housing arms above. */
+        /* Four variants on the two quantities the pass-2 preamble computed: v16 (feeds) and v18
+           (housing).  The noun is the DGROUP 0x74ad table indexed by ovc45_compute6, and the gold
+           figure is ovc45_costOrIncomeLabel of the income value. */
         nounIdx = (uint16_t)ovr_ovc45_compute6(v18,bld->storage);
         noun = (nounIdx != 0) ? (char far *)"people" : (char far *)"person";
-        if (v16 != 0) {
-          res = ovr_fmVsprintf((char far *)"%s: %s %d gold. Feeds %d %s.",
-                               (uint16_t)ovr_ovc15_usesStshRealloc(
-                                   (char far *)MK_FP((uint16_t)((uint32_t)bld->name >> 16),
-                                                     (uint16_t)bld->name)),(uint16_t)noun,
-                               bld->cost,v16,(uint16_t)noun);
+        gold = (uint16_t)ovr_ovc45_costOrIncomeLabel(v16,(uint16_t)(v16 < 0 ? -v16 : v16));
+        if ((v16 == 0) && (v18 == 0)) {
+          /* nothing to report */
         }
-        else if (bld->housing != 0) {
-          res = ovr_fmVsprintf(
-                    (char far *)"%s: %s %d gold. provides housing for %d %s and feeds %d %s.",
-                    (uint16_t)ovr_ovc15_usesStshRealloc(
-                        (char far *)MK_FP((uint16_t)((uint32_t)bld->name >> 16),
-                                          (uint16_t)bld->name)),(uint16_t)noun,bld->cost,
-                    bld->housing,(uint16_t)noun,v16,(uint16_t)noun);
+        else if (v16 > 0) {
+          if (v18 > 0) {
+            res = ovr_fmVsprintf(
+                      (char far *)"%s: %s %d gold. provides housing for %d %s and feeds %d %s.",
+                      (uint16_t)ovr_ovc15_usesStshRealloc(
+                          (char far *)MK_FP((uint16_t)((uint32_t)bld->name >> 16),
+                                            (uint16_t)bld->name)),(uint16_t)noun,gold,
+                      v18,(uint16_t)noun,v16,(uint16_t)noun);
+          }
+          else {
+            res = ovr_fmVsprintf((char far *)"%s: %s %d gold. Feeds %d %s.",
+                                 (uint16_t)ovr_ovc15_usesStshRealloc(
+                                     (char far *)MK_FP((uint16_t)((uint32_t)bld->name >> 16),
+                                                       (uint16_t)bld->name)),(uint16_t)noun,gold,
+                                 v16,(uint16_t)noun);
+          }
+          strcpy(outBuf,res);
         }
         else {
-          res = ovr_fmVsprintf((char far *)"%s: %s %d gold.",
-                               (uint16_t)ovr_ovc15_usesStshRealloc(
-                                   (char far *)MK_FP((uint16_t)((uint32_t)bld->name >> 16),
-                                                     (uint16_t)bld->name)),(uint16_t)noun,
-                               bld->cost);
+          if (v18 > 0) {
+            res = ovr_fmVsprintf((char far *)"%s: %s %d gold. Provides housing for %d %s.",
+                                 (uint16_t)ovr_ovc15_usesStshRealloc(
+                                     (char far *)MK_FP((uint16_t)((uint32_t)bld->name >> 16),
+                                                       (uint16_t)bld->name)),(uint16_t)noun,gold,
+                                 v18,(uint16_t)noun);
+          }
+          else {
+            res = ovr_fmVsprintf((char far *)"%s: %s %d gold.",
+                                 (uint16_t)ovr_ovc15_usesStshRealloc(
+                                     (char far *)MK_FP((uint16_t)((uint32_t)bld->name >> 16),
+                                                       (uint16_t)bld->name)),(uint16_t)noun,
+                                 gold);
+          }
+          strcpy(outBuf,res);
         }
-        strcpy(outBuf,res);
       }
       /* GAP: the remaining pass-2 arms (unitType 3, 7, 0xa, 0xb, 0xc) - their literals are in the
          inventory but their argument tables are not yet resolved. */
