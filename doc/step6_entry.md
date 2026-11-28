@@ -24036,3 +24036,35 @@ individually would invent a meaning per half; the honest fix is to collapse each
     diff_dgroup          288/1,805 matched (unchanged)
     compare_runtime      280 identical / 11 different at entry, init_game and key (unchanged)
     structural_deficits  6 entries, unchanged
+
+
+## Renaming batch 7: `ui_textDefineRegionCommand` (6616:0689), grep 9,071 -> 8,916 (-155)
+
+`ovc34_unit.c`'s 114 `bStack_` hits all live in this one 385-line function. Ten slots, 98 hits, each
+with a single role:
+
+    pbVar12  -> rowPtr     running pointer down the drawn rows
+    pbVar8   -> namePtr    computed pointer into Seed_2000_d110
+    pbVar5   -> idxPtr     (pbStack_20 - 9) / 3 + Seed_2000_d10e
+    pbVar7   -> namePtrB   the same computation driven by rowPtr
+    uVar6    -> segTmp     segment argument, 0x2410 at the first call
+    uVar13   -> sheetLo    low byte of sheetEntry
+    uVar14   -> ptrLo      low byte of rowPtr, passed to drawLine
+    uStack_e -> frameSeg   0xa000, then the current graphic's segment
+    uVar3    -> keyAvail   ovr_biosKeyAvail's result
+    unaff_DI -> diArg      the argument ovr_stshRleCut receives in DI
+
+Note on `frameSeg`: my first attempt named it `gfxSeg`, which is already a local in this function, so
+the module failed to compile with "Multiple declaration". The file was reverted and the rename redone
+under a name that does not collide - worth recording because the same trap applies to every batch on a
+385-line body.
+
+## Measured (HEAD 233273c5 -> this commit)
+
+    grep_checks          9,071 -> 8,916   (-155 this turn's second commit; -367 for the turn)
+    REBUILT.EXE          447,922 (unchanged)
+    build 65/65, LINK.LOG 0 errors
+    compare_state        identical 734 / 7 different / 889 missing (unchanged)
+    diff_dgroup          288/1,805 matched (unchanged)
+    compare_runtime      280 identical / 11 different at entry, init_game and key (unchanged)
+    structural_deficits  6 entries, unchanged

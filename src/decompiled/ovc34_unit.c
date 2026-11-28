@@ -311,23 +311,23 @@ void __cdecl16far ui_textDefineRegionCommand(byte menuIndex)
   byte mouseStatus;
   char *textPtr;
   undefined1 extraout_AH;
-  uint16_t uVar3;
+  uint16_t keyAvail;       /* ovr_biosKeyAvail's result */
   uint16_t sheetEntry;   /* sheetByte record +0x107 */
   uint16_t keyPressed;   /* keyprocessor_usesBiosKeyAvail result */
   uint16_t entitiesSeg;  /* (uint16_t)((ulong)Entities >> 16) */
   uint16_t suffix;       /* ovr_ovc41_pluralSuffix result */
   undefined1 extraout_AH_00;
-  byte *pbVar5;
-  uint16_t uVar6;
-  byte *pbVar7;
-  byte *pbVar8;
+  byte *idxPtr;            /* (pbStack_20 - 9) / 3 + Seed_2000_d10e */
+  uint16_t segTmp;         /* segment argument, 0x2410 at the first call */
+  byte *namePtrB;          /* the same computation driven by rowPtr */
+  byte *namePtr;           /* computed pointer into Seed_2000_d110 */
   uint16_t textSeg;
   int textWidth;   /* ovr_ovc45_compute9() result */
   uint entityIdx;
-  uint16_t unaff_DI;
-  byte *pbVar12;
-  undefined1 uVar13;
-  undefined1 uVar14;
+  uint16_t diArg;          /* the argument ovr_stshRleCut receives in DI */
+  byte *rowPtr;            /* running pointer down the drawn rows */
+  undefined1 sheetLo;      /* low byte of sheetEntry */
+  undefined1 ptrLo;        /* low byte of rowPtr, passed to drawLine */
   bool type;
   static char text[64];   /* DGROUP-backed formatting buffer */
   static char msg[64];   /* DGROUP-backed formatting buffer */
@@ -354,7 +354,7 @@ void __cdecl16far ui_textDefineRegionCommand(byte menuIndex)
   far_t far *pfStack_1a;
   uint16_t gfxSeg2;
   uint8_t saveArea;
-  uint16_t uStack_e;
+  uint16_t frameSeg;        /* 0xa000, then the current graphic's segment */
   byte *pbStack_c;
   int matchCount;
   uint16_t gfxSeg;
@@ -373,33 +373,33 @@ void __cdecl16far ui_textDefineRegionCommand(byte menuIndex)
   if (sheetByte == 0xff) {
     return;
   }
-  uVar6 = 0x2410;
+  segTmp = 0x2410;
   sheetEntry = *(uint16_t *)((uint)sheetByte * 4 + 0x107);
-  uVar13 = (undefined1)sheetEntry;
+  sheetLo = (undefined1)sheetEntry;
   textPtr = ovr_stsprintf(msg,(char *)CONCAT22(0x648f,_SS),
-                         (char *)CONCAT13((char)((uint)sheetEntry >> 8),CONCAT12(uVar13,0x2410)),uVar13,
+                         (char *)CONCAT13((char)((uint)sheetEntry >> 8),CONCAT12(sheetLo,0x2410)),sheetLo,
                          (char)*(uint16_t *)((uint)sheetByte * 4 + 0x109),
                          (char)*(uint16_t *)((uint)partyIdx * 4),
                          ((uint16_t *)((uint)partyIdx * 4))[1]);
-  ovr_say(textPtr,uVar6);
+  ovr_say(textPtr,segTmp);
   do {
     type = SUB21(_SS,0);
-    uVar13 = (undefined1)((uint)_SS >> 8);
+    sheetLo = (undefined1)((uint)_SS >> 8);
     mouseStatus = ovr_init2_usesCFGMice((uint16_t *)&mouseX,0,0);
   } while (CONCAT11(extraout_AH,mouseStatus) != 0);
-  while (uVar3 = ovr_biosKeyAvail(), (char)uVar3 != '\0') {
+  while (keyAvail = ovr_biosKeyAvail(), (char)keyAvail != '\0') {
     ovr_gameProcessKey();
   }
-  memcpy((char *)CONCAT13(uVar13,CONCAT12(type,&saveArea)),(char *)BlitRects,10);
-  uStack_e = 0xa000;
+  memcpy((char *)CONCAT13(sheetLo,CONCAT12(type,&saveArea)),(char *)BlitRects,10);
+  frameSeg = 0xa000;
   ovr_miceRestoreArea((brect_t *)&saveArea,0);
-  pfStack_1a = ovr_stshRleCut((far_t far *)0x0,far_from_u32((uint32_t)(0xca000)),7,222,150,unaff_DI,0xc,7,0xde);
-  gfxSeg2 = uVar6;
+  pfStack_1a = ovr_stshRleCut((far_t far *)0x0,far_from_u32((uint32_t)(0xca000)),7,222,150,diArg,0xc,7,0xde);
+  gfxSeg2 = segTmp;
   ovr_miceBlitRect((brect_t *)&saveArea,0);
   pvStack_6 = ovr_stshAlloc(0xfa0f);
-  ptr.seg = uVar6;
+  ptr.seg = segTmp;
   ptr.ofs = (uint16_t)pvStack_6;
-  gfxSeg3 = uVar6;
+  gfxSeg3 = segTmp;
   ovr_alignToSeg(ptr);
   pbStack_2a = mouseX;
   pbStack_2c = mouseY;
@@ -409,11 +409,11 @@ void __cdecl16far ui_textDefineRegionCommand(byte menuIndex)
   pbStack_34 = (byte *)0xffff;
   input = 0x0;
   rightButtonLatch = '\0';
-  gfxSeg = uVar6;
+  gfxSeg = segTmp;
   do {
     keyPressed = keyprocessor_usesBiosKeyAvail
                       ((uint16_t *)CONCAT22(_SS,&cursorX),
-                       (uint16_t *)CONCAT13(uVar13,CONCAT12(type,&cursorY)),
+                       (uint16_t *)CONCAT13(sheetLo,CONCAT12(type,&cursorY)),
                        (uint8_t *)CONCAT22(_SS,&input));
     if ((char)keyPressed != '\0') goto L_ui_unit_order_6616_0689_1054;
     if ((cursorX != pbStack_32) || (cursorY != pbStack_34)) {
@@ -421,7 +421,7 @@ void __cdecl16far ui_textDefineRegionCommand(byte menuIndex)
       pbStack_1c = cursorX;
       pbStack_34 = cursorY;
       pbStack_1e = cursorY;
-      uStack_e = gfxSeg;
+      frameSeg = gfxSeg;
       (*(uint8_t *)((uint8_t *)&(gfx_00.seg))) = (char)gfxSeg2;
       gfx_00.ofs = (uint16_t)pfStack_1a;
       (*(uint8_t *)((uint8_t *)&(gfx_00.seg) + 1)) = (char)(gfxSeg2 >> 8);
@@ -456,24 +456,24 @@ void __cdecl16far ui_textDefineRegionCommand(byte menuIndex)
     pbStack_28 = (byte *)0xffff;
     pbStack_20 = pbStack_1e;
     input = 0x0;
-    pbVar12 = pbStack_1c;
+    rowPtr = pbStack_1c;
     do {
       keyPressed = keyprocessor_usesBiosKeyAvail
                         ((uint16_t *)CONCAT22(_SS,&cursorX),
-                         (uint16_t *)CONCAT13(uVar13,CONCAT12(type,&cursorY)),
+                         (uint16_t *)CONCAT13(sheetLo,CONCAT12(type,&cursorY)),
                          (uint8_t *)CONCAT22(_SS,&input));
       if ((char)keyPressed != '\0') goto L_ui_unit_order_6616_0689_1054;
       if ((cursorX != pbStack_32) || (cursorY != pbStack_34)) {
         pbStack_32 = cursorX;
         pbStack_34 = cursorY;
         pbStack_20 = cursorY;
-        pbVar12 = cursorX;
+        rowPtr = cursorX;
       }
-      if ((int)pbVar12 < 0xc) {
-        pbVar12 = (byte *)__C0_ASM_CopyRight + 8;
+      if ((int)rowPtr < 0xc) {
+        rowPtr = (byte *)__C0_ASM_CopyRight + 8;
       }
-      if (0xde < (int)pbVar12) {
-        pbVar12 = (byte *)0xde;
+      if (0xde < (int)rowPtr) {
+        rowPtr = (byte *)0xde;
       }
       if ((int)pbStack_20 < 7) {
         pbStack_20 = (byte *)__C0_ASM_CopyRight + 3;
@@ -481,41 +481,41 @@ void __cdecl16far ui_textDefineRegionCommand(byte menuIndex)
       if (0x96 < (int)pbStack_20) {
         pbStack_20 = (byte *)((char *)0x96);
       }
-      if ((pbStack_26 != pbVar12) || (pbStack_28 != pbStack_20)) {
-        uStack_e = gfxSeg;
+      if ((pbStack_26 != rowPtr) || (pbStack_28 != pbStack_20)) {
+        frameSeg = gfxSeg;
         (*(uint8_t *)((uint8_t *)&(gfx_01.seg))) = (char)gfxSeg2;
         gfx_01.ofs = (uint16_t)pfStack_1a;
         (*(uint8_t *)((uint8_t *)&(gfx_01.seg) + 1)) = (char)(gfxSeg2 >> 8);
         dst_00.seg = gfxSeg;
         dst_00.ofs = 0x8cc;
         ovr_blitLoadRleGfx(gfx_01,dst_00,0xcc);
-        uVar14 = SUB21(pbVar12,0);
-        ovr_driver_drawLine(pbStack_1c,(int)pbStack_1e,pbVar12,(int)pbStack_1e,0xff,uVar14,
+        ptrLo = SUB21(rowPtr,0);
+        ovr_driver_drawLine(pbStack_1c,(int)pbStack_1e,rowPtr,(int)pbStack_1e,0xff,ptrLo,
                             (char)pbStack_1e,0xff,gfxSeg);
         ovr_driver_drawLine(pbStack_1c,(int)pbStack_1e,pbStack_1c,(int)pbStack_20,0xff,
                             (char)pbStack_1c,(char)pbStack_20,0xff,gfxSeg);
-        ovr_driver_drawLine(pbVar12,(int)pbStack_1e,pbVar12,(int)pbStack_20,0xff,uVar14,
+        ovr_driver_drawLine(rowPtr,(int)pbStack_1e,rowPtr,(int)pbStack_20,0xff,ptrLo,
                             (char)pbStack_20,0xff,gfxSeg);
-        ovr_driver_drawLine(pbStack_1c,(int)pbStack_20,pbVar12,(int)pbStack_20,0xff,uVar14,
+        ovr_driver_drawLine(pbStack_1c,(int)pbStack_20,rowPtr,(int)pbStack_20,0xff,ptrLo,
                             (char)pbStack_20,0xff,gfxSeg);
         ovr_miceBlitRect((brect_t *)&saveArea,0);
         ovr_blitRect((brect_t *)&saveArea,0);
         ovr_miceUpdate();
-        pbVar5 = (byte *)((int)(pbStack_20 + -9) / 3 + Seed_2000_d10e);
-        pbVar7 = (byte *)(Seed_2000_d110 + ((uint)(pbVar12 + -0xc) >> 1) + 2 & 0xfffc);
+        idxPtr = (byte *)((int)(pbStack_20 + -9) / 3 + Seed_2000_d10e);
+        namePtrB = (byte *)(Seed_2000_d110 + ((uint)(rowPtr + -0xc) >> 1) + 2 & 0xfffc);
         pbStack_24 = (byte *)((int)(pbStack_1e + -9) / 3 + Seed_2000_d10e);
         pbStack_22 = (byte *)(Seed_2000_d110 + ((uint)(pbStack_1c + -0xc) >> 1) + 2 & 0xfffc);
-        pbStack_26 = pbVar7;
-        if ((int)pbVar7 < (int)pbStack_22) {
+        pbStack_26 = namePtrB;
+        if ((int)namePtrB < (int)pbStack_22) {
           pbStack_26 = pbStack_22;
-          pbStack_22 = pbVar7;
-          pbStack_c = pbVar7;
+          pbStack_22 = namePtrB;
+          pbStack_c = namePtrB;
         }
-        pbStack_28 = pbVar5;
-        if ((int)pbVar5 < (int)pbStack_24) {
+        pbStack_28 = idxPtr;
+        if ((int)idxPtr < (int)pbStack_24) {
           pbStack_28 = pbStack_24;
-          pbStack_24 = pbVar5;
-          pbStack_c = pbVar5;
+          pbStack_24 = idxPtr;
+          pbStack_c = idxPtr;
         }
         matchCount = 0;
         for (entityIdx = 0; entityIdx < EntityCount; entityIdx = entityIdx + 1) {
@@ -529,23 +529,23 @@ void __cdecl16far ui_textDefineRegionCommand(byte menuIndex)
           }
         }
         ovr_resetTextBlitCycle();
-        uVar14 = 0x7a;
+        ptrLo = 0x7a;
         textWidth = ovr_ovc45_compute9(text,
                                     (char *)CONCAT22(*(uint16_t *)((uint)partyIdx * 4),_SS),
                                     (char *)CONCAT22(Font03.ofs,
                                                      (char *)((uint16_t *)((uint)partyIdx * 4))
                                                              [1]),Font03.seg,'C',(char)Font03.seg,
                                     0x43,3,0xa000);
-        suffix = ovr_ovc41_pluralSuffix(matchCount,(char)textWidth,uVar14);
-        uVar6 = 0x2410;
+        suffix = ovr_ovc41_pluralSuffix(matchCount,(char)textWidth,ptrLo);
+        segTmp = 0x2410;
         textPtr = ovr_stsprintf(msg,(char *)CONCAT22(0x64b8,_SS),
                                (char *)CONCAT22(matchCount,(char *)0x2410),
                                *(uint16_t *)((uint)sheetByte * 4 + 0x13f),
-                               *(uint16_t *)((uint)sheetByte * 4 + 0x141),suffix,uVar14);
-        ovr_uiNotify(textPtr,uVar6,(char)uVar6);
+                               *(uint16_t *)((uint)sheetByte * 4 + 0x141),suffix,ptrLo);
+        ovr_uiNotify(textPtr,segTmp,(char)segTmp);
       }
       pbStack_28 = pbStack_20;
-      pbStack_26 = pbVar12;
+      pbStack_26 = rowPtr;
       if (input == 0x0) {
         input = ovr_init2_usesCFGMice((uint16_t *)&mouseX,0,0);
       }
@@ -554,46 +554,46 @@ void __cdecl16far ui_textDefineRegionCommand(byte menuIndex)
         pbStack_2a = mouseX;
         pbStack_2c = mouseY;
         pbStack_20 = mouseY;
-        pbVar12 = mouseX;
+        rowPtr = mouseX;
       }
     } while (input == 0x0);
     ovr_miceRestoreArea((brect_t *)(BlitRects + 1),0x2410);
-    if ((((0xb < (int)pbVar12) && ((int)pbVar12 < 0xdf)) && (6 < (int)pbStack_20)) &&
+    if ((((0xb < (int)rowPtr) && ((int)rowPtr < 0xdf)) && (6 < (int)pbStack_20)) &&
        ((int)pbStack_20 < 0x97)) {
-      pbVar5 = (byte *)((int)(pbStack_20 + -9) / 3 + Seed_2000_d10e);
-      pbVar7 = (byte *)(Seed_2000_d110 + ((uint)(pbVar12 + -0xc) >> 1) + 2 & 0xfffc);
-      pbVar12 = (byte *)((int)(pbStack_1e + -9) / 3 + Seed_2000_d10e);
-      pbVar8 = (byte *)(Seed_2000_d110 + ((uint)(pbStack_1c + -0xc) >> 1) + 2 & 0xfffc);
-      pbStack_26 = pbVar7;
-      pbStack_22 = pbVar8;
-      if ((int)pbVar7 < (int)pbVar8) {
-        pbStack_26 = pbVar8;
-        pbStack_22 = pbVar7;
-        pbStack_c = pbVar8;
+      idxPtr = (byte *)((int)(pbStack_20 + -9) / 3 + Seed_2000_d10e);
+      namePtrB = (byte *)(Seed_2000_d110 + ((uint)(rowPtr + -0xc) >> 1) + 2 & 0xfffc);
+      rowPtr = (byte *)((int)(pbStack_1e + -9) / 3 + Seed_2000_d10e);
+      namePtr = (byte *)(Seed_2000_d110 + ((uint)(pbStack_1c + -0xc) >> 1) + 2 & 0xfffc);
+      pbStack_26 = namePtrB;
+      pbStack_22 = namePtr;
+      if ((int)namePtrB < (int)namePtr) {
+        pbStack_26 = namePtr;
+        pbStack_22 = namePtrB;
+        pbStack_c = namePtr;
       }
-      pbStack_28 = pbVar5;
-      pbStack_24 = pbVar12;
-      if ((int)pbVar5 < (int)pbVar12) {
-        pbStack_28 = pbVar12;
-        pbStack_24 = pbVar5;
-        pbStack_c = pbVar12;
+      pbStack_28 = idxPtr;
+      pbStack_24 = rowPtr;
+      if ((int)idxPtr < (int)rowPtr) {
+        pbStack_28 = rowPtr;
+        pbStack_24 = idxPtr;
+        pbStack_c = rowPtr;
       }
       _fmemset(MK_FP(_SS, &unitFlags), 0, 5);
       matchCount = 0;
       for (entityIdx = 0; entityIdx < EntityCount; entityIdx = entityIdx + 1) {
-        pbVar8 = (byte *)((char *)0x2410);
+        namePtr = (byte *)((char *)0x2410);
         entitiesSeg = (uint16_t)((ulong)Entities >> 0x10);
         if (((AGNT_FIELD(&(Entities)[entityIdx], base.entity, 3) == partyIdx) &&
-            (pbVar8 = (byte *)((char *)0x2410),
+            (namePtr = (byte *)((char *)0x2410),
             pbStack_22 <= (byte *)*(uint *)((entity_t far *)Entities + entityIdx))) &&
-           ((pbVar8 = (byte *)((char *)0x2410),
+           ((namePtr = (byte *)((char *)0x2410),
             (byte *)*(uint *)((entity_t far *)Entities + entityIdx) <= pbStack_26 &&
-            ((pbVar8 = (byte *)((char *)0x2410),
+            ((namePtr = (byte *)((char *)0x2410),
              pbStack_24 <= (byte *)((entity_t far *)Entities)[entityIdx].base.y &&
-             (pbVar8 = (byte *)((char *)0x2410),
+             (namePtr = (byte *)((char *)0x2410),
              (byte *)((entity_t far *)Entities)[entityIdx].base.y <= pbStack_28)))))) {
           if (input < 2) {
-            pbVar8 = (byte *)((char *)0x2410);
+            namePtr = (byte *)((char *)0x2410);
             unit_usesAlignUp42(menuIndex,*(uint16_t *)((entity_t far *)Entities + entityIdx),
                                ((entity_t far *)Entities)[entityIdx].base.y);
           }
@@ -616,7 +616,7 @@ void __cdecl16far ui_textDefineRegionCommand(byte menuIndex)
         textPtr = ovr_stsprintf(msg,(char *)CONCAT22(0x6522,_SS),
                                (char *)CONCAT22(matchCount,(char *)0x2410),
                                (char)*(uint16_t *)((uint)sheetByte * 4 + 0x13f),
-                               (char)*(uint16_t *)((uint)sheetByte * 4 + 0x141),(char)suffix,pbVar8
+                               (char)*(uint16_t *)((uint)sheetByte * 4 + 0x141),(char)suffix,namePtr
                               );
         ovr_say(textPtr,textSeg);
       }
@@ -626,7 +626,7 @@ void __cdecl16far ui_textDefineRegionCommand(byte menuIndex)
         textPtr = ovr_stsprintf(msg,(char *)CONCAT22(0x6543,_SS),
                                (char *)CONCAT22(matchCount,(char *)0x2410),
                                (char)*(uint16_t *)((uint)sheetByte * 4 + 0x13f),
-                               (char)*(uint16_t *)((uint)sheetByte * 4 + 0x141),(char)suffix,pbVar8
+                               (char)*(uint16_t *)((uint)sheetByte * 4 + 0x141),(char)suffix,namePtr
                               );
         ovr_say(textPtr,textSeg);
       }
@@ -636,7 +636,7 @@ void __cdecl16far ui_textDefineRegionCommand(byte menuIndex)
         textPtr = ovr_stsprintf(msg,(char *)CONCAT22(0x6557,_SS),
                                (char *)CONCAT22(matchCount,(char *)0x2410),
                                (char)*(uint16_t *)((uint)sheetByte * 4 + 0x13f),
-                               (char)*(uint16_t *)((uint)sheetByte * 4 + 0x141),(char)suffix,pbVar8
+                               (char)*(uint16_t *)((uint)sheetByte * 4 + 0x141),(char)suffix,namePtr
                               );
         ovr_say(textPtr,textSeg);
       }
@@ -646,7 +646,7 @@ void __cdecl16far ui_textDefineRegionCommand(byte menuIndex)
         textPtr = ovr_stsprintf(msg,(char *)CONCAT22(0x6568,_SS),
                                (char *)CONCAT22(matchCount,(char *)0x2410),
                                (char)*(uint16_t *)((uint)sheetByte * 4 + 0x13f),
-                               (char)*(uint16_t *)((uint)sheetByte * 4 + 0x141),(char)suffix,pbVar8
+                               (char)*(uint16_t *)((uint)sheetByte * 4 + 0x141),(char)suffix,namePtr
                               );
         ovr_say(textPtr,textSeg);
       }
@@ -658,7 +658,7 @@ L_ui_unit_order_6616_0689_1054:
   ovr_miceRestoreArea((brect_t *)(BlitRects + 1),0x2410);
   ovr_say((char *)"Region selection aborted.",0x2410);
 L_ui_unit_order_6616_0689_106E:
-  uStack_e = gfxSeg;
+  frameSeg = gfxSeg;
   (*(uint8_t *)((uint8_t *)&(gfx_02.seg))) = (char)gfxSeg2;
   gfx_02.ofs = (uint16_t)pfStack_1a;
   (*(uint8_t *)((uint8_t *)&(gfx_02.seg) + 1)) = (char)(gfxSeg2 >> 8);
