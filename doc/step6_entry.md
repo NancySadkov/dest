@@ -22352,3 +22352,38 @@ unnameable calls (`198,0057` / `198,005c`) are a `GAP` with the frame that feeds
     compare_state    1,628 matched / 0 different / missing 2      (unchanged)
     diff_dgroup      1,639/1,805 matched, 5 layout runs           (unchanged)
     compare_runtime  1,692 matched / 1,683 identical / 9 different (unchanged, all three sample points)
+
+
+## 7e7c:0b9c: action menu entries and dispatch table decoded and written
+
+The `0x2000..0x2b38` region is the action menu. Its entries are appended to the same far-pointer list
+as the description, each with a code byte, and the choice is dispatched through the jump table at
+`cs:0x2b3c`:
+
+    code 0 -> 0x2b38  Demolish        (leaves the routine)
+    code 1 -> 0x2376  Salvage
+    code 2 -> 0x278b  Repair
+    code 3 -> 0x291e  Upgrade
+    code 4 -> 0x2ab4  Change Party    (calls ovc45_textChoosePartyBuild(&arg3,arg5,arg4))
+    code 5 -> 0x2b38  Done            (leaves the routine)
+    code 6 -> 0x2aee  New Owner
+    code 7 -> 0x2b23  Information     (flips `done` and loops)
+
+Guards per entry, from the trace: Demolish needs `flags2 & 4` and a non-0xff unitType whose sheet
+`faction == 0`; Repair and Upgrade both need `ovc45_compute8(unitType)` (Repair additionally
+`level < 8`, Upgrade additionally `halfWidth != 0`); Information needs `!(flags2 & 0x400)` and
+`arg4 != 0xff`; New Owner needs `!(flags2 & 4)` and `unitIdx >= 0xf8`; Change Party needs `arg5 != 0`;
+Done is unconditional. The eight labels are now used in place ("Salvage", "Demolish", "Repair",
+"Upgrade", "Information", "New Owner", "Change Party", "Done").
+
+The list is shown with `ovr_ovc28_compute2(list, n, outBuf)` (the `lcall 0x1c8,0x25` at 0x23d9).
+
+## Measured (HEAD 19e0cbf3 -> this commit)
+
+    screen_calls     7e7c:0b9c  C 69 -> 71  (image 187)
+    grep_checks      11,516 (unchanged)
+    REBUILT.EXE      463,082 -> 463,636
+    build 65/65, LINK.LOG 0 errors
+    compare_state    1,628 matched / 0 different / missing 2      (unchanged)
+    diff_dgroup      1,639/1,805 matched, 5 layout runs           (unchanged)
+    compare_runtime  1,692 matched / 1,683 identical / 9 different (unchanged)

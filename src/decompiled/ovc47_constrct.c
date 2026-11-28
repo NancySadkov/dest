@@ -417,6 +417,7 @@ void constrct_buildInfoText(int x,byte far *flag,int entityIdx,int arg4,int arg5
   int n;
   int v16;
   int v18;
+  int choice;
   char far *res;
   char outBuf[0x2b0];
   far_t list[0x10];
@@ -646,6 +647,78 @@ void constrct_buildInfoText(int x,byte far *flag,int entityIdx,int arg4,int arg5
       list[n].ofs = (uint16_t)"Salvage";
       n++;
     }
+      /* ---- the action menu (0x2000..0x2b38) ---- */
+      /* Entries are appended to the same list as the description, each with a code byte that the
+         jump table at cs:0x2b3c dispatches on: 0 Demolish, 1 Salvage, 2 Repair, 3 Upgrade,
+         4 Change Party, 5 Done, 6 New Owner, 7 Information. */
+      if ((bld->flags2 & 4) != 0) {
+        if ((GUnits[unitIdx].unitType != 0xff) &&
+            (((char_sheet_t far *)GLeaderSheets[GUnits[unitIdx].unitType])->faction == 0)) {
+          codes[n] = 0;
+          list[n].seg = (uint16_t)_DS;
+          list[n].ofs = (uint16_t)"Demolish";
+          n++;
+        }
+      }
+      if (ovr_ovc45_compute8(GUnits[unitIdx].unitType) != 0) {
+        if (GUnits[unitIdx].level < 8) {
+          codes[n] = 2;
+          list[n].seg = (uint16_t)_DS;
+          list[n].ofs = (uint16_t)"Repair";
+          n++;
+        }
+        if (bld->halfWidth != 0) {
+          codes[n] = 3;
+          list[n].seg = (uint16_t)_DS;
+          list[n].ofs = (uint16_t)"Upgrade";
+          n++;
+        }
+      }
+      if (((bld->flags2 & 0x400) == 0) && (arg4 != 0xff)) {
+        codes[n] = 7;
+        list[n].seg = (uint16_t)_DS;
+        list[n].ofs = (uint16_t)"Information";
+        n++;
+      }
+      if (((bld->flags2 & 4) == 0) && (unitIdx >= 0xf8)) {
+        codes[n] = 6;
+        list[n].seg = (uint16_t)_DS;
+        list[n].ofs = (uint16_t)"New Owner";
+        n++;
+      }
+      if (arg5 != 0) {
+        codes[n] = 4;
+        list[n].seg = (uint16_t)_DS;
+        list[n].ofs = (uint16_t)"Change Party";
+        n++;
+      }
+      codes[n] = 5;
+      list[n].seg = (uint16_t)_DS;
+      list[n].ofs = (uint16_t)"Done";
+      n++;
+
+      /* Show the list and dispatch the choice through the cs:0x2b3c table.  Cases 1/2/3/6/7 carry
+         the action bodies (salvage value, repair, upgrade, new owner, information); 0 and 5 leave
+         the routine. */
+      choice = (int)ovr_ovc28_compute2(list,(uint16_t)n,
+                                       (char far *)MK_FP(_SS,(uint16_t)outBuf));
+      switch (choice) {
+      case 1:
+      case 2:
+      case 3:
+      case 6:
+        /* GAP: the salvage / repair / upgrade / new-owner bodies (0x2376, 0x278b, 0x291e, 0x2aee).
+           They use createConstructionRecord / createConstructionRecordFar, ovc45_usesGPopulationLo,
+           play_sfx, say and inputUpdate, and set *flag = 1. */
+        *flag = 1;
+        break;
+      case 7:
+        done = (byte)(done ^ 1);
+        break;
+      default:
+        return;
+      }
+    break;
   } while (done == 0);
 }
 /* 7e7c:2b4c */
