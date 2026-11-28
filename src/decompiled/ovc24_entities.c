@@ -540,36 +540,38 @@ uint16_t __cdecl16far ovc24_unitAtLeader(byte leaderIndex)
 void __cdecl16far ovc24_checkStrongholds(void)
 
 {
-  bool bVar1;
-  bool bVar2;
+  bool flagB;               /* set when the leader took a step this round */
+  bool arenaRes;            /* ovc24_textArena's verdict for the probe cell */
   uint16_t unitIdx;
   uint aligned;
-  char *pcVar5;
-  uint uVar6;
+  char *capPtr;            /* ovr_ovc15_capitalize's result, superseded immediately */
+  char *msgPtr;            /* ovr_stsprintf's result, handed to uiNotify */
+  uint leaderY;            /* (GLeaderSheets[leaderIndex])->y */
+  uint endRes;             /* ovr_season_checkEndGame's result */
   uint16_t textSeg;
   int probeOfs;
-  uint16_t unaff_DI;
+  uint16_t diArg;           /* the value the image leaves in DI */
   static char text[64];   /* DGROUP-backed formatting buffer */
   char sbuf [120];
   static char outFlag[64];   /* DGROUP-backed formatting buffer */
   uint8_t excludedFlags;
-  char cStack_11;
+  char flagUnset;          /* read at 648/693/696 and never written in this body */
   uint flagMask;
   uint16_t cellX;
   uint ownMask;
-  char cStack_a;
+  char flagA;               /* set when the leader has a legal step */
   byte leaderClass;
   byte enemyMask;
   byte side;
   uint leaderIndex;
-  char cStack_4;
+  char gameOver;            /* set when the season ended or was saved */
   byte firstLeader;
   
   strongholdCheckPending = 0;
-  cStack_4 = '\0';
+  gameOver = '\0';
   if (!GameRunning) {
-    cStack_a = '\0';
-    bVar1 = false;
+    flagA = '\0';
+    flagB = false;
     for (leaderIndex = 0; (int)leaderIndex < (int)(uint)GLeaderCount; leaderIndex = leaderIndex + 1) {
       if ((GLeaderSheets[leaderIndex])->active != '\0') {
         leaderClass = (GLeaderSheets[leaderIndex])->classStr;
@@ -577,14 +579,14 @@ void __cdecl16far ovc24_checkStrongholds(void)
         ownMask = 0x1000 << (1U - (side != 0) & 0x1f);
         enemyMask = '\0' << (side & 0x1f);
         cellX = alignUp4((GLeaderSheets[leaderIndex])->x,0,0);
-        uVar6 = (GLeaderSheets[leaderIndex])->y;
+        leaderY = (GLeaderSheets[leaderIndex])->y;
         flagMask = 0;
         for (probeOfs = -2; probeOfs < 2; probeOfs = probeOfs + 1) {
-          flagMask = flagMask | (*(short (*) [60] [148])GMapFlags)[uVar6][cellX + probeOfs];
+          flagMask = flagMask | (*(short (*) [60] [148])GMapFlags)[leaderY][cellX + probeOfs];
         }
         if (((flagMask & enemyMask) == 0) && ((flagMask & ownMask) != 0)) {
           unitIdx = ovc24_unitAtLeader((byte)leaderIndex);
-          if (((char)unitIdx == '\0') || (bVar2 = ovc24_textArena(cellX,uVar6,side), bVar2))
+          if (((char)unitIdx == '\0') || (arenaRes = ovc24_textArena(cellX,leaderY,side), arenaRes))
           goto L_OVC24_5943_112e_1255;
         }
         else {
@@ -602,33 +604,33 @@ L_OVC24_5943_112e_1255:
         else {
           ovr_play_sfx(44,0,0);
           strongholdsDestroyed = strongholdsDestroyed + 1;
-          cStack_a = '\x01';
+          flagA = '\x01';
         }
         textSeg = 0x195d;
         if ((AgntGs[(uint)leaderClass].flags3 & 0x800) == 0) {
-          aligned = alignUp4((GLeaderSheets[leaderIndex])->x,uVar6,0);
-          pcVar5 = ovr_ovc15_capitalize(text);
-          pcVar5 = ovr_stsprintf(sbuf,(char *)CONCAT22(0x578d,_SS),
-                                 (char *)CONCAT22(pcVar5,(char *)0x26510),textSeg,aligned);
-          ovr_uiNotify(pcVar5,textSeg,0);
+          aligned = alignUp4((GLeaderSheets[leaderIndex])->x,leaderY,0);
+          capPtr = ovr_ovc15_capitalize(text);
+          msgPtr = ovr_stsprintf(sbuf,(char *)CONCAT22(0x578d,_SS),
+                                 (char *)CONCAT22(msgPtr,(char *)0x26510),textSeg,aligned);
+          ovr_uiNotify(msgPtr,textSeg,0);
         }
         else {
-          aligned = alignUp4((GLeaderSheets[leaderIndex])->x,uVar6,0);
-          pcVar5 = ovr_stsprintf(sbuf,(char *)CONCAT22(0x576a,_SS),
+          aligned = alignUp4((GLeaderSheets[leaderIndex])->x,leaderY,0);
+          msgPtr = ovr_stsprintf(sbuf,(char *)CONCAT22(0x576a,_SS),
                                  (char *)CONCAT22(aligned,(char *)0x26510));
-          ovr_uiNotify(pcVar5,textSeg,0);
+          ovr_uiNotify(msgPtr,textSeg,0);
         }
         if (firstLeader == leaderIndex) {
           ovr_createConstructionRecordFar
-                    (0,(GLeaderSheets[leaderIndex])->x + -2,uVar6,(uint8_t *)outFlag,0xff,(char)unaff_DI,0xff,0,0);
+                    (0,(GLeaderSheets[leaderIndex])->x + -2,leaderY,(uint8_t *)outFlag,0xff,(char)diArg,0xff,0,0);
         }
         else {
           ovr_createConstructionRecordFar
-                    (0,(GLeaderSheets[leaderIndex])->x + -1,uVar6,(uint8_t *)outFlag,0xff,(char)unaff_DI,0xff,0,0);
+                    (0,(GLeaderSheets[leaderIndex])->x + -1,leaderY,(uint8_t *)outFlag,0xff,(char)diArg,0xff,0,0);
         }
         CurSfxType3 = 0xff;
         (GLeaderSheets[leaderIndex])->active = 0;
-        bVar1 = true;
+        flagB = true;
         ovr_manage_mapPartySlots();
         ovr_font_usesMiceBlitRect(0x5a);
         _fmemset(MK_FP(_SS, &flagMask), 0, 2);
@@ -638,20 +640,20 @@ L_OVC24_5943_112e_1255:
                     ('\x01',(char *)*(uint16_t *)((int)&worldMenuLabels[0].seg + 1 + probeOfs),*(uint16_t *)((int)&worldMenuLabels[1].ofs + 1 + probeOfs),(char *)0x0,0,4,0,0,0,0);
         }
         else {
-          uVar6 = ovr_season_checkEndGame((byte)leaderIndex);
-          if ((uVar6 & 0xff) == 0) {
+          endRes = ovr_season_checkEndGame((byte)leaderIndex);
+          if ((endRes & 0xff) == 0) {
             for (probeOfs = 0; probeOfs < (int)(uint)GLeaderCount; probeOfs = probeOfs + 1) {
               if ((GLeaderSheets[probeOfs])->active != '\0') {
                 (&excludedFlags)[*((byte far *)GLeaderSheets[probeOfs] + 0x3f)] = 0x1;
               }
             }
-            if ((((cStack_11 == '\0') && (1 < PlayerIndex)) && (GHighScoreSaved == '\0')) &&
+            if ((((flagUnset == '\0') && (1 < PlayerIndex)) && (GHighScoreSaved == '\0')) &&
                (((GLeaderSheets[firstLeader])->alignment == '\x02' ||
                 (((GLeaderSheets[firstLeader])->alignment == '\x01' &&
                  (8 < (GLeaderSheets[firstLeader])->titleIndex)))))) {
-              cStack_4 = '\x01';
+              gameOver = '\x01';
             }
-            if (cStack_4 == '\0') {
+            if (gameOver == '\0') {
               probeOfs = (uint)(GLeaderSheets[leaderIndex])->classStr * 0x95;
               ovr_ovc40_usesAlignToSeg
                         ('\x03',(char *)*(uint16_t *)((int)&worldMenuLabels[0].seg + 1 + probeOfs),*(uint16_t *)((int)&worldMenuLabels[1].ofs + 1 + probeOfs),(char *)0x0,0,6,0,0,0,0);
@@ -667,7 +669,7 @@ L_OVC24_5943_112e_1255:
       }
 L_OVC24_5943_112e_15E7:
     }
-    if (bVar1) {
+    if (flagB) {
       firstLeader = ovr_manage_findFirstLeader();
       _fmemset(MK_FP(_SS, &flagMask), 0, 2);
       for (leaderIndex = 0; (int)leaderIndex < (int)(uint)GLeaderCount; leaderIndex = leaderIndex + 1) {
@@ -690,16 +692,16 @@ L_OVC24_5943_112e_15E7:
         ovr_stop_audio();
         CurMusicType = 0xff;
       }
-      else if ((cStack_11 == '\0') && (PlayerIndex == 1)) {
+      else if ((flagUnset == '\0') && (PlayerIndex == 1)) {
         ovr_ovc30_nextWave(1);
       }
-      else if ((cStack_a != '\0') && ((cStack_11 == '\0' && (1 < PlayerIndex)))) {
+      else if ((flagA != '\0') && ((flagUnset == '\0' && (1 < PlayerIndex)))) {
         ovr_stop_audio();
         CurMusicType = 0x54;
         ovr_play_sfx(84,0,0);
         ovr_uiNotify((char *)"You have defeated all enemies.",0x2410,0);
         ovr_font_usesMiceBlitRect(messageDelayTicks << 4);
-        if (cStack_4 == '\0') {
+        if (gameOver == '\0') {
           ovr_inputUpdate((ulong)messageDelayTicks << 4);
         }
         else {

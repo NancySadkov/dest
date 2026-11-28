@@ -25981,3 +25981,40 @@ variable.
       bldng_selectBuildingType (676c:03dd) -57
       6fbe:01a9 (FLI frame player)         -53
       ovc15_textArena (4207:2301)          -53
+
+
+## `5943:112e` (leader's season step): 40 hits down to 0, grep 5,001 -> 4,954 (-47)
+
+    uVar6  -> leaderY   (GLeaderSheets[leaderIndex])->y
+              endRes    ovr_season_checkEndGame's result
+    pcVar5 -> capPtr    ovr_ovc15_capitalize's result, superseded on the next line
+              msgPtr    ovr_stsprintf's result, handed to uiNotify
+    cStack_4 -> gameOver  set when the season ended or the save was written
+    cStack_a -> flagA     set when the leader has a legal step
+    cStack_11 -> flagUnset  read at 648/693/696 and **never written in this body**
+    bVar1  -> flagB     set when the leader took a step this round
+    bVar2  -> arenaRes  ovc24_textArena's verdict for the probe cell
+    unaff_DI -> diArg   the value the image leaves in DI
+
+`flagUnset` is the fifth never-written local this campaign has found (after `stgSeg2`, `uStack_16`,
+`resultSeg`, `cStack_13`): it is tested three times and assigned nowhere, so naming it keeps the gap
+visible without inventing a value.
+
+## Measured (HEAD a3f80041 -> this commit)
+
+    grep_checks          5,001 -> 4,954   (-47)   -- below 5,000 for the first time
+    REBUILT.EXE          448,002 (unchanged size)
+    build 65/65, LINK.LOG 0 errors
+    compare_state        identical 734 / 7 different / 889 missing (unchanged)
+    diff_dgroup          288/1,805 matched (unchanged)
+    compare_runtime      280 identical / 11 different at entry, init_game and key (unchanged)
+    structural_deficits  two game bodies: 7e7c:0b9c (177/187), 77eb:0d61 (54/58)
+
+## Turn total (HEAD 907d3e6b -> here)
+
+    grep_checks          5,245 -> 4,954   (-291)
+      ovc45_textDone2 (77eb:1bb3)           -81
+      bldng_selectBuildingType (676c:03dd)  -57
+      6fbe:01a9 (FLI frame player)          -53
+      ovc15_textArena (4207:2301)           -53
+      5943:112e (leader's season step)      -47
