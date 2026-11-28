@@ -23460,3 +23460,44 @@ the in-source note records that the audit table calls `SquareRecX` a word althou
     compare_state        identical 734 / 7 different / 889 missing (unchanged)
     diff_dgroup          288/1,805 matched (unchanged)
     compare_runtime      280 identical / 11 different at entry, init_game and key (unchanged)
+
+
+## `ovc22_textRingProt` (5087:056e): the six prologue `_fmemset` calls and the aliased budget words
+
+The body was already written from the recorded decode; what it did not reproduce was the image's
+prologue, which clears its locals with **six `_fmemset` calls** rather than field-by-field stores.
+That was the whole 7-call gap (C 4 -> 11 counted, image 11).
+
+    0x059d  _fmemset(&budget[4], 0, 6)   dirBudget[1..3]
+    0x05ae  _fmemset(&budget[1], 0, 6)   ringBudget[1..3]
+    0x05bf  _fmemset(raw + 0x9a, 0, 3)   the three per-resource bytes
+    0x05e8  _fmemset(&extra[0], 0, 6)    the three words stored to tail94/96/98
+    0x0646  _fmemset(&resCount[0], 0, 8) the four per-resource counts
+    0x06c2  _fmemset(raw + 0xaa, 0, 3)   the three per-resource bytes at +0xaa
+
+Making them callable required reproducing the frame's aliasing properly. The header's inventory says
+`ringBudget[3]` and `dirBudget[0]` are the *same word* (bp-0x2a) and `ringBudget[0]` is the high half
+of the 32-bit `totalB`. Six separate scalars cannot express that, so the two arrays are now one:
+
+    uint16_t budget[7];   /* [1..3] = ringBudget[1..3]; [3] is also dirBudget[0]; [4..6] = dirBudget[1..3] */
+
+which is exactly the contiguous run bp-0x30..bp-0x24 the image uses. Both output paths already added
+into the shared word, so only the storage changed:
+
+    sheet->dirBudgetIn[0..2]  = budget[4..6]
+    sheet->ringBudgetIn[0..2] = budget[1..3]      ( [2] is the shared word )
+
+The one call still not written is `lcall 0x208,0x20` (its AL is stored to `sheet->popularity`). The
+in-source note now records the sharper reason: **segment 0x208 is a VROOMM window, not a module** -
+`audit/functions_real.tsv` has 106 segments and none below 0x1000, and `overlay_segments.csv` has no
+row for 0x208 - so the target has no static name.
+
+## Measured (HEAD c45473d0 -> this commit)
+
+    structural_deficits  5087:056e  4/11 -> 11/11 counted (gone; 8 functions left, was 9)
+    grep_checks          9,798 (unchanged)
+    REBUILT.EXE          447,986 (unchanged)
+    build 65/65, LINK.LOG 0 errors
+    compare_state        identical 734 / 7 different / 889 missing (unchanged)
+    diff_dgroup          288/1,805 matched (unchanged)
+    compare_runtime      280 identical / 11 different at entry, init_game and key (unchanged)

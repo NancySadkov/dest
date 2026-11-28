@@ -382,12 +382,11 @@ void __cdecl16far ovc22_textRingProt(byte partyIndex)
   uint16_t extra[3];
   uint32_t totalA;
   uint32_t totalB;
-  uint16_t ring1;
-  uint16_t ring2;
-  uint16_t shared;
-  uint16_t dir1;
-  uint16_t dir2;
-  uint16_t dir3;
+  /* The frame seats the two 4-word budget arrays so that ringBudget[3] and dirBudget[0] are the
+     same word (bp-0x2a) and ringBudget[0] is the high half of totalB (bp-0x30).  One array keeps
+     the shared word shared: budget[1..3] = ringBudget[1..3], budget[3] is also dirBudget[0],
+     budget[4..6] = dirBudget[1..3]. */
+  uint16_t budget[7];
   uint16_t resCount[4];
   uint16_t population;
   uint16_t housing;
@@ -416,20 +415,12 @@ void __cdecl16far ovc22_textRingProt(byte partyIndex)
   housing = 0;
   levelCap = 0;
 
-  dir1 = 0;
-  dir2 = 0;
-  dir3 = 0;
-  ring1 = 0;
-  ring2 = 0;
-  shared = 0;
-  extra[0] = 0;
-  extra[1] = 0;
-  extra[2] = 0;
+  /* 0x059d..0x05f1: the image clears these with _fmemset, in this order. */
+  _fmemset(&budget[4],0,6);         /* dirBudget[1..3] */
+  _fmemset(&budget[1],0,6);         /* ringBudget[1..3], whose last word is dirBudget[0] */
+  _fmemset(raw + 0x9a,0,3);         /* the three per-resource bytes at +0x9a */
+  _fmemset(&extra[0],0,6);          /* the three extra words stored to tail94/96/98 */
   totalB = 0;
-
-  sheet->pad_9a[0] = 0;
-  sheet->pad_9a[1] = 0;
-  sheet->pad_9a[2] = 0;
 
   switch (Difficulty) {
   case 1:
@@ -443,10 +434,7 @@ void __cdecl16far ovc22_textRingProt(byte partyIndex)
     break;
   }
   resourceTotal = 0;
-  resCount[0] = 0;
-  resCount[1] = 0;
-  resCount[2] = 0;
-  resCount[3] = 0;
+  _fmemset(&resCount[0],0,8);       /* 0x0646 */
 
   for (i = 0xf8; i < GUnitCount; i++) {
     GUnits[i].flags &= 0xfd;
@@ -455,9 +443,7 @@ void __cdecl16far ovc22_textRingProt(byte partyIndex)
   partyMask = (uint16_t)(0x1000 << (sheet->faction & 0x1f));
 
   sheet->tailAD = 0;
-  sheet->tailAA[0] = 0;
-  sheet->tailAA[1] = 0;
-  sheet->tailAA[2] = 0;
+  _fmemset(raw + 0xaa,0,3);         /* 0x06c2, the three per-resource bytes at +0xaa */
   if (sheet->faction != 0) {
     sheet->flags5d &= 0xf9;
   }
@@ -571,13 +557,13 @@ void __cdecl16far ovc22_textRingProt(byte partyIndex)
         totalB += (uint32_t)bt->output << 16;
         break;
       case 1:
-        ring1 += bt->output;
+        budget[1] += bt->output;
         break;
       case 2:
-        ring2 += bt->output;
+        budget[2] += bt->output;
         break;
       case 3:
-        shared += bt->output;
+        budget[3] += bt->output;
         break;
       default:
         break;
@@ -592,16 +578,16 @@ void __cdecl16far ovc22_textRingProt(byte partyIndex)
     }
     switch (bt->resource) {
     case 0:
-      shared += bt->output;
+      budget[3] += bt->output;
       break;
     case 1:
-      dir1 += bt->output;
+      budget[4] += bt->output;
       break;
     case 2:
-      dir2 += bt->output;
+      budget[5] += bt->output;
       break;
     case 3:
-      dir3 += bt->output;
+      budget[6] += bt->output;
       break;
     default:
       break;
@@ -683,20 +669,21 @@ void __cdecl16far ovc22_textRingProt(byte partyIndex)
   sheet->foodProd = (short)population;
   sheet->income = (short)income;
   sheet->vaultStorage = (long)totalA;
-  sheet->dirBudgetIn[0] = dir1;
-  sheet->dirBudgetIn[1] = dir2;
-  sheet->dirBudgetIn[2] = dir3;
-  sheet->ringBudgetIn[0] = ring1;
-  sheet->ringBudgetIn[1] = ring2;
-  sheet->ringBudgetIn[2] = shared;
+  sheet->dirBudgetIn[0] = budget[4];
+  sheet->dirBudgetIn[1] = budget[5];
+  sheet->dirBudgetIn[2] = budget[6];
+  sheet->ringBudgetIn[0] = budget[1];
+  sheet->ringBudgetIn[1] = budget[2];
+  sheet->ringBudgetIn[2] = budget[3];
   sheet->rank = (short)resourceTotal;
   sheet->level = (uint8_t)((levelCap > 0xff) ? 0xff : levelCap);
   sheet->levelLimit = (resCount[3] > 0) ? 0xff : (resCount[2] > 0) ? 0xc : (resCount[1] > 0) ? 8 : 4;
 
-  /* GAP: the image stores AL from `lcall 0x208,0x20` into sheet->popularity (5087:1413).  That
-     selector occurs exactly once in the whole binary, so no cross-reference can name the target and
-     the call cannot be emitted under a real name; the store is deliberately left out rather than
-     guessed (see doc/step6_entry.md). */
+  /* GAP: the image stores AL from `lcall 0x208,0x20` into sheet->popularity (5087:1413).
+     Segment 0x208 is a VROOMM overlay *window*, not a module: it appears in neither
+     audit/functions_real.tsv (whose 106 segments contain nothing below 0x1000) nor
+     audit/overlay_segments.csv, so the target has no static name and the call cannot be emitted
+     without inventing one.  The store is left out rather than guessed. */
 
   ovc22_usesPlayerCount(partyIndex);
 }
