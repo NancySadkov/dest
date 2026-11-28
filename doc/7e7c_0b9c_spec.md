@@ -205,4 +205,48 @@ Leaves 1-3 are the "head" of the function: a shared preamble that reports owners
 occupied. Leaves 4+ switch on the building type and emit that type's description - the same three
 calls (`className`, one or two `compute9` line renders, `usesStshRealloc(name)`) followed by the
 type-specific `fmVsprintf`.
+## Correction: 80 leaves, not 79
+
+The inventory above counts the three *output* call types (`fmVsprintf` 44, `strcpy` 32, `strcat` 3 =
+79 sites). There is one further leaf that writes straight into `outBuf` with **`stsprintf`**
+(`lcall 0x170,0x7a`, 1 site) and needs no `strcpy` - leaf 4 below. So the function has **80 leaves**:
+40 `fmVsprintf`+`strcpy` pairs, 3 `strcat` sites, 1 `stsprintf`, and the rest are the companion
+`strcpy`/`strcat` halves of pairs already counted.
+
+## Leaf 4 — `7e7c:0f16..0x10e4`, format `0x7ac4`, `stsprintf` into `outBuf`
+
+Preamble that is shared by the type-specific chain (it is *not* a leaf: it computes three values used
+later, then falls through to the type dispatch at `0x100c`):
+
+    if (GUnits[unitIdx].unitType != 0xff) {
+      v16 = GAP_198_0057(bld, GUnits[unitIdx].unitType, GUnits[unitIdx].x, GUnits[unitIdx].y);
+      di  = GAP_198_005c(bld, GUnits[unitIdx].unitType, GUnits[unitIdx].x, GUnits[unitIdx].y);
+      v18 = BuildingTypes[bld].housing;              /* +0x119? no: +0x127 = base 0x10e + 0x19 */
+    } else { v16 = 0; di = 0; v18 = 0; }
+
+  The two `GAP_*` calls are exactly the two unnameable pairs from the call map (`198,0057` and
+  `198,005c`, one site each); both take four words (`push y, x, unitType, bld`) and return a word.
+  `[bp-0x16]` = v16, `di` = v18's companion, `[bp-0x18]` = v18.
+
+Leaf 4 itself, entered when `BuildingTypes[bld].unitType == 6` (base 0x10e + 0x25):
+
+    clamp = resourceTable[BuildingTypes[bld].resource];   /* kind -> byte table at DGROUP 0x74b4 */
+    switch (GLeaderSheets[owner]->cls) {
+      case 4: if (clamp > 0x0c) clamp = 0x0c; break;
+      case 5: if (clamp > 0x0a) clamp = 0x0a; break;
+      case 6: if (clamp > 0x08) clamp = 0x08; break;
+    }
+    stsprintf(outBuf, "<0x7ac4>", usesStshRealloc(BuildingTypes[bld].name), -di, clamp);
+    goto end;   /* 0x1f1a */
+
+  (`add sp,0x10` = 16 = dst 4 + fmt 4 + name 4 + (-di) 2 + clamp 2.) Note the argument is `-di`
+  (`mov ax,di; neg ax`), and that the y offset differs from leaves 1-3.
+
+## Updated batch status
+
+    leaves 1-3   transcribed (0c0f, 0d90, 0e86)
+    leaf  4      transcribed (0f16 preamble + 1028 body)
+    leaves 5-80  pending: the type dispatch at 0x100c walks BuildingTypes[bld].unitType through
+                 1, 6, ... and each arm builds its own message; the literal for every arm is in the
+                 inventory above.
 
