@@ -1078,33 +1078,57 @@ void __cdecl16far upd_usesAlignUp4(void)
      uint * for the sheet gold/trade counters at +0x56/+0x60/+0x7e. */
   uint16_t *flagWord;
   int far *accHi;
-  uint8_t *puVar4;
+  uint8_t *framePtr;       /* &Entities[i].base.animFrame */
   byte leaderIdx;
   short unitY;             /* GUnits[unitIdx].y */
-  uint32_t uVar7;
+  uint32_t typeRecPtr;     /* AgntAnms[unitType] read as a 32-bit pointer */
   far_t pctOut;
   far_t remainderOut;
   far_t partOut;
-  bool bVar8;
-  bool bVar9;
+  bool foodShort;           /* foodProd lags population */
+  bool totalFail;           /* the attack roll fell outside both bands */
+  bool unitLost;            /* the unit is removed from its leader */
   char sheetFaction;
   uint16_t randVal;
-  uint uVar12;
+  uint popLoss;             /* food surplus taken out of the gold word */
+  uint foodGain;            /* the surplus added back when foodProd leads */
+  uint borrowBit;           /* (uint)(foodLo23 < *accLo) */
+  uint foodLow;             /* the sheet's +0x8a food word */
+  uint oldAccLo2;           /* a second accumulator's previous low word */
+  uint unitXAligned;        /* alignUp4 of the unit's x, for the message */
+  uint damage;              /* ovc22_usesLUDIV_at_2's result */
   char *msg;
   uint16_t index;
   uint16_t tableOfs;
   long *plVar15;
   agnt_t far *valueLo;
   unit_t *units;
-  int iVar17;
-  int iVar18;
+  int sheetFood62;         /* the sheet's +0x62 counter, tested < 1 */
+  uint lidx;                /* the 0..GLeaderCount loop over GLeaderSheets */
+  int goldHi58;             /* the sheet's +0x58 gold high word, tested < 1 */
+  int goldDiff;             /* the +0x8c minus +0x58 difference */
+  int leaderSheetOfs;       /* far_ofs of the leader's sheet (stored, never read) */
+  int sheetSegInt;          /* the segment half of GLeaderSheets[idx] */
+  int classOfs;             /* gindex * 0x95, the class record offset */
   int sheetOfs;
   entity_t *peVar20;
-  int iVar21;
+  int lSheetOfs;           /* another leader's sheet offset (the loops) */
+  int otherWord;            /* that leader's +0x80 / +0x8c word */
+  int addHi;                /* the high half of the transferAmount amount */
   entity_t *peVar22;
   uint16_t unaff_SI;
   uint16_t unaff_DI;
-  uint uVar23;
+  uint oldAccLo;           /* an accumulator's previous low word (12 sites) */
+  uint sheetWord62;         /* the sheet's +0x62 counter word (3 sites) */
+  uint goldWord58;          /* the sheet's +0x58 gold high word (2 sites) */
+  uint entIdx;              /* the two 0..EntityCount scans over Entities */
+  uint foodLo23;            /* the sheet's +0x60 food word (3 sites) */
+  uint scanPos;             /* the descending EntityCount..0 scan cursor */
+  uint goldLo;              /* the sheet's gold, low word (1224..1227) */
+  int goldHi;              /* its high word, tested against < 1 (1226..1239) */
+  int incomeVal;           /* a building's signed income (1235..1238) */
+  uint bldByteOfs;         /* bldType * 0x27 (1251..1255) */
+  uint accLo2;             /* the accumulator's low word (1274..1277) */
   byte entStatus;           /* ovc22_usesEntities(idx)'s status byte (1773) */
   byte carryBit;            /* the carry out of the LXMUL result (1788/1792) */
   uint healthWord;          /* the entity's health word (1797..1801) */
@@ -1113,34 +1137,38 @@ void __cdecl16far upd_usesAlignUp4(void)
   uint16_t unitsSeg;
   uint16_t sheetSeg;
   uint16_t sheetSeg2;       /* segment half of GLeaderSheets[idx] */
-  bool bVar27;
+  bool popCarry;            /* carry out of the GPopulation add */
+  bool successFlag;         /* the attack roll succeeded */
   far_t table;
   uint8_t *bldTypePtr;      /* &bldType, handed out as a far pointer */
   uint16_t pctSeg;
   uint8_t *partialPtr;      /* &partialWeight */
   uint16_t remainderSeg;
   uint8_t *successPtr;      /* &successWeight */
-  undefined1 uVar33;
-  undefined1 uVar34;
+  undefined1 packHi;         /* the high byte of a packed 32-bit argument */
+  undefined1 sayPause;       /* 0x10, ovr_say's duration */
+  undefined1 packLo;        /* the low byte of a packed 32-bit argument */
   undefined1 ptrSegHi;
   long a;
-  uint uVar36;
-  ulong in_stack_0000ffd2;
+  uint income32;            /* BuildingTypes[].income widened to 32 bits */
+  int foodDiff;             /* the +0x62 minus +0x80 food difference */
+  uint amountLo;            /* the low half of the transferred amount */
+  ulong transferAmount;     /* the food amount moved between sheets */
   int budget;              /* 0..3, decremented from the leader's budget */
   uint8_t bldType;
   uint8_t partialWeight;
   uint8_t successWeight;
-  char cStack_1d;
+  char unitDied;            /* set when a unit we killed reached frame 0 */
   uint8_t found;
   byte partySlot;
   uint16_t entY;
   uint entX;
   uint idx;
-  uint uStack_14;
+  uint sendable;            /* how much of popAcc this sheet can take */
   uint popAcc;
   uint popGain;             /* gold / 10, added to GPopulation */
-  int iStack_e;
-  int iStack_c;
+  int waitTicks;           /* 0..199 idle counter */
+  int promoteValue;        /* 0, 0x28 or titleIndex * 4 + 0x14 */
   uint tradeAmount;
   uint16_t randRange;       /* 0x96 or 0x5dc, the ovr_randBelow bound */
   byte gindex;
@@ -1149,7 +1177,7 @@ void __cdecl16far upd_usesAlignUp4(void)
   
   a = CONCAT22(unaff_SI,unaff_DI);
   if (!GameRunning) {
-    cStack_1d = '\0';
+    unitDied = '\0';
     found = 0x0;
     for (idx = 0xf8; idx < GUnitCount; idx = idx + 1) {
       flagsPtr = &(GUnits)[idx].flags;
@@ -1169,8 +1197,8 @@ void __cdecl16far upd_usesAlignUp4(void)
       units = GUnits;
       if ((units[unitIdx].flags & 3) == 0) {
         if ((units[unitIdx].unitType == 0xff) ||
-           (uVar7 = *(uint32_t *)((uint)units[unitIdx].unitType << 2),
-           *(char *)((int)uVar7 + 0x3f) == '\0')) {
+           (typeRecPtr = *(uint32_t *)((uint)units[unitIdx].unitType << 2),
+           *(char *)((int)typeRecPtr + 0x3f) == '\0')) {
           randRange = 0x96;
         }
         else {
@@ -1216,27 +1244,27 @@ void __cdecl16far upd_usesAlignUp4(void)
         if ((sheetFaction == '\0') &&
            ((GLeaderSheets[idx])->foodProd <
             (GLeaderSheets[idx])->population >> 1)) {
-          bVar8 = true;
+          foodShort = true;
         }
         else {
-          bVar8 = false;
+          foodShort = false;
         }
-        uVar23 = *((uint far *)GLeaderSheets[idx] + 0x54);
+        goldLo = *((uint far *)GLeaderSheets[idx] + 0x54);
         unitsSeg = (uint16_t)((ulong)(uint32_t)GLeaderSheets[idx] >> 0x10);
-        iVar17 = *(int far *)((uint8_t far *)GLeaderSheets[idx] + 0x58) + ((int)uVar23 >> 0xf) +
-                 (uint)CARRY2(*(uint far *)((uint8_t far *)GLeaderSheets[idx] + 0x56),uVar23);
-        if ((iVar17 < 1) && (iVar17 < 0)) {
+        goldHi = *(int far *)((uint8_t far *)GLeaderSheets[idx] + 0x58) + ((int)goldLo >> 0xf) +
+                 (uint)CARRY2(*(uint far *)((uint8_t far *)GLeaderSheets[idx] + 0x56),goldLo);
+        if ((goldHi < 1) && (goldHi < 0)) {
           for (unitIdx = 0xf8; unitIdx < GUnitCount; unitIdx = unitIdx + 1) {
             unitsSeg = (uint16_t)((ulong)GUnits >> 0x10);
             units = GUnits;
             bldType = (units + unitIdx)->bldType;
             if ((units[unitIdx].unitType == idx) &&
                (BuildingTypes[bldType].income < 0)) {
-              uVar12 = BuildingTypes[bldType].income;
+              incomeVal = BuildingTypes[bldType].income;
               sheetSeg = (uint16_t)((ulong)(uint32_t)GLeaderSheets[idx] >> 0x10);
-              iVar17 = *(int far *)((uint8_t far *)GLeaderSheets[idx] + 0x58) + ((int)uVar12 >> 0xf) +
-                       (uint)CARRY2(*(uint far *)((uint8_t far *)GLeaderSheets[idx] + 0x56),uVar12);
-              if ((iVar17 < 1) && (iVar17 < 0)) {
+              goldHi = *(int far *)((uint8_t far *)GLeaderSheets[idx] + 0x58) + ((int)incomeVal >> 0xf) +
+                       (uint)CARRY2(*(uint far *)((uint8_t far *)GLeaderSheets[idx] + 0x56),incomeVal);
+              if ((goldHi < 1) && (goldHi < 0)) {
                 if ((sheetFaction == '\0') && (units[unitIdx].level != 0)) {
                   randVal = ovr_randBelow(100,0);
                   unitsSeg = (uint16_t)((ulong)GUnits >> 0x10);
@@ -1248,11 +1276,11 @@ void __cdecl16far upd_usesAlignUp4(void)
                     units = GUnits;
                     unitsSeg = (uint16_t)((ulong)GUnits >> 0x10);
                     if (((BuildingTypes[bldType].flags2 & 4) == 0) &&
-                       ((iVar17 = 0, units[unitIdx].level == 0 ||
-                        (iVar17 = (uint)bldType * 0x27, (BuildingTypes[bldType].flags2 & 0x200) != 0))))
+                       ((bldByteOfs = 0, units[unitIdx].level == 0 ||
+                        (bldByteOfs = (uint)bldType * 0x27, (BuildingTypes[bldType].flags2 & 0x200) != 0))))
                     {
                       ovc22_usesGUnits(unitIdx,(uint8_t *)
-                                              CONCAT13((char)((uint)iVar17 >> 8),
+                                              CONCAT13((char)((uint)bldByteOfs >> 8),
                                                        CONCAT12((byte)idx,_SS)));
                     }
                     else if (((((bld_inst_t *)BldInstances + bldType)->ofs != 0 ||
@@ -1268,13 +1296,13 @@ void __cdecl16far upd_usesAlignUp4(void)
                 }
               }
               else {
-                uVar36 = BuildingTypes[bldType].income;
+                income32 = BuildingTypes[bldType].income;
                 unitsSeg = (uint16_t)((ulong)(uint32_t)GLeaderSheets[idx] >> 0x10);
                 accLo = (uint far *)((uint8_t far *)GLeaderSheets[idx] + 0x56);
-                uVar12 = *accLo;
-                *accLo = *accLo + uVar36;
+                accLo2 = *accLo;
+                *accLo = *accLo + income32;
                 accHi = (int far *)((uint8_t far *)GLeaderSheets[idx] + 0x58);
-                *accHi = *accHi + ((int)uVar36 >> 0xf) + (uint)CARRY2(uVar12,uVar36);
+                *accHi = *accHi + ((int)income32 >> 0xf) + (uint)CARRY2(accLo2,income32);
               }
             }
           }
@@ -1289,16 +1317,16 @@ void __cdecl16far upd_usesAlignUp4(void)
           else {
             popGain = 0;
           }
-          bVar27 = CARRY2(GPopulationLo,popGain);
+          popCarry = CARRY2(GPopulationLo,popGain);
           GPopulationLo = GPopulationLo + popGain;
-          GPopulationHi = GPopulationHi + ((int)popGain >> 0xf) + (uint)bVar27;
-          uVar12 = *((int far *)GLeaderSheets[idx] + 0x54) - popGain;
+          GPopulationHi = GPopulationHi + ((int)popGain >> 0xf) + (uint)popCarry;
+          popLoss = *((int far *)GLeaderSheets[idx] + 0x54) - popGain;
           unitsSeg = (uint16_t)((ulong)(uint32_t)GLeaderSheets[idx] >> 0x10);
           accLo = (uint far *)((uint8_t far *)GLeaderSheets[idx] + 0x56);
-          uVar23 = *accLo;
-          *accLo = *accLo + uVar12;
+          oldAccLo = *accLo;
+          *accLo = *accLo + popLoss;
           accHi = (int far *)((uint8_t far *)GLeaderSheets[idx] + 0x58);
-          *accHi = *accHi + ((int)uVar12 >> 0xf) + (uint)CARRY2(uVar23,uVar12);
+          *accHi = *accHi + ((int)popLoss >> 0xf) + (uint)CARRY2(oldAccLo,popLoss);
         }
         if ((AgntGs[(uint)(GLeaderSheets[idx])->classStr].flags & 0x100)
             == 0) {
@@ -1307,23 +1335,23 @@ void __cdecl16far upd_usesAlignUp4(void)
             popAcc = (GLeaderSheets[idx])->population -
                         (GLeaderSheets[idx])->foodProd;
             unitsSeg = (uint16_t)((ulong)(uint32_t)GLeaderSheets[idx] >> 0x10);
-            iVar21 = (int)(uint32_t)GLeaderSheets[idx];
-            iVar17 = *(int *)(iVar21 + 0x62);
-            if ((-1 < iVar17) && ((0 < iVar17 || (*(int *)(iVar21 + 0x60) != 0)))) {
+            sheetOfs = (int)(uint32_t)GLeaderSheets[idx];
+            sheetFood62 = *(int *)(sheetOfs + 0x62);
+            if ((-1 < sheetFood62) && ((0 < sheetFood62 || (*(int *)(sheetOfs + 0x60) != 0)))) {
               unitsSeg = (uint16_t)((ulong)(uint32_t)GLeaderSheets[idx] >> 0x10);
-              uVar23 = *(uint far *)((uint8_t far *)GLeaderSheets[idx] + 0x62);
-              if ((0x7fff < uVar23) ||
-                 ((uStack_14 = popAcc, (int)uVar23 < 1 && (*(uint far *)((uint8_t far *)GLeaderSheets[idx] + 0x60) <= popAcc)
+              sheetWord62 = *(uint far *)((uint8_t far *)GLeaderSheets[idx] + 0x62);
+              if ((0x7fff < sheetWord62) ||
+                 ((sendable = popAcc, (int)sheetWord62 < 1 && (*(uint far *)((uint8_t far *)GLeaderSheets[idx] + 0x60) <= popAcc)
                   ))) {
-                uStack_14 = *((uint far *)GLeaderSheets[idx] + 0x60);
+                sendable = *((uint far *)GLeaderSheets[idx] + 0x60);
               }
-              popAcc = popAcc - uStack_14;
+              popAcc = popAcc - sendable;
               unitsSeg = (uint16_t)((ulong)(uint32_t)GLeaderSheets[idx] >> 0x10);
               accLo = (uint far *)((uint8_t far *)GLeaderSheets[idx] + 0x60);
-              uVar23 = *accLo;
-              *accLo = *accLo - uStack_14;
+              oldAccLo = *accLo;
+              *accLo = *accLo - sendable;
               accHi = (int far *)((uint8_t far *)GLeaderSheets[idx] + 0x62);
-              *accHi = *accHi - (uint)(uVar23 < uStack_14);
+              *accHi = *accHi - (uint)(oldAccLo < sendable);
             }
             if (popAcc != 0) {
               tradeAmount = popAcc;
@@ -1331,100 +1359,100 @@ void __cdecl16far upd_usesAlignUp4(void)
                 tradeAmount = (GLeaderSheets[idx])->maxTrade;
               }
               unitsSeg = (uint16_t)((ulong)(uint32_t)GLeaderSheets[idx] >> 0x10);
-              uVar23 = *(uint far *)((uint8_t far *)GLeaderSheets[idx] + 0x58);
-              if (((int)uVar23 < 1) && ((0x7fff < uVar23 || (*(uint far *)((uint8_t far *)GLeaderSheets[idx] + 0x56) < tradeAmount))))
+              goldWord58 = *(uint far *)((uint8_t far *)GLeaderSheets[idx] + 0x58);
+              if (((int)goldWord58 < 1) && ((0x7fff < goldWord58 || (*(uint far *)((uint8_t far *)GLeaderSheets[idx] + 0x56) < tradeAmount))))
               {
                 tradeAmount = *((uint far *)GLeaderSheets[idx] + 0x56);
               }
               unitsSeg = (uint16_t)((ulong)(uint32_t)GLeaderSheets[idx] >> 0x10);
               accLo = (uint far *)((uint8_t far *)GLeaderSheets[idx] + 0x56);
-              uVar23 = *accLo;
+              oldAccLo = *accLo;
               *accLo = *accLo - tradeAmount;
               accHi = (int far *)((uint8_t far *)GLeaderSheets[idx] + 0x58);
-              *accHi = *accHi - (uint)(uVar23 < tradeAmount);
+              *accHi = *accHi - (uint)(oldAccLo < tradeAmount);
               popAcc = popAcc - tradeAmount;
               (GLeaderSheets[idx])->foodSold = tradeAmount;
             }
             if (sheetFaction == '\0') {
-              for (iVar17 = 0; (popAcc != 0 && (iVar17 < (int)(uint)GLeaderCount));
-                  iVar17 = iVar17 + 1) {
-                if (((GLeaderSheets[iVar17])->active != '\0') &&
-                   ((*((char far *)GLeaderSheets[iVar17] + 0x3f) == '\0' &&
-                    (unitsSeg = (uint16_t)SEG_OF(GLeaderSheets[iVar17]),
-                    iVar21 = (int)far_ofs_u32(GLeaderSheets[iVar17]),
-                    *(int *)(iVar21 + 0x60) != 0 || *(int *)(iVar21 + 0x62) != 0)))) {
-                  unitsSeg = (uint16_t)SEG_OF(GLeaderSheets[iVar17]);
-                  iVar21 = (int)far_ofs_u32(GLeaderSheets[iVar17]);
-                  uVar23 = *(uint *)(iVar21 + 0x62);
-                  if ((uVar23 < 0x8000) &&
-                     ((0 < (int)uVar23 || (popAcc < *(uint *)(iVar21 + 0x60))))) {
-                    uStack_14 = popAcc;
+              for (lidx = 0; (popAcc != 0 && (lidx < (int)(uint)GLeaderCount));
+                  lidx = lidx + 1) {
+                if (((GLeaderSheets[lidx])->active != '\0') &&
+                   ((*((char far *)GLeaderSheets[lidx] + 0x3f) == '\0' &&
+                    (unitsSeg = (uint16_t)SEG_OF(GLeaderSheets[lidx]),
+                    lSheetOfs = (int)far_ofs_u32(GLeaderSheets[lidx]),
+                    *(int *)(lSheetOfs + 0x60) != 0 || *(int *)(lSheetOfs + 0x62) != 0)))) {
+                  unitsSeg = (uint16_t)SEG_OF(GLeaderSheets[lidx]);
+                  lSheetOfs = (int)far_ofs_u32(GLeaderSheets[lidx]);
+                  sheetWord62 = *(uint *)(lSheetOfs + 0x62);
+                  if ((sheetWord62 < 0x8000) &&
+                     ((0 < (int)sheetWord62 || (popAcc < *(uint *)(lSheetOfs + 0x60))))) {
+                    sendable = popAcc;
                   }
                   else {
-                    uStack_14 = *((uint far *)GLeaderSheets[iVar17] + 0x60);
+                    sendable = *((uint far *)GLeaderSheets[lidx] + 0x60);
                   }
-                  popAcc = popAcc - uStack_14;
-                  unitsSeg = (uint16_t)SEG_OF(GLeaderSheets[iVar17]);
-                  iVar21 = (int)far_ofs_u32(GLeaderSheets[iVar17]);
-                  accLo = (uint *)(iVar21 + 0x60);
-                  uVar23 = *accLo;
-                  *accLo = *accLo - uStack_14;
-                  accHi = (int *)(iVar21 + 0x62);
-                  *accHi = *accHi - (uint)(uVar23 < uStack_14);
+                  popAcc = popAcc - sendable;
+                  unitsSeg = (uint16_t)SEG_OF(GLeaderSheets[lidx]);
+                  lSheetOfs = (int)far_ofs_u32(GLeaderSheets[lidx]);
+                  accLo = (uint *)(lSheetOfs + 0x60);
+                  oldAccLo = *accLo;
+                  *accLo = *accLo - sendable;
+                  accHi = (int *)(lSheetOfs + 0x62);
+                  *accHi = *accHi - (uint)(oldAccLo < sendable);
                 }
               }
             }
-            uVar23 = 0;
-            while ((uVar23 < EntityCount && (popAcc != 0))) {
+            entIdx = 0;
+            while ((entIdx < EntityCount && (popAcc != 0))) {
               unitsSeg = (uint16_t)((ulong)Entities >> 0x10);
               peVar20 = Entities;
-              if (((*(char *)((int)&peVar20[uVar23].base.entity + 1) == '\0') &&
-                  (*(byte *)((int)&peVar20[uVar23].base.entity + 3) == idx)) &&
-                 ((bVar8 || (1 < peVar20[uVar23].base.animFrame)))) {
-                if (peVar20[uVar23].base.animFrame != 0x0) {
+              if (((*(char *)((int)&peVar20[entIdx].base.entity + 1) == '\0') &&
+                  (*(byte *)((int)&peVar20[entIdx].base.entity + 3) == idx)) &&
+                 ((foodShort || (1 < peVar20[entIdx].base.animFrame)))) {
+                if (peVar20[entIdx].base.animFrame != 0x0) {
                   if (DebugVerbose != false) {
                     printf("kill 3\r");
                   }
-                  puVar4 = &(Entities)[uVar23].base.animFrame;
-                  *puVar4 = *puVar4 + 0xff;
-                  if ((Entities)[uVar23].base.animFrame == 0x0) {
-                    cStack_1d = '\x01';
+                  framePtr = &(Entities)[entIdx].base.animFrame;
+                  *framePtr = *framePtr + 0xff;
+                  if ((Entities)[entIdx].base.animFrame == 0x0) {
+                    unitDied = '\x01';
                   }
                 }
                 popAcc = popAcc - 1;
               }
-              uVar23 = uVar23 + 1;
+              entIdx = entIdx + 1;
             }
           }
           else {
-            uVar12 = (GLeaderSheets[idx])->foodProd -
+            foodGain = (GLeaderSheets[idx])->foodProd -
                      (GLeaderSheets[idx])->population;
             unitsSeg = (uint16_t)((ulong)(uint32_t)GLeaderSheets[idx] >> 0x10);
             accLo = (uint far *)((uint8_t far *)GLeaderSheets[idx] + 0x60);
-            uVar23 = *accLo;
-            *accLo = *accLo + uVar12;
+            oldAccLo = *accLo;
+            *accLo = *accLo + foodGain;
             accHi = (int far *)((uint8_t far *)GLeaderSheets[idx] + 0x62);
-            *accHi = *accHi + (uint)CARRY2(uVar23,uVar12);
+            *accHi = *accHi + (uint)CARRY2(oldAccLo,foodGain);
           }
         }
         unitsSeg = (uint16_t)((ulong)(uint32_t)GLeaderSheets[idx] >> 0x10);
-        iVar18 = (int)(uint32_t)GLeaderSheets[idx];
-        iVar17 = *(int *)(iVar18 + 0x62);
+        sheetOfs = (int)(uint32_t)GLeaderSheets[idx];
+        sheetFood62 = *(int *)(sheetOfs + 0x62);
         sheetSeg = (uint16_t)((ulong)(uint32_t)GLeaderSheets[idx] >> 0x10);
         sheetOfs = (int)(uint32_t)GLeaderSheets[idx];
-        iVar21 = *(int *)(sheetOfs + 0x80);
-        if ((iVar21 <= iVar17) &&
-           ((iVar21 < iVar17 || (*(uint *)(sheetOfs + 0x7e) < *(uint *)(iVar18 + 0x60))))) {
+        otherWord = *(int *)(sheetOfs + 0x80);
+        if ((otherWord <= sheetFood62) &&
+           ((otherWord < sheetFood62 || (*(uint *)(sheetOfs + 0x7e) < *(uint *)(sheetOfs + 0x60))))) {
           unitsSeg = (uint16_t)((ulong)(uint32_t)GLeaderSheets[idx] >> 0x10);
-          uVar23 = *(uint far *)((uint8_t far *)GLeaderSheets[idx] + 0x60);
+          foodLo23 = *(uint far *)((uint8_t far *)GLeaderSheets[idx] + 0x60);
           sheetSeg = (uint16_t)((ulong)(uint32_t)GLeaderSheets[idx] >> 0x10);
-          iVar21 = (int)(uint32_t)GLeaderSheets[idx];
-          accLo = (uint *)(iVar21 + 0x7e);
-          uVar12 = (uint)(uVar23 < *accLo);
-          uVar36 = *(int far *)((uint8_t far *)GLeaderSheets[idx] + 0x62) - *(int *)(iVar21 + 0x80);
-          if (((int)(uVar36 - uVar12) < 0) ||
-             ((uVar36 == uVar12 &&
-              (uVar23 - *accLo <= (GLeaderSheets[idx])->maxTrade)))) {
+          sheetOfs = (int)(uint32_t)GLeaderSheets[idx];
+          accLo = (uint *)(sheetOfs + 0x7e);
+          borrowBit = (uint)(foodLo23 < *accLo);
+          foodDiff = *(int far *)((uint8_t far *)GLeaderSheets[idx] + 0x62) - *(int *)(sheetOfs + 0x80);
+          if (((int)(foodDiff - borrowBit) < 0) ||
+             ((foodDiff == borrowBit &&
+              (foodLo23 - *accLo <= (GLeaderSheets[idx])->maxTrade)))) {
             tradeAmount = *((int far *)GLeaderSheets[idx] + 0x60) -
                        *((int far *)GLeaderSheets[idx] + 0x7e);
           }
@@ -1434,16 +1462,16 @@ void __cdecl16far upd_usesAlignUp4(void)
           (GLeaderSheets[idx])->foodSold = -tradeAmount;
           unitsSeg = (uint16_t)((ulong)(uint32_t)GLeaderSheets[idx] >> 0x10);
           accLo = (uint far *)((uint8_t far *)GLeaderSheets[idx] + 0x56);
-          uVar23 = *accLo;
+          oldAccLo = *accLo;
           *accLo = *accLo + tradeAmount;
           accHi = (int far *)((uint8_t far *)GLeaderSheets[idx] + 0x58);
-          *accHi = *accHi + (uint)CARRY2(uVar23,tradeAmount);
+          *accHi = *accHi + (uint)CARRY2(oldAccLo,tradeAmount);
           sheetSeg = (uint16_t)((ulong)(uint32_t)GLeaderSheets[idx] >> 0x10);
           unitsSeg = *(uint16_t far *)((uint8_t far *)GLeaderSheets[idx] + 0x7e);
           sheetSeg2 = (uint16_t)((ulong)(uint32_t)GLeaderSheets[idx] >> 0x10);
-          iVar21 = (int)(uint32_t)GLeaderSheets[idx];
-          *(uint16_t *)(iVar21 + 0x62) = *(uint16_t far *)((uint8_t far *)GLeaderSheets[idx] + 0x80);
-          *(uint16_t *)(iVar21 + 0x60) = unitsSeg;
+          sheetOfs = (int)(uint32_t)GLeaderSheets[idx];
+          *(uint16_t *)(sheetOfs + 0x62) = *(uint16_t far *)((uint8_t far *)GLeaderSheets[idx] + 0x80);
+          *(uint16_t *)(sheetOfs + 0x60) = unitsSeg;
         }
         if (((GLeaderSheets[idx])->housing <
              (GLeaderSheets[idx])->population) &&
@@ -1451,22 +1479,22 @@ void __cdecl16far upd_usesAlignUp4(void)
             == 0)) {
           popAcc = (GLeaderSheets[idx])->population -
                       (GLeaderSheets[idx])->housing;
-          uVar23 = 0;
-          while ((uVar23 < EntityCount && (popAcc != 0))) {
+          entIdx = 0;
+          while ((entIdx < EntityCount && (popAcc != 0))) {
             unitsSeg = (uint16_t)((ulong)Entities >> 0x10);
             peVar20 = Entities;
-            if ((*(byte *)((int)&peVar20[uVar23].base.entity + 3) == idx) &&
-               ((((*(char *)((int)&peVar20[uVar23].base.entity + 1) == '\0' &&
-                  (peVar20[uVar23].base.destX == 0)) && (peVar20[uVar23].base.destY == 0)) &&
-                (3 < peVar20[uVar23].base.animFrame)))) {
+            if ((*(byte *)((int)&peVar20[entIdx].base.entity + 3) == idx) &&
+               ((((*(char *)((int)&peVar20[entIdx].base.entity + 1) == '\0' &&
+                  (peVar20[entIdx].base.destX == 0)) && (peVar20[entIdx].base.destY == 0)) &&
+                (3 < peVar20[entIdx].base.animFrame)))) {
               if (DebugVerbose != false) {
                 printf("kill 2 \r");
               }
-              puVar4 = &(Entities)[uVar23].base.animFrame;
-              *puVar4 = *puVar4 + 0xff;
+              framePtr = &(Entities)[entIdx].base.animFrame;
+              *framePtr = *framePtr + 0xff;
               popAcc = popAcc - 1;
             }
-            uVar23 = uVar23 + 1;
+            entIdx = entIdx + 1;
           }
         }
         ovr_ovc25_tickCountdown(idx);
@@ -1523,9 +1551,9 @@ void __cdecl16far upd_usesAlignUp4(void)
              *((undefined1 far *)GLeaderSheets[idx] + 0xa6);
         if (*((char far *)GLeaderSheets[idx] + 0x3f) != '\0') {
           unitsSeg = (uint16_t)((ulong)(uint32_t)GLeaderSheets[idx] >> 0x10);
-          iVar21 = (int)(uint32_t)GLeaderSheets[idx];
-          iVar17 = *(int *)(iVar21 + 0x58);
-          if ((iVar17 < 1) && ((iVar17 != 0 || (*(int *)(iVar21 + 0x56) == 0)))) {
+          sheetOfs = (int)(uint32_t)GLeaderSheets[idx];
+          goldHi58 = *(int *)(sheetOfs + 0x58);
+          if ((goldHi58 < 1) && ((goldHi58 != 0 || (*(int *)(sheetOfs + 0x56) == 0)))) {
             unitsSeg = (uint16_t)((ulong)(uint32_t)GLeaderSheets[idx] >> 0x10);
             *(uint16_t far *)((uint8_t far *)GLeaderSheets[idx] + 0x58) = 0;
             *(uint16_t far *)((uint8_t far *)GLeaderSheets[idx] + 0x56) = 0x32;
@@ -1535,87 +1563,87 @@ void __cdecl16far upd_usesAlignUp4(void)
           sheetAA = (uint)*((byte far *)GLeaderSheets[idx] + 0xaa);
           for (leaderIdxB = 0; (int)leaderIdxB < (int)(uint)GLeaderCount; leaderIdxB = leaderIdxB + 1) {
             unitsSeg = (uint16_t)((ulong)(uint32_t)GLeaderSheets[idx] >> 0x10);
-            iVar18 = (int)(uint32_t)GLeaderSheets[idx];
-            iVar17 = *(int *)(iVar18 + 0x58);
+            sheetOfs = (int)(uint32_t)GLeaderSheets[idx];
+            goldHi58 = *(int *)(sheetOfs + 0x58);
             sheetSeg = (uint16_t)((ulong)(uint32_t)GLeaderSheets[idx] >> 0x10);
             sheetOfs = (int)(uint32_t)GLeaderSheets[idx];
-            iVar21 = *(int *)(sheetOfs + 0x8c);
-            if ((iVar21 <= iVar17) &&
-               ((iVar17 != iVar21 || (*(uint *)(sheetOfs + 0x8a) <= *(uint *)(iVar18 + 0x56)))))
+            otherWord = *(int *)(sheetOfs + 0x8c);
+            if ((otherWord <= goldHi58) &&
+               ((goldHi58 != otherWord || (*(uint *)(sheetOfs + 0x8a) <= *(uint *)(sheetOfs + 0x56)))))
             break;
             if (((GLeaderSheets[leaderIdxB])->active != '\0') &&
                (((0 < *((int far *)GLeaderSheets[leaderIdxB] + 0x54) &&
                  (*((char far *)GLeaderSheets[leaderIdxB] + 0x3f) == '\0')) &&
                 (leaderIdxB != idx)))) {
-              in_stack_0000ffd2 =
+              transferAmount =
                    ((long)*((int far *)GLeaderSheets[leaderIdxB] + 0x54) * (long)(int)sheetAA &
                    0xffffU) / 100;
               unitsSeg = (uint16_t)((ulong)(uint32_t)GLeaderSheets[idx] >> 0x10);
-              uVar12 = *(uint far *)((uint8_t far *)GLeaderSheets[idx] + 0x8a);
+              foodLow = *(uint far *)((uint8_t far *)GLeaderSheets[idx] + 0x8a);
               sheetSeg = (uint16_t)((ulong)(uint32_t)GLeaderSheets[idx] >> 0x10);
-              iVar21 = (int)(uint32_t)GLeaderSheets[idx];
-              accLo = (uint *)(iVar21 + 0x56);
-              iVar17 = (*(int far *)((uint8_t far *)GLeaderSheets[idx] + 0x8c) - *(int *)(iVar21 + 0x58)) -
-                       (uint)(uVar12 < *accLo);
-              if ((iVar17 < 1) && ((iVar17 < 0 || (uVar12 - *accLo < (uint)in_stack_0000ffd2)))) {
+              sheetOfs = (int)(uint32_t)GLeaderSheets[idx];
+              accLo = (uint *)(sheetOfs + 0x56);
+              goldDiff = (*(int far *)((uint8_t far *)GLeaderSheets[idx] + 0x8c) - *(int *)(sheetOfs + 0x58)) -
+                       (uint)(foodLow < *accLo);
+              if ((goldDiff < 1) && ((goldDiff < 0 || (foodLow - *accLo < (uint)transferAmount)))) {
                 unitsSeg = (uint16_t)((ulong)(uint32_t)GLeaderSheets[idx] >> 0x10);
-                uVar12 = *(uint far *)((uint8_t far *)GLeaderSheets[idx] + 0x8a);
+                foodLow = *(uint far *)((uint8_t far *)GLeaderSheets[idx] + 0x8a);
                 sheetSeg = (uint16_t)((ulong)(uint32_t)GLeaderSheets[idx] >> 0x10);
-                iVar21 = (int)(uint32_t)GLeaderSheets[idx];
-                accLo = (uint *)(iVar21 + 0x56);
-                in_stack_0000ffd2 =
-                     CONCAT22((*(int far *)((uint8_t far *)GLeaderSheets[idx] + 0x8c) - *(int *)(iVar21 + 0x58)) -
-                              (uint)(uVar12 < *accLo),uVar12 - *accLo);
+                sheetOfs = (int)(uint32_t)GLeaderSheets[idx];
+                accLo = (uint *)(sheetOfs + 0x56);
+                transferAmount =
+                     CONCAT22((*(int far *)((uint8_t far *)GLeaderSheets[idx] + 0x8c) - *(int *)(sheetOfs + 0x58)) -
+                              (uint)(foodLow < *accLo),foodLow - *accLo);
               }
               unitsSeg = (uint16_t)SEG_OF(GLeaderSheets[leaderIdxB]);
-              iVar21 = (int)far_ofs_u32(GLeaderSheets[leaderIdxB]);
-              iVar17 = *(int *)(iVar21 + 0x58);
-              iVar18 = (int)(in_stack_0000ffd2 >> 0x10);
-              if ((iVar17 <= iVar18) &&
-                 ((iVar17 < iVar18 || (*(uint *)(iVar21 + 0x56) < (uint)in_stack_0000ffd2)))) {
+              lSheetOfs = (int)far_ofs_u32(GLeaderSheets[leaderIdxB]);
+              goldHi58 = *(int *)(lSheetOfs + 0x58);
+              addHi = (int)(transferAmount >> 0x10);
+              if ((goldHi58 <= addHi) &&
+                 ((goldHi58 < addHi || (*(uint *)(lSheetOfs + 0x56) < (uint)transferAmount)))) {
                 unitsSeg = (uint16_t)SEG_OF(GLeaderSheets[leaderIdxB]);
-                iVar17 = (int)far_ofs_u32(GLeaderSheets[leaderIdxB]);
-                in_stack_0000ffd2 =
+                leaderSheetOfs = (int)far_ofs_u32(GLeaderSheets[leaderIdxB]);
+                transferAmount =
                      CONCAT22(*(uint16_t far *)((uint8_t far *)GLeaderSheets[idx] + 0x58),*(uint16_t far *)((uint8_t far *)GLeaderSheets[idx] + 0x56));
               }
               unitsSeg = (uint16_t)((ulong)(uint32_t)GLeaderSheets[idx] >> 0x10);
-              iVar21 = (int)(in_stack_0000ffd2 >> 0x10);
-              uVar36 = (uint)in_stack_0000ffd2;
+              addHi = (int)(transferAmount >> 0x10);
+              amountLo = (uint)transferAmount;
               accLo = (uint far *)((uint8_t far *)GLeaderSheets[idx] + 0x56);
-              uVar12 = *accLo;
-              *accLo = *accLo + uVar36;
+              oldAccLo2 = *accLo;
+              *accLo = *accLo + amountLo;
               accHi = (int far *)((uint8_t far *)GLeaderSheets[idx] + 0x58);
-              *accHi = *accHi + iVar21 + (uint)CARRY2(uVar12,uVar36);
+              *accHi = *accHi + addHi + (uint)CARRY2(oldAccLo2,amountLo);
               unitsSeg = (uint16_t)SEG_OF(GLeaderSheets[leaderIdxB]);
-              iVar17 = (int)far_ofs_u32(GLeaderSheets[leaderIdxB]);
+              leaderSheetOfs = (int)far_ofs_u32(GLeaderSheets[leaderIdxB]);
               accLo = (uint far *)((uint8_t far *)GLeaderSheets[idx] + 0x56);
-              uVar12 = *accLo;
-              *accLo = *accLo - uVar36;
+              oldAccLo2 = *accLo;
+              *accLo = *accLo - amountLo;
               accHi = (int far *)((uint8_t far *)GLeaderSheets[idx] + 0x58);
-              *accHi = (*accHi - iVar21) - (uint)(uVar12 < uVar36);
+              *accHi = (*accHi - addHi) - (uint)(oldAccLo2 < amountLo);
             }
           }
         }
-        iVar17 = *((int far *)GLeaderSheets[idx] + 0x58);
-        if ((iVar17 < 1) && (iVar17 < 0)) {
+        goldHi58 = *((int far *)GLeaderSheets[idx] + 0x58);
+        if ((goldHi58 < 1) && (goldHi58 < 0)) {
           unitsSeg = (uint16_t)((ulong)(uint32_t)GLeaderSheets[idx] >> 0x10);
           *(uint16_t far *)((uint8_t far *)GLeaderSheets[idx] + 0x58) = 0;
           *(uint16_t far *)((uint8_t far *)GLeaderSheets[idx] + 0x56) = 0;
         }
         unitsSeg = (uint16_t)((ulong)(uint32_t)GLeaderSheets[idx] >> 0x10);
-        iVar18 = (int)(uint32_t)GLeaderSheets[idx];
-        iVar17 = *(int *)(iVar18 + 0x58);
+        sheetOfs = (int)(uint32_t)GLeaderSheets[idx];
+        goldHi58 = *(int *)(sheetOfs + 0x58);
         sheetSeg = (uint16_t)((ulong)(uint32_t)GLeaderSheets[idx] >> 0x10);
         sheetOfs = (int)(uint32_t)GLeaderSheets[idx];
-        iVar21 = *(int *)(sheetOfs + 0x8c);
-        if ((iVar21 <= iVar17) &&
-           ((iVar21 < iVar17 || (*(uint *)(sheetOfs + 0x8a) < *(uint *)(iVar18 + 0x56))))) {
+        otherWord = *(int *)(sheetOfs + 0x8c);
+        if ((otherWord <= goldHi58) &&
+           ((otherWord < goldHi58 || (*(uint *)(sheetOfs + 0x8a) < *(uint *)(sheetOfs + 0x56))))) {
           sheetSeg = (uint16_t)((ulong)(uint32_t)GLeaderSheets[idx] >> 0x10);
           unitsSeg = *(uint16_t far *)((uint8_t far *)GLeaderSheets[idx] + 0x8a);
           sheetSeg2 = (uint16_t)((ulong)(uint32_t)GLeaderSheets[idx] >> 0x10);
-          iVar21 = (int)(uint32_t)GLeaderSheets[idx];
-          *(uint16_t *)(iVar21 + 0x58) = *(uint16_t far *)((uint8_t far *)GLeaderSheets[idx] + 0x8c);
-          *(uint16_t *)(iVar21 + 0x56) = unitsSeg;
+          sheetOfs = (int)(uint32_t)GLeaderSheets[idx];
+          *(uint16_t *)(sheetOfs + 0x58) = *(uint16_t far *)((uint8_t far *)GLeaderSheets[idx] + 0x8c);
+          *(uint16_t *)(sheetOfs + 0x56) = unitsSeg;
         }
       }
     }
@@ -1632,18 +1660,18 @@ void __cdecl16far upd_usesAlignUp4(void)
         }
         unitsSeg = (uint16_t)((ulong)GUnits >> 0x10);
         if ((GUnits)[unitIdx].timer == 0) {
-          uVar7 = *(uint32_t *)((uint)(GUnits)[unitIdx].unitType << 2);
-          if (*(char *)((int)uVar7 + 0x3f) == '\0') {
+          typeRecPtr = *(uint32_t *)((uint)(GUnits)[unitIdx].unitType << 2);
+          if (*(char *)((int)typeRecPtr + 0x3f) == '\0') {
             ovr_play_sfx(81,0,0);
             unitsSeg = (uint16_t)((ulong)GUnits >> 0x10);
             unitY = (GUnits)[unitIdx].y;
-            uVar33 = (undefined1)unitY;
+            packHi = (undefined1)unitY;
             ptrSegHi = (undefined1)((uint)unitY >> 8);
-            uVar34 = 0x10;
-            uVar12 = ovr_alignUp4((GUnits)[unitIdx].x,0,0);
+            sayPause = 0x10;
+            unitXAligned = ovr_alignUp4((GUnits)[unitIdx].x,0,0);
             msg = ovr_fmVsprintf("Mine exhausted at (%d, %d).",
-                                     (char *)CONCAT13(ptrSegHi,CONCAT12(uVar33,uVar12)));
-            ovr_say(msg,uVar34);
+                                     (char *)CONCAT13(ptrSegHi,CONCAT12(packHi,unitXAligned)));
+            ovr_say(msg,sayPause);
             ovr_inputUpdate((ulong)((uint)MessageDelay * 2 + 0x24));
           }
           ovc22_usesGUnits(unitIdx,(uint8_t *)
@@ -1666,24 +1694,24 @@ void __cdecl16far upd_usesAlignUp4(void)
       EntityScanPos = 0;
       for (idx = 0; (int)idx < (int)(uint)GLeaderCount; idx = idx + 1) {
         if ((GLeaderSheets[idx])->active != '\0') {
-          iVar17 = ((int *)(idx * 4))[1];
+          sheetSegInt = ((int *)(idx * 4))[1];
           memcpy((char *)CONCAT22(((int *)(idx * 4))[1],
                                   (char *)(*(int *)(idx * 4) + 0x8e)),
-                 (char *)CONCAT13((char)((uint)iVar17 >> 8),
-                                  CONCAT12((char)iVar17,*(int *)(idx * 4) + 0x94)),3);
+                 (char *)CONCAT13((char)((uint)sheetSegInt >> 8),
+                                  CONCAT12((char)sheetSegInt,*(int *)(idx * 4) + 0x94)),3);
         }
       }
     }
-    iStack_e = 0;
+    waitTicks = 0;
     firstLeader = ovr_manage_findFirstLeader();
     if ((firstLeader == 0xff) || (GCanPromote == '\0')) {
-      iStack_c = 0;
+      promoteValue = 0;
     }
     else if ((GLeaderSheets[firstLeader])->titleIndex < 5) {
-      iStack_c = 0x28;
+      promoteValue = 0x28;
     }
     else {
-      iStack_c = (uint)(GLeaderSheets[firstLeader])->titleIndex * 4 + 0x14;
+      promoteValue = (uint)(GLeaderSheets[firstLeader])->titleIndex * 4 + 0x14;
     }
     for (idx = EntityScanPos; idx < EntityCount; idx = idx + 1) {
       unitsSeg = (uint16_t)((ulong)Entities >> 0x10);
@@ -1693,11 +1721,11 @@ void __cdecl16far upd_usesAlignUp4(void)
         gindex = peVar20[idx].base.gindex;
         sheetFaction = AgntGs[(uint)gindex].ai;
         leaderIdx = *(byte *)((int)&peVar20[idx].base.entity + 3);
-        bVar27 = false;
-        bVar9 = false;
-        bVar8 = false;
+        successFlag = false;
+        unitLost = false;
+        totalFail = false;
         if (AgntGs[(uint)gindex].shortName[3] == -1) {
-          bVar27 = true;
+          successFlag = true;
         }
         else {
           partySlot = (GLeaderSheets[leaderIdx])->partySlot;
@@ -1711,8 +1739,8 @@ void __cdecl16far upd_usesAlignUp4(void)
               bldType = 0x22;
             }
             else {
-              uVar34 = (undefined1)_SS;
-              uVar33 = (undefined1)(_SS >> 8);
+              packLo = (undefined1)_SS;
+              packHi = (undefined1)(_SS >> 8);
               successPtr = &successWeight;
               partialPtr = &partialWeight;
               bldTypePtr = &bldType;
@@ -1726,9 +1754,9 @@ void __cdecl16far upd_usesAlignUp4(void)
               pctOut.ofs = (uint16_t)bldTypePtr;
               remainderOut.seg = remainderSeg;
               remainderOut.ofs = (uint16_t)partialPtr;
-              (*(uint8_t *)((uint8_t *)&(partOut.seg))) = uVar34;
+              (*(uint8_t *)((uint8_t *)&(partOut.seg))) = packLo;
               partOut.ofs = (uint16_t)successPtr;
-              (*(uint8_t *)((uint8_t *)&(partOut.seg) + 1)) = uVar33;
+              (*(uint8_t *)((uint8_t *)&(partOut.seg) + 1)) = packHi;
               ovr_attact_compute3(table,index,pctOut,remainderOut,partOut);
             }
           }
@@ -1739,16 +1767,16 @@ void __cdecl16far upd_usesAlignUp4(void)
           }
           randVal = ovr_randBelow(100,0);
           if ((byte)randVal < successWeight) {
-            bVar27 = true;
+            successFlag = true;
           }
           else if ((randVal & 0xff) < (uint)partialWeight + (uint)successWeight) {
-            bVar9 = true;
+            unitLost = true;
           }
           else {
-            bVar8 = true;
+            totalFail = true;
           }
         }
-        if ((bVar8) &&
+        if ((totalFail) &&
            (unitsSeg = (uint16_t)((ulong)Entities >> 0x10),
            randVal = (Entities)[idx].base.y,
            sheetFaction = ovr_ovc23_tickRecordsAt
@@ -1757,51 +1785,51 @@ void __cdecl16far upd_usesAlignUp4(void)
           if ((partialWeight == 0x0) && (successWeight == 0x0)) {
             randVal = ovr_randBelow(2,0);
             if ((randVal & 0xff) == 0) {
-              bVar27 = true;
+              successFlag = true;
             }
             else {
-              bVar9 = true;
+              unitLost = true;
             }
           }
           else {
             randVal = ovr_randBelow((uint)partialWeight + (uint)successWeight,0);
             if ((byte)randVal < successWeight) {
-              bVar27 = true;
+              successFlag = true;
             }
             else {
-              bVar9 = true;
+              unitLost = true;
             }
           }
         }
-        if ((bVar27) && (entStatus = ovc22_usesEntities(idx), (entStatus & 0xff) == 0)) {
-          bVar9 = true;
+        if ((successFlag) && (entStatus = ovc22_usesEntities(idx), (entStatus & 0xff) == 0)) {
+          unitLost = true;
         }
-        if (bVar9) {
+        if (unitLost) {
           if ((AgntGs[(uint)gindex].shortName[3] != -1) &&
              (leaderIdx != 0xff)) {
             if ((*(char *)((int)*(uint32_t *)((uint)leaderIdx << 2) + 0x3f) != '\0') ||
                (Entities[idx].base.level <
                 *(byte *)((int)*(uint32_t *)((uint)leaderIdx << 2) + 0x53))) {
-              uVar34 = (undefined1)iStack_c;
-              uVar33 = (undefined1)((uint)iStack_c >> 8);
+              packLo = (undefined1)promoteValue;
+              packHi = (undefined1)((uint)promoteValue >> 8);
               ovc22_usesLUDIV_at_((entity_t *)
                                   CONCAT13((char)((ulong)Entities >> 0x18),
                                            CONCAT12((char)((ulong)Entities >> 0x10),
                                                     Entities + idx)));
               carryBit = 0;
-              plVar15 = LXMUL_at_((long *)CONCAT11(uVar33,uVar34),a,in_stack_0000ffd2);
+              plVar15 = LXMUL_at_((long *)CONCAT11(packHi,packLo),a,transferAmount);
               peVar20 = Entities + idx;
               valueLo = ovr_ovc15_textError((entity_t *)CONCAT22(DAT_2000_d190,peVar20),
                                             (agnt_t far *)(CONCAT12((carryBit & 1) != 0,plVar15) >> 1));
-              uVar12 = ovc22_usesLUDIV_at_2
-                                 ((uint16_t)valueLo,(uint16_t)peVar20,CONCAT11(uVar33,uVar34));
+              damage = ovc22_usesLUDIV_at_2
+                                 ((uint16_t)valueLo,(uint16_t)peVar20,CONCAT11(packHi,packLo));
               unitsSeg = (uint16_t)((ulong)Entities >> 0x10);
               peVar22 = Entities;
               healthWord = *(uint *)&peVar22[idx].base.health;
               *(uint *)&peVar22[idx].base.frameIndex =
                    (int)&(peVar20->base).x +
-                   (uint)CARRY2(healthWord,uVar12) + *(int *)&peVar22[idx].base.frameIndex;
-              *(uint *)&peVar22[idx].base.health = healthWord + uVar12;
+                   (uint)CARRY2(healthWord,damage) + *(int *)&peVar22[idx].base.frameIndex;
+              *(uint *)&peVar22[idx].base.health = healthWord + damage;
               ovr_ovc41_compute3(CONCAT13((char)((ulong)Entities >> 0x18),
                                           CONCAT12((char)((ulong)Entities >> 0x10),
                                                    Entities + idx)));
@@ -1847,8 +1875,8 @@ void __cdecl16far upd_usesAlignUp4(void)
           (Entities)[idx].base.animFrame =
                *(char *)((int)*(uint32_t *)((uint)leaderIdx << 2) + 0xa4) + (char)budget;
         }
-        iStack_e = iStack_e + 1;
-        if (199 < iStack_e) break;
+        waitTicks = waitTicks + 1;
+        if (199 < waitTicks) break;
       }
     }
     EntityScanPos = idx;
@@ -1858,27 +1886,27 @@ void __cdecl16far upd_usesAlignUp4(void)
     if (DebugVerbose != false) {
       printf("%d \r",GGameState);
     }
-    uVar23 = EntityCount;
-    if (cStack_1d != '\0') {
-      while (idx = uVar23 - 1, -1 < (int)idx) {
+    scanPos = EntityCount;
+    if (unitDied != '\0') {
+      while (idx = scanPos - 1, -1 < (int)idx) {
         unitsSeg = (uint16_t)((ulong)Entities >> 0x10);
         peVar20 = Entities;
-        uVar23 = idx;
+        scanPos = idx;
         if (peVar20[idx].base.animFrame == 0x0) {
           if (AgntGs[(uint)peVar20[idx].base.gindex].ai == '\0') {
             ovr_alignUp4(((peVar20 + idx)->base).x,(char)peVar20[idx].base.y,0);
-            iVar17 = (uint)(Entities)[idx].base.gindex * 0x95;
+            classOfs = (uint)(Entities)[idx].base.gindex * 0x95;
             msg = ovr_fmVsprintf("Intelligence reports %s unit died of starvation. (%d, %d)",
                                      (char *)CONCAT22(*(uint16_t *)
-                                                       ((int)&worldMenuLabels[1].ofs + 1 + iVar17),
+                                                       ((int)&worldMenuLabels[1].ofs + 1 + classOfs),
                                                       (char *)*(uint16_t *)
                                                                ((int)&worldMenuLabels[0].seg + 1 +
-                                                               iVar17)));
+                                                               classOfs)));
             asm { mov randVal,dx };
             ovr_uiNotify(msg,randVal,(char)randVal);
           }
           ovr_ovc15_removeEntity(idx);
-          uVar23 = idx;
+          scanPos = idx;
         }
       }
     }

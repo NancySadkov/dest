@@ -25044,3 +25044,55 @@ kind of wrong-but-tidy code I have been refusing all session.
     compare_state        identical 734 / 7 different / 889 missing (unchanged)
     diff_dgroup          288/1,805 matched (unchanged)
     compare_runtime      280 identical / 11 different at entry, init_game and key (unchanged)
+
+
+## `upd_usesAlignUp4` (5087:1d7d) rewritten slot by slot: grep 7,491 -> 7,187 (-304)
+
+The 245-line interleaved block is now free of Ghidra slots. This was not a rename pass: every slot was
+resolved by reading what the statements actually do, and several turned out to hold three or four
+unrelated lifetimes that had to become separate variables.
+
+**The gold accumulator windows (1221..1466).** Nineteen slots, split wherever a slot held more than
+one thing:
+
+    uVar23 -> goldLo (the sheet's +0x54 gold low word)
+              oldAccLo (an accumulator's previous low word - 12 sites)
+              sheetWord62 / goldWord58 / foodLo23 (the +0x62, +0x58 and +0x60 words, tested)
+              entIdx (two 0..EntityCount scans over Entities)
+              scanPos (the descending EntityCount..0 cursor)
+    iVar17 -> bldByteOfs (bldType * 0x27, the doubled condition included)
+              sheetFood62 / goldHi58 (the +0x62 and +0x58 words, tested < 1)
+              lidx (the 0..GLeaderCount loop over GLeaderSheets)
+              goldDiff (the +0x8c minus +0x58 difference)
+              leaderSheetOfs (far_ofs of the leader's sheet, stored and never read)
+              sheetSegInt / classOfs
+    iVar21 -> sheetOfs (this sheet), lSheetOfs (another leader's sheet), otherWord
+              (+0x80/+0x8c), addHi (the high half of the transferred amount)
+    uVar12 -> popLoss / foodGain / borrowBit / foodLow / oldAccLo2 / unitXAligned / damage
+    iVar18 -> sheetOfs, addHi
+    uVar36 -> income32 / foodDiff / amountLo
+
+**The transfer and attack blocks (1568..1821).** `in_stack_0000ffd2` is `transferAmount`, a `ulong`
+built as `(leaderGold * sheetAA % 0xffff) / 100` and then clamped to the available food; `uStack_14` is
+`sendable`, how much of `popAcc` the sheet can take; `bVar27` is `popCarry` in one place and
+`successFlag` in another; `bVar8` is `foodShort` at 1243 and `totalFail` at 1722; `bVar9` is
+`unitLost`; `uVar33`/`uVar34` are `packHi`/`packLo` (the packed 32-bit argument bytes) except where
+`uVar34 = 0x10` is `ovr_say`'s duration; `iStack_c` is `promoteValue`, `iStack_e` is `waitTicks`,
+`cStack_1d` is `unitDied`.
+
+**The body now contains only `unaff_SI` (2) and `unaff_DI` (2)** - the two register-passed arguments it
+reads on entry (`a = CONCAT22(unaff_SI,unaff_DI)`). There is nothing left to name.
+
+## Measured (HEAD f82077c8 -> this commit)
+
+    grep_checks          7,491 -> 7,187   (-304)
+    REBUILT.EXE          447,858 (unchanged size)
+    build 65/65, LINK.LOG 0 errors
+    compare_state        identical 734 / 7 different / 889 missing (unchanged)
+    diff_dgroup          288/1,805 matched (unchanged)
+    compare_runtime      280 identical / 11 different at entry, init_game and key (unchanged)
+    structural_deficits  two game bodies: 7e7c:0b9c (177/187), 77eb:0d61 (54/58)
+
+Four intermediate states were compiled and linked while working through the block; each one built
+65/65 and linked with 0 errors before the next was attempted, so the tree has never carried a broken
+state.
