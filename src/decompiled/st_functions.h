@@ -616,7 +616,7 @@ uint __cdecl16far stLoad(int handle);
 undefined1 __cdecl16far save_loadGameFile(void);
 undefined1 __cdecl16far save_loadArchiveGame(void);
 int __cdecl16far save_writeBlock(int handle,void *buf,uint16_t bufSeg,uint16_t count);
-int __cdecl16far stSave(void);
+int __cdecl16far stSave(byte slot);
 void __cdecl16far save_deleteGameFile(void);
 void __cdecl16far stshUniqueColorsRemap(stg_tmp_t *gfx,uint16_t arg2);
 void __cdecl16far ovc20_textLenLoc(void);

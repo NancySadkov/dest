@@ -22216,3 +22216,51 @@ pointers to the far callee would compare `DS:ofs` against a stack buffer and alw
     diff_dgroup      1,639/1,805 matched, 5 layout runs           (unchanged)
     compare_runtime  1,692 matched / 1,683 identical / 9 different (unchanged, all three sample points)
     screen_calls     49fd:01da still matches its 61-call census
+
+
+## `49fd:090f` (`stSave`) rewritten — the write counterpart of `stLoad`
+
+Same defect as `stLoad` and the same fix: all 51 `save_writeBlock` calls passed `unaff_DI`/`unaff_SI`
+as buffer segment and count, so every block write had garbage length and segment. The body is now
+generated from the image (`push count / push bufSeg / push bufOfs / push handle / push cs / call
+0x8da`), and it is exactly mirror-symmetric with `stLoad`:
+
+    0x28  SaveHeader       (written first and last, so a half-written file is detectable)
+    0x4560 GUnitGrid, 0x4560 GMapFlags, 0x22b0 GMapCells
+    2  GfxRndSeed, 2 GfxRndSeed2, 2 EntityCount, EntityCount*0x37 Entities
+    2  SquareRecCount, SquareRecCount*0x13 @ segment 0x58
+    1  GLeaderCount, then 0xae per GLeaderSheets[i]
+    4  TimerSeed, 1 CurPartySlot, 1 PartyCount, 2 GRecordCount,
+       GRecordCount*0x12 @ segment 0x88, 2 GUnitCount, GUnitCount*9 GUnits ...
+    ... the 30 remaining 1/2/4-byte globals, 0xa @ 0x92bc, then SaveHeader again
+
+The prologue is worth recording because it settles a signature question: the image does
+
+    push slot / push 0x280,0x8c6c (GWorkDir) / push ds,0x47a9 ("%ssave.%03d") / lcall 0x170,0x4d
+
+i.e. **the format comes first** and the return value (DX:AX) is the formatted name, which is then
+passed straight to `ovr_creat_wait_unlock_and_disk`. So `fmVsprintf(fmt, ...)` formats into its own
+ring buffer and returns it — matching the recovered body at `474a:0953` ("vsprintfs string into a ring
+buffer"), and *not* the `(dst, fmt)` order I had assumed for `stsprintf` elsewhere. `stSave` now
+takes a `byte slot` (the image reads `[bp+6]` and uses it as the `%03d` argument); it has no callers
+in the tree, only the `2347:0025` thunk, so the prototype change is local.
+
+Error paths are two distinct ones, as in the image: a failed open goes straight to the error text,
+a failed write closes the file, rebuilds the name and calls `unlink` first.
+
+`unlink` is declared with a near `char *` here while the image passes a far pointer; the name points
+into `fmVsprintf`'s DGROUP ring buffer, so `(char *)name` addresses the same bytes and this is noted
+in-source rather than silently changing the argument.
+
+## Measured (HEAD b5155851 -> this commit)
+
+    grep_checks      11,639 -> 11,516   (-123)
+    REBUILT.EXE      460,676 -> 459,828
+    build 65/65, LINK.LOG 0 errors
+    compare_state    1,628 matched / 0 different / missing 2      (unchanged)
+    diff_dgroup      1,639/1,805 matched, 5 layout runs           (unchanged)
+    compare_runtime  1,692 matched / 1,683 identical / 9 different (unchanged, all three sample points)
+    screen_calls     49fd:090f matches its 61-call census (no row)
+
+Cumulative over the two save functions: grep **11,757 -> 11,516** (-241), both bodies now reading and
+writing the real buffers at the real sizes.
