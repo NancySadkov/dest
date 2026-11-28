@@ -511,3 +511,35 @@ Reading the first arms confirms the shape (`+0x131` = `bld.resource`):
 
 so the body is now a straight transcription: one `if` per arm, the two-leaf arms split on
 `bld.resource == 1`, each leaf `fmVsprintf(...)` + `strcpy(outBuf, ...)` + `goto done`.
+
+## CORRECTION: `0x1f1a` is a loop continue, not a return
+
+The earlier sections say "42 blocks return through `0x1f1a`, 13 through `0x2b38`". That is wrong, and
+the mistake matters: `0x1f1a` is **not** an epilogue. The trace shows
+
+    1f1a: xor si,si / load BuildingTypes[bld].cost (+0x125) / index GUnits[unitIdx] ...
+          ...                           -> falls into `jmp 0x0be8`
+
+and `0x0be8` is the loop head read at the very start of this analysis (`Entities[arg4].byte_0x1a` ->
+`[bp-0x20]`, then the `[bp-0x27]` test). Only `0x2b38` is the real epilogue:
+
+    2b38: pop di / pop si / leave / retf
+
+So `constrct_buildInfoText` is a **loop with two passes**, selected by the flag `[bp-0x27]`:
+
+    0ba5   [bp-0x27] = 0
+    0ba9.. x, bldType (usesGfxRndSeed2), unitIdx (getUnitIndex), owner
+    0be8   loop head:
+    0c03     if ([bp-0x27] != 0) goto 0x0f16      /* second pass */
+    0c0f..   pass 1: leaves 1-24 (ownership preamble, then the unitType arms)
+    1f1a..   continue: cost/GUnits bookkeeping, `jmp 0x0be8`
+    0f16..   pass 2: leaf 4's preamble + the second unitType chain (leaves 25-45)
+    2b2d     [bp-0x27] = (last comparison != 0)   /* arms the exit */
+    2b30     jmp 0x0be8
+    2b38     epilogue
+
+That explains why the same `unitType` values appear twice in the arm table (`0x13` at leaf 17 and again
+at leaf 25): they are different passes, not a duplicated arm.
+
+Consequence for the body: it is a `do { ... } while (!done)` with the flag arming the exit, and the
+`0x1f1a` blocks are `continue` statements, not `return`s. The arms must be emitted per pass.
