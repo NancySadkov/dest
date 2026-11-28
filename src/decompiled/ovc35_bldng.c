@@ -167,8 +167,8 @@ int __cdecl16far bldng_compute2(uint8_t buildType,char leader)
   byte extraout_AH;
   
   tableVal = bldng_usesGStrangeTable(buildType);
-  iVar3 = (tableVal & 0xff) * 0x27;
-  if (*(char *)(iVar3 + 0x133) == '\x17') {
+  /* 0x133 with a 0x27 stride is BuildingTypes[k].unitType (base 0x10e + 0x25). */
+  if (BuildingTypes[tableVal & 0xff].unitType == '\x17') {
     leaderIdx = ovr_manage_findFirstLeader();
     if (leaderIdx == leader) {
       iVar3 = CONCAT11(extraout_AH,1);

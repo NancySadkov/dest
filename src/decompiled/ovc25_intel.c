@@ -575,7 +575,6 @@ uint __cdecl16far ovc25_hasBuildingNear(uint16_t x,int y)
   int gx;
   int unitIdx;
   byte bldType;
-  uint bldOfs;
 
   alignedX = ovr_alignUp4(x,0,0);
   alignedEnd = alignedX + 3;
@@ -583,8 +582,7 @@ uint __cdecl16far ovc25_hasBuildingNear(uint16_t x,int y)
     for (gx = -2; gx < 2; gx = gx + 1) {
       unitIdx = (*(short (*) [148] [60])GUnitGrid)[alignedX + gx][y];
       bldType = (GUnits + unitIdx)->bldType;
-      bldOfs = (uint)bldType * 0x27;
-      if ((bldType < 0xf8) && (*(char *)(bldOfs + 0x11a) != '\0')) {
+      if ((bldType < 0xf8) && (BuildingTypes[bldType].kind != 0)) {
         return 1;
       }
     }

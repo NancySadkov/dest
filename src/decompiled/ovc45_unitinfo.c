@@ -321,8 +321,7 @@ uint __cdecl16far ovc45_compute1(byte bldType,int x,int y)
 {
   bool flag;
   uint mapRes;
-  uint bldOfs;
-  
+
   if ((BuildingTypes[bldType].flags2 & 0x10) != 0) {
     mapRes = ovc45_usesGMapFlags(x,y + 1);
     if ((((mapRes & 0xff) == 0) && (mapRes = ovc45_usesGMapFlags(x,y), (mapRes & 0xff) == 0)) &&
@@ -340,8 +339,10 @@ uint __cdecl16far ovc45_compute1(byte bldType,int x,int y)
       return 0;
     }
   }
-  bldOfs = (uint)bldType * 0x27;
-  if ((*(uint *)(bldOfs + 0x121) & 8) != 0) {
+  /* BuildingTypes records sit at a 0x27 stride with their base at 0x10e of the overlay data
+     segment, so the image's `bldType * 0x27 + 0x121` IS BuildingTypes[bldType].flags2
+     (0x10e + 0x13).  The former raw-offset form dereferenced DS:0x121 + bldType*0x27 instead. */
+  if ((BuildingTypes[bldType].flags2 & 8) != 0) {
     mapRes = ovc45_usesGMapFlags(x,y);
     if ((((mapRes & 0xff) == 0) && (mapRes = ovc45_usesGMapFlags(x + -1,y), (mapRes & 0xff) == 0)) &&
        (mapRes = ovc45_usesGMapFlags(x + 1,y), (mapRes & 0xff) == 0)) {

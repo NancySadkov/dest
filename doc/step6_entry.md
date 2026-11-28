@@ -21992,3 +21992,70 @@ the routine's tail, not an entry. With the merges `4d05:26f6` measures `0x26f6..
     compare_runtime  1,692 matched / 1,683 identical / 9 different (unchanged, all three sample points)
     screen_calls     4d05:1bee  leaves the table (was C 1 / image 24)
                      4d05:26f6  leaves the table (C 36 / image 36 after the continuation merges)
+
+
+## `77eb:0d61` is fully mapped but its four `0x200,*` calls cannot be named; `BuildingTypes` base proved
+
+`ovc45_buildPlacementMessage` (2,375 bytes, 897 instructions) has been read end to end. Its census is
+41 overlay + 17 near = 58, matching the table exactly. The complete call map:
+
+    170,007a x9  ovr_stsprintf                 0a02  ovc45_usesGPopulationLo
+    160,0025 x2  ovr_ovc15_usesStshRealloc     0aea  ovc45_compute4      x8
+    138,002a x2  ovr_constr_usesGMapFlags      0bc1  ovc45_compute5      x2
+    0f8,003e x2  ovr_say                       0c36  ovc45_textArena2
+    0f8,004d x2  ovr_inputUpdate               226e  ovc45_compute9
+    0f8,0057 x2  ovr_blitLabel                 234a  ovc45_usesGMapFlags5
+    140,0020 x2  ovr_play_sfx                 04d8  ovc45_textChoosePartyBuild
+    1a8,0043 x1  ovr_alignUp4 (4/4 vote)       0778  ovc45_compute1
+    198,003e x1  ovc22_className (vote)        09c1  ovc45_compute3
+    1c8,0025 x1  ovc28_compute2 (unique)
+    1a0,002a x1  createConstructionRecordFar (unique)
+    158,0061 x1  attact_usesGMapFlags (static map, single site)
+    000,2cc2 x10 strcat   000,2d31 x2 strcpy   000,2d9b x1 strlen
+    200,0025 x1 / 200,0034 x1 / 200,002a x1 / 200,0020 x1   <-- unresolvable
+
+**Why the last four block the body.** They are not VROOMM stub calls: `src/decompiled/ovr_stubs.c`
+enumerates stub segments 0x22a6..0x240d only, and `audit/overlay_segments.csv`'s row for runtime
+segment `0200` lists sixteen candidate overlay segments with `resolved=no`. The static load image at
+segment 0x200 is ordinary mid-function code (a `mov sp,bp / pop bp / ret 0xc` epilogue sits at
+0x202d), so the four targets only exist once the overlay is loaded - that is VROOMM directory data,
+which AGENTS.md puts out of scope. They are load-bearing: `0x200,0x25(leader->buildType)` produces the
+building-type index the whole function then uses, and `0x200,0x34` is the placement guard. Writing the
+body with four `GUESS:` names would misname the two calls that decide the function's behaviour, so it
+stays a stub until either the runtime directory is available or one of those four functions is
+identified from another caller.
+
+## Spin-off: the `BuildingTypes` data model is now proved, and six sites were dereferencing the wrong segment
+
+The listing made the model unambiguous. Building-type records live at **segment 0x60, base offset
+0x10e, stride 0x27**, so the image's `bldType * 0x27 + 0x1XX` is `BuildingTypes[bldType]` plus a field:
+
+    0x11a -> kind      0x11b -> size     0x11e -> flags    0x121 -> flags2 (word)
+    0x125 -> cost (word)                 0x133 -> unitType 0x134 -> flags3
+
+Base + offsets line up exactly with `struct bldtp_t` (0x0c kind, 0x0d size, 0x10 flags, 0x13 flags2,
+0x17 cost, 0x25 unitType, 0x26 flags3), which also confirms the struct layout the tree already carries.
+
+That exposed a real defect class: several bodies had kept Ghidra's raw `bldOfs + 0x1XX` form, which in
+the rebuild dereferences **DS:0x1XX + bldType*0x27** - a DGROUP address in the CRT area, not the
+building record. Six sites were converted to the typed form (the arithmetic is identical, only the base
+and segment are now the real ones):
+
+    ovc45_unitinfo.c  ovc45_compute1           flags2 & 8    (was *(uint*)(bldOfs+0x121))
+    ovc24_entities.c  ovc24_unitAtLeader       flags2 & 4    (was *(uint*)(bldOfs+0x121))
+    ovc25_intel.c     ovc25_hasBuildingNear    kind != 0     (was *(char*)(bldOfs+0x11a))
+    ovc35_bldng.c     bldng_compute2           unitType      (was *(char*)(iVar3+0x133))
+    ovc23_bldrec.c    ovc23_isLargeBuilding    size < 2      (was *(byte*)(iVar1+0x11b))
+    ovc23_bldrec.c    ovc23_compute1  x2       flags         (was *(char*)(recOfs+0x11e))
+
+Where the surrounding code relied on `iVar1`/`result` holding `bldType * 0x27` for the stale-AH return
+trick, the multiplication is kept and only the condition was retyped, so those returns are unchanged.
+
+## Measured (HEAD 42a17712 -> this commit)
+
+    grep_checks      11,760 -> 11,757   (-3: two raw-offset * 0x27 expressions and one dead local)
+    REBUILT.EXE      461,428 -> 461,476
+    build 65/65, LINK.LOG 0 errors
+    compare_state    1,628 matched / 0 different / missing 2      (unchanged)
+    diff_dgroup      1,639/1,805 matched, 5 layout runs           (unchanged)
+    compare_runtime  1,692 matched / 1,683 identical / 9 different (unchanged, all three sample points)

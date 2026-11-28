@@ -501,7 +501,6 @@ uint16_t __cdecl16far ovc24_unitAtLeader(byte leaderIndex)
   int leaderX;
   unit_t *units;
   short unitIdx;
-  uint bldOfs;
 
   leaderX = (GLeaderSheets[leaderIndex])->x;
   leaderY = (GLeaderSheets[leaderIndex])->y;
@@ -516,8 +515,7 @@ uint16_t __cdecl16far ovc24_unitAtLeader(byte leaderIndex)
   if (units[unitIdx].unitType != leaderIndex) {
     return 1;
   }
-  bldOfs = (uint)(units + unitIdx)->bldType * 0x27;
-  if ((*(uint *)(bldOfs + 0x121) & 4) == 0) {
+  if ((BuildingTypes[(units + unitIdx)->bldType].flags2 & 4) == 0) {
     return 1;
   }
   if ((*(char *)((int)*(uint32_t *)((uint)leaderIndex << 2) + 0x3f) == '\0') &&

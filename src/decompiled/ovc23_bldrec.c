@@ -268,11 +268,12 @@ int __cdecl16far ovc23_isLargeBuilding(int x,int y)
 {
   int iVar1;
   byte bVar2;
-  
-  iVar1 = (uint)(GUnits + ((short (*) [148] [60])GUnitGrid)[-1][x + 0x93][y])->bldType *
-          0x27;
+  byte bldType;
+
+  bldType = (GUnits + ((short (*) [148] [60])GUnitGrid)[-1][x + 0x93][y])->bldType;
+  iVar1 = (uint)bldType * 0x27;
   bVar2 = (byte)((uint)iVar1 >> 8);
-  if (*(byte *)(iVar1 + 0x11b) < 2) {
+  if (BuildingTypes[bldType].size < 2) {
     iVar1 = (uint)bVar2 << 8;
   }
   else {
@@ -1230,7 +1231,6 @@ uint __cdecl16far ovc23_compute1(int x,int y,byte bldType,uint8_t unitType)
 {
   char bldFlags;
   byte neighbourType;
-  int recOfs;
   int stepCoord;
   uint result;
   
@@ -1247,8 +1247,7 @@ uint __cdecl16far ovc23_compute1(int x,int y,byte bldType,uint8_t unitType)
       ovc23_placeBuilding(x,y,bldType,unitType);
     }
     neighbourType = ovr_ovc45_getUnitType(x + -1,y);
-    recOfs = (uint)neighbourType * 0x27;
-    if (*(char *)(recOfs + 0x11e) == '\x02') {
+    if (BuildingTypes[neighbourType].flags == '\x02') {
       stepCoord = x + -1;
       ovc23_placeBuilding(stepCoord,y,neighbourType + 1,unitType);
     }
@@ -1263,8 +1262,7 @@ uint __cdecl16far ovc23_compute1(int x,int y,byte bldType,uint8_t unitType)
       ovc23_placeBuilding(x,y,bldType,unitType);
     }
     neighbourType = ovr_ovc45_getUnitType(x,y + 1);
-    recOfs = (uint)neighbourType * 0x27;
-    if (*(char *)(recOfs + 0x11e) == '\x01') {
+    if (BuildingTypes[neighbourType].flags == '\x01') {
       stepCoord = y + 1;
       ovc23_placeBuilding(x,stepCoord,neighbourType + 2,unitType);
     }
