@@ -419,6 +419,8 @@ void constrct_buildInfoText(int x,byte far *flag,int entityIdx,int arg4,int arg5
   int v18;
   int choice;
   uint16_t nounIdx;
+  uint16_t repairCost;
+  uint16_t upgradeCost;
   uint16_t gold;
   char far *noun;
   char far *res;
@@ -742,6 +744,8 @@ void constrct_buildInfoText(int x,byte far *flag,int entityIdx,int arg4,int arg5
 
     /* ---- 0x1f1a continuation: cost estimate + the far-pointer action list ---- */
     cost = (int)((long)bld->cost * GUnits[unitIdx].level / 0x18 + 1);
+    repairCost = (uint16_t)((long)bld->cost / 5 + 1);
+    upgradeCost = (uint16_t)((long)bld->cost / 5 + 1);
     codes[n] = 1;
     if (bld->action != (char far *)0) {
       list[n].ofs = (uint16_t)bld->action;
@@ -752,6 +756,9 @@ void constrct_buildInfoText(int x,byte far *flag,int entityIdx,int arg4,int arg5
       list[n].seg = (uint16_t)_DS;
       list[n].ofs = (uint16_t)"Salvage";
       n++;
+      /* leaf 34: the salvage value line is appended to the message (0x2007) */
+      res = ovr_fmVsprintf((char far *)" Salvage value %d gold.",cost);
+      strcat(outBuf,res);
     }
       /* ---- the action menu (0x2000..0x2b38) ---- */
       /* Entries are appended to the same list as the description, each with a code byte that the
@@ -772,12 +779,22 @@ void constrct_buildInfoText(int x,byte far *flag,int entityIdx,int arg4,int arg5
           list[n].seg = (uint16_t)_DS;
           list[n].ofs = (uint16_t)"Repair";
           n++;
+          if (done == 0) {
+            /* leaf 35 (0x2137) */
+            res = ovr_fmVsprintf((char far *)" Repair costs %d gp.",repairCost);
+            strcat(outBuf,res);
+          }
         }
         if (bld->halfWidth != 0) {
           codes[n] = 3;
           list[n].seg = (uint16_t)_DS;
           list[n].ofs = (uint16_t)"Upgrade";
           n++;
+          if (done == 0) {
+            /* leaf 36 (0x21ff) */
+            res = ovr_fmVsprintf((char far *)" Upgrade costs %d gp.",upgradeCost);
+            strcat(outBuf,res);
+          }
         }
       }
       if (((bld->flags2 & 0x400) == 0) && (arg4 != 0xff)) {

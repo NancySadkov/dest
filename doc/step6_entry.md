@@ -22607,3 +22607,35 @@ Restoring the three ownership leaves to their fully decoded form (which had been
 
 The same restoration is what the remaining 40 need: compute9 line renders in the description arms
 (5 calls), costOrIncomeLabel (4), compute6 (7), the missing strcpy halves (9) and strcat (3).
+
+
+## 7e7c:0b9c: the three cost lines added (census 147 -> 153)
+
+Leaves 34-36 were the last unwritten `fmVsprintf`+`strcat` pairs:
+
+    34  0x2007  strcat(outBuf, fmVsprintf(" Salvage value %d gold.", cost));
+    35  0x2137  strcat(outBuf, fmVsprintf(" Repair costs %d gp.",       repairCost));
+    36  0x21ff  strcat(outBuf, fmVsprintf(" Upgrade costs %d gp.",      upgradeCost));
+
+The repair/upgrade figure is the image's own expression: `0x2120..0x2128` is
+`ax = bld->cost; bx = 5; xor dx,dx; div bx; inc ax; [bp-0x1c] = ax`, i.e. `cost / 5 + 1`, and both
+cases use that same `[bp-0x1c]`. The salvage figure is the continuation's `[bp-0x1e]` (the level-scaled
+estimate already computed there).
+
+`GUESS`: the *placement* guard for 35 and 36 is `done == 0` (the trace shows the first pass appending
+the line and the second not), which is inferred from the `[bp-0x27]` test at `0x212b` rather than read
+directly.
+
+## Measured (HEAD 167a546c -> this commit)
+
+    screen_calls     7e7c:0b9c  C 147 -> 153  (image 187), delta -40 -> -34
+    grep_checks      11,516 (unchanged)
+    REBUILT.EXE      466,746 -> 466,972
+    build 65/65, LINK.LOG 0 errors
+    compare_state    1,628 matched / 0 different / missing 2      (unchanged)
+    diff_dgroup      1,639/1,805 matched, 5 layout runs           (unchanged)
+    compare_runtime  1,692 matched / 1,683 identical / 9 different (unchanged, all three sample points)
+
+Remaining 34: compute6 (7 of 9), costOrIncomeLabel (4 of 5), fmVsprintf (5 of 44), usesStshRealloc
+(2), strcpy (9), compute8 (1), createConstrFar (1), ovc28_compute2 (1) and the two unnameable sites
+(1f8,2a x2, 1a8,2a).
