@@ -22459,3 +22459,40 @@ a 3-byte stub entry of a module that cannot be issuing a map update here.
 
 Remaining 70 calls in this function: the pass-2 arms still marked GAP (unitType 0x13 second
 occurrence, 0, 8, 9, 0xb, 0xc, 3, 7, 0xa and the demolish/upgrade groups) and the `0x1a8,0x2a` gap.
+
+
+## 7e7c:0b9c: the remaining pass-2 arms written (census 117 -> 132)
+
+Five more arms are in the tree, with their literals from the inventory:
+
+    0x13 (second occurrence, 0x1a19)
+        "%s: Costs %d gold of income and provides storage for %u gold."
+        -> name, bld->cost, bld->storage
+
+    0 and 8 (shared body, 0x1a50 / 0x1b6e)
+        bld->storage != 0: "%s: Provides housing for %d %s and storage for %d food."
+        else:              "%s: Provides housing for %d %s."
+
+    9 (0x1c87)
+        v16 != 0:          "%s: %s %d gold. Feeds %d %s."
+        housing != 0:      "%s: %s %d gold. provides housing for %d %s and feeds %d %s."
+        else:              "%s: %s %d gold."
+
+Two `GUESS` markers are in-source for the `%s` words inside those formats (the housing/rate nouns):
+the image takes them from a far-pointer table addressed as `bld+0x74ad`, indexed by the housing kind.
+The literal stand-ins `"housing"` / `"Produces"` compile and are marked, but they are **not** verified
+to be the strings the original shows. That is the honest state: the call sites, order and formats are
+from the image; those two words are not.
+
+## Measured (HEAD bfc46164 -> this commit)
+
+    screen_calls     7e7c:0b9c  C 117 -> 132  (image 187), delta -70 -> -55
+    grep_checks      11,516 (unchanged)
+    REBUILT.EXE      465,408 -> 466,134
+    build 65/65, LINK.LOG 0 errors
+    compare_state    1,628 matched / 0 different / missing 2      (unchanged)
+    diff_dgroup      1,639/1,805 matched, 5 layout runs           (unchanged)
+    compare_runtime  1,692 matched / 1,683 identical / 9 different (unchanged, all three sample points)
+
+Remaining 55 calls: the arms for unitType 3, 7, 0xa, 0xb, 0xc (their literals are in the inventory,
+their argument tables are not resolved) and the `0x1a8,0x2a` site.

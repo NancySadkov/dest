@@ -628,10 +628,61 @@ void constrct_buildInfoText(int x,byte far *flag,int entityIdx,int arg4,int arg5
                                         (uint16_t)bld->name)),bld->cost,bld->storage);
         strcpy(outBuf,res);
       }
-      /* GAP: the remaining pass-2 arms (unitType 0x13 again at 0x1a19, 0, 8, 9, 0xb, 0xc, 3, 7,
-         0xa and the two demolish/upgrade groups) plus the menu build/dispatch at 0x2000..0x2af0
-         (createConstructionRecord, usesGPopulationLo, *flag = 1, inputUpdate(MessageDelay*2),
-         textChoosePartyBuild). */
+      else if (bld->unitType == 0x13) {
+        res = ovr_fmVsprintf(
+                  (char far *)"%s: Costs %d gold of income and provides storage for %u gold.",
+                  (uint16_t)ovr_ovc15_usesStshRealloc(
+                      (char far *)MK_FP((uint16_t)((uint32_t)bld->name >> 16),
+                                        (uint16_t)bld->name)),bld->cost,bld->storage);
+        strcpy(outBuf,res);
+      }
+      else if ((bld->unitType == 0) || (bld->unitType == 8)) {
+        /* GUESS: the %s after the housing count is a far pointer taken from the table at
+           bld+0x74ad indexed by the housing kind; the literal below is a stand-in. */
+        if (bld->storage != 0) {
+          res = ovr_fmVsprintf(
+                    (char far *)"%s: Provides housing for %d %s and storage for %d food.",
+                    (uint16_t)ovr_ovc15_usesStshRealloc(
+                        (char far *)MK_FP((uint16_t)((uint32_t)bld->name >> 16),
+                                          (uint16_t)bld->name)),v18,(uint16_t)"housing",
+                    bld->storage);
+        }
+        else {
+          res = ovr_fmVsprintf((char far *)"%s: Provides housing for %d %s.",
+                               (uint16_t)ovr_ovc15_usesStshRealloc(
+                                   (char far *)MK_FP((uint16_t)((uint32_t)bld->name >> 16),
+                                                     (uint16_t)bld->name)),v18,(uint16_t)"housing");
+        }
+        strcpy(outBuf,res);
+      }
+      else if (bld->unitType == 9) {
+        /* GUESS: the %s before the gold amount is a rate word from the same table. */
+        if (v16 != 0) {
+          res = ovr_fmVsprintf((char far *)"%s: %s %d gold. Feeds %d %s.",
+                               (uint16_t)ovr_ovc15_usesStshRealloc(
+                                   (char far *)MK_FP((uint16_t)((uint32_t)bld->name >> 16),
+                                                     (uint16_t)bld->name)),(uint16_t)"Produces",
+                               bld->cost,v16,(uint16_t)"food");
+        }
+        else if (bld->housing != 0) {
+          res = ovr_fmVsprintf(
+                    (char far *)"%s: %s %d gold. provides housing for %d %s and feeds %d %s.",
+                    (uint16_t)ovr_ovc15_usesStshRealloc(
+                        (char far *)MK_FP((uint16_t)((uint32_t)bld->name >> 16),
+                                          (uint16_t)bld->name)),(uint16_t)"Produces",bld->cost,
+                    bld->housing,(uint16_t)"housing",v16,(uint16_t)"food");
+        }
+        else {
+          res = ovr_fmVsprintf((char far *)"%s: %s %d gold.",
+                               (uint16_t)ovr_ovc15_usesStshRealloc(
+                                   (char far *)MK_FP((uint16_t)((uint32_t)bld->name >> 16),
+                                                     (uint16_t)bld->name)),(uint16_t)"Produces",
+                               bld->cost);
+        }
+        strcpy(outBuf,res);
+      }
+      /* GAP: the remaining pass-2 arms (unitType 3, 7, 0xa, 0xb, 0xc) - their literals are in the
+         inventory but their argument tables are not yet resolved. */
     }
 
     /* ---- 0x1f1a continuation: cost estimate + the far-pointer action list ---- */
