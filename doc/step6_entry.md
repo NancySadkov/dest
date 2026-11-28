@@ -25458,3 +25458,53 @@ entry.
     diff_dgroup          288/1,805 matched (unchanged)
     compare_runtime      280 identical / 11 different at entry, init_game and key (unchanged)
     structural_deficits  two game bodies: 7e7c:0b9c (177/187), 77eb:0d61 (54/58)
+
+
+## `ovc24_textKill` (5943:026e) cleared: 118 hits down to 0, grep 5,969 -> 5,825 (-144)
+
+The body that spreads a famine timer across a faction and then kills what starves.
+
+    uVar16  -> entIdx    the adjacent-entity scan index (145..196)
+               timerLo   the faction timer's low word before the add (156/159)
+               pickLo    randPick2 & 0xff, the damage-share numerator (232..241)
+               candIdx   the candidate entity, 0xffff until one is chosen (249..380)
+    uStack_8 -> dmgShare  1 or 2, the animFrame damage applied this pass
+    bVar5   -> factionOf  ovc24_usesEntities(entityIndex_00)
+               candVal    ovr_agnt_compute8's result, the best value so far
+    uVar7   -> dmgSum     faction^2 * animFrame, the timer increment
+               alignedX   alignUp4 of an entity's x, compared with entX0
+    uVar6   -> entX0      alignUp4 of the first entity's x, the scan key
+               rollRes    ovr_ovc27_rollToHitAgent's result
+    puVar1  -> timerSlot  &factionTimer[agentAI] ;  flagsWord  &frames + 1
+    piVar2  -> timerHiSlot  &factionTimer[agentAI] + 2
+    puVar3  -> framePtr   &Entities[i].base.animFrame
+    puVar25 / pbVar26 -> maxSlot   &factionMax[agentAI] (+2 for the second table) - the two
+                                   pointers are the same expression, so they share one name
+    cStack_12 -> attackMode   1 or 2, handed to ovr_ovc27_compute3
+    in_stack_0000ffd0 -> argWord ;  unaff_SI -> argLo ;  unaff_DI -> mulHi
+
+**The one split that needed a reachability argument** is `uVar6`. It holds `entX0` (141) and is read at
+195 and 364, but 292/316 overwrite it with `ovr_ovc27_rollToHitAgent`'s result in between. Those are
+safe to separate only because the block that contains 292/316 ends in `return;` at 360 - so 362..364 is
+unreachable from it, and the reads can never see the roll result. Without that `return` this split would
+have silently changed the scan key.
+
+`argLo`/`mulHi` are the two register values the image leaves in place (`unaff_SI`/`unaff_DI`); they are
+named for what the expression does with them, not for where they come from, and `argWord` is the 32-bit
+argument they pair with.
+
+## Measured (HEAD e4c58880 -> this commit)
+
+    grep_checks          5,969 -> 5,825   (-144)
+    REBUILT.EXE          447,954 -> 447,970   (+16: frame reshuffle)
+    build 65/65, LINK.LOG 0 errors
+    compare_state        identical 734 / 7 different / 889 missing (unchanged)
+    diff_dgroup          288/1,805 matched (unchanged)
+    compare_runtime      280 identical / 11 different at entry, init_game and key (unchanged)
+    structural_deficits  two game bodies: 7e7c:0b9c (177/187), 77eb:0d61 (54/58)
+
+## Turn total (HEAD dbb7af4e -> here)
+
+    grep_checks          6,090 -> 5,825   (-265)
+      constr_usesAgnt_clear (36ce:0995)   -121
+      ovc24_textKill (5943:026e)          -144

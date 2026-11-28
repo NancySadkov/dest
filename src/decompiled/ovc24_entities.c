@@ -91,13 +91,17 @@ char __cdecl16far ovc24_usesEntities(int entityIndex)
 void __cdecl16far ovc24_textKill(uint entityIndex)
 
 {
-  uint *puVar1;
-  int *piVar2;
-  uint8_t *puVar3;
+  uint *timerSlot;         /* &factionTimer[agentAI], the low word */
+  uint *flagsWord;         /* &Entities[i].base.frames + 1, the flags word */
+  int *timerHiSlot;         /* &factionTimer[agentAI] + 2, the high word */
+  uint8_t *framePtr;        /* &Entities[i].base.animFrame */
   byte agentAI;
-  byte bVar5;
-  uint uVar6;
-  uint uVar7;
+  byte factionOf;           /* ovc24_usesEntities(entityIndex_00) */
+  byte candVal;             /* ovr_agnt_compute8's result, the best value so far */
+  uint entX0;               /* alignUp4 of the first entity's x, the scan key */
+  uint rollRes;             /* ovr_ovc27_rollToHitAgent's result */
+  uint dmgSum;              /* the faction timer increment: faction^2 * animFrame */
+  uint alignedX;            /* alignUp4 of an entity's x, compared with entX0 */
   long *plVar8;
   uint16_t randPick;
   uint16_t randPickB;
@@ -106,10 +110,13 @@ void __cdecl16far ovc24_textKill(uint entityIndex)
   char *msg;
   uint16_t startY;
   entity_t *peVar15;
-  uint16_t unaff_SI;
+  uint16_t argLo;           /* its low word, left in SI */
   uint entityIndex_00;
-  uint uVar16;
-  uint16_t unaff_DI;
+  uint entIdx;              /* the adjacent-entity scan index */
+  uint timerLo;             /* the faction timer's low word before the add */
+  uint pickLo;              /* randPick2 & 0xff, the damage share numerator */
+  uint candIdx;             /* the candidate entity, 0xffff until one is chosen */
+  uint16_t mulHi;           /* the high word left in DI for the 32-bit multiply */
   uint16_t entitiesSeg;
   undefined1 timerB0;
   undefined1 timerB0c;
@@ -118,11 +125,10 @@ void __cdecl16far ovc24_textKill(uint entityIndex)
   undefined1 timerB1c;
   undefined1 timerB2;
   undefined1 timerB2c;
-  uint8_t *puVar25;
-  byte *pbVar26;
+  uint8_t *maxSlot;         /* &factionMax[agentAI] (+2 for the second table) */
   undefined1 timerB3;
   undefined1 timerB3c;
-  uint32_t in_stack_0000ffd0;
+  uint32_t argWord;         /* the caller's 32-bit argument at [bp-0x30] */
   long lVar29;
   uint32_t factionTimer[2];   /* [BP-0x2a]: two 32-bit per-faction timers */
   uint8_t factionFlagsB[2];   /* [BP-0x20] */
@@ -130,70 +136,70 @@ void __cdecl16far ovc24_textKill(uint entityIndex)
   uint8_t factionMax [4];
   long *plStack_18;
   int timerHi;
-  char cStack_12;
+  char attackMode;          /* 1 or 2, handed to ovr_ovc27_compute3 */
   byte bStack_10;
   uint otherIdx;
-  uint uStack_8;
+  uint dmgShare;            /* 1 or 2, the animFrame damage applied this pass */
   
-  lVar29 = CONCAT22((int)((ulong)in_stack_0000ffd0 >> 0x10),unaff_SI);
+  lVar29 = CONCAT22((int)((ulong)argWord >> 0x10),argLo);
   entitiesSeg = (uint16_t)((ulong)Entities >> 0x10);
   startY = (Entities)[entityIndex].base.y;
-  uVar6 = alignUp4(((Entities + entityIndex)->base).x,0,0);
+  entX0 = alignUp4(((Entities + entityIndex)->base).x,0,0);
   _fmemset(MK_FP(_SS, factionTimer), 0, 8);
   _fmemset(MK_FP(_SS, factionFlagsB), 0xFF81, 2);
   _fmemset(MK_FP(_SS, factionFlagsA), 0xFF81, 2);
-  uVar16 = entityIndex;
+  entIdx = entityIndex;
   do {
-    entityIndex_00 = uVar16;
+    entityIndex_00 = entIdx;
     entitiesSeg = (uint16_t)((ulong)Entities >> 0x10);
     gindex = (Entities)[entityIndex_00].base.gindex;
     *(undefined1 *)((int)&(Entities)[entityIndex_00].base.entity + 2) = 1;
     agentAI = AgntGs[(uint)gindex].ai;
-    bVar5 = ovc24_usesEntities(entityIndex_00);
-    uVar7 = (uint)bVar5 * (uint)bVar5 * (uint)(Entities)[entityIndex_00].base.animFrame
+    factionOf = ovc24_usesEntities(entityIndex_00);
+    dmgSum = (uint)factionOf * (uint)factionOf * (uint)(Entities)[entityIndex_00].base.animFrame
     ;
-    puVar1 = (uint *)(&factionTimer[0] + agentAI);
-    uVar16 = *puVar1;
-    *puVar1 = *puVar1 + uVar7;
-    piVar2 = (int *)((int)&factionTimer[0] + (uint)agentAI * 4 + 2);
-    *piVar2 = *piVar2 + ((int)uVar7 >> 0xf) + (uint)CARRY2(uVar16,uVar7);
+    timerSlot = (uint *)(&factionTimer[0] + agentAI);
+    timerLo = *timerSlot;
+    *timerSlot = *timerSlot + dmgSum;
+    timerHiSlot = (int *)((int)&factionTimer[0] + (uint)agentAI * 4 + 2);
+    *timerHiSlot = *timerHiSlot + ((int)dmgSum >> 0xf) + (uint)CARRY2(timerLo,dmgSum);
     if (((AgntGs[(uint)gindex].flags & 8) == 0) &&
        ((AgntGs[(uint)gindex].flags2 & 0x20) == 0)) {
-      puVar25 = factionMax + agentAI;
-      bVar5 = ovr_agnt_compute8(&(Entities)[entityIndex_00].base,
+      maxSlot = factionMax + agentAI;
+      candVal = ovr_agnt_compute8(&(Entities)[entityIndex_00].base,
                                 (char)((ulong)Entities >> 0x10));
-      if ((char)*puVar25 < (char)bVar5) {
-        pbVar26 = factionMax + agentAI;
-        bVar5 = ovr_agnt_compute8(&Entities[entityIndex_00].base,(char)((ulong)Entities >> 0x10));
-        *pbVar26 = bVar5;
+      if ((char)*maxSlot < (char)candVal) {
+        maxSlot = factionMax + agentAI;
+        candVal = ovr_agnt_compute8(&Entities[entityIndex_00].base,(char)((ulong)Entities >> 0x10));
+        *maxSlot = candVal;
       }
     }
     if ((AgntGs[(uint)gindex].flags & 8) == 0) {
-      puVar25 = factionMax + agentAI + 2;
-      bVar5 = ovr_agnt_compute8(&Entities[entityIndex_00].base,(char)((ulong)Entities >> 0x10));
-      if ((char)*puVar25 < (char)bVar5) {
-        pbVar26 = factionMax + agentAI + 2;
-        bVar5 = ovr_agnt_compute8(&Entities[entityIndex_00].base,(char)((ulong)Entities >> 0x10));
-        *pbVar26 = bVar5;
+      maxSlot = factionMax + agentAI + 2;
+      candVal = ovr_agnt_compute8(&Entities[entityIndex_00].base,(char)((ulong)Entities >> 0x10));
+      if ((char)*maxSlot < (char)candVal) {
+        maxSlot = factionMax + agentAI + 2;
+        candVal = ovr_agnt_compute8(&Entities[entityIndex_00].base,(char)((ulong)Entities >> 0x10));
+        *maxSlot = candVal;
       }
     }
     if (((char)factionMax[agentAI + 2] < '\x02') &&
        ((AgntGs[(uint)gindex].flags & 2) != 0)) {
       factionMax[agentAI + 2] = 0x2;
     }
-    uVar16 = entityIndex_00;
+    entIdx = entityIndex_00;
     if ((((char)factionMax[agentAI] < '\x02') &&
         ((AgntGs[(uint)gindex].flags & 2) != 0)) &&
        (4 < (Entities)[entityIndex_00].base.level)) {
       factionMax[agentAI] = 0x2;
     }
     do {
-      uVar16 = uVar16 + 1;
-      if (EntityCount <= uVar16) break;
+      entIdx = entIdx + 1;
+      if (EntityCount <= entIdx) break;
       entitiesSeg = (uint16_t)((ulong)Entities >> 0x10);
-    } while (((Entities)[uVar16].base.y != startY) ||
-            (uVar7 = alignUp4(((Entities + uVar16)->base).x,0,0), uVar7 != uVar6));
-  } while (uVar16 < EntityCount);
+    } while (((Entities)[entIdx].base.y != startY) ||
+            (alignedX = alignUp4(((Entities + entIdx)->base).x,0,0), alignedX != entX0));
+  } while (entIdx < EntityCount);
   timerHi = 0;
   plStack_18 = (long *)"Time passes...";
   if ((-1 < (*(uint16_t *)((uint8_t *)&(factionTimer[0]) + 2))) &&
@@ -215,43 +221,43 @@ void __cdecl16far ovc24_textKill(uint entityIndex)
   timerB1c = timerB1;
   timerB2c = timerB2;
   timerB3c = timerB3;
-  plVar8 = LXMUL_at_(plStack_18,CONCAT22(unaff_DI,timerHi),lVar29);
+  plVar8 = LXMUL_at_(plStack_18,CONCAT22(mulHi,timerHi),lVar29);
   factionTimer[0] = LDIV_at_(CONCAT13((char)((uint)entitiesSeg >> 8),CONCAT12((char)entitiesSeg,plVar8)),
                        CONCAT13(timerB3c,CONCAT12(timerB2c,CONCAT11(timerB1c,timerB0c))));
   factionTimer[0] = factionTimer[0] + 0x14;
   entitiesSeg = 0;
-  plVar8 = LXMUL_at_(plStack_18,CONCAT22(unaff_DI,timerHi),lVar29);
+  plVar8 = LXMUL_at_(plStack_18,CONCAT22(mulHi,timerHi),lVar29);
   factionTimer[1] = LDIV_at_(CONCAT13((char)((uint)entitiesSeg >> 8),CONCAT12((char)entitiesSeg,plVar8)),
                        CONCAT13(timerB3,CONCAT12(timerB2,CONCAT11(timerB1,timerB0))));
   factionTimer[1] = factionTimer[1] + 0x14;
   randPick = ovr_randBelow((uint16_t)(long *)factionTimer[0],0);
   randPickB = ovr_randBelow((uint16_t)(long *)factionTimer[1],0);
   randPick2 = ovr_randBelow((uint16_t)(long *)factionTimer[0],0);
-  uStack_8 = randPick2 & 0xff;
+  dmgShare = randPick2 & 0xff;
   randPick2 = ovr_randBelow((uint16_t)(long *)factionTimer[1],0);
-  uVar16 = randPick2 & 0xff;
+  pickLo = randPick2 & 0xff;
   if ((randPickB & 0xff) < (randPick & 0xff)) {
-    uStack_8 = uStack_8 / (uVar16 + 1);
+    dmgShare = dmgShare / (pickLo + 1);
     bStack_10 = 1;
   }
   else {
-    if (uVar16 <= uStack_8) {
+    if (pickLo <= dmgShare) {
       return;
     }
-    uStack_8 = uVar16 / (uStack_8 + 1);
+    dmgShare = pickLo / (dmgShare + 1);
     bStack_10 = 0;
   }
-  uStack_8 = uStack_8 + 1;
-  if (2 < uStack_8) {
-    uStack_8 = 2;
+  dmgShare = dmgShare + 1;
+  if (2 < dmgShare) {
+    dmgShare = 2;
   }
   lVar29 = -0x1000000;
-  uVar16 = 0xffff;
+  candIdx = 0xffff;
   otherIdx = 0xffff;
   do {
     if ((int)entityIndex_00 < (int)entityIndex) {
       if (otherIdx != 0xffff) {
-        if (uVar16 == 0xffff) {
+        if (candIdx == 0xffff) {
           gindex = (byte)((ulong)Entities >> 0x10);
           ovr_attact_usesRandBelow
                     (&Entities[otherIdx].base,gindex,gindex,Entities[otherIdx].base.target);
@@ -274,32 +280,32 @@ void __cdecl16far ovc24_textKill(uint entityIndex)
           }
         }
         else {
-          if (Entities[uVar16].base.animFrame <= uStack_8) {
-            uStack_8 = (uint)Entities[uVar16].base.animFrame;
+          if (Entities[candIdx].base.animFrame <= dmgShare) {
+            dmgShare = (uint)Entities[candIdx].base.animFrame;
           }
-          Entities[uVar16].base.animFrame = Entities[uVar16].base.animFrame - (byte)uStack_8;
+          Entities[candIdx].base.animFrame = Entities[candIdx].base.animFrame - (byte)dmgShare;
           gindex = (byte)((ulong)Entities >> 0x10);
-          ovr_ovc41_compute4(&Entities[uVar16].base,gindex,(byte)uStack_8,&Entities[otherIdx].base,
-                             gindex,(byte)uStack_8,(char)(Entities + otherIdx),gindex);
+          ovr_ovc41_compute4(&Entities[candIdx].base,gindex,(byte)dmgShare,&Entities[otherIdx].base,
+                             gindex,(byte)dmgShare,(char)(Entities + otherIdx),gindex);
           ovr_ovc25_attackingNotice
-                    (*(byte *)((int)&(Entities)[uVar16].base.entity + 3));
-          if ((Entities)[uVar16].base.animFrame != 0x0) {
-            ovc24_usesLDIV_at_(uVar16);
+                    (*(byte *)((int)&(Entities)[candIdx].base.entity + 3));
+          if ((Entities)[candIdx].base.animFrame != 0x0) {
+            ovc24_usesLDIV_at_(candIdx);
             entitiesSeg = (uint16_t)((ulong)Entities >> 0x10);
             peVar15 = Entities;
             if (((AgntGs[(uint)peVar15[otherIdx].base.gindex].flags2 & 4) != 0) &&
-               ((*(uint *)((int)&peVar15[uVar16].base.frames + 1) & 1) == 0)) {
-              uVar6 = ovr_ovc27_rollToHitAgent
+               ((*(uint *)((int)&peVar15[candIdx].base.frames + 1) & 1) == 0)) {
+              rollRes = ovr_ovc27_rollToHitAgent
                                 (CONCAT13((char)((ulong)Entities >> 0x18),
-                                          CONCAT12((char)((ulong)Entities >> 0x10),peVar15 + uVar16
+                                          CONCAT12((char)((ulong)Entities >> 0x10),peVar15 + candIdx
                                                   )),0);
-              if ((uVar6 & 0xff) == 0) {
-                puVar1 = (uint *)((int)&(Entities)[uVar16].base.frames + 1);
-                *puVar1 = *puVar1 | 1;
+              if ((rollRes & 0xff) == 0) {
+                flagsWord = (uint *)((int)&(Entities)[candIdx].base.frames + 1);
+                *flagsWord = *flagsWord | 1;
                 entitiesSeg = (uint16_t)((ulong)Entities >> 0x10);
                 alignUp4(((Entities + entityIndex)->base).x,
                          (char)(Entities)[entityIndex].base.y,0);
-                gOfs = (uint)(Entities)[uVar16].base.gindex * 0x95;
+                gOfs = (uint)(Entities)[candIdx].base.gindex * 0x95;
                 entitiesSeg = *(uint16_t *)((int)&worldMenuLabels[1].ofs + 1 + gOfs);
                 msg = ovr_fmVsprintf("Intelligence reports %s unit infected with disease. (%d, %d)"
                                          ,(char *)CONCAT13((char)((uint)entitiesSeg >> 8),
@@ -313,36 +319,36 @@ void __cdecl16far ovc24_textKill(uint entityIndex)
             }
             if ((AgntGs[(uint)(Entities)[otherIdx].base.gindex].flags2 & 0xc00) != 0)
             {
-              uVar6 = ovr_ovc27_rollToHitAgent
+              rollRes = ovr_ovc27_rollToHitAgent
                                 (CONCAT13((char)((ulong)Entities >> 0x18),
                                           CONCAT12((char)((ulong)Entities >> 0x10),
-                                                   Entities + uVar16)),3);
-              if ((uVar6 & 0xff) == 0) {
+                                                   Entities + candIdx)),3);
+              if ((rollRes & 0xff) == 0) {
                 if ((AgntGs[(uint)(Entities)[otherIdx].base.gindex].flags2 & 0x800)
                     == 0) {
-                  cStack_12 = '\x01';
+                  attackMode = '\x01';
                 }
                 else {
-                  cStack_12 = '\x02';
+                  attackMode = '\x02';
                 }
                 entitiesSeg = ovr_ovc27_compute3(CONCAT13((char)((ulong)Entities >> 0x18),
                                                      CONCAT12((char)((ulong)Entities >> 0x10),
-                                                              Entities + uVar16)),
-                                            cStack_12);
+                                                              Entities + candIdx)),
+                                            attackMode);
                 if ((char)entitiesSeg != '\0') {
                   if (DebugVerbose != false) {
                     printf("kill 3\r");
                   }
                   entitiesSeg = (uint16_t)((ulong)Entities >> 0x10);
-                  if ((Entities)[uVar16].base.animFrame != 0x0) {
-                    puVar3 = &(Entities)[uVar16].base.animFrame;
-                    *puVar3 = *puVar3 + 0xff;
+                  if ((Entities)[candIdx].base.animFrame != 0x0) {
+                    framePtr = &(Entities)[candIdx].base.animFrame;
+                    *framePtr = *framePtr + 0xff;
                   }
                 }
                 entitiesSeg = (uint16_t)((ulong)Entities >> 0x10);
                 alignUp4(((Entities + entityIndex)->base).x,
                          (char)(Entities)[entityIndex].base.y,0);
-                gOfs = (uint)(Entities)[uVar16].base.gindex * 0x95;
+                gOfs = (uint)(Entities)[candIdx].base.gindex * 0x95;
                 entitiesSeg = *(uint16_t *)((int)&worldMenuLabels[1].ofs + 1 + gOfs);
                 msg = ovr_fmVsprintf("Intelligence reports %s unit drained of energy. (%d, %d)",
                                          (char *)CONCAT13((char)((uint)entitiesSeg >> 8),
@@ -360,8 +366,8 @@ void __cdecl16far ovc24_textKill(uint entityIndex)
       return;
     }
     if (Entities[entityIndex].base.y == startY) {
-      uVar7 = alignUp4(((Entities + entityIndex)->base).x,0,0);
-      if (uVar7 == uVar6) {
+      alignedX = alignUp4(((Entities + entityIndex)->base).x,0,0);
+      if (alignedX == entX0) {
         entitiesSeg = (uint16_t)((ulong)Entities >> 0x10);
         peVar15 = Entities;
         if (AgntGs[(uint)peVar15[entityIndex].base.gindex].ai == bStack_10) {
@@ -377,7 +383,7 @@ L_OVC24_5943_026e_0772:
                (((AgntGs[(uint)gindex].flags2 & 0x10) == 0 ||
                 (-1 < (char)factionMax[bStack_10 ^ 1])))) {
               lVar29 = CONCAT13((Entities)[entityIndex].base.level,(int3)lVar29);
-              uVar16 = entityIndex;
+              candIdx = entityIndex;
             }
           }
           else if (peVar15[entityIndex].base.level == gindex) {
