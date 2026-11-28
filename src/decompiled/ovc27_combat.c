@@ -14,75 +14,77 @@
 void __cdecl16far ovc27_intelAttackingNotice(int x1,int y1,int x2,int y2,int *rectOfs)
 
 {
-  undefined1 *puVar1;
+  undefined1 *pixelPtr;     /* the framebuffer byte for this column */
   uint slopeRem;
   uint remSign;
-  int iVar4;
-  int iVar5;
-  int *piVar6;
-  byte in_stack_00000010;
+  int x2Save;              /* x2 held across the x/y swap */
+  int rowTop;              /* y1 + the dither pattern's offset for this column */
+  int y2SaveTmp;           /* y2 held across the x/y swap */
+  int rowAbove;            /* rowTop - 1, the row drawn one shade darker */
+  int *rectBase;            /* rectOfs: {left, top, right, bottom} */
+  byte phaseOfs;           /* the dither pattern's phase, from the caller's stack */
   far_t dst;
   uint8_t yOffset;
-  int iStack_10;
+  int err;                  /* the Bresenham error term */
   int yStep;
-  int iStack_c;
-  int iStack_a;
-  int iStack_8;
+  int errStep;              /* |remainder of the slope|, accumulated per column */
+  int slope;                /* (y2 - y1) / (x2 - x1) */
+  int px;                   /* the column being drawn */
   int y2Saved;
   byte bStack_3;
   
-  iVar5 = y2;
-  iVar4 = x2;
+  y2SaveTmp = y2;
+  x2Save = x2;
   dst.seg = _SS;
   dst.ofs = (uint16_t)&yOffset;
   F_SCOPY(far_from_u32((uint32_t)(0x2410592a)),dst,32);
   if (x2 < x1) {
     x2 = x1;
-    x1 = iVar4;
+    x1 = x2Save;
     y2Saved = y2;
     y2 = y1;
-    y1 = iVar5;
+    y1 = y2SaveTmp;
   }
   if (x1 < *rectOfs) {
     x1 = *rectOfs;
   }
-  piVar6 = (int *)rectOfs;
-  if (piVar6[2] < x2) {
-    x2 = piVar6[2];
+  rectBase = (int *)rectOfs;
+  if (rectBase[2] < x2) {
+    x2 = rectBase[2];
   }
   if (x1 <= x2) {
     if (x1 == x2) {
-      iStack_a = 0;
-      iStack_c = 0;
+      slope = 0;
+      errStep = 0;
     }
     else {
-      iStack_a = (y2 - y1) / (x2 - x1);
+      slope = (y2 - y1) / (x2 - x1);
       slopeRem = (y2 - y1) % (x2 - x1);
       remSign = (int)slopeRem >> 0xf;
-      iStack_c = (slopeRem ^ remSign) - remSign;
+      errStep = (slopeRem ^ remSign) - remSign;
     }
     yStep = ovr_ovc07_signum(y2 - y1);
-    iStack_10 = x2 - x1 >> 1;
+    err = x2 - x1 >> 1;
     bStack_3 = 0;
-    for (iStack_8 = x1; iStack_8 <= x2; iStack_8 = iStack_8 + 1) {
-      iVar4 = y1 + *(int *)(&yOffset + ((uint)bStack_3 + (uint)in_stack_00000010 & 0xf) * 2);
-      iVar5 = iVar4 + -1;
+    for (px = x1; px <= x2; px = px + 1) {
+      rowTop = y1 + *(int *)(&yOffset + ((uint)bStack_3 + (uint)phaseOfs & 0xf) * 2);
+      rowAbove = rowTop + -1;
       bStack_3 = bStack_3 + 1;
-      puVar1 = (undefined1 *)(iVar5 * 0x140 + iStack_8);
-      if ((piVar6[1] <= iVar5) && (iVar5 <= piVar6[3])) {
-        *puVar1 = 0xc;
+      pixelPtr = (undefined1 *)(rowAbove * 0x140 + px);
+      if ((rectBase[1] <= rowAbove) && (rowAbove <= rectBase[3])) {
+        *pixelPtr = 0xc;
       }
-      if ((piVar6[1] <= iVar4) && (iVar4 <= piVar6[3])) {
-        puVar1[0x140] = 0xf;
+      if ((rectBase[1] <= rowTop) && (rowTop <= rectBase[3])) {
+        pixelPtr[0x140] = 0xf;
       }
-      if ((piVar6[1] <= iVar4 + 1) && (iVar4 + 1 <= piVar6[3])) {
-        puVar1[0x280] = 0xc;
+      if ((rectBase[1] <= rowTop + 1) && (rowTop + 1 <= rectBase[3])) {
+        pixelPtr[0x280] = 0xc;
       }
-      y1 = y1 + iStack_a;
-      iStack_10 = iStack_10 + iStack_c;
-      if (x2 - x1 <= iStack_10) {
+      y1 = y1 + slope;
+      err = err + errStep;
+      if (x2 - x1 <= err) {
         y1 = y1 + yStep;
-        iStack_10 = iStack_10 - (x2 - x1);
+        err = err - (x2 - x1);
       }
     }
   }

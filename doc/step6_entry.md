@@ -25747,3 +25747,39 @@ constant pair stays visible.
       init_usesRandBelow (3381:24c3)      -58
       constrct_usesLDIV_at_ (7e7c:2b4c)   -75
       6018:1398 (paged list)              -56
+
+
+## `5ded:0000` (framebuffer line with a dither pattern): 54 hits down to 0, grep 5,360 -> 5,291 (-69)
+
+    piVar6  -> rectBase   rectOfs: {left, top, right, bottom}
+    iVar4   -> x2Save     x2 held across the x/y swap ;  rowTop  y1 + the pattern offset
+    iVar5   -> y2SaveTmp  y2 held across the swap     ;  rowAbove  rowTop - 1
+    iStack_a -> slope     (y2 - y1) / (x2 - x1)
+    iStack_c -> errStep   |remainder of the slope|, accumulated per column
+    iStack_10 -> err      the Bresenham error term
+    iStack_8 -> px        the column being drawn
+    puVar1  -> pixelPtr   the framebuffer byte for this column
+    in_stack_00000010 -> phaseOfs   the dither pattern's phase, from the caller's stack
+
+The body is the classic three-row dithered line: `pixelPtr` is written at -1, 0 and +1 rows with shades
+0xc, 0xf and 0xc, and `err`/`errStep` walk the Bresenham step. Both swap temporaries (`x2Save`,
+`y2SaveTmp`) coexist with the loop's own `rowTop`/`rowAbove` uses of the same slots, but each is
+assigned before its first read, so the split is safe.
+
+## Measured (HEAD e464dc56 -> this commit)
+
+    grep_checks          5,360 -> 5,291   (-69)
+    REBUILT.EXE          447,970 (unchanged size)
+    build 65/65, LINK.LOG 0 errors
+    compare_state        identical 734 / 7 different / 889 missing (unchanged)
+    diff_dgroup          288/1,805 matched (unchanged)
+    compare_runtime      280 identical / 11 different at entry, init_game and key (unchanged)
+    structural_deficits  two game bodies: 7e7c:0b9c (177/187), 77eb:0d61 (54/58)
+
+## Turn total (HEAD e850b68b -> here)
+
+    grep_checks          5,549 -> 5,291   (-258)
+      init_usesRandBelow (3381:24c3)      -58
+      constrct_usesLDIV_at_ (7e7c:2b4c)   -75
+      6018:1398 (paged list)              -56
+      5ded:0000 (dithered line)           -69
