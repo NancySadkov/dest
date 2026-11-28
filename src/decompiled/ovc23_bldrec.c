@@ -758,76 +758,77 @@ void __cdecl16far
 createConstructionRecord(byte bldType,int x,int y,uint8_t *outFlag,char partyIndex,uint16_t arg6,uint16_t arg7,uint16_t arg8,uint16_t arg9,uint16_t arg10)
 
 {
-  int *piVar1;
-  byte *pbVar2;
-  undefined1 uVar3;
-  int iVar4;
-  uint16_t uVar5;
-  uint uVar6;
-  uint16_t unaff_SI;
-  uint uVar7;
-  uint16_t unaff_DI;
-  uint uVar8;
-  undefined1 uStack000d;
-  byte in_stack_0000000e;
-  char in_stack_00000010;
-  agnt_t far *in_stack_0000fff6;
-  uint uStack_8;
+  int *xPtr;                /* &GRecords[n].x */
+  byte *flagsPtr;           /* &GRecords[n] + 0xd */
+  undefined1 bldSize;       /* BuildingTypes[bStack_5].size */
+  int largeRes;             /* ovc23_isLargeBuilding's result */
+  uint16_t battleRes;       /* ovr_ovc22_usesGOngoingBattle's result */
+  uint16_t gridSegDead;     /* GUnitGrid's segment: stored, never read */
+  uint16_t expVal;          /* ovc23_usesGRecordCount3's result */
+  uint battleRes2;          /* the same call inside the record scan */
+  uint bestAge;             /* the largest GameTick - tick found */
+  uint bestIdx;             /* the record the scan settled on, or 0xffff */
+  uint newIdx;              /* the record just appended */
+  undefined1 outHi;         /* the high byte of the outFlag far pointer */
+  byte actorIdx;           /* the acting agent's index */
+  char flagArg;            /* the flag argument */
+  agnt_t far *foundRec;    /* ovc23_findRecordAt's result, as an index */
+  uint recIdx;              /* the loop counter, over building size and records */
   byte bStack_5;
   byte bStack_3;
   
-  outFlag = (undefined1 *)CONCAT13(uStack000d,CONCAT12(partyIndex,outFlag));
-  for (uStack_8 = 0; (int)uStack_8 < (int)(uint)BuildingTypes[bldType].size;
-      uStack_8 = uStack_8 + 1) {
-    in_stack_0000fff6 = (agnt_t far *)ovc23_findRecordAt(x + uStack_8,y,0);
-    if (-1 < (int)in_stack_0000fff6) {
-      ovc23_removeRecord((int)in_stack_0000fff6);
+  outFlag = (undefined1 *)CONCAT13(outHi,CONCAT12(partyIndex,outFlag));
+  for (recIdx = 0; (int)recIdx < (int)(uint)BuildingTypes[bldType].size;
+      recIdx = recIdx + 1) {
+    foundRec = (agnt_t far *)ovc23_findRecordAt(x + recIdx,y,0);
+    if (-1 < (int)foundRec) {
+      ovc23_removeRecord((int)foundRec);
     }
   }
-  iVar4 = ovc23_isLargeBuilding(x,y);
-  if ((char)iVar4 != '\0') {
-    ovc23_placeBuilding(x + -1,y,0,in_stack_0000000e);
-    uVar5 = ovr_ovc22_usesGOngoingBattle((byte)x - 1,(byte)y);
-    if ((char)uVar5 != '\0') {
+  largeRes = ovc23_isLargeBuilding(x,y);
+  if ((char)largeRes != '\0') {
+    ovc23_placeBuilding(x + -1,y,0,actorIdx);
+    battleRes = ovr_ovc22_usesGOngoingBattle((byte)x - 1,(byte)y);
+    if ((char)battleRes != '\0') {
       *outFlag = 1;
     }
   }
-  for (uStack_8 = 1; (int)uStack_8 < (int)(uint)BuildingTypes[bldType].size;
-      uStack_8 = uStack_8 + 1) {
-    ovc23_placeBuilding(x + uStack_8,y,0,in_stack_0000000e);
-    uVar5 = ovr_ovc22_usesGOngoingBattle((byte)x + (char)uStack_8,(byte)y);
-    if ((char)uVar5 != '\0') {
+  for (recIdx = 1; (int)recIdx < (int)(uint)BuildingTypes[bldType].size;
+      recIdx = recIdx + 1) {
+    ovc23_placeBuilding(x + recIdx,y,0,actorIdx);
+    battleRes = ovr_ovc22_usesGOngoingBattle((byte)x + (char)recIdx,(byte)y);
+    if ((char)battleRes != '\0') {
       *outFlag = 1;
     }
   }
-  if (*(char *)((int)*(uint32_t *)((uint)in_stack_0000000e << 2) + 0x3f) == '\0') {
+  if (*(char *)((int)*(uint32_t *)((uint)actorIdx << 2) + 0x3f) == '\0') {
     if (0x31 < GRecordCount) {
-      uVar7 = 0;
-      uVar8 = 0xffff;
-      for (uStack_8 = 0; uStack_8 < GRecordCount; uStack_8 = uStack_8 + 1) {
-        uVar6 = ovr_ovc22_usesGOngoingBattle
-                          (GREC_FIELD(&GRecords[uStack_8], x, 0),GREC_FIELD(&GRecords[uStack_8], y, 0));
-        if (((uVar6 & 0xff) == 0) && (uVar7 <= (uint)(GameTick - GRecords[uStack_8].tick)))
+      bestAge = 0;
+      bestIdx = 0xffff;
+      for (recIdx = 0; recIdx < GRecordCount; recIdx = recIdx + 1) {
+        battleRes2 = ovr_ovc22_usesGOngoingBattle
+                          (GREC_FIELD(&GRecords[recIdx], x, 0),GREC_FIELD(&GRecords[recIdx], y, 0));
+        if (((battleRes2 & 0xff) == 0) && (bestAge <= (uint)(GameTick - GRecords[recIdx].tick)))
         {
-          uVar7 = GameTick - GRecords[uStack_8].tick;
-          uVar8 = uStack_8;
+          bestAge = GameTick - GRecords[recIdx].tick;
+          bestIdx = recIdx;
         }
       }
-      if (uVar8 == 0xffff) {
-        for (uStack_8 = 0; uStack_8 < GRecordCount; uStack_8 = uStack_8 + 1) {
-          if (uVar7 <= (uint)(GameTick - GRecords[uStack_8].tick)) {
-            uVar7 = GameTick - GRecords[uStack_8].tick;
-            uVar8 = uStack_8;
+      if (bestIdx == 0xffff) {
+        for (recIdx = 0; recIdx < GRecordCount; recIdx = recIdx + 1) {
+          if (bestAge <= (uint)(GameTick - GRecords[recIdx].tick)) {
+            bestAge = GameTick - GRecords[recIdx].tick;
+            bestIdx = recIdx;
           }
         }
       }
-      if (uVar8 == 0xffff) {
+      if (bestIdx == 0xffff) {
         return;
       }
-      if (uVar8 + 1 < GRecordCount) {
-        _fmemmove((char *)CONCAT22(_DS,(char *)&GREC_FIELD(&GRecords[uVar8], buildTimer, 0)),
-                  (char *)CONCAT22(_DS,(char *)&GREC_FIELD(&GRecords[uVar8 + 1], buildTimer, 0)),
-                  ((GRecordCount - uVar8) + -1) * 0x12);
+      if (bestIdx + 1 < GRecordCount) {
+        _fmemmove((char *)CONCAT22(_DS,(char *)&GREC_FIELD(&GRecords[bestIdx], buildTimer, 0)),
+                  (char *)CONCAT22(_DS,(char *)&GREC_FIELD(&GRecords[bestIdx + 1], buildTimer, 0)),
+                  ((GRecordCount - bestIdx) + -1) * 0x12);
       }
       GRecordCount = GRecordCount - 1;
     }
@@ -835,17 +836,17 @@ createConstructionRecord(byte bldType,int x,int y,uint8_t *outFlag,char partyInd
     *(byte *)((uint8_t *)&GRecords[GRecordCount] + 8) = bldType;
     *(int *)((uint8_t *)&GRecords[GRecordCount] + 2) = x;
     *(int *)((uint8_t *)&GRecords[GRecordCount] + 4) = y;
-    *(byte *)((uint8_t *)&GRecords[GRecordCount] + 9) = in_stack_0000000e;
-    iVar4 = ovc23_isLargeBuilding(x,y);
-    uVar5 = (uint16_t)((ulong)GUnitGrid >> 0x10);
-    if ((char)iVar4 == '\0') {
+    *(byte *)((uint8_t *)&GRecords[GRecordCount] + 9) = actorIdx;
+    largeRes = ovc23_isLargeBuilding(x,y);
+    gridSegDead = (uint16_t)((ulong)GUnitGrid >> 0x10);
+    if ((char)largeRes == '\0') {
       bStack_5 = (GUnits + (*(short (*) [148] [60])GUnitGrid)[x][y])->bldType;
     }
     else {
       bStack_5 = (GUnits + ((short (*) [148] [60])GUnitGrid)[-1][x + 0x93][y])->bldType;
     }
     bStack_3 = BuildingTypes[bStack_5].buildTime;
-    uVar3 = BuildingTypes[bStack_5].size;
+    bldSize = BuildingTypes[bStack_5].size;
     if (bStack_3 == 0) {
       bStack_3 = 1;
     }
@@ -857,35 +858,35 @@ createConstructionRecord(byte bldType,int x,int y,uint8_t *outFlag,char partyInd
     }
     *(int *)((uint8_t *)&GRecords[GRecordCount] + 0xf) = GameTick;
     *(uint16_t *)(&GRecords[GRecordCount]) = 0;
-    uVar5 = ovc23_usesGRecordCount3
-                      (BuildingTypes[bldType].expinc,in_stack_0000000e,GRecordCount);
-    *(undefined1 *)((uint8_t *)&GRecords[GRecordCount] + 0xc) = (char)uVar5;
+    expVal = ovc23_usesGRecordCount3
+                      (BuildingTypes[bldType].expinc,actorIdx,GRecordCount);
+    *(undefined1 *)((uint8_t *)&GRecords[GRecordCount] + 0xc) = (char)expVal;
     if (*(char *)((uint8_t *)&GRecords[GRecordCount] + 0xc) == '\0') {
       *(undefined1 *)((uint8_t *)&GRecords[GRecordCount] + 0xc) = 1;
     }
     if (bldType == 0) {
-      iVar4 = ovc23_isLargeBuilding(x,y);
-      if ((char)iVar4 != '\0') {
-        piVar1 = (int *)((uint8_t *)&GRecords[GRecordCount] + 2);
-        *piVar1 = *piVar1 + -1;
+      largeRes = ovc23_isLargeBuilding(x,y);
+      if ((char)largeRes != '\0') {
+        xPtr = (int *)((uint8_t *)&GRecords[GRecordCount] + 2);
+        *xPtr = *xPtr + -1;
       }
-      *(undefined1 *)((uint8_t *)&GRecords[GRecordCount] + 7) = uVar3;
-      if (in_stack_00000010 == '\x01') {
+      *(undefined1 *)((uint8_t *)&GRecords[GRecordCount] + 7) = bldSize;
+      if (flagArg == '\x01') {
         *(undefined1 *)((uint8_t *)&GRecords[GRecordCount] + 0xe) = 1;
       }
       else {
-        *(char *)((uint8_t *)&GRecords[GRecordCount] + 0xc) = in_stack_00000010;
+        *(char *)((uint8_t *)&GRecords[GRecordCount] + 0xc) = flagArg;
         *(undefined1 *)((uint8_t *)&GRecords[GRecordCount] + 0xe) = 0;
       }
-      pbVar2 = (byte *)((uint8_t *)&GRecords[GRecordCount] + 0xd);
-      *pbVar2 = *pbVar2 | 3;
+      flagsPtr = (byte *)((uint8_t *)&GRecords[GRecordCount] + 0xd);
+      *flagsPtr = *flagsPtr | 3;
     }
     else {
       *(undefined1 *)((uint8_t *)&GRecords[GRecordCount] + 7) = BuildingTypes[bldType].size;
-      if (in_stack_00000010 != '\0') {
-        ovc23_placeBuilding(x,y,0,in_stack_0000000e);
-        uVar5 = ovr_ovc22_usesGOngoingBattle((byte)x,(byte)y);
-        if ((char)uVar5 != '\0') {
+      if (flagArg != '\0') {
+        ovc23_placeBuilding(x,y,0,actorIdx);
+        battleRes = ovr_ovc22_usesGOngoingBattle((byte)x,(byte)y);
+        if ((char)battleRes != '\0') {
           *outFlag = 1;
         }
       }
@@ -893,15 +894,15 @@ createConstructionRecord(byte bldType,int x,int y,uint8_t *outFlag,char partyInd
     }
     *(undefined1 *)((uint8_t *)&GRecords[GRecordCount] + 0x11) = 0;
     *(undefined1 *)((uint8_t *)&GRecords[GRecordCount] + 0xb) = *(undefined1 *)((uint8_t *)&GRecords[GRecordCount] + 0xc);
-    uVar8 = GRecordCount;
+    newIdx = GRecordCount;
     GRecordCount = GRecordCount + 1;
-    ovc23_abandonConstruction(uVar8);
+    ovc23_abandonConstruction(newIdx);
     ovc23_textAdlibNone();
   }
   else {
-    ovc23_placeBuilding(x,y,bldType,in_stack_0000000e);
-    uVar5 = ovr_ovc22_usesGOngoingBattle((byte)x,(byte)y);
-    if ((char)uVar5 != '\0') {
+    ovc23_placeBuilding(x,y,bldType,actorIdx);
+    battleRes = ovr_ovc22_usesGOngoingBattle((byte)x,(byte)y);
+    if ((char)battleRes != '\0') {
       *outFlag = 1;
     }
   }

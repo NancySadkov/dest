@@ -25311,3 +25311,35 @@ mid-flow - the same shape as `4d05:24b1` and `getcache`, so there is nothing lef
     compare_state        identical 734 / 7 different / 889 missing (unchanged)
     diff_dgroup          288/1,805 matched (unchanged)
     compare_runtime      280 identical / 11 different at entry, init_game and key (unchanged)
+
+
+## `55fe:184e` (ovc23_placeRecord) cleared: 97 hits down to 0, grep 6,379 -> 6,275 (-104)
+
+    uStack_8 -> recIdx      one counter over all three loops (building size twice, records twice)
+    iVar4    -> largeRes    ovc23_isLargeBuilding's result, tested three times
+    uVar7    -> bestAge    the largest GameTick - tick the record scavenger found
+    uVar8    -> bestIdx    the record it settled on, or 0xffff;  newIdx the record just appended
+    uVar5    -> battleRes  ovr_ovc22_usesGOngoingBattle's result (8 sites)
+                gridSegDead GUnitGrid's segment, stored at 840 and never read
+                expVal      ovc23_usesGRecordCount3's result
+    uVar6    -> battleRes2 the same battle call inside the record scan
+    uVar3    -> bldSize    BuildingTypes[bStack_5].size
+    piVar1   -> xPtr       &GRecords[n].x ;  pbVar2 -> flagsPtr  &GRecords[n] + 0xd
+    uStack000d -> outHi    the high byte of the outFlag far pointer
+    in_stack_0000000e -> actorIdx   the acting agent's index
+    in_stack_00000010 -> flagArg    the flag argument
+    in_stack_0000fff6 -> foundRec   ovc23_findRecordAt's result, used as an index
+
+**Two dead declarations removed:** `unaff_SI` and `unaff_DI` were declared at the top of this body and
+referenced nowhere in it - the compiler objects are silent about that, and grep counts them, so they
+were a straight deletion rather than a rename.
+
+## Measured (HEAD 23fac63c -> this commit)
+
+    grep_checks          6,379 -> 6,275   (-104)
+    REBUILT.EXE          447,778 (unchanged size)
+    build 65/65, LINK.LOG 0 errors
+    compare_state        identical 734 / 7 different / 889 missing (unchanged)
+    diff_dgroup          288/1,805 matched (unchanged)
+    compare_runtime      280 identical / 11 different at entry, init_game and key (unchanged)
+    structural_deficits  two game bodies: 7e7c:0b9c (177/187), 77eb:0d61 (54/58)
