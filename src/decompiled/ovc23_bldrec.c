@@ -334,53 +334,54 @@ void __cdecl16far ovc23_textBuildThfres01Lbm(far_t dst)
 
 {
   uint16_t play_id;
-  bool bVar1;
-  byte bVar2;
+  bool drew;                /* set when anything was drawn for this row */
+  byte hlRes;               /* ovr_constr_setHighlightAtOffset's result */
   undefined1 extraout_AH;
-  int iVar4;
-  uint16_t unaff_SI;
-  uint16_t unaff_DI;
-  uint16_t uVar5;
-  int iVar3;
+  int height;               /* ovc23_usesCornerBR/BR2's height for the frame */
+  uint16_t siArg;           /* the value the image leaves in SI */
+  uint16_t diArg;           /* the value the image leaves in DI */
+  uint16_t sq;              /* the square index along row 0 */
+  int sprIdx;              /* the sprite index built from AH and the highlight */
+  int recIdx;              /* the construction record the square maps to */
   
-  bVar1 = false;
+  drew = false;
   GAnimPlaying = 0;
-  uVar5 = rowMapSquareFirst[0];
+  sq = rowMapSquareFirst[0];
   while( true ) {
-    if (rowMapSquareEnd[0] <= uVar5) break;
-    play_id = *(uint16_t *)(&mapSquareColumn[uVar5]);
+    if (rowMapSquareEnd[0] <= sq) break;
+    play_id = *(uint16_t *)(&mapSquareColumn[sq]);
     if ((-3 < (int)play_id) && ((int)play_id < 2)) {
-      bVar2 = ovr_constr_setHighlightAtOffset(play_id,0,0);
-      iVar3 = CONCAT11(extraout_AH,bVar2);
-      if (((char *)0x28048)[iVar3 * 3 + *(int *)(uVar5 * 2)] != '\0') {
-        iVar4 = ovc23_usesCornerBR(play_id,iVar3);
+      hlRes = ovr_constr_setHighlightAtOffset(play_id,0,0);
+      sprIdx = CONCAT11(extraout_AH,hlRes);
+      if (((char *)0x28048)[sprIdx * 3 + *(int *)(sq * 2)] != '\0') {
+        height = ovc23_usesCornerBR(play_id,sprIdx);
         ovr_animAdvance(play_id,((char *)0x28048)
-                                [iVar3 * 3 + *(int *)(uVar5 * 2)],*(uint16_t *)(&mapSquareLeftX[uVar5]),
-                        (uint)bandOrigin[0] - iVar4,dst);
-        bVar1 = true;
+                                [sprIdx * 3 + *(int *)(sq * 2)],*(uint16_t *)(&mapSquareLeftX[sq]),
+                        (uint)bandOrigin[0] - height,dst);
+        drew = true;
       }
-      iVar3 = iRam0002d2d7;
+      recIdx = iRam0002d2d7;
       if (*(int *)(play_id * 2 + -0x6e25) != -1) {
         if (*(char *)(play_id + 0x90ec) == '\0') {
-          iVar3 = *(int *)(play_id * 2 + -0x6e25);
-          iVar4 = ovc23_usesCornerBR2(play_id,(uint)GRecords[iVar3].width);
+          recIdx = *(int *)(play_id * 2 + -0x6e25);
+          height = ovc23_usesCornerBR2(play_id,(uint)GRecords[recIdx].width);
           ovc23_usesBlitGfxRect2
-                    ((uint)bandOrigin[0] - iVar4,iVar3,dst.ofs,(brect_t *)CONCAT22(unaff_DI,dst.seg)
-                     ,unaff_SI);
-          bVar1 = true;
+                    ((uint)bandOrigin[0] - height,recIdx,dst.ofs,(brect_t *)CONCAT22(diArg,dst.seg)
+                     ,siArg);
+          drew = true;
         }
         else if (play_id == 0xfffe) {
-          iVar4 = ovc23_usesCornerBR2(-2,(uint)GRecords[iRam0002d2d7].width);
+          height = ovc23_usesCornerBR2(-2,(uint)GRecords[iRam0002d2d7].width);
           ovc23_usesBlitGfxRect2
-                    ((uint)bandOrigin[0] - iVar4,iVar3,dst.ofs,(brect_t *)CONCAT22(unaff_DI,dst.seg)
-                     ,unaff_SI);
-          bVar1 = true;
+                    ((uint)bandOrigin[0] - height,recIdx,dst.ofs,(brect_t *)CONCAT22(diArg,dst.seg)
+                     ,siArg);
+          drew = true;
         }
       }
     }
-    uVar5 = uVar5 + 1;
+    sq = sq + 1;
   }
-  if (bVar1) {
+  if (drew) {
     ovr_constr_usesScreenOriginY(dst.ofs,dst.seg,0);
   }
   return;

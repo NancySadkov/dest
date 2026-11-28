@@ -26144,3 +26144,34 @@ are exclusive with 330's arm, so the compute1 result cannot reach them - the spl
       5b66:131f (uVar renames)             -34
       2e25:05e9 (construction records)     -53
       5b66:131f (unaff_BP reconstruction)    0 for the gate, ~100 artefacts resolved
+
+
+## `55fe:0863` (row-0 animator): 41 hits down to 0, grep 4,820 -> 4,779 (-41)
+
+    iVar3  -> sprIdx   the sprite index built from AH and the highlight byte
+              recIdx   the construction record the square maps to
+    iVar4  -> height   ovc23_usesCornerBR / BR2's height for the frame (three call sites,
+                       one role - each assigned immediately before use)
+    uVar5  -> sq       the square index along row 0
+    bVar1  -> drew     set when anything was drawn for this row
+    bVar2  -> hlRes    ovr_constr_setHighlightAtOffset's result
+    unaff_SI -> siArg ;  unaff_DI -> diArg   the two register values the image leaves
+
+## Measured (HEAD fd418f42 -> this commit)
+
+    grep_checks          4,820 -> 4,779   (-41)
+    REBUILT.EXE          447,938 (unchanged size)
+    build 65/65, LINK.LOG 0 errors
+    compare_state        identical 734 / 7 different / 889 missing (unchanged)
+    diff_dgroup          288/1,805 matched (unchanged)
+    compare_runtime      280 identical / 11 different at entry, init_game and key (unchanged)
+    structural_deficits  two game bodies: 7e7c:0b9c (177/187), 77eb:0d61 (54/58)
+
+## Turn total (HEAD 861fe0d5 -> here)
+
+    grep_checks          4,954 -> 4,779   (-175)
+      3f0b:2a09 (arena bar meter)          -47
+      5b66:131f (uVar renames)             -34
+      2e25:05e9 (construction records)     -53
+      55fe:0863 (row-0 animator)           -41
+      5b66:131f (unaff_BP reconstruction)    0 for the gate, ~100 artefacts resolved
