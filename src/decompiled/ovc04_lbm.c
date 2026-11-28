@@ -214,6 +214,7 @@ stg_tmp_t far * __cdecl16far grabLbm(int16_t file_id,int16_t x,int16_t y)
   far_t handle;
   far_t handle_00;
   far_t handle_01;
+  bool foundBmhd;           /* set once the BMHD chunk was seen */
   bool bVar1;
   uint16_t formHi;
   uint16_t ilbmLo;
@@ -227,9 +228,17 @@ stg_tmp_t far * __cdecl16far grabLbm(int16_t file_id,int16_t x,int16_t y)
   uint16_t pbmLo;
   uint16_t pbmHi;
   uint16_t fid;
+  int readRes;              /* ovr_stshRead's result */
   int iVar13;
   void *pvVar14;
+  uint32_t *be4First;       /* the first ovr_be4's result, tested against the IFF size */
+  uint32_t *tell1;          /* ovr_stshTell before the first seek */
+  uint32_t *chunkSize;      /* ovr_be4's chunk length for the body */
+  uint32_t *tell2;          /* ovr_stshTell before the second seek */
   uint32_t *puVar15;
+  uint16_t formLo;          /* IdFORM's low word, the first guard */
+  uint16_t chunkHi;         /* the chunk's high word / carry source */
+  uint16_t seekHi;          /* the high word of the seek offset */
   uint16_t uVar16;
   uint16_t i;
   uint16_t unaff_DI;
@@ -258,7 +267,7 @@ stg_tmp_t far * __cdecl16far grabLbm(int16_t file_id,int16_t x,int16_t y)
   ilbmHi = IdILBM.hi;
   ilbmLo = IdILBM.lo;
   formHi = IdFORM.hi;
-  uVar16 = IdFORM.lo;
+  formHi = IdFORM.lo;
   fid = ovr_stshOpen(file_id);
   if ((int)fid < 0) {
                     /* WARNING: Subroutine does not return */
@@ -268,21 +277,21 @@ stg_tmp_t far * __cdecl16far grabLbm(int16_t file_id,int16_t x,int16_t y)
   _fmemset(dst, 0, 0x308);
   (*(uint16_t *)((uint8_t *)&(remain))) = ovr_stshRead();
   if ((((int)remain == 0 && (*(uint16_t *)((uint8_t *)&(remain) + 2)) == (stg_tmp_t *)0x0) && (tmp.hi == formHi)) &&
-     (tmp.lo == uVar16)) {
-    bVar1 = false;
+     (tmp.lo == formLo)) {
+    foundBmhd = false;
     ovr_stshRead();
     ovr_stshRead();
-    uVar16 = tmp.lo;
+    formHi = tmp.lo;
     if (((tmp.hi == pbmHi) && (tmp.lo == pbmLo)) || ((tmp.hi == ilbmHi && (tmp.lo == ilbmLo)))) {
-      while (iVar13 = ovr_stshRead(), iVar13 == 0 && uVar16 == 0) {
+      while (readRes = ovr_stshRead(), readRes == 0 && formHi == 0) {
         if ((tmp.hi == bmhdHi) && (tmp.lo == bmhdLo)) {
-          bVar1 = true;
-          uVar16 = tmp.lo;
-          iVar13 = ovr_stshRead();
-          if ((iVar13 != 0 || uVar16 != 0) ||
-             (((puVar15 = ovr_be4((uint32_t *)sz,CONCAT22(unaff_DI,(*(uint16_t *)((uint8_t *)&(sz) + 2)))), uVar16 != 0 ||
-               (puVar15 != (uint32_t *)((byte *)__C0_ASM_CopyRight + 0x10))) ||
-              (iVar13 = ovr_stshRead(), iVar13 != 0 || uVar16 != 0)))) break;
+          foundBmhd = true;
+          formHi = tmp.lo;
+          readRes = ovr_stshRead();
+          if ((readRes != 0 || formHi != 0) ||
+             (((be4First = ovr_be4((uint32_t *)sz,CONCAT22(unaff_DI,(*(uint16_t *)((uint8_t *)&(sz) + 2)))), formHi != 0 ||
+               (be4First != (uint32_t *)((byte *)__C0_ASM_CopyRight + 0x10))) ||
+              (readRes = ovr_stshRead(), readRes != 0 || formHi != 0)))) break;
           w = ovr_be2(hd.w);
           h = ovr_be2(hd.h);
           (*(uint16_t *)((uint8_t *)&(sz) + 2)) = 0;
@@ -310,13 +319,13 @@ stg_tmp_t far * __cdecl16far grabLbm(int16_t file_id,int16_t x,int16_t y)
             if ((-1 < (int)(*(uint16_t *)((uint8_t *)&(chnk_sz) + 2))) &&
                ((0 < (int)(*(uint16_t *)((uint8_t *)&(chnk_sz) + 2)) || ((char *)0x300 < (uint32_t *)chnk_sz))))
             {
-              puVar15 = ovr_stshTell((uint32_t *)fid,unaff_DI);
-              ovr_stshSeek(fid,(long)CONCAT22(((int)puVar15 >> 0xf) + (*(uint16_t *)((uint8_t *)&(chnk_sz) + 2)) +
-                                              (uint)CARRY2((uint)puVar15,(uint)(uint32_t *)chnk_sz)
-                                              + -1 + (uint)(" \r" < (char *)((int)puVar15 +
+              tell1 = ovr_stshTell((uint32_t *)fid,unaff_DI);
+              ovr_stshSeek(fid,(long)CONCAT22(((int)tell1 >> 0xf) + (*(uint16_t *)((uint8_t *)&(chnk_sz) + 2)) +
+                                              (uint)CARRY2((uint)tell1,(uint)(uint32_t *)chnk_sz)
+                                              + -1 + (uint)(" \r" < (char *)((int)tell1 +
                                                                             (int)(uint32_t *)chnk_sz
                                                                             )),
-                                              (char *)((int)puVar15 + (int)(uint32_t *)chnk_sz) +
+                                              (char *)((int)tell1 + (int)(uint32_t *)chnk_sz) +
                                               -0x300));
             }
           }
@@ -337,42 +346,42 @@ stg_tmp_t far * __cdecl16far grabLbm(int16_t file_id,int16_t x,int16_t y)
         }
         else {
           if ((tmp.hi == bodyHi) && (tmp.lo == bodyLo)) {
-            if (bVar1) {
+            if (foundBmhd) {
               ovr_stshRead();
-              puVar15 = ovr_be4((uint32_t *)sz,CONCAT22(unaff_DI,(*(uint16_t *)((uint8_t *)&(sz) + 2))));
-              (*(uint16_t *)((uint8_t *)&(chnk_sz))) = (uint16_t)puVar15;
+              chunkSize = ovr_be4((uint32_t *)sz,CONCAT22(unaff_DI,(*(uint16_t *)((uint8_t *)&(sz) + 2))));
+              (*(uint16_t *)((uint8_t *)&(chnk_sz))) = (uint16_t)chunkSize;
               (*(uint16_t *)((uint8_t *)&(chnk_sz) + 2)) = tmp.lo;
-              if (((uint)puVar15 & 1) != 0) {
-                (*(uint16_t *)((uint8_t *)&(chnk_sz))) = (uint16_t)(uint32_t *)((int)puVar15 + 1);
-                (*(uint16_t *)((uint8_t *)&(chnk_sz) + 2)) = tmp.lo + ((uint32_t *)0xfffe < puVar15);
+              if (((uint)chunkSize & 1) != 0) {
+                (*(uint16_t *)((uint8_t *)&(chnk_sz))) = (uint16_t)(uint32_t *)((int)chunkSize + 1);
+                (*(uint16_t *)((uint8_t *)&(chnk_sz) + 2)) = tmp.lo + ((uint32_t *)0xfffe < chunkSize);
               }
               pvVar14 = ovr_stshAlloc((uint32_t)CONCAT22((*(uint16_t *)((uint8_t *)&(chnk_sz) + 2)),(uint32_t *)chnk_sz));
               ovr_stshRead();
               ovr_stshClose(fid);
               src.seg = ST_SEG(dst);
-              src.ofs = (uint16_t)puVar15;
+              src.ofs = (uint16_t)chunkSize;
               lbm_decode_body(hd.enc,hd.nplanes,hd.mask,(uint8_t)pvVar14,src,
                               (stg_tmp_t far *)dst,y,w,h,unaff_DI);
-              handle.seg = (uint16_t)puVar15;
+              handle.seg = (uint16_t)chunkSize;
               handle.ofs = (uint16_t)pvVar14;
               ovr_stshFree(handle);
               return dst;
             }
             break;
           }
-          uVar16 = tmp.lo;
+          chunkHi = tmp.lo;
           ovr_stshRead();
           (*(uint16_t *)((uint8_t *)&(chnk_sz))) = ovr_be4((uint32_t *)chnk_sz,CONCAT22(unaff_DI,(*(uint16_t *)((uint8_t *)&(chnk_sz) + 2))));
-          (*(uint16_t *)((uint8_t *)&(chnk_sz) + 2)) = uVar16;
+          (*(uint16_t *)((uint8_t *)&(chnk_sz) + 2)) = chunkHi;
           if (((uint)(uint32_t *)chnk_sz & 1) != 0) {
             carry = (uint32_t *)0xfffe < (uint32_t *)chnk_sz;
             (*(uint16_t *)((uint8_t *)&(chnk_sz))) = (uint16_t)(uint32_t *)((int)(uint32_t *)chnk_sz + 1);
-            (*(uint16_t *)((uint8_t *)&(chnk_sz) + 2)) = uVar16 + carry;
+            (*(uint16_t *)((uint8_t *)&(chnk_sz) + 2)) = chunkHi + carry;
           }
-          puVar15 = ovr_stshTell((uint32_t *)fid,unaff_DI);
-          uVar16 = ((int)puVar15 >> 0xf) + (*(uint16_t *)((uint8_t *)&(chnk_sz) + 2)) +
-                   (uint)CARRY2((uint)puVar15,(uint)(uint32_t *)chnk_sz);
-          ovr_stshSeek(fid,CONCAT22(uVar16,(int)puVar15 + (int)(uint32_t *)chnk_sz));
+          tell2 = ovr_stshTell((uint32_t *)fid,unaff_DI);
+          seekHi = ((int)tell2 >> 0xf) + (*(uint16_t *)((uint8_t *)&(chnk_sz) + 2)) +
+                   (uint)CARRY2((uint)tell2,(uint)(uint32_t *)chnk_sz);
+          ovr_stshSeek(fid,CONCAT22(seekHi,(int)tell2 + (int)(uint32_t *)chnk_sz));
         }
       }
     }

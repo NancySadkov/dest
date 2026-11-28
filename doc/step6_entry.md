@@ -26175,3 +26175,40 @@ are exclusive with 330's arm, so the compute1 result cannot reach them - the spl
       2e25:05e9 (construction records)     -53
       55fe:0863 (row-0 animator)           -41
       5b66:131f (unaff_BP reconstruction)    0 for the gate, ~100 artefacts resolved
+
+
+## `30e6:0321` (ILBM chunk parser): the clear lifetimes named, 4,779 -> 4,721 (-58)
+
+This body is 32-bit IFF chunk arithmetic and I did **not** try to name all of it. The split is by what
+the statements prove:
+
+    uVar16 -> formLo    IdFORM's low word, the first guard (8 sites)
+              chunkHi   the chunk's high word / carry source
+              seekHi    the high word of the seek offset
+    puVar15 -> be4First  the first ovr_be4's result, tested against the IFF size
+              tell1      ovr_stshTell before the first seek
+              chunkSize  ovr_be4's chunk length for the body (7 sites)
+              tell2      ovr_stshTell before the second seek
+    iVar13 -> readRes    ovr_stshRead's result
+    bVar1  -> foundBmhd  set once the BMHD chunk was seen
+
+**Left alone, deliberately:** `uVar16`/`puVar15` at 326-332, where
+`((puVar15 = (uint32_t *)cmszB, uVar16 = (*(uint16_t *)((uint8_t *)&(cmszB) + 2)), ...))` swaps the
+cmsz length into both slots inside one comma expression and then immediately overwrites them with
+`0x300` and `0`. Whether the cmsz value survives past that expression depends on the chained `&&`, so
+naming the two roles separately would be a guess. Five `uVar16` and four `puVar15` occurrences remain,
+and the declarations stay.
+
+Also caught: my first name for `uVar16`'s first role was `formHi`, which **already exists** in this
+function (the high word, tested at 260/270) - the compiler rejected the duplicate declaration. The slot
+holds `IdFORM.lo`, so it is `formLo`; the pre-existing `formHi` is untouched.
+
+## Measured (HEAD 80aeb187 -> this commit)
+
+    grep_checks          4,779 -> 4,721   (-58)
+    REBUILT.EXE          447,938 -> 447,970   (+32: frame reshuffle)
+    build 65/65, LINK.LOG 0 errors
+    compare_state        identical 734 / 7 different / 889 missing (unchanged)
+    diff_dgroup          288/1,805 matched (unchanged)
+    compare_runtime      280 identical / 11 different at entry, init_game and key (unchanged)
+    structural_deficits  two game bodies: 7e7c:0b9c (177/187), 77eb:0d61 (54/58)
