@@ -22,6 +22,14 @@ make the delta interpretable and reports only the functions where code is genuin
 3. **Inlined helpers.**  A few bodies fold a tiny helper the image still calls (`2d63:04b7`'s three
    `call 0x599` sites, inlined as `x + y*320`).  Also excluded by `ARTEFACTS`.
 
+4. **Calls to targets the audit table does not name.**  The image side counts every `call`/`lcall`
+   instruction, while the C side counts only identifiers that are in `audit/functions_real.tsv`
+   (plus `ovr_*` and the local wrappers).  A body that calls a function the table has no name for
+   therefore shows a permanent negative delta - `3f0b:0685` was reported at `6/9` even after its
+   third call had been written, because the callee (`sub_OVC04_0001`) was a stub name rather than
+   the audit name (`attact_usesAlignUp43`).  When a small function sits at a deficit, check the
+   image's call targets against the table before assuming code is missing.
+
 Anything left is a body that is absent, stubbed, or truncated, with the size and the missing call
 count as the work estimate.
 
