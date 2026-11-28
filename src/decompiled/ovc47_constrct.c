@@ -704,13 +704,84 @@ void constrct_buildInfoText(int x,byte far *flag,int entityIdx,int arg4,int arg5
                                        (char far *)MK_FP(_SS,(uint16_t)outBuf));
       switch (choice) {
       case 1:
+        /* ---- salvage (0x2376..0x244a) ---- */
+        if (unitIdx >= 0xf8) {
+          res = (char far *)0;
+          if (cost != 0) {
+            res = ovr_fmVsprintf((char far *)"%s will be salvaged for %d gold. Are you sure?",
+                                 (uint16_t)ovr_ovc15_usesStshRealloc(
+                                     (char far *)MK_FP((uint16_t)((uint32_t)bld->name >> 16),
+                                                       (uint16_t)bld->name)),cost);
+          }
+          else if ((bld->flags2 & 4) != 0) {
+            choice = 1;
+          }
+          else {
+            res = ovr_fmVsprintf((char far *)"Get rid of %s permanently. Are you sure?",
+                                 (uint16_t)ovr_ovc15_usesStshRealloc(
+                                     (char far *)MK_FP((uint16_t)((uint32_t)bld->name >> 16),
+                                                       (uint16_t)bld->name)));
+          }
+          if (res != (char far *)0) {
+            choice = (int)ovr_ovc28_compute2(&list[n],2,res);
+          }
+          if (choice != 1) {
+            return;
+          }
+        }
+        else {
+          cost = 0;
+        }
+        /* shared action tail (0x2451): a rodent-free demolish calls the next function in this module */
+        if ((bld->flags2 & 4) != 0) {
+          constrct_usesLDIV_at_((byte)entityIdx,GUnits[unitIdx].unitType);
+          *flag = 1;
+        }
+        /* GAP: the rest of the shared tail (0x24cd..0x278b) - the construction-record teardown,
+           the "repaired"/"upgraded" bookkeeping and the map refresh. */
+        break;
       case 2:
+        /* ---- repair (0x278b..0x291e) ---- */
+        ovr_ovc45_compute3(unitIdx,entityIdx);
+        res = ovr_fmVsprintf((char far *)"%s does not have enough gold.",
+                             (uint16_t)ovr_ovc15_usesStshRealloc(
+                                 (char far *)MK_FP((uint16_t)((uint32_t)bld->name >> 16),
+                                                   (uint16_t)bld->name)));
+        ovr_say(res);
+        ovr_inputUpdate(MessageDelay);
+        ovr_play_sfx(0,0);
+        res = ovr_fmVsprintf((char far *)"%s repaired.",
+                             (uint16_t)ovr_ovc15_usesStshRealloc(
+                                 (char far *)MK_FP((uint16_t)((uint32_t)bld->name >> 16),
+                                                   (uint16_t)bld->name)));
+        ovr_say(res);
+        ovr_ovc45_usesGPopulationLo(owner,0,0);
+        ovr_inputUpdate(MessageDelay);
+        break;
       case 3:
-      case 6:
-        /* GAP: the salvage / repair / upgrade / new-owner bodies (0x2376, 0x278b, 0x291e, 0x2aee).
-           They use createConstructionRecord / createConstructionRecordFar, ovc45_usesGPopulationLo,
-           play_sfx, say and inputUpdate, and set *flag = 1. */
+        /* ---- upgrade (0x291e..0x2ab4) ---- */
+        ovr_ovc45_compute3(unitIdx,entityIdx);
+        res = ovr_fmVsprintf((char far *)"%s does not have enough gold.",
+                             (uint16_t)ovr_ovc15_usesStshRealloc(
+                                 (char far *)MK_FP((uint16_t)((uint32_t)bld->name >> 16),
+                                                   (uint16_t)bld->name)));
+        ovr_say(res);
+        ovr_say((char far *)"Too many construction sites.");
+        ovr_inputUpdate(MessageDelay);
+        ovr_play_sfx(0,0);
+        res = ovr_fmVsprintf((char far *)"%s upgraded.",
+                             (uint16_t)ovr_ovc15_usesStshRealloc(
+                                 (char far *)MK_FP((uint16_t)((uint32_t)bld->name >> 16),
+                                                   (uint16_t)bld->name)));
+        ovr_say(res);
+        (void)ovr_createConstructionRecord(owner,unitIdx,0);
+        ovr_ovc45_usesGPopulationLo(owner,0,0);
+        ovr_inputUpdate(MessageDelay);
         *flag = 1;
+        break;
+      case 6:
+        /* ---- new owner (0x2aee) ---- */
+        owner = ((byte far *)&Entities[entityIdx])[0x1a];
         break;
       case 7:
         done = (byte)(done ^ 1);

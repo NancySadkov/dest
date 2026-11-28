@@ -22387,3 +22387,46 @@ The list is shown with `ovr_ovc28_compute2(list, n, outBuf)` (the `lcall 0x1c8,0
     compare_state    1,628 matched / 0 different / missing 2      (unchanged)
     diff_dgroup      1,639/1,805 matched, 5 layout runs           (unchanged)
     compare_runtime  1,692 matched / 1,683 identical / 9 different (unchanged)
+
+
+## 7e7c:0b9c: the four action bodies written (census 71 -> 101)
+
+The `cs:0x2b3c` dispatch let each body be derived separately. All four are now in the tree:
+
+**Salvage (0x2376..0x244a)** - a yes/no prompt built on the shared 2-entry list (`"No"` at 0x7a02):
+
+    if (unitIdx >= 0xf8) {
+      if (cost != 0)          prompt = fmVsprintf("%s will be salvaged for %d gold. Are you sure?", name, cost);
+      else if (flags2 & 4)    choice = 1;                       /* already unusable, no prompt */
+      else                    prompt = fmVsprintf("Get rid of %s permanently. Are you sure?", name);
+      if (prompt)             choice = ovc28_compute2(&list[n], 2, prompt);
+      if (choice != 1) return;                                  /* only "Yes" proceeds */
+    } else cost = 0;
+    if (flags2 & 4) { constrct_usesLDIV_at_((byte)entityIdx, GUnits[unitIdx].unitType); *flag = 1; }
+
+The `0x2462..0x248c` guard shows the demolish path calling `0x2b4c`, which is the *next* function in
+the module (`constrct_usesLDIV_at_`, already recovered), so the call is named rather than guessed.
+
+**Repair (0x278b)** - `ovc45_compute3`, then the "%s does not have enough gold." notice, `say`,
+`inputUpdate(MessageDelay)`, `play_sfx`, "%s repaired.", `ovc45_usesGPopulationLo`.
+
+**Upgrade (0x291e)** - the same skeleton with "Too many construction sites." and "%s upgraded.",
+plus `createConstructionRecord(owner, unitIdx, 0)` and `*flag = 1`.
+
+**New Owner (0x2aee)** - one statement: re-read `owner` from the entity and loop.
+
+The literals are the image's, used in place.
+
+## Measured (HEAD 8514e0a5 -> this commit)
+
+    screen_calls     7e7c:0b9c  C 71 -> 101  (image 187), delta -116 -> -86
+    grep_checks      11,516 (unchanged)
+    REBUILT.EXE      463,636 -> 465,010
+    build 65/65, LINK.LOG 0 errors
+    compare_state    1,628 matched / 0 different / missing 2      (unchanged)
+    diff_dgroup      1,639/1,805 matched, 5 layout runs           (unchanged)
+    compare_runtime  1,692 matched / 1,683 identical / 9 different (unchanged, all three sample points)
+
+Remaining in this function: the shared action tail `0x24cd..0x278b` (the construction-record teardown
+and map refresh, ~40 calls) and the few `say`/`inputUpdate` argument details that the frames still
+leave open (marked GAP/GUESS in-source).
