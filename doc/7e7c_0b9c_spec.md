@@ -340,48 +340,174 @@ dispatch value only where the `cmp/je` pair was located.
 
 | # | address | kind | arm | resolved args (push order) |
 |---|---------|------|-----|----------------------------|
-| 1 | 0d75 | fmVsprintf | ? | className() className() compute9() compute9() compute9() compute9() bld.durability compute7() reallocFar() reallocFar() _DS "%s (%d/%d): Owned by %s. Active party is %s " |
-| 2 | 0e68 | fmVsprintf | ? | className() className() compute9() compute9() compute9() compute9() reallocFar() reallocFar() _DS "%s: Owned by %s. Active party is %s the %s." |
-| 3 | 0ef8 | fmVsprintf | ? | className() className() compute9() compute9() reallocFar() reallocFar() _DS "%s: Active party is %s the %s." |
-| 4 | 10dc | fmVsprintf | unitType == 6 | bld.b02f bld.b02f reallocFar() reallocFar() _DS "%s: Costs %d gold and provides training to l" _SS reallocFar() |
-| 5 | 114a | fmVsprintf | unitType == 1 | reallocFar() reallocFar() reallocFar() _DS "%s: Costs %d gold of income. Replaces broken" |
-| 6 | 11ad | fmVsprintf | unitType == 1 | bld.resource bld.resource reallocFar() reallocFar() _DS "%s: Costs %d gold of income. Forges +%d weap" |
-| 7 | 1247 | fmVsprintf | unitType == 0x1d | bld.resource bld.resource reallocFar() reallocFar() _DS "%s: Costs %d gold of income. Improves armor." |
-| 8 | 12c5 | fmVsprintf | unitType == 0x1d | bld.resource bld.resource reallocFar() reallocFar() _DS "%s: Costs %d gold of income. Improves armor " |
-| 9 | 1360 | fmVsprintf | unitType == 0xd | bld.resource bld.resource reallocFar() reallocFar() _DS "%s: Costs %d gold of income. Replaces broken" |
-| 10 | 13c3 | fmVsprintf | unitType == 0xd | bld.resource bld.resource reallocFar() reallocFar() _DS "%s: Costs %d gold of income. Creates +%d bow" |
-| 11 | 1441 | fmVsprintf | unitType == 0xd | bld.resource bld.resource reallocFar() reallocFar() _DS "%s: Costs %d gold. Increases unit size of fi" |
-| 12 | 14bc | fmVsprintf | unitType == 0xd | bld.resource bld.resource reallocFar() reallocFar() _DS "%s: Costs %d gold. Increases building speed " |
-| 13 | 1523 | fmVsprintf | unitType == 0xd | cs reallocFar() reallocFar() reallocFar() reallocFar() _DS "%s: Costs %d gold. Enhances training by %d%%" |
-| 14 | 159e | fmVsprintf | unitType == 0xd | cs bld.resource bld.resource reallocFar() reallocFar() _DS "%s: Costs %d gold. Produces +%d rings of pro" |
-| 15 | 1600 | fmVsprintf | unitType == 0xd | cs reallocFar() reallocFar() reallocFar() _DS "%s: Costs %d gold. Produces mirrors for medu" |
-| 16 | 1662 | fmVsprintf | unitType == 0xd | cs reallocFar() reallocFar() reallocFar() _DS "%s: Costs %d gold. Attracts new units to thi" |
-| 17 | 16da | fmVsprintf | unitType == 0xd | cs bld.w12a reallocFar() reallocFar() reallocFar() _DS "%s: Costs %d gold. Provides %u units of gold" |
-| 18 | 173c | fmVsprintf | unitType == 0xd | cs reallocFar() reallocFar() reallocFar() _DS "%s: Costs %d gold. Claim trees automatically" |
-| 19 | 179e | fmVsprintf | unitType == 0xd | cs reallocFar() reallocFar() reallocFar() _DS "%s: Costs %d gold. Repairs buildings at seas" |
-| 20 | 182d | fmVsprintf | unitType == 0xd | cs bld.b0a0 bld.b128 reallocFar() reallocFar() _DS "%s: Trades %d food for gold. Total trade is " |
-| 21 | 18ad | fmVsprintf | unitType == 0xd | cs rankPercent() di reallocFar() reallocFar() _DS "%s: Creates %d gold of income, and accesses " |
-| 22 | 1929 | fmVsprintf | unitType == 0xd | cs ? ? ? reallocFar() reallocFar() _DS "%s: Costs %d gold of income and provides vis" |
-| 23 | 19a1 | fmVsprintf | unitType == 0xd | cs bld.w12a reallocFar() reallocFar() reallocFar() _DS "%s: Costs %d gold of income and provides sto" |
-| 24 | 1a19 | fmVsprintf | unitType == 0xd | cs bld.w12a reallocFar() reallocFar() reallocFar() _DS "%s: Costs %d gold of income and provides sto" |
-| 25 | 1acc | fmVsprintf | unitType == 0 | cs bld.w12a bld.b74af bld.b74ad word ptr [bp - 0x18] reallocFar() reallocFar() _DS "%s: Provides housing for %d %s and storage f" |
-| 26 | 1b34 | fmVsprintf | unitType == 0 | cs bld.b74af bld.b74ad word ptr [bp - 0x18] reallocFar() reallocFar() _DS "%s: Provides housing for %d %s." |
-| 27 | 1bea | fmVsprintf | unitType == 8 | cs bld.w12a bld.b74af bld.b74ad word ptr [bp - 0x18] reallocFar() reallocFar() _DS "%s: Provides housing for %d %s and storage f" |
-| 28 | 1c52 | fmVsprintf | unitType == 8 | cs bld.b74af bld.b74ad word ptr [bp - 0x18] reallocFar() reallocFar() _DS "%s: Provides housing for %d %s." |
-| 29 | 1ce9 | fmVsprintf | unitType == 8 | cs bld.b74af bld.b74ad word ptr [bp - 0x16] compute6() costOrIncomeLabel() costOrIncomeLabel() reallocFar() reallocFar() _DS "%s: %s %d gold. Feeds %d %s." |
-| 30 | 1dad | fmVsprintf | unitType == 8 | cs bld.b74af bld.b74ad word ptr [bp - 0x16] bld.b74af bld.b74ad word ptr [bp - 0x18] compute6() costOrIncomeLabel() costOrIncomeLabel() reallocFar() reallocFar() _DS "%s: %s %d gold. provides housing for %d %s a" |
-| 31 | 1e28 | fmVsprintf | unitType == 8 | cs bld.b74af bld.b74ad word ptr [bp - 0x16] compute6() costOrIncomeLabel() costOrIncomeLabel() reallocFar() reallocFar() _DS "%s: %s %d gold. Feeds %d %s." |
-| 32 | 1eac | fmVsprintf | unitType == 8 | cs bld.b74af bld.b74ad word ptr [bp - 0x18] compute6() costOrIncomeLabel() costOrIncomeLabel() reallocFar() reallocFar() _DS "%s: %s %d gold. Provides housing for %d %s." |
-| 33 | 1f02 | fmVsprintf | unitType == 8 | cs reallocFar() costOrIncomeLabel() costOrIncomeLabel() reallocFar() reallocFar() _DS "%s: %s %d gold." |
-| 34 | 200e | fmVsprintf | unitType == 8 | cs word ptr [bp - 0x1e] _DS " Salvage value %d gold." |
-| 35 | 213e | fmVsprintf | unitType == 8 | cs word ptr [bp - 0x1c] _DS " Repair costs %d gp." |
-| 36 | 21ff | fmVsprintf | unitType == 8 | cs word ptr [bp - 0x1c] _DS " Upgrade costs %d gp." |
-| 37 | 23c8 | fmVsprintf | unitType == 8 | cs word ptr [bp - 0x1e] reallocFar() reallocFar() _DS "%s will be salvaged for %d gold. Are you sur" |
-| 38 | 2425 | fmVsprintf | unitType == 8 | cs bld.name.seg bld.name.ofs _DS "Get rid of %s permanently. Are you sure?" |
-| 39 | 25ce | fmVsprintf | unitType == 8 | cs word ptr [bp + 0xc] reallocFar() reallocFar() _DS "%s is being filled." |
-| 40 | 2630 | fmVsprintf | unitType == 8 | cs word ptr [bp + 0xc] word ptr [bp - 0x1e] reallocFar() reallocFar() _DS "%s salvaged for %d gold." |
-| 41 | 2739 | fmVsprintf | unitType == 8 | cs word ptr [bp + 0xc] reallocFar() reallocFar() _DS "%s is demolished." |
-| 42 | 27f3 | fmVsprintf | unitType == 8 | cs word ptr [bp + 0xc] reallocFar() reallocFar() _DS "%s does not have enough gold." |
-| 43 | 2858 | fmVsprintf | unitType == 8 | cs word ptr [bp + 0xc] reallocFar() reallocFar() _DS "%s repaired." |
-| 44 | 2986 | fmVsprintf | unitType == 8 | cs word ptr [bp + 0xc] reallocFar() reallocFar() _DS "%s does not have enough gold." |
-| 45 | 2a07 | fmVsprintf | unitType == 8 | cs word ptr [bp + 0xc] reallocFar() reallocFar() _DS "%s upgraded." |
+| 1 | 0d75 | fmVsprintf | ? | className() className() compute9() compute9() compute9() compute9() bld.durability compute7() reallocFar() reallocFar() _DS "%s (%d/%d): Owned by %s. Active party is %s "
+ |
+| 2 | 0e68 | fmVsprintf | ? | className() className() compute9() compute9() compute9() compute9() reallocFar() reallocFar() _DS "%s: Owned by %s. Active party is %s the %s."
+ |
+| 3 | 0ef8 | fmVsprintf | ? | className() className() compute9() compute9() reallocFar() reallocFar() _DS "%s: Active party is %s the %s."
+ |
+| 4 | 10dc | fmVsprintf | unitType == 6 | bld.b02f bld.b02f reallocFar() reallocFar() _DS "%s: Costs %d gold and provides training to l" _SS reallocFar()
+ |
+| 5 | 114a | fmVsprintf | unitType == 1 | reallocFar() reallocFar() reallocFar() _DS "%s: Costs %d gold of income. Replaces broken"
+ |
+| 6 | 11ad | fmVsprintf | unitType == 1 | bld.resource bld.resource reallocFar() reallocFar() _DS "%s: Costs %d gold of income. Forges +%d weap"
+ |
+| 7 | 1247 | fmVsprintf | unitType == 0x1d | bld.resource bld.resource reallocFar() reallocFar() _DS "%s: Costs %d gold of income. Improves armor."
+ |
+| 8 | 12c5 | fmVsprintf | unitType == 0x1d | bld.resource bld.resource reallocFar() reallocFar() _DS "%s: Costs %d gold of income. Improves armor "
+ |
+| 9 | 1360 | fmVsprintf | unitType == 0xd | bld.resource bld.resource reallocFar() reallocFar() _DS "%s: Costs %d gold of income. Replaces broken"
+ |
+| 10 | 13c3 | fmVsprintf | unitType == 0xd | bld.resource bld.resource reallocFar() reallocFar() _DS "%s: Costs %d gold of income. Creates +%d bow"
+ |
+| 11 | 1441 | fmVsprintf | unitType == 0xd | bld.resource bld.resource reallocFar() reallocFar() _DS "%s: Costs %d gold. Increases unit size of fi"
+ |
+| 12 | 14bc | fmVsprintf | unitType == 0xd | bld.resource bld.resource reallocFar() reallocFar() _DS "%s: Costs %d gold. Increases building speed "
+ |
+| 13 | 1523 | fmVsprintf | unitType == 0xd | cs reallocFar() reallocFar() reallocFar() reallocFar() _DS "%s: Costs %d gold. Enhances training by %d%%"
+ |
+| 14 | 159e | fmVsprintf | unitType == 0xd | cs bld.resource bld.resource reallocFar() reallocFar() _DS "%s: Costs %d gold. Produces +%d rings of pro"
+ |
+| 15 | 1600 | fmVsprintf | unitType == 0xd | cs reallocFar() reallocFar() reallocFar() _DS "%s: Costs %d gold. Produces mirrors for medu"
+ |
+| 16 | 1662 | fmVsprintf | unitType == 0xd | cs reallocFar() reallocFar() reallocFar() _DS "%s: Costs %d gold. Attracts new units to thi"
+ |
+| 17 | 16da | fmVsprintf | unitType == 0xd | cs bld.w12a reallocFar() reallocFar() reallocFar() _DS "%s: Costs %d gold. Provides %u units of gold"
+ |
+| 18 | 173c | fmVsprintf | unitType == 0xd | cs reallocFar() reallocFar() reallocFar() _DS "%s: Costs %d gold. Claim trees automatically"
+ |
+| 19 | 179e | fmVsprintf | unitType == 0xd | cs reallocFar() reallocFar() reallocFar() _DS "%s: Costs %d gold. Repairs buildings at seas"
+ |
+| 20 | 182d | fmVsprintf | unitType == 0xd | cs bld.b0a0 bld.b128 reallocFar() reallocFar() _DS "%s: Trades %d food for gold. Total trade is "
+ |
+| 21 | 18ad | fmVsprintf | unitType == 0xd | cs rankPercent() di reallocFar() reallocFar() _DS "%s: Creates %d gold of income, and accesses "
+ |
+| 22 | 1929 | fmVsprintf | unitType == 0xd | cs ? ? ? reallocFar() reallocFar() _DS "%s: Costs %d gold of income and provides vis"
+ |
+| 23 | 19a1 | fmVsprintf | unitType == 0xd | cs bld.w12a reallocFar() reallocFar() reallocFar() _DS "%s: Costs %d gold of income and provides sto"
+ |
+| 24 | 1a19 | fmVsprintf | unitType == 0xd | cs bld.w12a reallocFar() reallocFar() reallocFar() _DS "%s: Costs %d gold of income and provides sto"
+ |
+| 25 | 1acc | fmVsprintf | unitType == 0 | cs bld.w12a bld.b74af bld.b74ad word ptr [bp - 0x18] reallocFar() reallocFar() _DS "%s: Provides housing for %d %s and storage f"
+ |
+| 26 | 1b34 | fmVsprintf | unitType == 0 | cs bld.b74af bld.b74ad word ptr [bp - 0x18] reallocFar() reallocFar() _DS "%s: Provides housing for %d %s."
+ |
+| 27 | 1bea | fmVsprintf | unitType == 8 | cs bld.w12a bld.b74af bld.b74ad word ptr [bp - 0x18] reallocFar() reallocFar() _DS "%s: Provides housing for %d %s and storage f"
+ |
+| 28 | 1c52 | fmVsprintf | unitType == 8 | cs bld.b74af bld.b74ad word ptr [bp - 0x18] reallocFar() reallocFar() _DS "%s: Provides housing for %d %s."
+ |
+| 29 | 1ce9 | fmVsprintf | unitType == 8 | cs bld.b74af bld.b74ad word ptr [bp - 0x16] compute6() costOrIncomeLabel() costOrIncomeLabel() reallocFar() reallocFar() _DS "%s: %s %d gold. Feeds %d %s."
+ |
+| 30 | 1dad | fmVsprintf | unitType == 8 | cs bld.b74af bld.b74ad word ptr [bp - 0x16] bld.b74af bld.b74ad word ptr [bp - 0x18] compute6() costOrIncomeLabel() costOrIncomeLabel() reallocFar() reallocFar() _DS "%s: %s %d gold. provides housing for %d %s a"
+ |
+| 31 | 1e28 | fmVsprintf | unitType == 8 | cs bld.b74af bld.b74ad word ptr [bp - 0x16] compute6() costOrIncomeLabel() costOrIncomeLabel() reallocFar() reallocFar() _DS "%s: %s %d gold. Feeds %d %s."
+ |
+| 32 | 1eac | fmVsprintf | unitType == 8 | cs bld.b74af bld.b74ad word ptr [bp - 0x18] compute6() costOrIncomeLabel() costOrIncomeLabel() reallocFar() reallocFar() _DS "%s: %s %d gold. Provides housing for %d %s."
+ |
+| 33 | 1f02 | fmVsprintf | unitType == 8 | cs reallocFar() costOrIncomeLabel() costOrIncomeLabel() reallocFar() reallocFar() _DS "%s: %s %d gold."
+ |
+| 34 | 200e | fmVsprintf | unitType == 8 | cs word ptr [bp - 0x1e] _DS " Salvage value %d gold."
+ |
+| 35 | 213e | fmVsprintf | unitType == 8 | cs word ptr [bp - 0x1c] _DS " Repair costs %d gp."
+ |
+| 36 | 21ff | fmVsprintf | unitType == 8 | cs word ptr [bp - 0x1c] _DS " Upgrade costs %d gp."
+ |
+| 37 | 23c8 | fmVsprintf | unitType == 8 | cs word ptr [bp - 0x1e] reallocFar() reallocFar() _DS "%s will be salvaged for %d gold. Are you sur"
+ |
+| 38 | 2425 | fmVsprintf | unitType == 8 | cs bld.name.seg bld.name.ofs _DS "Get rid of %s permanently. Are you sure?"
+ |
+| 39 | 25ce | fmVsprintf | unitType == 8 | cs word ptr [bp + 0xc] reallocFar() reallocFar() _DS "%s is being filled."
+ |
+| 40 | 2630 | fmVsprintf | unitType == 8 | cs word ptr [bp + 0xc] word ptr [bp - 0x1e] reallocFar() reallocFar() _DS "%s salvaged for %d gold."
+ |
+| 41 | 2739 | fmVsprintf | unitType == 8 | cs word ptr [bp + 0xc] reallocFar() reallocFar() _DS "%s is demolished."
+ |
+| 42 | 27f3 | fmVsprintf | unitType == 8 | cs word ptr [bp + 0xc] reallocFar() reallocFar() _DS "%s does not have enough gold."
+ |
+| 43 | 2858 | fmVsprintf | unitType == 8 | cs word ptr [bp + 0xc] reallocFar() reallocFar() _DS "%s repaired."
+ |
+| 44 | 2986 | fmVsprintf | unitType == 8 | cs word ptr [bp + 0xc] reallocFar() reallocFar() _DS "%s does not have enough gold."
+ |
+| 45 | 2a07 | fmVsprintf | unitType == 8 | cs word ptr [bp + 0xc] reallocFar() reallocFar() _DS "%s upgraded."
+ |
+
+## Condition paths (the dispatch shape resolved)
+
+The dispatch is **not** a switch and not a `je`-chain: it is a chain of
+
+    cmp byte ptr es:[bx + 0x133], N     ; bld.unitType
+    jne <next arm>
+
+so the arm body follows the `jne`, i.e. an arm runs when `bld.unitType == N`, and each leaf ends with
+`jmp 0x1f1a` (return). That means the body is a sequence of
+
+    if (bld.unitType == N) {
+      if (<inner guard>) { <leaf>; }
+      else               { <leaf>; }
+      goto done;
+    }
+
+with only two inner guard kinds so far: `bld.resource` (`+0x131`) compared with 1, and a few
+`bld.flags2` (`+0x121`) bit tests in the second half. Leaves 1-3 are the preamble, not an arm.
+
+Row format: `leaf address | kind | arm | guards that must pass` (a guard is a `cmp`/`test` whose
+branch target lies past the leaf, i.e. taking it would skip the leaf).
+
+    0d75 fmVsprintf preamble       see leaves 1-3 section
+    0e68 fmVsprintf preamble       see leaves 1-3 section
+    0ef8 fmVsprintf preamble       see leaves 1-3 section
+    10dc stsprintf  unitType==6     -
+    114a fmVsprintf unitType==1     cmp byte ptr es:[bx + 0x131], 1 (jne 0x1165 @111a)
+    11ad fmVsprintf unitType==1     -
+    1247 fmVsprintf unitType==0x1d  cmp byte ptr es:[bx + 0x131], 1 (jne 0x1262 @11fe)
+    12c5 fmVsprintf unitType==0x1d  -
+    1360 fmVsprintf unitType==0xd   cmp byte ptr es:[bx + 0x131], 1 (jne 0x137b @1316)
+    13c3 fmVsprintf unitType==0xd   -
+    1441 fmVsprintf unitType==0xe   ? (jne 0x145c @13f8)
+    14bc fmVsprintf unitType==0xf   ? (jne 0x14d7 @1473)
+    1523 fmVsprintf unitType==0x17  ? (jne 0x153e @14ee)
+    159e fmVsprintf unitType==0x10  ? (jne 0x15b9 @1555)
+    1600 fmVsprintf unitType==0x11  ? (jne 0x161b @15d0)
+    1662 fmVsprintf unitType==0x12  ? (jne 0x167d @1632)
+    16da fmVsprintf unitType==0x13  ? (jne 0x16f5 @1694)
+    173c fmVsprintf unitType==0x14  ? (jne 0x1757 @170c)
+    179e fmVsprintf unitType==0x15  ? (jne 0x17b9 @176e)
+    182d fmVsprintf unitType==0x16  ? (jne 0x1848 @17d0)
+    18ad fmVsprintf unitType==4     ? (jne 0x18c8 @185f)
+    1929 fmVsprintf unitType==2     ? (jne 0x1944 @18df)
+    19a1 fmVsprintf unitType==5     ? (jne 0x19bc @195b)
+    1a19 fmVsprintf unitType==0x13  ? (jne 0x1a34 @19d3)
+    1acc fmVsprintf unitType==0     cmp word ptr es:[bx + 0x12a], 0 (jbe 0x1ae7 @1a67)
+    1b34 fmVsprintf unitType==0     -
+    1bea fmVsprintf unitType==8     cmp word ptr es:[bx + 0x12a], 0 (jbe 0x1c05 @1b85)
+    1c52 fmVsprintf unitType==8     -
+    1ce9 fmVsprintf unitType==9     ? (jne 0x1d04 @1c87)
+    1dad fmVsprintf unitType==9     -
+    1e28 fmVsprintf unitType==9     -
+    1eac fmVsprintf unitType==9     cmp word ptr [bp - 0x18], 0 (jbe 0x1ec6 @1e4a)
+    1f02 fmVsprintf unitType==9     -
+    200e fmVsprintf unitType==9     cmp word ptr [bp - 0x24], 0xf8 (jb 0x202c @1fb4) && cmp word ptr es:[bx + 0x125], 0 (jbe 0x202c @1fcd) && test word ptr es:[bx + 0x121], 4 (jne 0x202c @1fe7)
+    213e fmVsprintf unitType==9     cmp byte ptr es:[bx + 1], 8 (jae 0x215c @20ef)
+    21ff fmVsprintf unitType==9     cmp byte ptr es:[bx + 0x12c], 0 (je 0x2217 @219b) && ? (jne 0x2217 @21f6)
+    23c8 fmVsprintf unitType==9     cmp word ptr [bp - 0x1e], 0 (je 0x23e6 @239a)
+    2425 fmVsprintf unitType==9     -
+    25ce fmVsprintf unitType==9     test word ptr es:[bx + 0x121], 0x400 (je 0x25fb @25a3)
+    2630 fmVsprintf unitType==9     -
+    2739 fmVsprintf unitType==9     -
+    27f3 fmVsprintf unitType==9     ? (jg 0x2823 @27ae) && cmp ax, word ptr [bp - 0x1c] (jae 0x2823 @27b5)
+    2858 fmVsprintf unitType==9     -
+    2986 fmVsprintf unitType==9     ? (jg 0x299b @2941) && cmp ax, word ptr [bp - 0x1c] (jae 0x299b @2948)
+    2a07 fmVsprintf unitType==9     -
+
+Reading the first arms confirms the shape (`+0x131` = `bld.resource`):
+
+    unitType == 6              -> leaf 4  (stsprintf, training message)
+    unitType == 1, resource==1 -> leaf 5   " ... Replaces broken weapons."
+    unitType == 1, resource!=1 -> leaf 6   " ... Forges +%d weapons."
+    unitType == 0x1d, res==1   -> leaf 7   " ... Improves armor."
+    unitType == 0x1d, res!=1   -> leaf 8   " ... Improves armor class by -%d."
+    unitType == 0xd,  res==1   -> leaf 9   " ... Replaces broken bows."
+    unitType == 0xd,  res!=1   -> leaf 10  " ... Creates +%d bow and arrows."
+
+so the body is now a straight transcription: one `if` per arm, the two-leaf arms split on
+`bld.resource == 1`, each leaf `fmVsprintf(...)` + `strcpy(outBuf, ...)` + `goto done`.
