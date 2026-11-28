@@ -1229,62 +1229,62 @@ uint16_t __cdecl16far
 init_usesRandBelow(int16_t x,int16_t y,uint8_t dir,uint8_t *lastDir,uint8_t *sameDirCount)
 
 {
-  uint8_t uVar1;
-  byte bVar2;
-  int iVar3;
-  uint16_t uVar4;
-  undefined1 uVar7;
-  uint uVar5;
-  uint uVar6;
-  uint16_t in_stack_00000010;
-  uint uStack_e;
-  uint uStack_c;
+  uint8_t tryDirLow;        /* packedDir & 0xff, the candidate direction */
+  byte newDir;              /* bStack_3 - dir & 3, the turn taken */
+  int sum2x2;               /* init_sumMapCells2x2(x,y) */
+  uint16_t randPick;        /* ovr_randBelow(4,0) */
+  undefined1 packHi;        /* the high byte of packedDir, re-fed into each CONCAT11 */
+  uint cellSum;             /* init_sumMapCells2x2 for the neighbour tested */
+  uint packedDir;           /* the direction word the CONCAT11 chain passes along */
+  uint16_t countSeg;        /* the segment of sameDirCount, read from the stack */
+  uint bestScore2;          /* the scoring floor for the second group */
+  uint bestScore;           /* the lowest cell sum found so far */
   byte bStack_8;
   byte bStack_7;
   byte bStack_6;
   byte bStack_5;
   byte bStack_3;
   
-  iVar3 = init_sumMapCells2x2(x,y);
-  uStack_e = iVar3 + 0x14;
+  sum2x2 = init_sumMapCells2x2(x,y);
+  bestScore2 = sum2x2 + 0x14;
   bStack_6 = 0xff;
   bStack_5 = 0xff;
   bStack_7 = 0xff;
   bStack_8 = 0xff;
-  uVar4 = ovr_randBelow(4,0);
-  uVar7 = (undefined1)(uVar4 >> 8);
-  uStack_c = uStack_e;
-  bStack_3 = (byte)uVar4;
+  randPick = ovr_randBelow(4,0);
+  packHi = (undefined1)(randPick >> 8);
+  bestScore = bestScore2;
+  bStack_3 = (byte)randPick;
   do {
-    uVar6 = CONCAT11(uVar7,bStack_3 - dir) & 0xff03;
-    uVar1 = (uint8_t)uVar6;
-    if ((uVar1 != 0x2) &&
-       ((*(byte *)CONCAT22(in_stack_00000010,(*(uint16_t *)((uint8_t *)&(sameDirCount) + 2))) < 2 ||
-        (uVar6 = CONCAT11((char)(uVar6 >> 8),*(uint8_t *)CONCAT22((uint8_t *)sameDirCount,lastDir)),
-        *(uint8_t *)CONCAT22((uint8_t *)sameDirCount,lastDir) != uVar1)))) {
+    packedDir = CONCAT11(packHi,bStack_3 - dir) & 0xff03;
+    tryDirLow = (uint8_t)packedDir;
+    if ((tryDirLow != 0x2) &&
+       ((*(byte *)CONCAT22(countSeg,(*(uint16_t *)((uint8_t *)&(sameDirCount) + 2))) < 2 ||
+        (packedDir = CONCAT11((char)(packedDir >> 8),*(uint8_t *)CONCAT22((uint8_t *)sameDirCount,lastDir)),
+        *(uint8_t *)CONCAT22((uint8_t *)sameDirCount,lastDir) != tryDirLow)))) {
       bStack_8 = bStack_3;
-      uVar5 = init_sumMapCells2x2(x + *(char *)(bStack_3 + 0x885),y + *(char *)(bStack_3 + 0x889));
-      if (uVar5 <= uStack_c) {
+      cellSum = init_sumMapCells2x2(x + *(char *)(bStack_3 + 0x885),y + *(char *)(bStack_3 + 0x889));
+      if (cellSum <= bestScore) {
         bStack_5 = bStack_3;
-        uStack_c = uVar5;
+        bestScore = cellSum;
       }
-      uVar6 = init_compute2(x + *(char *)(bStack_3 + 0x885),y + *(char *)(bStack_3 + 0x889),bStack_3
+      packedDir = init_compute2(x + *(char *)(bStack_3 + 0x885),y + *(char *)(bStack_3 + 0x889),bStack_3
                            );
-      uVar7 = (undefined1)(uVar6 >> 8);
-      if ((char)uVar6 != '\0') {
-        uVar6 = CONCAT11(uVar7,bStack_3);
+      packHi = (undefined1)(packedDir >> 8);
+      if ((char)packedDir != '\0') {
+        packedDir = CONCAT11(packHi,bStack_3);
         bStack_7 = bStack_3;
-        if (uVar5 <= uStack_e) {
-          uVar6 = CONCAT11(uVar7,bStack_3);
+        if (cellSum <= bestScore2) {
+          packedDir = CONCAT11(packHi,bStack_3);
           bStack_6 = bStack_3;
-          uStack_e = uVar5;
+          bestScore2 = cellSum;
         }
       }
     }
-    uVar6 = CONCAT11((char)(uVar6 >> 8),bStack_3 + 1) & 0xff03;
-    bStack_3 = (byte)uVar6;
-    uVar7 = (undefined1)(uVar6 >> 8);
-  } while (bStack_3 != (byte)uVar4);
+    packedDir = CONCAT11((char)(packedDir >> 8),bStack_3 + 1) & 0xff03;
+    bStack_3 = (byte)packedDir;
+    packHi = (undefined1)(packedDir >> 8);
+  } while (bStack_3 != (byte)randPick);
   if (bStack_6 == 0xff) {
     if (bStack_7 == 0xff) {
       if (bStack_5 == 0xff) {
@@ -1301,18 +1301,18 @@ init_usesRandBelow(int16_t x,int16_t y,uint8_t dir,uint8_t *lastDir,uint8_t *sam
   else {
     bStack_3 = bStack_6;
   }
-  bVar2 = bStack_3 - dir & 3;
-  if (bVar2 != 0) {
-    if (*(byte *)CONCAT22((uint8_t *)sameDirCount,lastDir) == bVar2) {
-      *(byte *)CONCAT22(in_stack_00000010,(*(uint16_t *)((uint8_t *)&(sameDirCount) + 2))) =
-           *(byte *)CONCAT22(in_stack_00000010,(*(uint16_t *)((uint8_t *)&(sameDirCount) + 2))) + 1;
+  newDir = bStack_3 - dir & 3;
+  if (newDir != 0) {
+    if (*(byte *)CONCAT22((uint8_t *)sameDirCount,lastDir) == newDir) {
+      *(byte *)CONCAT22(countSeg,(*(uint16_t *)((uint8_t *)&(sameDirCount) + 2))) =
+           *(byte *)CONCAT22(countSeg,(*(uint16_t *)((uint8_t *)&(sameDirCount) + 2))) + 1;
     }
     else {
-      *(byte *)CONCAT22(in_stack_00000010,(*(uint16_t *)((uint8_t *)&(sameDirCount) + 2))) = 0;
-      *(byte *)CONCAT22((uint8_t *)sameDirCount,lastDir) = bVar2;
+      *(byte *)CONCAT22(countSeg,(*(uint16_t *)((uint8_t *)&(sameDirCount) + 2))) = 0;
+      *(byte *)CONCAT22((uint8_t *)sameDirCount,lastDir) = newDir;
     }
   }
-  return CONCAT11(uVar7,bStack_3);
+  return CONCAT11(packHi,bStack_3);
 }
 
 

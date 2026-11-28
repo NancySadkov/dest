@@ -25634,3 +25634,38 @@ Only `unaff_DI` (2) is left - the register value the image leaves for the
       ovc15_textMake (4207:10a3)          -104
       ovc43_usesFmFreeAudio (6fbe:0000)    -84
       ovc26_usesRandBelow (5d45:06f0)      -88
+
+
+## `init_usesRandBelow` (3381:24c3): 59 hits down to 0, grep 5,549 -> 5,491 (-58)
+
+The "pick a legal direction" helper. Ten slots, and nine of them are single-role:
+
+    uVar5  -> cellSum     init_sumMapCells2x2 for the neighbour being tried
+    uVar4  -> randPick    ovr_randBelow(4,0)
+    uVar1  -> tryDirLow   packedDir & 0xff, the candidate direction
+    bVar2  -> newDir      bStack_3 - dir & 3, the turn actually taken
+    iVar3  -> sum2x2      init_sumMapCells2x2(x,y)
+    uStack_c -> bestScore ;  uStack_e -> bestScore2   the two scoring floors
+    in_stack_00000010 -> countSeg   the segment of sameDirCount, read from the stack
+
+**`uVar6` and `uVar7` are kept as one name each** - `packedDir` and `packHi` - and this is the
+interesting part of the body:
+
+    1259  packedDir = CONCAT11(packHi, bStack_3 - dir) & 0xff03;
+    1271  packedDir = init_compute2(...);            /* a completely different value */
+    1284  packedDir = CONCAT11((char)(packedDir >> 8), bStack_3 + 1) & 0xff03;
+
+Line 1284 folds the **previous** word's high byte back into its own CONCAT11, and at that point the
+previous word is `init_compute2`'s result, not the direction word from 1259. Splitting the slot into
+"direction word" and "compute2 result" would make 1284 read the direction word's high byte instead, so
+it is one name covering the chain. That preserves the behaviour exactly and puts the reason in the
+declaration comments rather than in a guess.
+
+## Measured (HEAD e850b68b -> this commit)
+
+    grep_checks          5,549 -> 5,491   (-58)
+    REBUILT.EXE          447,970 (unchanged size)
+    build 65/65, LINK.LOG 0 errors
+    compare_state        identical 734 / 7 different / 889 missing (unchanged)
+    diff_dgroup          288/1,805 matched (unchanged)
+    compare_runtime      280 identical / 11 different at entry, init_game and key (unchanged)
