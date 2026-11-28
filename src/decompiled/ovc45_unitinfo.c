@@ -642,49 +642,300 @@ bool __cdecl16far ovc45_textArena2(byte bldType)
 
 /* 77eb:0d61 */
 
-/* Building-placement message builder.  Image extent 0x0d61..0x16b2 (2,385 bytes) plus the
-   five-entry switch jump table at cs:0x16a8.
+/* Building-placement message builder: 0x0d61..0x16b2 (2,385 bytes) plus the five-entry switch
+   table at cs:0x16a8 = 0x142c, 0x1433, 0x1662, 0x1670, 0x142c.
 
-   The 3,202-line body that used to live here was NOT this function: it was the asset
-   stubify/RLE loader (201 ovr_stshRleType2, 190 stsh_store, 138 func_0x0007ffe0, 59
-   ovr_stgFreeTmp, 57 ovr_grabLbmTR, 38 ovr_stshStoreFile).  That body lives, byte for byte, in
-   ovc44's getcache (6ffe:02f7) in ovc44_strong_dat.c; it also overflowed Borland's compiler
-   table limit, which is why this module could not be listed at all (`--only o45 --asm`).
+   Frame: `sub sp,0x3f2`; y is kept in DI; arguments are x [bp+6], y [bp+8], the entity index
+   [bp+0xa], a byte the menu path writes [bp+0xc], and the "offer change party" flag [bp+0xe].
+   Three scratch buffers live in the frame: `bigBuf` at [bp-0x3ca] (712 bytes), an 80-byte buffer at
+   [bp-0x102] for the cost prefix, and a 160-byte buffer at [bp-0xb2] for the one-off messages. The
+   menu is up to five far string pointers at [bp-0x3f2] with the matching action codes one byte
+   apart from [bp-0xb].
 
-   What the image does (tmp/o45_d61.txt + tmp/o45_d61b.txt):
-     - parameters: x at [bp+6], y at [bp+8] (kept in di), entity index at [bp+0xa], an in/out
-       result byte at [bp+0xc] and a flag byte at [bp+0xe];
-     - the moving entity is GEntities[entityIndex] (stride 0x37) and its +0x1a byte selects
-       GLeaderSheets[] (segment 0x70 at run time), whose sheet byte +0x85 gives the building type;
-     - BuildingTypes[bldType] (stride 0x27; image base 0060:010e, model base 195d:010e) supplies
-       name/description (far strings at +0/+4), kind (+0x0c), size (+0x0d), flags (+0x10),
-       flags2 (+0x13), cost (+0x17), unitType (+0x25) and flags3 (+0x26);
-     - the 15 rejection strings at 0x74f0..0x76e9: "%s:", " You can only place a single arena.",
-       " Bridges must be near water's edge.", " Next outpost available at rank %s.",
-       " No more outposts are available.", " Requires a rank of %s.",
-       " Requires a unit of level %d.", " Location is too narrow for %s.",
-       " Location is too narrow for a %s.", " Walls must be near land.",
-       "Buildings cannot be placed over water.", "This location is unsuitable for buildings.",
-       " It will cost %s the %s %d gp. ", "Party member %s doesn't have enough gold to construct
-       a %s.", "Too many construction sites.";
-     - a five-way menu switch at 0x1427 (codes 0x7685/0x768b/0x769b/0x76a8, jump table
-       cs:0x16a8) that ends by choosing the building party (0x4d8, ovc45_textChoosePartyBuild)
-       and rejecting 0xff, then loops back to 0xd86 while the local reject flag is clear.
+   The body is `do { ... } while (!done)`: "Change Building" and the two "cannot place at all"
+   messages leave `done` clear so the whole message is rebuilt against the new selection, while
+   Place, Done and a cancelled party pick set it.
 
-   Body not derived yet; the addresses, the struct offsets and the call census are recorded above
-   and in doc/step6_entry.md. */
+   bldtp_t offsets used here (base 0060:010e, stride 0x27): name +0x00, description +0x04,
+   kind +0x0c, size +0x0d, flags +0x10, flags2 +0x13, cost +0x17, unitType +0x25, flags3 +0x26.
 
+   GUESS (recorded per AGENTS.md): the image calls into the relocated overlay window 0x200 at
+   0x0dbb, 0x0ece, 0x1649 and 0x1666.  audit/overlay_segments.csv lists sixteen candidate modules
+   for that window and marks the reference unresolved, and the VROOMM directory is out of scope, so
+   the calls are not written and each result is taken from the nearest provable source:
+     - bldType: the sheet byte the call is given (char_sheet_t::buildType is the BuildingTypes
+       index by its own documentation);
+     - the "may place?" gate (0x0ece) is taken as satisfied, so the three rejection messages below
+       are kept in the body but are not reached in this build;
+     - the construction-record type (0x1649) is the building type;
+     - the "rebuild graphics" call (0x1666) has no visible result and is omitted.
+   The far-string arguments go through the exported `ovr_*` thunks, which are unprototyped and so
+   carry a far pointer as its two words, exactly as the image pushes them. */
 uint __cdecl16far
 ovc45_buildPlacementMessage
-          (uint x,uint16_t y,int entityIndex,uint16_t reserved,char flag)
+          (uint x,uint16_t y,int entityIndex,uint16_t chosen,char flag)
 
 {
-  /* Not derived yet - see the comment above. */
-  (void)x; (void)y; (void)entityIndex; (void)reserved; (void)flag;
+  byte colOfs;      /* [bp-0x11] x - (alignUp4(x) - 2) */
+  byte party;       /* [bp-0x0f] Entities[entityIndex].party */
+  byte bldType;     /* [bp-0x10] BuildingTypes index */
+  byte count;       /* si: number of menu entries */
+  byte choice;      /* [bp-0x0e] menu result, then the action code */
+  byte code;
+  byte placeOk;     /* GAP 0x0ece */
+  bool rejected;    /* [bp-0x0c] a reason message was built */
+  bool done;        /* [bp-0x0d] leave the outer loop */
+  int gold;
+  uint16_t rankIdx;
+  uint16_t cnOfs;
+  uint16_t cnSeg;
+  uint16_t recType;
+  char far *className;
+  char far *sheet;
+  char bigBuf[712];
+  char buf80[80];
+  char buf2[160];
+  far_t menu[5];
+  byte codes[5];
+
+  colOfs = (byte)(x - (byte)((int)ovr_alignUp4(x) - 2));
+  done = 0;
+  do {
+    party = ((byte far *)&Entities[entityIndex])[0x1a];
+    sheet = (char far *)GLeaderSheets[party];
+
+    /* GAP 0x0dbb: lcall 0x200,0x25(sheet->buildType) -> BuildingTypes index */
+    bldType = ((char_sheet_t far *)sheet)->buildType[0];
+
+    /* The image computes the copied name inside each branch (0x0dfe and 0x0e4e), not once. */
+    if (BuildingTypes[bldType].description != (char far *)0) {
+      ovr_stsprintf((char far *)bigBuf,BuildingTypes[bldType].description,
+                    ovr_ovc15_usesStshRealloc(BuildingTypes[bldType].name));
+    }
+    else {
+      ovr_stsprintf((char far *)bigBuf,(char far *)"%s:",
+                    ovr_ovc15_usesStshRealloc(BuildingTypes[bldType].name));
+    }
+
+    count = 0;
+    rejected = 0;
+
+    if (ovc45_textArena2(bldType)) {
+      strcat(bigBuf," You can only place a single arena.");
+      rejected = 1;
+      goto menu;
+    }
+    if (ovc45_compute1(bldType,(int)x,(int)y) == 0) {
+      strcat(bigBuf," Bridges must be near water's edge.");
+      rejected = 1;
+      goto menu;
+    }
+
+    /* GAP 0x0ece: lcall 0x200,0x34(bldType,party) is the "may place here?" gate. */
+    placeOk = 1;
+    if (placeOk != 0) {
+      goto suitability;
+    }
+    if (BuildingTypes[bldType].unitType == 0x12) {
+      if (ovc45_compute5() != 0) {
+        rankIdx = (uint16_t)ovc45_compute5();
+        /* GUESS: 0x4955 is an 8-byte-stride table of far rank names with no audit symbol. */
+        ovr_stsprintf((char far *)buf2,(char far *)" Next outpost available at rank %s.",
+                      (char far *)MK_FP(*(uint16_t far *)MK_FP(_DS,0x4957 + rankIdx * 8),
+                                        *(uint16_t far *)MK_FP(_DS,0x4955 + rankIdx * 8)));
+        strcat(bigBuf,buf2);
+      }
+      else {
+        strcat(bigBuf," No more outposts are available.");
+      }
+      rejected = 1;
+      goto menu;
+    }
+    if ((BuildingTypes[bldType].flags3 & 0x80) != 0) {
+      rankIdx = (uint16_t)(BuildingTypes[bldType].flags3 & 0x7f);
+      ovr_stsprintf((char far *)buf2,(char far *)" Requires a rank of %s.",
+                    (char far *)MK_FP(*(uint16_t far *)MK_FP(_DS,0x4957 + rankIdx * 8),
+                                      *(uint16_t far *)MK_FP(_DS,0x4955 + rankIdx * 8)));
+      strcat(bigBuf,buf2);
+    }
+    else {
+      ovr_stsprintf((char far *)buf2,(char far *)" Requires a unit of level %d.",
+                    (uint16_t)BuildingTypes[bldType].flags3);
+      strcat(bigBuf,buf2);
+    }
+    rejected = 1;
+    goto menu;
+
+  suitability:
+    if (BuildingTypes[bldType].size == 4) {
+      if ((ovc45_compute4((int)(x - colOfs),(int)y,0) != 0) &&
+          (ovc45_compute4((int)(x - colOfs + 1),(int)y,0) != 0) &&
+          (ovc45_compute4((int)(x - colOfs + 2),(int)y,0) != 0) &&
+          (ovc45_compute4((int)(x - colOfs + 3),(int)y,0) != 0)) {
+        goto width2;
+      }
+      ovr_stsprintf((char far *)buf2,(char far *)" Location is too narrow for %s.",
+                    BuildingTypes[bldType].name);
+      strcat(bigBuf,buf2);
+      rejected = 1;
+      goto menu;
+    }
+
+  width2:
+    if (BuildingTypes[bldType].size == 2) {
+      if ((colOfs != 3) && (ovc45_compute4((int)(x + 1),(int)y,0) != 0)) {
+        goto land;
+      }
+      if ((colOfs != 0) && (ovc45_compute4((int)(x - 1),(int)y,0) != 0)) {
+        x = x - 1;
+        goto land;
+      }
+      ovr_stsprintf((char far *)buf2,(char far *)" Location is too narrow for a %s.",
+                    BuildingTypes[bldType].name);
+      strcat(bigBuf,buf2);
+      rejected = 1;
+      goto menu;
+    }
+
+  land:
+    if (ovc45_usesGMapFlags5((char)BuildingTypes[bldType].flags,x,(int)y) != 0) {
+      strcat(bigBuf," Walls must be near land.");
+      rejected = 1;
+      goto menu;
+    }
+    if (!((BuildingTypes[bldType].kind == 2) ||
+          (BuildingTypes[bldType].flags == 1) ||
+          (BuildingTypes[bldType].flags == 2) ||
+          (ovr_attact_usesGMapFlags(x,(int)y) != 0))) {
+      strcpy(bigBuf,"Buildings cannot be placed over water.");
+      rejected = 1;
+      goto menu;
+    }
+    if ((ovr_constr_usesGMapFlags(x,(int)y) == 0) &&
+        ((BuildingTypes[bldType].flags2 & 0x20) == 0) &&
+        (BuildingTypes[bldType].flags == 0)) {
+      strcpy(bigBuf,"This location is unsuitable for buildings.");
+      rejected = 1;
+      goto menu;
+    }
+
+    /* The cost line: ovc45_compute9 writes the party's titled name into buf80 and returns its
+       destination (its epilogue is `mov dx,[bp+8]; mov ax,[bp+6]`), and the image then passes that
+       return value to the sprintf - i.e. buf80 itself. */
+    cnOfs = (uint16_t)ovr_ovc22_className(party,0);
+    asm mov cnSeg, dx;
+    className = (char far *)MK_FP(cnSeg,cnOfs);
+    ovr_ovc45_compute9((char far *)buf80,sheet,(char far *)MK_FP(Font03.seg,Font03.ofs),0x55,3);
+    ovr_stsprintf((char far *)buf2,(char far *)" It will cost %s the %s %d gp. ",
+                  (char far *)buf80,className,(uint16_t)BuildingTypes[bldType].cost);
+    strcat((char *)(bigBuf + strlen(bigBuf)),buf2);
+
+  menu:
+    if (!rejected) {
+      if ((ovr_constr_usesGMapFlags(x,(int)y) != 0) ||
+          ((BuildingTypes[bldType].flags2 & 0x20) != 0) ||
+          (BuildingTypes[bldType].flags != 0)) {
+        menu[count].seg = _DS;
+        menu[count].ofs = (uint16_t)"Place";
+        codes[count + 1] = 1;
+        count = count + 1;
+      }
+    }
+    menu[count].seg = _DS;
+    menu[count].ofs = (uint16_t)"Change Building";
+    codes[count + 1] = 2;
+    count = count + 1;
+    if (flag != 0) {
+      menu[count].seg = _DS;
+      menu[count].ofs = (uint16_t)"Change Party";
+      codes[count + 1] = 3;
+      count = count + 1;
+    }
+    menu[count].seg = _DS;
+    menu[count].ofs = (uint16_t)"Done";
+    codes[count + 1] = 4;
+    count = count + 1;
+
+    goldPartyIndex = party;
+    choice = (byte)ovr_ovc28_compute2((char far *)menu,count,(char far *)bigBuf);
+    goldPartyIndex = 0xff;
+    code = 0;
+    if (choice != 0) {
+      code = codes[choice];
+    }
+    done = 0;
+    switch (code) {
+    case 1:
+      gold = ovc45_compute3(party);
+      if (gold > 0) {
+        goto place;
+      }
+      if (gold < 0) {
+        goto noGold;
+      }
+      if ((uint)gold < (uint)BuildingTypes[bldType].cost) {
+        goto noGold;
+      }
+    place:
+      if (GRecordCount >= 0x32) {
+        ovr_say((char far *)"Too many construction sites.");
+        TextBlitCycle = *(uint32_t far *)MK_FP(BDA_DailyTimeCounter.seg,
+                                               BDA_DailyTimeCounter.ofs);
+        ovr_inputUpdate((long)(MessageDelay * 2 + 0x24));
+        break;
+      }
+      if (BuildingTypes[bldType].size == 2) {
+        if ((colOfs != 3) && (ovc45_compute4((int)(x + 1),(int)y,0) != 0)) {
+          goto place2;
+        }
+        if ((colOfs != 0) && (ovc45_compute4((int)(x - 1),(int)y,0) != 0)) {
+          x = x - 1;
+          goto place2;
+        }
+      }
+    place2:
+      if (BuildingTypes[bldType].size == 4) {
+        x = x - colOfs;
+      }
+      if ((BuildingTypes[bldType].flags2 & 0x20) != 0) {
+        ovr_play_sfx(0x56,0);
+      }
+      else {
+        ovr_play_sfx(0x4f,0);
+      }
+      ovc45_usesGPopulationLo(party,(uint)BuildingTypes[bldType].cost,0);
+      /* GAP 0x1649: lcall 0x200,0x2a(sheet->buildType) -> the record type. */
+      recType = (uint16_t)bldType;
+      ovr_createConstructionRecordFar(recType,(int)x,(int)y,(uint8_t far *)codes,party);
+      done = 1;
+      break;
+    noGold:
+      ovr_stsprintf((char far *)buf2,
+                    (char far *)"Party member %s doesn't have enough gold to construct a %s.",
+                    (char far *)GLeaderSheets[party],BuildingTypes[bldType].name);
+      ovr_say((char far *)buf2);
+      TextBlitCycle = *(uint32_t far *)MK_FP(BDA_DailyTimeCounter.seg,
+                                             BDA_DailyTimeCounter.ofs);
+      ovr_inputUpdate((long)(MessageDelay * 2 + 0x24));
+      break;
+    case 2:
+      /* GAP 0x1666: lcall 0x200,0x20(party) - no visible result; the loop rebuilds the message. */
+      break;
+    case 3:
+      chosen = (byte)ovc45_textChoosePartyBuild(x,y,&entityIndex,0);
+      if (chosen == 0xff) {
+        done = 1;
+      }
+      break;
+    case 0:
+    case 4:
+    default:
+      done = 1;
+      break;
+    }
+  } while (!done);
   return 0;
 }
-
-
 /* 77eb:16b2 */
 
 /* WARNING: Globals starting with '_' overlap smaller symbols at the same address */

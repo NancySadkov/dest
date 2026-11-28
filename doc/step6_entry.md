@@ -23349,3 +23349,68 @@ wrong at its most load-bearing call, so I worked the deficits that *are* fully d
     this turn:  3381:01c8 init_paths      4/7  -> 7/7   (plus a real buffer restored, see above)
                 6257:009f write_game_cfg 10/13 -> 13/13
     remaining:  10 functions, 96 missing calls
+
+
+## `77eb:0d61` written: C 0/58 -> 54/58 (the four remaining are the unresolved 0x200 window)
+
+The largest stub in the tree is now a body. `ovc45_buildPlacementMessage` is 2,385 bytes and 58 image
+calls; it is written in full with four call sites deliberately not written.
+
+**What the body does**, in image order:
+
+    colOfs = x - (alignUp4(x) - 2)                              ; 0x0d6d..0x0d7f
+    do {                                                        ; loop head 0x0d86
+      party   = Entities[entityIndex].party                     ; +0x1a
+      bldType = sheet->buildType                                ; GAP 0x0dbb (0x200,0x25)
+      "name: description" or "name:" via usesStshRealloc+stsprintf  (the copy is made in BOTH
+                                                                 branches, 0x0dfe and 0x0e4e)
+      arena check        ovc45_textArena2(bldType)              ; 0x0e75
+      bridge check       ovc45_compute1(bldType,x,y)            ; 0x0ea1
+      may-place gate                                            ; GAP 0x0ece (0x200,0x34)
+        -> unitType==0x12 : "Next outpost available at rank %s." / "No more outposts..."  (0x0ef9)
+        -> flags3&0x80    : "Requires a rank of %s."                                       (0x0f68)
+        -> else           : "Requires a unit of level %d."                                 (0x0fc3)
+      size==4           : four ovc45_compute4 probes, else "Location is too narrow for %s."
+      size==2           : (x+1) then (x-1) probes, x--, else "Location is too narrow for a %s."
+      usesGMapFlags5    : "Walls must be near land."                                       (0x1178)
+      kind==2/flags 1/2/attact_usesGMapFlags, else strcpy "Buildings cannot be placed over water."
+      constr_usesGMapFlags/flags2&0x20/flags, else strcpy "This location is unsuitable..."
+      cost line         : compute9 into buf80, sprintf " It will cost %s the %s %d gp. ",
+                          then strcat at bigBuf+strlen(bigBuf)   (the image's explicit offset)
+      menu              : "Place"/1 (unless unsuitable), "Change Building"/2, "Change Party"/3
+                          (only when the flag argument is set), "Done"/4, through
+                          goldPartyIndex + ovr_ovc28_compute2
+      switch(code)      : 1 Place, 2 (GAP 0x1666), 3 choose party, 0/4 Done
+    } while (!done)
+
+**Two decode results worth recording**, both of which changed the shape:
+
+1. The **cost line's argument order** was not ambiguous after all. Counting the `add sp` values
+   settles it: `ovc45_compute9` pops 16 bytes = `(dest, src, font, maxWidth, mode)` - exactly its
+   prototype - and `stsprintf` pops 18 = `(buf2, fmt, compute9's return, className, cost)`. The
+   pushes I had earlier read as one 22-byte frame for compute9 are two calls, with `cost` and the
+   class-name pointer evaluated early because Turbo C evaluates `stsprintf`'s arguments
+   right-to-left across the nested call.
+2. `ovc45_compute9` **returns its destination** (`mov dx,[bp+8]; mov ax,[bp+6]`), so the `%s` the
+   image feeds to the sprintf is `buf80` itself - it is written as `buf80` rather than capturing
+   the return in DX:AX.
+
+**The four GAP sites** (all explained in-source): `0x0dbb` (bldType, taken from the sheet byte the
+call is given - `char_sheet_t::buildType` is documented as the bldtp index), `0x0ece` (the
+may-place gate, taken as satisfied so the three rejection messages stay in the body unreached),
+`0x1649` (the construction-record type, taken as the building type) and `0x1666` (a graphics
+rebuild with no visible result). `audit/overlay_segments.csv` lists 16 candidate modules for window
+`0x200` and marks every reference `resolved=no`.
+
+## Measured (HEAD 20b75bcc -> this commit)
+
+    structural_deficits  77eb:0d61  0/58 -> 54/58  (delta -58 -> -4, only the four GAPs)
+    grep_checks          9,798 (unchanged - the body was written clean, no new residue)
+    REBUILT.EXE          447,986 -> 447,986
+    build 65/65, LINK.LOG 0 errors
+    compare_state        identical 734 / 7 different / 889 missing (unchanged)
+    diff_dgroup          288/1,805 matched (unchanged)
+    compare_runtime      280 identical / 11 different at entry, init_game and key (unchanged)
+
+`land_info` (7e7c, mode 0) calls this through `ovr_ovc45_buildPlacementMessage`, so the body is
+reachable from the UI; the runtime sample points are unchanged, i.e. it executes without fault.
