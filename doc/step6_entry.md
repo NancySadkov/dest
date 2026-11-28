@@ -24310,3 +24310,39 @@ rewrite rather than names.
     diff_dgroup          288/1,805 matched (unchanged)
     compare_runtime      280 identical / 11 different at entry, init_game and key (unchanged)
     structural_deficits  two game bodies: 7e7c:0b9c (177/187), 77eb:0d61 (54/58)
+
+
+## Renaming batch 13: `blit_usesStExit` (317e:0f7d), grep 8,160 -> 8,060 (-100)
+
+The largest body left in `ovc06_blit.c` (115 hits over 26 slots). Twenty-four named; two left:
+
+    bVar1    -> shadeTmp    shade1 saved across the x/y swap
+    in_DX    -> loadedSeg   DX on entry: the loaded graphic's segment
+    uVar4    -> signMask    makes the modulus absolute
+    uVar5    -> gfxOfs      gfx.ofs, the header this walks
+    uVar6    -> bitMask     rotated 1, 2, 4 ... 0x8000 per row
+    uVar7    -> gfxSeg      gfx.seg
+    iStack_28-> srcOfs ; uStack_26 -> gfxSegArg
+    iStack_24-> dySpan ; iStack_22 -> dxSpan ; iStack_1c -> slope ; iStack_1e -> remainder
+    iStack_20-> dySign ; iStack_12 -> leftX ; uStack_10 -> spanW ; uStack_c -> clipLeft
+    iStack_14..1a -> rectL / rectT / rectR / rectB
+    bStack_7 -> shade ; pfStack_6 -> rowDecode ; pfStack_4 -> unusedSel (0x22a6, never read)
+    uStack_e -> row ; uStack_a -> left as a documented spare (written, never read)
+
+**Left:** `iVar2` and `iVar3` each carry three roles in the swap block and the row loop (x1 scratch /
+row y / span length; y1 scratch / swap temp / decoder bytes consumed) - the same reuse pattern as
+`getcache`, so they need the body split, not a name.
+
+`ovc40_palette.c` is now at its floor: everything remaining in `ovc40_usesAlignToSeg` is the
+`uStack_XX` far-pointer halves (`text1_01.seg = uStack_46; text1_01.ofs = uStack_48;`), which is the
+`far_t` collapse rewrite, not a rename.
+
+## Measured (HEAD bfc96db0 -> this commit)
+
+    grep_checks          8,160 -> 8,060   (-100)
+    REBUILT.EXE          447,906 (unchanged)
+    build 65/65, LINK.LOG 0 errors
+    compare_state        identical 734 / 7 different / 889 missing (unchanged)
+    diff_dgroup          288/1,805 matched (unchanged)
+    compare_runtime      280 identical / 11 different at entry, init_game and key (unchanged)
+    structural_deficits  two game bodies: 7e7c:0b9c (177/187), 77eb:0d61 (54/58)

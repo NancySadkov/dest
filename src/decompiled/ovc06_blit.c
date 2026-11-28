@@ -833,39 +833,39 @@ void __cdecl16far
 blit_usesStExit(far_t gfx,int x1,int y1,byte shade1,int x2,int y2,byte shade2,int *rectOfs,uint16_t arg9,uint16_t arg10,uint16_t arg11,uint16_t arg12,uint16_t arg13,uint16_t arg14,uint16_t arg15)
 
 {
-  byte bVar1;
+  byte shadeTmp;           /* shade1 saved across the x/y swap */
   int iVar2;
   int iVar3;
-  uint16_t in_DX;
-  uint uVar4;
-  uint16_t uVar5;
-  uint uVar6;
-  uint16_t uVar7;
+  uint16_t loadedSeg;       /* DX on entry: the loaded graphic's segment */
+  uint signMask;           /* sign of the modulus, used to make it absolute */
+  uint16_t gfxOfs;          /* gfx.ofs, the header this walks */
+  uint bitMask;            /* rotated 1, 2, 4 ... 0x8000 per row */
+  uint16_t gfxSeg;          /* gfx.seg */
   uint16_t in_stack_00000016;
   char in_stack_00000018;
   far_t src;
   uint8_t rowBuf;
-  int iStack_28;
-  uint16_t uStack_26;
-  int iStack_24;
-  int iStack_22;
-  int16_t iStack_20;
-  int iStack_1e;
-  int iStack_1c;
-  int iStack_1a;
-  int iStack_18;
-  int iStack_16;
-  int iStack_14;
-  int iStack_12;
-  uint16_t uStack_10;
-  uint uStack_e;
-  uint16_t uStack_c;
-  uint uStack_a;
-  byte bStack_7;
-  far_t *pfStack_6;
-  far_t *pfStack_4;
+  int srcOfs;              /* source data offset, advanced per row */
+  uint16_t gfxSegArg;       /* gfx.seg, as the decoder's argument */
+  int dySpan;              /* vertical span in pixels */
+  int dxSpan;              /* horizontal span in pixels */
+  int16_t dySign;           /* ovr_ovc07_signum(dySpan) */
+  int remainder;           /* |dySpan % dxSpan| */
+  int slope;               /* dySpan / dxSpan */
+  int rectB;               /* rectOfs[3], the clip bottom */
+  int rectR;               /* rectOfs[2], the clip right edge */
+  int rectT;               /* rectOfs[1], the clip top */
+  int rectL;               /* rectOfs[0], the clip left edge */
+  int leftX;               /* the span's first column */
+  uint16_t spanW;          /* columns in the span */
+  uint row;                /* row counter within the graphic */
+  uint16_t clipLeft;        /* columns clipped off the left edge */
+  uint uStack_a;           /* spare: shade1's value, written and never read */
+  byte shade;              /* the larger of the two shades */
+  far_t *rowDecode;        /* the row decoder selected by the argument */
+  far_t *unusedSel;        /* 0x22a6, stored and never read */
   
-  bVar1 = shade1;
+  shadeTmp = shade1;
   iVar3 = y1;
   iVar2 = x1;
   if (x2 < x1) {
@@ -875,85 +875,85 @@ blit_usesStExit(far_t gfx,int x1,int y1,byte shade1,int x2,int y2,byte shade2,in
     y2 = iVar3;
     uStack_a = (uint)shade1;
     shade1 = shade2;
-    shade2 = bVar1;
+    shade2 = shadeTmp;
   }
   if ((gfx.ofs != 0 || gfx.seg != 0) && (shade1 != 0)) {
     if (*(char *)MK_FP(gfx.seg, gfx.ofs) == '\0') {
       gfx.ofs = (uint16_t)ovr_stshLoadGfx(gfx);
-      gfx.seg = in_DX;
+      gfx.seg = loadedSeg;
     }
     if (*(char *)MK_FP(gfx.seg, gfx.ofs) != '\x01') {
                     /* WARNING: Subroutine does not return */
       ovr_stExit(0x1a);
     }
-    iStack_14 = *rectOfs;
-    iStack_16 = rectOfs[1];
-    iStack_18 = rectOfs[2];
-    iStack_1a = rectOfs[3];
-    if (x1 < iStack_14) {
-      uStack_c = iStack_14 - x1;
-      iStack_12 = iStack_14;
+    rectL = *rectOfs;
+    rectT = rectOfs[1];
+    rectR = rectOfs[2];
+    rectB = rectOfs[3];
+    if (x1 < rectL) {
+      clipLeft = rectL - x1;
+      leftX = rectL;
     }
     else {
-      iStack_12 = x1;
-      uStack_c = 0;
+      leftX = x1;
+      clipLeft = 0;
     }
-    if (iStack_18 < x2) {
-      iVar2 = iStack_18 - iStack_12;
+    if (rectR < x2) {
+      iVar2 = rectR - leftX;
     }
     else {
-      iVar2 = x2 - iStack_12;
+      iVar2 = x2 - leftX;
     }
-    uStack_10 = iVar2 + 1;
-    if (0 < (int)uStack_10) {
-      bStack_7 = shade2;
+    spanW = iVar2 + 1;
+    if (0 < (int)spanW) {
+      shade = shade2;
       if (shade2 < shade1) {
-        bStack_7 = shade1;
+        shade = shade1;
       }
-      uVar7 = gfx.seg;
-      uVar5 = gfx.ofs;
-      iVar2 = y1 - (*(int *)(uVar5 + 7) * (uint)bStack_7 >> 4);
-      uVar6 = 1;
+      gfxSeg = gfx.seg;
+      gfxOfs = gfx.ofs;
+      iVar2 = y1 - (*(int *)(gfxOfs + 7) * (uint)shade >> 4);
+      bitMask = 1;
       if (in_stack_00000018 == '\0') {
-        pfStack_6 = (far_t *)(GUnitDescriptions + 0x12);
+        rowDecode = (far_t *)(GUnitDescriptions + 0x12);
       }
       else {
-        pfStack_6 = (far_t *)&GUnitDescriptions[0xf].seg;
+        rowDecode = (far_t *)&GUnitDescriptions[0xf].seg;
       }
-      pfStack_4 = (far_t *)0x22a6;
-      iStack_28 = uVar5 + 9;
-      iStack_22 = x2 - x1;
-      iStack_24 = (y2 - (*(int *)(uVar5 + 7) * (uint)bStack_7 >> 4)) - iVar2;
-      if (iStack_22 == 0) {
-        iStack_1c = 0;
-        iStack_1e = 0;
+      unusedSel = (far_t *)0x22a6;
+      srcOfs = gfxOfs + 9;
+      dxSpan = x2 - x1;
+      dySpan = (y2 - (*(int *)(gfxOfs + 7) * (uint)shade >> 4)) - iVar2;
+      if (dxSpan == 0) {
+        slope = 0;
+        remainder = 0;
       }
       else {
-        iStack_1c = iStack_24 / iStack_22;
-        uVar4 = iStack_24 % iStack_22 >> 0xf;
-        iStack_1e = (iStack_24 % iStack_22 ^ uVar4) - uVar4;
+        slope = dySpan / dxSpan;
+        signMask = dySpan % dxSpan >> 0xf;
+        remainder = (dySpan % dxSpan ^ signMask) - signMask;
       }
-      uStack_26 = uVar7;
-      iStack_20 = ovr_ovc07_signum(iStack_24);
-      uStack_e = 0;
-      while ((uStack_e < *(uint *)(uVar5 + 7) && (iVar2 <= iStack_1a))) {
-        iVar3 = (*(code *)pfStack_6)(0x22da,iStack_28,uStack_26,&rowBuf);
-        iStack_28 = iStack_28 + iVar3;
-        if ((*(uint *)((uint)bStack_7 * 2 + 0x470) & uVar6) != 0) {
+      gfxSegArg = gfxSeg;
+      dySign = ovr_ovc07_signum(dySpan);
+      row = 0;
+      while ((row < *(uint *)(gfxOfs + 7) && (iVar2 <= rectB))) {
+        iVar3 = (*(code *)rowDecode)(0x22da,srcOfs,gfxSegArg,&rowBuf);
+        srcOfs = srcOfs + iVar3;
+        if ((*(uint *)((uint)shade * 2 + 0x470) & bitMask) != 0) {
           src.seg = _SS;
           src.ofs = (uint16_t)&rowBuf;
-          blit_compute1(rectOfs[4],iVar2,iStack_12,src,uStack_c,*(uint16_t *)(uVar5 + 5),uStack_10,
-                        *(uint16_t *)((uint)bStack_7 * 2 + 0x470),iStack_22,iStack_1c,iStack_1e,
-                        iStack_20,iStack_16,iStack_1a);
+          blit_compute1(rectOfs[4],iVar2,leftX,src,clipLeft,*(uint16_t *)(gfxOfs + 5),spanW,
+                        *(uint16_t *)((uint)shade * 2 + 0x470),dxSpan,slope,remainder,
+                        dySign,rectT,rectB);
           iVar2 = iVar2 + 1;
         }
-        if (uVar6 == 0x8000) {
-          uVar6 = 1;
+        if (bitMask == 0x8000) {
+          bitMask = 1;
         }
         else {
-          uVar6 = uVar6 << 1;
+          bitMask = bitMask << 1;
         }
-        uStack_e = uStack_e + 1;
+        row = row + 1;
       }
     }
   }
