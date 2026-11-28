@@ -24,6 +24,8 @@ uint16_t __cdecl16far ovc23_textAdlibNone(void)
   int alignedX;
   int i;
   int record;
+  int d;
+  int si;
   byte colOfs;
 
   flags = 0;
@@ -47,8 +49,33 @@ uint16_t __cdecl16far ovc23_textAdlibNone(void)
       continue;
     }
     colOfs = ((byte (*)[0x12])MK_FP(0x88,0))[record][7];
-    /* GAP: the per-record placement scan (0x00d5..0x0180) writes the matched record index into the
-       0x91d8 table and sets the flag byte at 0x90ea+colOfs, then `cursorRecordFound = 1`. */
+    /* 0x00d5..0x0180: place this record's columns relative to the cursor column. */
+    d = ((short (*)[0x12])MK_FP(0x88,0))[record][1] - (int)(GfxRndSeed - 2);
+    if (((d + (int)colOfs) - 1) < 0) {
+      continue;
+    }
+    if (d > 3) {
+      continue;
+    }
+    if (((short (*)[0x12])MK_FP(0x88,0))[record][0] > 0x4e20) {
+      ((short (*)[0x12])MK_FP(0x88,0))[record][0] = 3;
+    }
+    for (si = 0; si < (int)colOfs; si++) {
+      if ((si + d) < 0) {
+        continue;
+      }
+      if ((si + d) > 3) {
+        continue;
+      }
+      /* GUESS: the 8-byte table at 0x91d7 holds the record index per column (0x0163), and the
+         4-byte area at 0x90ea marks the columns past the first (0x016e). Both are addressed
+         absolutely because the audit table has no symbol for either. */
+      ((uint16_t *)(uint16_t)0x91d7)[si + d] = (uint16_t)record;
+      if (si > 0) {
+        ((byte *)(uint16_t)0x90ea)[d + si] = 1;
+      }
+    }
+    cursorRecordFound = 1;
   }
 
   /* GAP: the outline draw and the mode dispatch (0x0191..0x0479): the `SfxPending`-style byte at
