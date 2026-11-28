@@ -25217,3 +25217,26 @@ copy that would have to be inserted to separate them is not visible in the state
       run_demo (6d7a:08df)                -177
       ovc_07_usesLDIV_at_ (32c9:0466)     -138
     every batch built 65/65, linked with 0 errors, and moved no other gate.
+
+
+## `stshInitAudioAssets` (4b0a:0b9c): seven single-role slots, grep 6,615 -> 6,567 (-48)
+
+    puVar3   -> fileSizePtr   ovr_stshFilesize's result
+    puVar11  -> namePtr       the name-table entry for i
+    pcVar1   -> extPos        _fstrstr's ".xmi" result
+    pcVar6   -> storedPtr     stshStoreFile's result
+    uVar9    -> blkLen        the .voc block length being stored
+    uStack_8 -> bestHi ;  uStack_a -> bestLo   the largest block seen, as a 32-bit pair
+
+**Left:** `iVar10` (21) and `iVar4` (11) each carry four or five roles in this one 132-line loop -
+`iVar4` is the size high word at 603, `ovr_stshRead`'s result at 617, the carry initialiser at 632 and
+the new size low word at 640 within forty lines. Separating them needs the image, not a rename.
+
+## Measured (HEAD 8ed6351a -> this commit)
+
+    grep_checks          6,615 -> 6,567   (-48)
+    REBUILT.EXE          447,778 (unchanged size)
+    build 65/65, LINK.LOG 0 errors
+    compare_state        identical 734 / 7 different / 889 missing (unchanged)
+    diff_dgroup          288/1,805 matched (unchanged)
+    compare_runtime      280 identical / 11 different at entry, init_game and key (unchanged)

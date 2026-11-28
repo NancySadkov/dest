@@ -546,20 +546,20 @@ uint16_t __cdecl16far stshDecVocSampleRate(uint8_t encfreq)
 void __cdecl16far stshInitAudioAssets(char grab)
 
 {
-  char *pcVar1;
+  char *extPos;             /* _fstrstr's ".xmi" result */
   long *plVar2;
   uint16_t freq;
-  uint32_t *puVar3;
+  uint32_t *fileSizePtr;    /* ovr_stshFilesize's result */
   int iVar4;
   void *pvVar5;
   uint16_t file_id;
-  cte_t *pcVar6;
+  cte_t *storedPtr;         /* stshStoreFile's result */
   far_t far *pfVar7;
   uint sumLo;
-  uint uVar9;
+  uint blkLen;              /* the .voc block length being stored */
   int in_DX;
   int iVar10;
-  uint16_t *puVar11;
+  uint16_t *namePtr;        /* the name table entry for entry i */
   uint sumHi;
   uint16_t unaff_SI;
   uint16_t i;
@@ -569,22 +569,22 @@ void __cdecl16far stshInitAudioAssets(char grab)
   uint8_t blkSize;
   undefined1 blkSizeHi;
   voc_t voc;
-  uint uStack_a;
-  uint uStack_8;
+  uint bestLo;              /* the largest block's low word */
+  uint bestHi;              /* the largest block's high word */
   
   AudioAssetsReady1 = 1;
   AudioAssetsReady2 = 1;
-  uStack_8 = 0;
-  uStack_a = 0;
+  bestHi = 0;
+  bestLo = 0;
   i = 0;
   do {
                     /* ;0x90 = total .xmi and .voc files */
     if (0x89 < (int)i) {
       return;
     }
-    puVar11 = (uint16_t *)(*(int *)(i * 2) * 4);
-    pcVar1 = _fstrstr((char *)CONCAT22(puVar11[1],(char *)*puVar11),".xmi");
-    if (pcVar1 == (char *)0x0 && in_DX == 0) {
+    namePtr = (uint16_t *)(*(int *)(i * 2) * 4);
+    extPos = _fstrstr((char *)CONCAT22(namePtr[1],(char *)*namePtr),".xmi");
+    if (extPos == (char *)0x0 && in_DX == 0) {
       *(uint16_t *)(&AudioHandles[i]) = 1;
     }
     else {
@@ -598,9 +598,9 @@ void __cdecl16far stshInitAudioAssets(char grab)
     }
     else {
       if (*(int *)(&AudioHandles[i]) == 0) {
-        puVar3 = ovr_stshFilesize((uint32_t *)*(uint16_t *)(i * 2),(uint16_t)unaff_DI);
-        iVar10 = (int)puVar3 + 0xd;
-        iVar4 = in_DX + (uint)((uint32_t *)0xfff2 < puVar3);
+        fileSizePtr = ovr_stshFilesize((uint32_t *)*(uint16_t *)(i * 2),(uint16_t)unaff_DI);
+        iVar10 = (int)fileSizePtr + 0xd;
+        iVar4 = in_DX + (uint)((uint32_t *)0xfff2 < fileSizePtr);
         pvVar5 = ovr_stshAlloc(CONCAT13((char)((uint)iVar4 >> 8),CONCAT12((char)iVar4,iVar10)));
         {
           uint8_t far *handle;
@@ -611,7 +611,7 @@ void __cdecl16far stshInitAudioAssets(char grab)
           *handle = 3;
           *(uint16_t far *)(handle + 3) = 0;
           *(uint16_t far *)(handle + 1) = 0;
-          *(uint16_t far *)(handle + 5) = (uint16_t)puVar3;
+          *(uint16_t far *)(handle + 5) = (uint16_t)fileSizePtr;
         }
         file_id = ovr_stshOpen(*(uint16_t *)(i * 2));
         iVar4 = ovr_stshRead();
@@ -634,11 +634,11 @@ void __cdecl16far stshInitAudioAssets(char grab)
         blkSize = voc.blksz[0];
         plVar2 = LXLSH_at_((long *)0x0,CONCAT22(unaff_DI,(uint)voc.blksz[0]),(byte)unaff_SI);
         sumLo = CONCAT11(blkSizeHi,blkSize) + (int)plVar2;
-        uVar9 = sumLo - 2;
+        blkLen = sumLo - 2;
         sumHi = (iVar4 + iVar10 + (uint)CARRY2(CONCAT11(blkSizeHi,blkSize),(uint)plVar2) +
                  (uint)voc.blksz[2]) - (uint)(sumLo < 2);
         iVar4 = sumLo + 0xb;
-        iVar10 = sumHi + (0xfff2 < uVar9);
+        iVar10 = sumHi + (0xfff2 < blkLen);
         pvVar5 = ovr_stshAlloc(CONCAT13((char)((uint)iVar10 >> 8),CONCAT12((char)iVar10,iVar4)));
         ((uint16_t *)(i * 4))[1] = iVar4;
         *(uint16_t *)(i * 4) =(uint16_t)( pvVar5);
@@ -647,15 +647,15 @@ void __cdecl16far stshInitAudioAssets(char grab)
         iVar10 = (int)*(uint32_t *)(i << 2);
         *(uint16_t *)(iVar10 + 3) = 0;
         *(uint16_t *)(iVar10 + 1) = 0;
-        *(uint *)((int)*(uint32_t *)(i << 2) + 5) = uVar9;
-        if ((uStack_8 <= sumHi) && ((sumHi != uStack_8 || (uStack_a <= uVar9)))) {
-          carry = 0xfff2 < uVar9;
-          uVar9 = sumLo + 0xb;
-          uStack_8 = sumHi + carry;
-          uStack_a = uVar9;
+        *(uint *)((int)*(uint32_t *)(i << 2) + 5) = blkLen;
+        if ((bestHi <= sumHi) && ((sumHi != bestHi || (bestLo <= blkLen)))) {
+          carry = 0xfff2 < blkLen;
+          blkLen = sumLo + 0xb;
+          bestHi = sumHi + carry;
+          bestLo = blkLen;
         }
         iVar10 = ovr_stshRead();
-        if (iVar10 != 0 || uVar9 != 0) {
+        if (iVar10 != 0 || blkLen != 0) {
                     /* WARNING: Subroutine does not return */
           ovr_stExit(0x20);
         }
@@ -664,9 +664,9 @@ void __cdecl16far stshInitAudioAssets(char grab)
         ((anm_t *)((i << 2)))->x = freq;
       }
       ovr_stshClose(file_id);
-      pcVar6 = stshStoreFile((uint8_t *)*(uint16_t *)(i * 4),(char)((uint16_t *)(i * 4))[1]);
+      storedPtr = stshStoreFile((uint8_t *)*(uint16_t *)(i * 4),(char)((uint16_t *)(i * 4))[1]);
       ((uint16_t *)(i * 4))[1] = iVar10;
-      *(uint16_t *)(i * 4) =(uint16_t)( pcVar6);
+      *(uint16_t *)(i * 4) =(uint16_t)( storedPtr);
     }
     i = i + 1;
     in_DX = iVar10;
